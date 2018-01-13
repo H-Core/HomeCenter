@@ -15,5 +15,5 @@ build_script:
 test_script:
   - dotnet test "VoiceActions.NET.Tests" -c %CONFIGURATION%
 on_success:
-  - ps: if ($env:Configuration -eq "Debug") { OpenCover.Console.exe -target:"c:\Program Files\dotnet\dotnet.exe" -targetargs:"test -f netcoreapp1.0 -c %CONFIGURATION% VoiceActions.NET.Tests" -hideskipped:File -output:.\coverage.xml -oldStyle -filter:"+[VoiceActions.NET.Tests*]* -[VoiceActions.NET.Tests*]*" -register:user }
+  - ps: if ($env:Configuration -eq "Debug") { OpenCover.Console.exe -target:"c:\Program Files\dotnet\dotnet.exe" -targetargs:"test -f netcoreapp1.0 -c %CONFIGURATION% VoiceActions.NET.Tests" -hideskipped:File -output:.\coverage.xml -oldStyle -filter:"+[VoiceActions.NET*]* -[VoiceActions.NET.Tests*]*" -register:user }
   - ps: if ($env:Configuration -eq "Debug") { codecov -f "coverage.xml" -t 859daacd-d023-4e20-813e-e5baf7f1911d }
