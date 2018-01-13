@@ -21,12 +21,22 @@ namespace VoiceActions.NET.Tests
             Output = output;
         }
 
+        protected static void BaseDisposeTest(IDisposable obj)
+        {
+            // Check double disposing
+            obj.Dispose();
+            obj.Dispose();
+        }
+
+        protected bool CheckPlatform(PlatformID? platformId) => 
+            platformId == null || platformId == Environment.OSVersion.Platform;
+
         protected void BaseRecorderTest(IRecorder recorder, PlatformID? platformId = null)
         {
             Assert.NotNull(recorder);
-            if (platformId != null && platformId != Environment.OSVersion.Platform)
+            if (!CheckPlatform(platformId))
             {
-                Output.WriteLine($"Recorder: {recorder} not support current system: {Environment.OSVersion}");
+                Output?.WriteLine($"Recorder: {recorder} not support current system: {Environment.OSVersion}");
                 return;
             }
 
@@ -37,9 +47,7 @@ namespace VoiceActions.NET.Tests
             Assert.NotNull(recorder.Data);
             Assert.InRange(recorder.Data.Length, 1, int.MaxValue);
 
-            // Check double disposing
-            recorder.Dispose();
-            recorder.Dispose();
+            BaseDisposeTest(recorder);
 
             Output?.WriteLine($"Recorder: {recorder} is good!");
         }
@@ -52,9 +60,22 @@ namespace VoiceActions.NET.Tests
 
             Assert.Equal(expected, await converter.Convert(data));
 
-            // Check double disposing
-            converter.Dispose();
-            converter.Dispose();
+            BaseDisposeTest(converter);
+        }
+
+        protected void BaseVoiceManagerTest(VoiceManager manager, PlatformID? platformId = null)
+        {
+            Assert.NotNull(manager);
+            if (!CheckPlatform(platformId))
+            {
+                Output?.WriteLine($"Manager: {manager} not support current system: {Environment.OSVersion}");
+                return;
+            }
+
+            BaseRecorderTest(manager.Recorder);
+            BaseRecorderTest(manager);
+
+            BaseDisposeTest(manager);
         }
     }
 }
