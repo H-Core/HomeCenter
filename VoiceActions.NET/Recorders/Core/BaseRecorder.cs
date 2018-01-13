@@ -1,9 +1,9 @@
 ﻿using System;
-using VoiceActions.NET.SpeechToTextConverters;
+using VoiceActions.NET.Converters;
 
-namespace VoiceActions.NET.SpeechRecorders.Core
+namespace VoiceActions.NET.Recorders.Core
 {
-    public class BaseSpeechRecorder : ISpeechRecorder
+    public class BaseRecorder : IRecorder
     {
         #region Properties
 
@@ -11,17 +11,17 @@ namespace VoiceActions.NET.SpeechRecorders.Core
         public byte[] Data { get; protected set; }
         public string Text { get; protected set; }
 
-        public ISpeechToTextConverter Converter { get; set; }
+        public IConverter Converter { get; set; }
 
         #endregion
 
         #region Events
 
-        public event EventHandler<SpeechEventArgs> Started;
-        private void OnStarted() => Started?.Invoke(this, new SpeechEventArgs { SpeechRecorder = this });
+        public event EventHandler<RecorderEventArgs> Started;
+        private void OnStarted() => Started?.Invoke(this, new RecorderEventArgs { SpeechRecorder = this });
 
-        public event EventHandler<SpeechEventArgs> Stopped;
-        private void OnStopped() => Stopped?.Invoke(this, new SpeechEventArgs { SpeechRecorder = this, Data = Data, Text = Text });
+        public event EventHandler<RecorderEventArgs> Stopped;
+        private void OnStopped() => Stopped?.Invoke(this, new RecorderEventArgs { SpeechRecorder = this, Data = Data, Text = Text });
 
         #endregion
 

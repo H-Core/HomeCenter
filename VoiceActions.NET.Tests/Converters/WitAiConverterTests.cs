@@ -1,14 +1,14 @@
 ﻿using System.Threading.Tasks;
 using NUnit.Framework;
-using VoiceActions.NET.SpeechToTextConverters;
+using VoiceActions.NET.Converters;
 using VoiceActions.NET.Tests.Utilities;
 
-namespace VoiceActions.NET.Tests.SpeechToTextConverters
+namespace VoiceActions.NET.Tests.Converters
 {
     [TestFixture]
     public class WitAiConverterTests
     {
-        private static async Task BaseTest(string expected, byte[] data, ISpeechToTextConverter converter)
+        private static async Task BaseTest(string expected, byte[] data, IConverter converter)
         {
             Assert.IsNotNull(expected);
             Assert.IsNotNull(data);

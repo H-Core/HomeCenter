@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Timers;
-using VoiceActions.NET.SpeechRecorders.Core;
+using VoiceActions.NET.Recorders.Core;
 
-namespace VoiceActions.NET.SpeechRecorders
+namespace VoiceActions.NET.Recorders
 {
-    public class AutoStopSpeechRecorder<T> : BaseSpeechRecorder, ISpeechRecorder, IDisposable where T : ISpeechRecorder, new()
+    public class AutoStopRecorder<T> : BaseRecorder, IRecorder, IDisposable where T : IRecorder, new()
     {
         #region Properties
 
         public Timer Timer { get; set; } = new Timer();
         public double Interval => Timer.Interval;
-        public ISpeechRecorder SpeechRecorder { get; } = new T();
+        public IRecorder SpeechRecorder { get; } = new T();
 
         #endregion
 
         #region Constructors
 
-        public AutoStopSpeechRecorder(int interval)
+        public AutoStopRecorder(int interval)
         {
             Timer.Interval = interval;
             Timer.Elapsed += OnTimerOnElapsed;

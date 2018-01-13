@@ -40,8 +40,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SpeechRecorders\WinmmSpeechRecorderTests.cs" />
-    <Compile Include="SpeechToTextConverters\WitAiConverterTests.cs" />
+    <Compile Include="Recorders\WinmmSpeechRecorderTests.cs" />
+    <Compile Include="Converters\WitAiConverterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\TestUtilities.cs" />
   </ItemGroup>

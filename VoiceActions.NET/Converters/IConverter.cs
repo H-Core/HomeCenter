@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace VoiceActions.NET.SpeechToTextConverters
+namespace VoiceActions.NET.Converters
 {
-    public interface ISpeechToTextConverter
+    public interface IConverter
     {
         Task<string> Convert(byte[] bytes);
     }

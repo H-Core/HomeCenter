@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using VoiceActions.NET.SpeechToTextConverters.Core.WitAiConverter;
+using VoiceActions.NET.Converters.Core.WitAiConverter;
 
-namespace VoiceActions.NET.SpeechToTextConverters
+namespace VoiceActions.NET.Converters
 {
-    public class WitAiConverter : ISpeechToTextConverter
+    public class WitAiConverter : IConverter
     {
         #region Properties
 

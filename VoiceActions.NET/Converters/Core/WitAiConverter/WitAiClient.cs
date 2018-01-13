@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace VoiceActions.NET.SpeechToTextConverters.Core.WitAiConverter
+namespace VoiceActions.NET.Converters.Core.WitAiConverter
 {
     public class WitAiClient
     {

@@ -1,10 +1,10 @@
 ﻿using System.IO;
 using System.Runtime.InteropServices;
-using VoiceActions.NET.SpeechRecorders.Core;
+using VoiceActions.NET.Recorders.Core;
 
-namespace VoiceActions.NET.SpeechRecorders
+namespace VoiceActions.NET.Recorders
 {
-    public class WinmmSpeechRecorder : BaseSpeechRecorder, ISpeechRecorder
+    public class WinmmRecorder : BaseRecorder, IRecorder
     {
         #region Private methods
 
