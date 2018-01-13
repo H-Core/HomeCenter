@@ -1,5 +1,4 @@
 ﻿using System;
-using VoiceActions.NET.Converters;
 
 namespace VoiceActions.NET.Recorders.Core
 {
@@ -9,19 +8,16 @@ namespace VoiceActions.NET.Recorders.Core
 
         public bool IsStarted { get; private set; }
         public byte[] Data { get; protected set; }
-        public string Text { get; protected set; }
-
-        public IConverter Converter { get; set; }
 
         #endregion
 
         #region Events
 
-        public event EventHandler<RecorderEventArgs> Started;
-        private void OnStarted() => Started?.Invoke(this, new RecorderEventArgs { SpeechRecorder = this });
+        public event EventHandler<VoiceActionsEventArgs> Started;
+        private void OnStarted() => Started?.Invoke(this, new VoiceActionsEventArgs { Recorder = this });
 
-        public event EventHandler<RecorderEventArgs> Stopped;
-        private void OnStopped() => Stopped?.Invoke(this, new RecorderEventArgs { SpeechRecorder = this, Data = Data, Text = Text });
+        public event EventHandler<VoiceActionsEventArgs> Stopped;
+        private void OnStopped() => Stopped?.Invoke(this, new VoiceActionsEventArgs { Recorder = this, Data = Data });
 
         #endregion
 
@@ -33,15 +29,9 @@ namespace VoiceActions.NET.Recorders.Core
             OnStarted();
         }
 
-        public async void Stop()
+        public void Stop()
         {
             IsStarted = false;
-
-            if (Converter != null)
-            {
-                Text = await Converter.Convert(Data);
-            }
-
             OnStopped();
         }
 

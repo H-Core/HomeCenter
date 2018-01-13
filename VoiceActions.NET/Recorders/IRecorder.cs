@@ -1,5 +1,4 @@
 ﻿using System;
-using VoiceActions.NET.Recorders.Core;
 
 namespace VoiceActions.NET.Recorders
 {
@@ -7,12 +6,11 @@ namespace VoiceActions.NET.Recorders
     {
         bool IsStarted { get; }
         byte[] Data { get; }
-        string Text { get; }
 
         void Start();
         void Stop();
 
-        event EventHandler<RecorderEventArgs> Started;
-        event EventHandler<RecorderEventArgs> Stopped;
+        event EventHandler<VoiceActionsEventArgs> Started;
+        event EventHandler<VoiceActionsEventArgs> Stopped;
     }
 }

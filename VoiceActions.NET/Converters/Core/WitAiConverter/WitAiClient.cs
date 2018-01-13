@@ -36,7 +36,6 @@ namespace VoiceActions.NET.Converters.Core.WitAiConverter
 
         #region Public methods
 
-        public Task<string> ProcessWrittenText(string text) => Task.Run(() => ProcessText(text));
         public Task<string> ProcessSpokenText(byte[] bytes) => Task.Run(() => ProcessSpeech(bytes));
 
         #endregion
@@ -73,17 +72,6 @@ namespace VoiceActions.NET.Converters.Core.WitAiConverter
             {
                 return $"Error: {exception.Message}";
             }
-        }
-
-        private string ProcessText(string text)
-        {
-            // 20140401 tells the wit.ai engine which version to use, in this case the last version
-            // before April 1st, 2014
-            var request = WebRequest.Create($"https://api.wit.ai/message?v=20140401&q={text}");
-            request.Method = "GET";
-            request.Headers["Authorization"] = "Bearer " + Token;
-
-            return GetResponseText(request);
         }
 
         private string ProcessSpeech(byte[] bytes)
