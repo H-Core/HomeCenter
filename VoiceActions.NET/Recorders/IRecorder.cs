@@ -2,7 +2,7 @@
 
 namespace VoiceActions.NET.Recorders
 {
-    public interface IRecorder
+    public interface IRecorder : IDisposable
     {
         bool IsStarted { get; }
         byte[] Data { get; }

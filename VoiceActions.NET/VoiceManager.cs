@@ -185,5 +185,18 @@ namespace VoiceActions.NET
         }
 
         #endregion
+
+        #region IDisposable
+
+        public new void Dispose()
+        {
+            Recorder?.Dispose();
+            Recorder = null;
+
+            Converter?.Dispose();
+            Converter = null;
+        }
+
+        #endregion
     }
 }

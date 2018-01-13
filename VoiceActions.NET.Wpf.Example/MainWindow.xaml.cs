@@ -7,11 +7,11 @@ using VoiceActions.NET.Recorders;
 
 namespace VoiceActions.NET.Wpf.Example
 {
-    public partial class MainWindow
+    public partial class MainWindow : IDisposable
     {
         #region Properties
 
-        private VoiceManager VoiceManager { get; } = new VoiceManager
+        private VoiceManager VoiceManager { get; set; } = new VoiceManager
         {
             Recorder = new AutoStopRecorder<WinmmRecorder>(3000),
             Converter = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")
@@ -38,6 +38,16 @@ namespace VoiceActions.NET.Wpf.Example
                 RecordButton.Content = "🔉";
                 RecordButton.Background = Brushes.LightGray;
             });
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            VoiceManager?.Dispose();
+            VoiceManager = null;
         }
 
         #endregion

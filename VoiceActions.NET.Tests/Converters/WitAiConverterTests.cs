@@ -14,6 +14,10 @@ namespace VoiceActions.NET.Tests.Converters
             Assert.NotNull(converter);
 
             Assert.Equal(expected, await converter.Convert(data));
+
+            // Check double disposing
+            converter.Dispose();
+            converter.Dispose();
         }
 
         [Fact]

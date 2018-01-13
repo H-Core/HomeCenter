@@ -7,9 +7,9 @@ using Xunit.Abstractions;
 
 namespace VoiceActions.NET.Tests.Recorders
 {
-    public class WitmmSpeechRecorderTests : OutputTests
+    public class WitmmRecorderTests : OutputTests
     {
-        public WitmmSpeechRecorderTests(ITestOutputHelper output) : base(output)
+        public WitmmRecorderTests(ITestOutputHelper output) : base(output)
         {
         }
 
@@ -29,16 +29,20 @@ namespace VoiceActions.NET.Tests.Recorders
             Assert.NotNull(recorder.Data);
             Assert.InRange(recorder.Data.Length, 1, int.MaxValue);
 
+            // Check double disposing
+            recorder.Dispose();
+            recorder.Dispose();
+
             Output.WriteLine($"Recorder: {recorder} is good!");
         }
 
         [Fact]
-        public void WinmmSpeechRecorderTest() => BaseTest(new WinmmRecorder(), PlatformID.Win32NT); // need to test in the main thread
+        public void WinmmRecorderTest() => BaseTest(new WinmmRecorder(), PlatformID.Win32NT); // need to test in the main thread
 
         [Fact]
-        public void AutoStopSpeechRecorderTest1() => BaseTest(new AutoStopRecorder<WinmmRecorder>(1000), PlatformID.Win32NT); // need to test in the main thread
+        public void AutoStopRecorderTest1() => BaseTest(new AutoStopRecorder<WinmmRecorder>(1000), PlatformID.Win32NT); // need to test in the main thread
 
         [Fact]
-        public void AutoStopSpeechRecorderTest2() => BaseTest(new AutoStopRecorder<WinmmRecorder>(4000), PlatformID.Win32NT); // need to test in the main thread
+        public void AutoStopRecorderTest2() => BaseTest(new AutoStopRecorder<WinmmRecorder>(4000), PlatformID.Win32NT); // need to test in the main thread
     }
 }

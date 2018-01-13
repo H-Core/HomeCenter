@@ -1,10 +1,9 @@
-﻿using System;
-using System.Timers;
+﻿using System.Timers;
 using VoiceActions.NET.Recorders.Core;
 
 namespace VoiceActions.NET.Recorders
 {
-    public class AutoStopRecorder<T> : BaseRecorder, IAutoStopRecorder, IDisposable where T : IRecorder, new()
+    public class AutoStopRecorder<T> : BaseRecorder, IAutoStopRecorder where T : IRecorder, new()
     {
         #region Properties
 
@@ -20,7 +19,7 @@ namespace VoiceActions.NET.Recorders
             }
         }
 
-        public IRecorder SpeechRecorder { get; } = new T();
+        public IRecorder Recorder { get; private set; } = new T();
 
         #endregion
 
@@ -39,15 +38,15 @@ namespace VoiceActions.NET.Recorders
         public new void Start()
         {
             Timer.Start();
-            SpeechRecorder.Start();
+            Recorder.Start();
             base.Start();
         }
 
         public new void Stop()
         {
             Timer.Stop();
-            SpeechRecorder.Stop();
-            Data = SpeechRecorder.Data;
+            Recorder.Stop();
+            Data = Recorder.Data;
             base.Stop();
         }
 
@@ -55,10 +54,13 @@ namespace VoiceActions.NET.Recorders
 
         #region IDisposable
 
-        public void Dispose()
+        public new void Dispose()
         {
             Timer?.Dispose();
             Timer = null;
+
+            Recorder?.Dispose();
+            Recorder = null;
         }
 
         #endregion

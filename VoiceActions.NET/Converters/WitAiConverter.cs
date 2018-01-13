@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using VoiceActions.NET.Converters.Core;
 using VoiceActions.NET.Converters.Core.WitAiConverter;
 
 namespace VoiceActions.NET.Converters
 {
-    public class WitAiConverter : IConverter
+    public class WitAiConverter : BaseConverter, IConverter
     {
         #region Properties
 

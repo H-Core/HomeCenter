@@ -36,5 +36,13 @@ namespace VoiceActions.NET.Recorders.Core
         }
 
         #endregion
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+        }
+
+        #endregion
     }
 }
