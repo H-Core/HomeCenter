@@ -8,7 +8,7 @@ namespace VoiceActions.NET.SpeechRecorders
     {
         #region Properties
 
-        public Timer Timer { get; } = new Timer();
+        public Timer Timer { get; set; } = new Timer();
         public double Interval => Timer.Interval;
         public ISpeechRecorder SpeechRecorder { get; } = new T();
 
