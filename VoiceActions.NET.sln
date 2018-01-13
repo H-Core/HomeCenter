@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceActions.NET.Tests", "VoiceActions.NET.Tests\VoiceActions.NET.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceActions.NET.Wpf.Example", "VoiceActions.NET.Wpf.Example\VoiceActions.NET.Wpf.Example.csproj", "{31165983-28FF-4121-9054-7C9CE85DF449}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31165983-28FF-4121-9054-7C9CE85DF449}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31165983-28FF-4121-9054-7C9CE85DF449}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31165983-28FF-4121-9054-7C9CE85DF449}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31165983-28FF-4121-9054-7C9CE85DF449}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
