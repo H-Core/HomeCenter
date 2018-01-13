@@ -4,12 +4,22 @@ using VoiceActions.NET.Recorders.Core;
 
 namespace VoiceActions.NET.Recorders
 {
-    public class AutoStopRecorder<T> : BaseRecorder, IRecorder, IDisposable where T : IRecorder, new()
+    public class AutoStopRecorder<T> : BaseRecorder, IAutoStopRecorder, IDisposable where T : IRecorder, new()
     {
         #region Properties
 
-        public Timer Timer { get; set; } = new Timer();
-        public double Interval => Timer.Interval;
+        private Timer Timer { get; set; } = new Timer();
+        public double Interval {  get => Timer.Interval; set => Timer.Interval = value; }
+        public bool AutoStopEnabled
+        {
+            get => Timer.Enabled;
+            set
+            {
+                Timer.Stop();
+                Timer.Enabled = value;
+            }
+        }
+
         public IRecorder SpeechRecorder { get; } = new T();
 
         #endregion

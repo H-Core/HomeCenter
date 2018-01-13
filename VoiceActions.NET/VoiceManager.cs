@@ -137,12 +137,38 @@ namespace VoiceActions.NET
             base.Start();
         }
 
+        public void Start(bool disableAutoStopIfExists)
+        {
+            var recorder = Recorder ?? throw new Exception("Recorder is null");
+            if (disableAutoStopIfExists && recorder is IAutoStopRecorder autoStopRecorder)
+            {
+                autoStopRecorder.AutoStopEnabled = false;
+            }
+
+            Start();
+        }
+
         public new void Stop()
         {
             var recorder = Recorder ?? throw new Exception("Recorder is null");
+            if (recorder is IAutoStopRecorder autoStopRecorder)
+            {
+                autoStopRecorder.AutoStopEnabled = true;
+            }
 
             recorder.Stop();
-            base.Stop();
+        }
+
+        public void Change()
+        {
+            if (!IsStarted)
+            {
+                Start();
+            }
+            else
+            {
+                Stop();
+            }
         }
 
         #endregion
@@ -151,6 +177,7 @@ namespace VoiceActions.NET
 
         private void OnStoppedRecorder(object sender, VoiceActionsEventArgs args)
         {
+            base.Stop();
             var recorder = Recorder ?? throw new Exception("Recorder is null");
 
             Data = recorder.Data;
