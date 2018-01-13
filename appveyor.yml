@@ -1,0 +1,19 @@
+version: '1.0.{build}'
+image: Visual Studio 2017
+platform: Any CPU
+configuration:
+  - Debug
+  - Release
+build:
+  verbosity: minimal
+before_build:
+  - appveyor-retry dotnet restore -v Minimal  
+  - choco install opencover.portable
+  - choco install codecov
+build_script:
+  - dotnet build "VoiceActions.NET" -c %CONFIGURATION% --no-dependencies
+test_script:
+  - dotnet test "VoiceActions.NET.Tests" -c %CONFIGURATION%
+on_success:
+  - ps: if ($env:Configuration -eq "Debug") { OpenCover.Console.exe -target:"c:\Program Files\dotnet\dotnet.exe" -targetargs:"test -f netcoreapp1.0 -c %CONFIGURATION% VoiceActions.NET.Tests" -hideskipped:File -output:.\coverage.xml -oldStyle -filter:"+[VoiceActions.NET.Tests*]* -[VoiceActions.NET.Tests*]*" -register:user }
+  - ps: if ($env:Configuration -eq "Debug") { codecov -f "coverage.xml" -t e5889b94-2547-4803-a307-fe55149e7013 }

@@ -1,0 +1,11 @@
+language: csharp
+notifications:
+  email: false
+sudo: required
+mono: none
+dotnet: 1.0.1
+script:
+  - dotnet restore
+  - dotnet build
+  - cd VoiceActions.NET.Tests
+  - dotnet test
