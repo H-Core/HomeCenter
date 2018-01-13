@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Xunit;
 using VoiceActions.NET.Recorders;
 using VoiceActions.NET.Tests.Utilities;
@@ -12,9 +13,14 @@ namespace VoiceActions.NET.Tests.Recorders
         {
         }
 
-        private void BaseTest(IRecorder recorder)
+        private void BaseTest(IRecorder recorder, PlatformID? platformId = null)
         {
             Assert.NotNull(recorder);
+            if (platformId != null && platformId != Environment.OSVersion.Platform)
+            {
+                Output.WriteLine($"Recorder: {recorder} not support current system: {Environment.OSVersion}");
+                return;
+            }
 
             recorder.Start();
             Thread.Sleep(2000);
@@ -27,12 +33,12 @@ namespace VoiceActions.NET.Tests.Recorders
         }
 
         [Fact]
-        public void WinmmSpeechRecorderTest() => BaseTest(new WinmmRecorder()); // need to test in the main thread
+        public void WinmmSpeechRecorderTest() => BaseTest(new WinmmRecorder(), PlatformID.Win32NT); // need to test in the main thread
 
         [Fact]
-        public void AutoStopSpeechRecorderTest1() => BaseTest(new AutoStopRecorder<WinmmRecorder>(1000)); // need to test in the main thread
+        public void AutoStopSpeechRecorderTest1() => BaseTest(new AutoStopRecorder<WinmmRecorder>(1000), PlatformID.Win32NT); // need to test in the main thread
 
         [Fact]
-        public void AutoStopSpeechRecorderTest2() => BaseTest(new AutoStopRecorder<WinmmRecorder>(4000)); // need to test in the main thread
+        public void AutoStopSpeechRecorderTest2() => BaseTest(new AutoStopRecorder<WinmmRecorder>(4000), PlatformID.Win32NT); // need to test in the main thread
     }
 }
