@@ -1,33 +1,38 @@
 ﻿using System.Threading;
-using NUnit.Framework;
+using Xunit;
 using VoiceActions.NET.Recorders;
+using VoiceActions.NET.Tests.Utilities;
+using Xunit.Abstractions;
 
 namespace VoiceActions.NET.Tests.Recorders
 {
-    [TestFixture]
-    public class WitmmSpeechRecorderTests
+    public class WitmmSpeechRecorderTests : OutputTests
     {
-        private static void BaseTest(IRecorder recorder)
+        public WitmmSpeechRecorderTests(ITestOutputHelper output) : base(output)
         {
-            Assert.IsNotNull(recorder, "Recorder is null");
+        }
+
+        private void BaseTest(IRecorder recorder)
+        {
+            Assert.NotNull(recorder);
 
             recorder.Start();
             Thread.Sleep(2000);
             recorder.Stop();
 
-            Assert.IsNotNull(recorder.Data, "Recorder Data is null");
-            Assert.Greater(recorder.Data.Length, 0, "Recorder Data is empty");
+            Assert.NotNull(recorder.Data);
+            Assert.InRange(recorder.Data.Length, 1, int.MaxValue);
 
-            Assert.Pass($"Recorder: {recorder} is good!");
+            Output.WriteLine($"Recorder: {recorder} is good!");
         }
 
-        [Test]
+        [Fact]
         public void WinmmSpeechRecorderTest() => BaseTest(new WinmmRecorder()); // need to test in the main thread
 
-        [Test]
+        [Fact]
         public void AutoStopSpeechRecorderTest1() => BaseTest(new AutoStopRecorder<WinmmRecorder>(1000)); // need to test in the main thread
 
-        [Test]
+        [Fact]
         public void AutoStopSpeechRecorderTest2() => BaseTest(new AutoStopRecorder<WinmmRecorder>(4000)); // need to test in the main thread
     }
 }

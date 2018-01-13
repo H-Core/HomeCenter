@@ -1,12 +1,12 @@
 ﻿using System.IO;
-using NUnit.Framework;
+using System.Reflection;
 
 namespace VoiceActions.NET.Tests.Utilities
 {
     public static class TestUtilities
     {
-        public static string OutputPath => TestContext.CurrentContext.TestDirectory;
-        public static string ProjectPath => Path.GetDirectoryName(Path.GetDirectoryName(OutputPath));
+        public static string OutputPath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        public static string ProjectPath => Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(OutputPath)));
         public static string SolutionPath => Path.GetDirectoryName(ProjectPath);
         public static string TestFilesPath => Path.Combine(ProjectPath, "TestFiles");
         public static string RawSpeechPath => Path.Combine(TestFilesPath, "RawSpeech");
