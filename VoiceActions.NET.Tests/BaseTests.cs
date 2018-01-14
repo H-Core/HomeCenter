@@ -49,6 +49,11 @@ namespace VoiceActions.NET.Tests
             Assert.InRange(recorder.Data.Length, 1, int.MaxValue);
 
             BaseDisposeTest(recorder);
+            if (recorder is AutoStopRecorder autoStopRecorder)
+            {
+                Assert.Null(autoStopRecorder.Recorder);
+                Assert.Null(autoStopRecorder.Timer);
+            }
 
             Output?.WriteLine($"Recorder: {recorder} is good!");
         }
@@ -63,7 +68,16 @@ namespace VoiceActions.NET.Tests
 
             BaseDisposeTest(converter);
         }
-        
+
+        protected static void BaseArgsTest(VoiceManager manager, VoiceActionsEventArgs args)
+        {
+            Assert.Equal(manager.Converter, args.Converter);
+            Assert.Equal(manager.Recorder, args.Recorder);
+            Assert.Equal(manager.Data, args.Data);
+            Assert.False(args.IsHandled);
+            Assert.Equal(manager.Text, args.Text);
+        }
+
         protected void BaseVoiceManagerTest(VoiceManager manager, PlatformID? platformId = null, int timeout = 1000, int waitEventTimeout = 10000)
         {
             Assert.NotNull(manager);
@@ -80,37 +94,23 @@ namespace VoiceActions.NET.Tests
             manager.Started += (s, e) =>
             {
                 startedEvent.Set();
-                //Assert.Equal(manager.Converter, e.Converter);
-                //Assert.Equal(manager.Recorder, e.Recorder);
-                Assert.Null(e.Data);
-                Assert.False(e.IsHandled);
-                Assert.Null(e.Text);
+                BaseArgsTest(manager, e);
             };
             manager.Stopped += (s, e) =>
             {
                 stoppedEvent.Set();
-                //Assert.Equal(manager.Converter, e.Converter);
-                //Assert.Equal(manager.Recorder, e.Recorder);
-                Assert.Equal(manager.Data, e.Data);
-                Assert.False(e.IsHandled);
-                Assert.Null(e.Text);
+                BaseArgsTest(manager, e);
             };
             manager.NewText += (s, e) =>
             {
                 newTextEvent.Set();
-                //Assert.Equal(manager.Converter, e.Converter);
-                //Assert.Equal(manager.Recorder, e.Recorder);
-                Assert.Equal(manager.Data, e.Data);
-                Assert.False(e.IsHandled);
-                Assert.Equal(manager.Text, e.Text);
+                BaseArgsTest(manager, e);
 
                 if (string.Equals(manager.Text, "проверка", StringComparison.OrdinalIgnoreCase))
                 {
                     actionEvent.Set();
                 }
             };
-
-            //BaseRecorderTest(manager);
 
             manager.Change();
             Thread.Sleep(timeout);
@@ -131,12 +131,7 @@ namespace VoiceActions.NET.Tests
             Assert.True(newTextEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
             Assert.True(actionEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
 
-            // Check double disposing
-            manager.Dispose();
-            manager.Dispose();
-
-            //BaseRecorderTest(manager.Recorder);
-            BaseDisposeTest(manager);
+            BaseRecorderTest(manager);
 
             Assert.Null(manager.Recorder);
             Assert.Null(manager.Converter);

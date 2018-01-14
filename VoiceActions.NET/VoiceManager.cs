@@ -36,13 +36,15 @@ namespace VoiceActions.NET
         #region Events
 
         public event EventHandler<VoiceActionsEventArgs> NewText;
-        private void OnNewText() => NewText?.Invoke(this, new VoiceActionsEventArgs
+        private void OnNewText() => NewText?.Invoke(this, CreateArgs());
+
+        private VoiceActionsEventArgs CreateArgs() => new VoiceActionsEventArgs
         {
             Recorder = Recorder,
             Converter = Converter,
             Data = Data,
             Text = Text
-        });
+        };
 
         #endregion
 
@@ -75,12 +77,15 @@ namespace VoiceActions.NET
             ProcessText(await converter.Convert(bytes));
         }
 
-        public new void Start()
+        public override void Start()
         {
             var recorder = Recorder ?? throw new Exception("Recorder is null");
 
             recorder.Start();
-            base.Start();
+            IsStarted = true;
+            Text = null;
+            Data = null;
+            OnStarted(CreateArgs());
         }
 
         public void Start(bool disableAutoStopIfExists)
@@ -94,7 +99,7 @@ namespace VoiceActions.NET
             Start();
         }
 
-        public new void Stop()
+        public override void Stop()
         {
             var recorder = Recorder ?? throw new Exception("Recorder is null");
             if (recorder is IAutoStopRecorder autoStopRecorder)
@@ -123,10 +128,13 @@ namespace VoiceActions.NET
 
         private void OnStoppedRecorder(object sender, VoiceActionsEventArgs args)
         {
-            base.Stop();
+            IsStarted = false;
+
             var recorder = Recorder ?? throw new Exception("Recorder is null");
 
             Data = recorder.Data;
+            OnStopped(CreateArgs());
+
             ProcessSpeech(Data);
         }
 
@@ -134,7 +142,7 @@ namespace VoiceActions.NET
 
         #region IDisposable
 
-        public new void Dispose()
+        public override void Dispose()
         {
             _recorder?.Dispose();
             _recorder = null;

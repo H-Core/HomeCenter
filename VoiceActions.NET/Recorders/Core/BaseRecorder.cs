@@ -6,7 +6,7 @@ namespace VoiceActions.NET.Recorders.Core
     {
         #region Properties
 
-        public bool IsStarted { get; private set; }
+        public bool IsStarted { get; protected set; }
         public byte[] Data { get; protected set; }
 
         #endregion
@@ -14,32 +14,36 @@ namespace VoiceActions.NET.Recorders.Core
         #region Events
 
         public event EventHandler<VoiceActionsEventArgs> Started;
-        private void OnStarted() => Started?.Invoke(this, new VoiceActionsEventArgs { Recorder = this });
+        protected void OnStarted(VoiceActionsEventArgs args) => Started?.Invoke(this, args);
 
         public event EventHandler<VoiceActionsEventArgs> Stopped;
-        private void OnStopped() => Stopped?.Invoke(this, new VoiceActionsEventArgs { Recorder = this, Data = Data });
+        protected void OnStopped(VoiceActionsEventArgs args) => Stopped?.Invoke(this, args);
+
+        private VoiceActionsEventArgs CreateArgs() => 
+            new VoiceActionsEventArgs { Recorder = this, Data = Data };
 
         #endregion
 
         #region Public methods
 
-        public void Start()
+        public virtual void Start()
         {
             IsStarted = true;
-            OnStarted();
+            Data = null;
+            OnStarted(CreateArgs());
         }
 
-        public void Stop()
+        public virtual void Stop()
         {
             IsStarted = false;
-            OnStopped();
+            OnStopped(CreateArgs());
         }
 
         #endregion
 
         #region IDisposable
 
-        public void Dispose()
+        public virtual void Dispose()
         {
         }
 

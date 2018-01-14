@@ -6,7 +6,7 @@ namespace VoiceActions.NET.Converters.Core
     {
         #region IDisposable
 
-        public void Dispose()
+        public virtual void Dispose()
         {
         }
 

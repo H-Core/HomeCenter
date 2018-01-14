@@ -4,7 +4,7 @@ using VoiceActions.NET.Recorders.Core;
 
 namespace VoiceActions.NET.Recorders
 {
-    public class WinmmRecorder : BaseRecorder, IRecorder
+    public class WinmmRecorder : BaseRecorder
     {
         #region Private methods
 
@@ -18,7 +18,7 @@ namespace VoiceActions.NET.Recorders
 
         #region Public methods
 
-        public new void Start()
+        public override void Start()
         {
             MciSendString("open new Type waveaudio Alias recsound");
             MciSendString("record recsound");
@@ -26,7 +26,7 @@ namespace VoiceActions.NET.Recorders
             base.Start();
         }
 
-        public new void Stop()
+        public override void Stop()
         {
             var path = Path.GetTempFileName();
             MciSendString("save recsound " + path);

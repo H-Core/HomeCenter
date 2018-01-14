@@ -7,7 +7,7 @@ namespace VoiceActions.NET.Recorders
     {
         #region Properties
 
-        private Timer Timer { get; set; } = new Timer();
+        public Timer Timer { get; private set; } = new Timer();
         public double Interval {  get => Timer.Interval; set => Timer.Interval = value; }
         public bool AutoStopEnabled
         {
@@ -37,14 +37,14 @@ namespace VoiceActions.NET.Recorders
 
         #region Public methods
 
-        public new void Start()
+        public override void Start()
         {
             Timer.Start();
             Recorder.Start();
             base.Start();
         }
 
-        public new void Stop()
+        public override void Stop()
         {
             Timer.Stop();
             Recorder.Stop();
@@ -56,7 +56,7 @@ namespace VoiceActions.NET.Recorders
 
         #region IDisposable
 
-        public new void Dispose()
+        public override void Dispose()
         {
             Timer?.Dispose();
             Timer = null;
