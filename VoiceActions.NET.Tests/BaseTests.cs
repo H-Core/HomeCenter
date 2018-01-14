@@ -41,11 +41,11 @@ namespace VoiceActions.NET.Tests
             }
 
             recorder.Start();
-            //Thread.Sleep(timeout);
+            Thread.Sleep(timeout);
             recorder.Stop();
 
             Assert.NotNull(recorder.Data);
-            //Assert.InRange(recorder.Data.Length, 1, int.MaxValue);
+            Assert.InRange(recorder.Data.Length, 1, int.MaxValue);
 
             BaseDisposeTest(recorder);
 
@@ -106,16 +106,24 @@ namespace VoiceActions.NET.Tests
             //BaseRecorderTest(manager);
 
             manager.Change();
-            //Thread.Sleep(timeout);
+            Thread.Sleep(timeout);
             manager.Change();
 
             manager.Start();
-            //Thread.Sleep(timeout);
+            Thread.Sleep(timeout);
+            manager.Stop();
+
+            manager.Start(true);
+            Thread.Sleep(timeout);
             manager.Stop();
 
             Assert.True(startedEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
             Assert.True(stoppedEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
             Assert.True(newTextEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
+
+            // Check double disposing
+            manager.Dispose();
+            manager.Dispose();
 
             //BaseRecorderTest(manager.Recorder);
             BaseDisposeTest(manager);
