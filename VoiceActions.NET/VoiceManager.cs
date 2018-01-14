@@ -17,8 +17,7 @@ namespace VoiceActions.NET
 
         #region Properties
 
-        public IRecorder Recorder
-        {
+        public IRecorder Recorder {
             get => _recorder;
             set {
                 _recorder = value ?? throw new Exception("Recorder is null");
@@ -26,8 +25,7 @@ namespace VoiceActions.NET
             }
         }
 
-        public IConverter Converter
-        {
+        public IConverter Converter {
             get => _converter;
             set => _converter = value ?? throw new Exception("Converter is null");
         }
@@ -61,44 +59,6 @@ namespace VoiceActions.NET
         {
             Recorder = recorder;
             Converter = converter;
-        }
-
-        public VoiceManager(RecorderEnum recorder, ConverterEnum converter, object[] recorderArguments = null, object[] converterArguments = null) : this()
-        {
-            Recorder = GetRecorderFromEnum(recorder, recorderArguments ?? new object[0]);
-            Converter = GetConverterFromEnum(converter, converterArguments ?? new object[0]);
-        }
-
-        public VoiceManager(RecorderEnum recorder, params object[] arguments) : this()
-        {
-            Recorder = GetRecorderFromEnum(recorder, arguments);
-        }
-
-        public VoiceManager(ConverterEnum converter, params object[] arguments) : this()
-        {
-            Converter = GetConverterFromEnum(converter, arguments);
-        }
-
-        public static IRecorder GetRecorderFromEnum(RecorderEnum recorder, params object[] arguments)
-        {
-            switch (recorder)
-            {
-                case RecorderEnum.Winmm:
-                    return new WinmmRecorder();
-            }
-
-            return null;
-        }
-
-        public static IConverter GetConverterFromEnum(ConverterEnum converter, params object[] arguments)
-        {
-            switch (converter)
-            {
-                case ConverterEnum.WitAi:
-                    return new WitAiConverter(arguments.Length > 0 ? (string)arguments[0] : null);
-            }
-
-            return null;
         }
 
         #endregion
