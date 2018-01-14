@@ -109,11 +109,15 @@ namespace VoiceActions.NET.Tests
             Thread.Sleep(2000);
             manager.Change();
 
+            manager.Start();
+            Thread.Sleep(2000);
+            manager.Stop();
+
             Assert.True(startedEvent.WaitOne(TimeSpan.FromSeconds(10)));
             Assert.True(stoppedEvent.WaitOne(TimeSpan.FromSeconds(10)));
             Assert.True(newTextEvent.WaitOne(TimeSpan.FromSeconds(10)));
 
-            BaseRecorderTest(manager.Recorder);
+            //BaseRecorderTest(manager.Recorder);
             BaseDisposeTest(manager);
         }
     }
