@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using VoiceActions.NET.Converters;
 using VoiceActions.NET.Recorders;
 using VoiceActions.NET.Recorders.Core;
@@ -30,7 +29,6 @@ namespace VoiceActions.NET
             set => _converter = value ?? throw new Exception("Converter is null");
         }
 
-        private Dictionary<string, Action> ActionDictionary { get; } = new Dictionary<string, Action>();
         public string Text { get; private set; }
 
         #endregion
@@ -38,11 +36,10 @@ namespace VoiceActions.NET
         #region Events
 
         public event EventHandler<VoiceActionsEventArgs> NewText;
-        private void OnNewText(bool isHandled) => NewText?.Invoke(this, new VoiceActionsEventArgs
+        private void OnNewText() => NewText?.Invoke(this, new VoiceActionsEventArgs
         {
             Recorder = Recorder,
             Converter = Converter,
-            IsHandled = isHandled,
             Data = Data,
             Text = Text
         });
@@ -65,21 +62,10 @@ namespace VoiceActions.NET
 
         #region Public methods
 
-        public void SetActionHandler(string text, Action action)
-        {
-            ActionDictionary[text] = action;
-        }
-
         public void ProcessText(string text)
         {
             Text = text;
-            var isHandled = ActionDictionary.ContainsKey(text) && ActionDictionary[text] != null;
-            OnNewText(isHandled);
-
-            if (isHandled)
-            {
-                ActionDictionary[text]?.Invoke();
-            }
+            OnNewText();
         }
 
         public async void ProcessSpeech(byte[] bytes)
