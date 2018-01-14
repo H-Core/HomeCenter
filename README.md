@@ -6,8 +6,15 @@ This library allows you to assign any actions performed on the voice command. As
 # Example
 Coming soon
 
+# Branches
+
+| master(stable) |               |
+|----------------|---------------|
+|    Travic CI   |    AppVeyor   |  
+| [![Build Status](https://api.travis-ci.org/HavenDV/VoiceActions.NET.svg?branch=master)](https://travis-ci.org/HavenDV/VoiceActions.NET) | [![Build status](https://ci.appveyor.com/api/projects/status/6d1qhja444di11pt/branch/master?svg=true)](https://ci.appveyor.com/project/HavenDV/voiceactions-net/branch/master) |
+
 # Requirements
-+ ![.NET Standard 2.0](https://github.com/dotnet/standard/blob/master/docs/versions/netstandard2.0.md)
++ [.NET Standard 2.0](https://github.com/dotnet/standard/blob/master/docs/versions/netstandard2.0.md)
 
 # Contacts
 * [mail](mailto:havendv@gmail.com)
