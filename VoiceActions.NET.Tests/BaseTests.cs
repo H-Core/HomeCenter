@@ -72,13 +72,48 @@ namespace VoiceActions.NET.Tests
                 return;
             }
 
-            BaseRecorderTest(manager.Recorder);
-            BaseRecorderTest(manager);
+            var startedEvent = new AutoResetEvent(false);
+            var stoppedEvent = new AutoResetEvent(false);
+            var newTextEvent = new AutoResetEvent(false);
+            manager.Started += (s, e) =>
+            {
+                startedEvent.Set();
+                //Assert.Equal(manager.Converter, e.Converter);
+                //Assert.Equal(manager.Recorder, e.Recorder);
+                Assert.Null(e.Data);
+                Assert.False(e.IsHandled);
+                Assert.Null(e.Text);
+            };
+            manager.Stopped += (s, e) =>
+            {
+                stoppedEvent.Set();
+                //Assert.Equal(manager.Converter, e.Converter);
+                //Assert.Equal(manager.Recorder, e.Recorder);
+                Assert.Equal(manager.Data, e.Data);
+                Assert.False(e.IsHandled);
+                Assert.Null(e.Text);
+            };
+            manager.NewText += (s, e) =>
+            {
+                newTextEvent.Set();
+                //Assert.Equal(manager.Converter, e.Converter);
+                //Assert.Equal(manager.Recorder, e.Recorder);
+                Assert.Equal(manager.Data, e.Data);
+                Assert.False(e.IsHandled);
+                Assert.Equal(manager.Text, e.Text);
+            };
+
+            //BaseRecorderTest(manager);
 
             manager.Change();
             Thread.Sleep(2000);
             manager.Change();
 
+            Assert.True(startedEvent.WaitOne(TimeSpan.FromSeconds(10)));
+            Assert.True(stoppedEvent.WaitOne(TimeSpan.FromSeconds(10)));
+            Assert.True(newTextEvent.WaitOne(TimeSpan.FromSeconds(10)));
+
+            BaseRecorderTest(manager.Recorder);
             BaseDisposeTest(manager);
         }
     }
