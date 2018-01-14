@@ -1,7 +1,13 @@
 # VoiceActions.NET [![Language](https://img.shields.io/badge/language-C%23-blue.svg?style=flat-square)](https://github.com/HavenDV/VoiceActions.NET/search?l=C%23&o=desc&s=&type=Code) [![codecov](https://codecov.io/gh/HavenDV/VoiceActions.NET/branch/master/graph/badge.svg)](https://codecov.io/gh/HavenDV/VoiceActions.NET) [![License](https://img.shields.io/github/license/HavenDV/VoiceActions.NET.svg?label=License&maxAge=86400)](LICENSE.md)
 
 # Description
-This library allows you to assign any actions performed on the voice command. As voice sources, WinMM libraries are currently available, as a voice to text converter - Wit.ai
+This library allows you to assign any actions performed on the voice command.
+
+Available recorders:
++ Windows Multimedia API(winmm.dll)
+
+Available voice to text converters:
++ Wit.ai
 
 # Example
 Coming soon
