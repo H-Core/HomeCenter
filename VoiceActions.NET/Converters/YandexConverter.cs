@@ -45,10 +45,10 @@ namespace VoiceActions.NET.Converters
             request.ContentLength = bytes.Length;
             request.GetRequestStream().Write(bytes, 0, bytes.Length);
 
-            var text = request.GetResponseText();
+            (var text, var exception) = request.GetResponseText();
             if (string.IsNullOrWhiteSpace(text))
             {
-                return null;
+                return exception.Message;
             }
 
             var document = XDocument.Parse(text);
