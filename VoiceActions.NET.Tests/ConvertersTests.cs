@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using Xunit;
 using VoiceActions.NET.Converters;
 using VoiceActions.NET.Tests.Utilities;
+using Xunit;
 
-namespace VoiceActions.NET.Tests.Converters
+namespace VoiceActions.NET.Tests
 {
     public class ConvertersTests : BaseTests
     {

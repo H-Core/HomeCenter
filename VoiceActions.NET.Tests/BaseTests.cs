@@ -31,7 +31,7 @@ namespace VoiceActions.NET.Tests
         protected bool CheckPlatform(PlatformID? platformId) => 
             platformId == null || platformId == Environment.OSVersion.Platform;
 
-        protected void BaseRecorderTest(IRecorder recorder, PlatformID? platformId = null)
+        protected void BaseRecorderTest(IRecorder recorder, PlatformID? platformId = null, int timeout = 1000)
         {
             Assert.NotNull(recorder);
             if (!CheckPlatform(platformId))
@@ -41,7 +41,7 @@ namespace VoiceActions.NET.Tests
             }
 
             recorder.Start();
-            Thread.Sleep(2000);
+            Thread.Sleep(timeout);
             recorder.Stop();
 
             Assert.NotNull(recorder.Data);
@@ -63,7 +63,7 @@ namespace VoiceActions.NET.Tests
             BaseDisposeTest(converter);
         }
 
-        protected void BaseVoiceManagerTest(VoiceManager manager, PlatformID? platformId = null)
+        protected void BaseVoiceManagerTest(VoiceManager manager, PlatformID? platformId = null, int timeout = 1000, int waitEventTimeout = 10000)
         {
             Assert.NotNull(manager);
             if (!CheckPlatform(platformId))
@@ -106,16 +106,16 @@ namespace VoiceActions.NET.Tests
             //BaseRecorderTest(manager);
 
             manager.Change();
-            Thread.Sleep(2000);
+            Thread.Sleep(timeout);
             manager.Change();
 
             manager.Start();
-            Thread.Sleep(2000);
+            Thread.Sleep(timeout);
             manager.Stop();
 
-            Assert.True(startedEvent.WaitOne(TimeSpan.FromSeconds(10)));
-            Assert.True(stoppedEvent.WaitOne(TimeSpan.FromSeconds(10)));
-            Assert.True(newTextEvent.WaitOne(TimeSpan.FromSeconds(10)));
+            Assert.True(startedEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
+            Assert.True(stoppedEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
+            Assert.True(newTextEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
 
             //BaseRecorderTest(manager.Recorder);
             BaseDisposeTest(manager);

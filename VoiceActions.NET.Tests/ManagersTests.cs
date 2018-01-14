@@ -15,7 +15,7 @@ namespace VoiceActions.NET.Tests
         [Fact]
         public void AutoWinmmWitAiVoiceManagerTest() => BaseVoiceManagerTest(new VoiceManager
         {
-            Recorder = new AutoStopRecorder(new WinmmRecorder(), 2000),
+            Recorder = new AutoStopRecorder(new WinmmRecorder(), 1000),
             Converter = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")
         }, PlatformID.Win32NT);
 

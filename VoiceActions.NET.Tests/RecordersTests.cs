@@ -1,9 +1,9 @@
 ﻿using System;
-using Xunit;
 using VoiceActions.NET.Recorders;
+using Xunit;
 using Xunit.Abstractions;
 
-namespace VoiceActions.NET.Tests.Recorders
+namespace VoiceActions.NET.Tests
 {
     public class RecordersTests : BaseTests
     {
@@ -17,10 +17,10 @@ namespace VoiceActions.NET.Tests.Recorders
 
         [Fact]
         public void AutoStopRecorderTest1() => BaseRecorderTest(
-            new AutoStopRecorder(new WinmmRecorder(), 1000), PlatformID.Win32NT);
+            new AutoStopRecorder(new WinmmRecorder(), 500), PlatformID.Win32NT);
 
         [Fact]
         public void AutoStopRecorderTest2() => BaseRecorderTest(
-            new AutoStopRecorder(new WinmmRecorder(), 4000), PlatformID.Win32NT);
+            new AutoStopRecorder(new WinmmRecorder(), 2000), PlatformID.Win32NT);
     }
 }
