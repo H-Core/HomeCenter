@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using VoiceActions.NET.Converters;
 using VoiceActions.NET.Recorders;
+using VoiceActions.NET.Tests.Utilities;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -63,6 +64,14 @@ namespace VoiceActions.NET.Tests
             BaseDisposeTest(converter);
         }
 
+        protected static void WaitEvents(int timeout, params AutoResetEvent[] events)
+        {
+            foreach (var resetEvent in events)
+            {
+                Assert.True(resetEvent.WaitOne(TimeSpan.FromMilliseconds(timeout)));
+            }
+        }
+
         protected void BaseVoiceManagerTest(VoiceManager manager, PlatformID? platformId = null, int timeout = 1000, int waitEventTimeout = 10000)
         {
             Assert.NotNull(manager);
@@ -75,6 +84,7 @@ namespace VoiceActions.NET.Tests
             var startedEvent = new AutoResetEvent(false);
             var stoppedEvent = new AutoResetEvent(false);
             var newTextEvent = new AutoResetEvent(false);
+            var actionEvent = new AutoResetEvent(false);
             manager.Started += (s, e) =>
             {
                 startedEvent.Set();
@@ -102,6 +112,7 @@ namespace VoiceActions.NET.Tests
                 Assert.False(e.IsHandled);
                 Assert.Equal(manager.Text, e.Text);
             };
+            manager.SetActionHandler("проверка", () => actionEvent.Set());
 
             //BaseRecorderTest(manager);
 
@@ -117,9 +128,9 @@ namespace VoiceActions.NET.Tests
             Thread.Sleep(timeout);
             manager.Stop();
 
-            Assert.True(startedEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
-            Assert.True(stoppedEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
-            Assert.True(newTextEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
+            manager.ProcessSpeech(TestUtilities.GetRawSpeech("speech1.wav"));
+
+            WaitEvents(waitEventTimeout, startedEvent, stoppedEvent, newTextEvent, actionEvent);
 
             // Check double disposing
             manager.Dispose();
@@ -127,6 +138,9 @@ namespace VoiceActions.NET.Tests
 
             //BaseRecorderTest(manager.Recorder);
             BaseDisposeTest(manager);
+
+            Assert.Null(manager.Recorder);
+            Assert.Null(manager.Converter);
         }
     }
 }
