@@ -5,7 +5,7 @@ using VoiceActions.NET.Tests.Utilities;
 
 namespace VoiceActions.NET.Tests.Converters
 {
-    public class WitAiConverterTests : BaseTests
+    public class ConvertersTests : BaseTests
     {
         [Fact]
         public async Task ConvertTest() => await BaseConverterTest(

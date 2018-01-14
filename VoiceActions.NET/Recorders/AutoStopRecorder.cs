@@ -3,7 +3,7 @@ using VoiceActions.NET.Recorders.Core;
 
 namespace VoiceActions.NET.Recorders
 {
-    public class AutoStopRecorder<T> : BaseRecorder, IAutoStopRecorder where T : IRecorder, new()
+    public class AutoStopRecorder : BaseRecorder, IAutoStopRecorder
     {
         #region Properties
 
@@ -19,14 +19,16 @@ namespace VoiceActions.NET.Recorders
             }
         }
 
-        public IRecorder Recorder { get; private set; } = new T();
+        public IRecorder Recorder { get; private set; }
 
         #endregion
 
         #region Constructors
 
-        public AutoStopRecorder(int interval)
+        public AutoStopRecorder(IRecorder recorder, int interval)
         {
+            Recorder = recorder;
+
             Timer.Interval = interval;
             Timer.Elapsed += OnTimerOnElapsed;
         }

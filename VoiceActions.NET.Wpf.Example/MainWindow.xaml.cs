@@ -13,7 +13,7 @@ namespace VoiceActions.NET.Wpf.Example
 
         private VoiceManager VoiceManager { get; set; } = new VoiceManager
         {
-            Recorder = new AutoStopRecorder<WinmmRecorder>(3000),
+            Recorder = new AutoStopRecorder(new WinmmRecorder(), 3000),
             Converter = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")
         };
 

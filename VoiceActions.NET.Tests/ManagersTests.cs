@@ -6,16 +6,16 @@ using Xunit.Abstractions;
 
 namespace VoiceActions.NET.Tests
 {
-    public class VoiceManagerTests : BaseTests
+    public class ManagersTests : BaseTests
     {
-        public VoiceManagerTests(ITestOutputHelper output) : base(output)
+        public ManagersTests(ITestOutputHelper output) : base(output)
         {
         }
 
         [Fact]
         public void AutoWinmmWitAiVoiceManagerTest() => BaseVoiceManagerTest(new VoiceManager
         {
-            Recorder = new AutoStopRecorder<WinmmRecorder>(2000),
+            Recorder = new AutoStopRecorder(new WinmmRecorder(), 2000),
             Converter = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")
         }, PlatformID.Win32NT);
 
@@ -25,5 +25,12 @@ namespace VoiceActions.NET.Tests
             Recorder = new WinmmRecorder(),
             Converter = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")
         }, PlatformID.Win32NT);
+
+        [Fact]
+        public void VoiceManagerConstructorTest() => BaseVoiceManagerTest(
+            new VoiceManager(
+                new WinmmRecorder(), 
+                new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")), 
+            PlatformID.Win32NT);
     }
 }
