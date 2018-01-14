@@ -8,6 +8,7 @@ Available recorders:
 
 Available voice to text converters:
 + Wit.ai
++ Yandex SpeechKit
 
 # Example
 Coming soon
