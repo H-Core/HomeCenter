@@ -75,6 +75,10 @@ namespace VoiceActions.NET.Tests
             BaseRecorderTest(manager.Recorder);
             BaseRecorderTest(manager);
 
+            manager.Change();
+            Thread.Sleep(2000);
+            manager.Change();
+
             BaseDisposeTest(manager);
         }
     }
