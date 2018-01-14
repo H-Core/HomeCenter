@@ -150,11 +150,11 @@ namespace VoiceActions.NET
 
         public new void Dispose()
         {
-            Recorder?.Dispose();
-            Recorder = null;
+            _recorder?.Dispose();
+            _recorder = null;
 
-            Converter?.Dispose();
-            Converter = null;
+            _converter?.Dispose();
+            _converter = null;
         }
 
         #endregion
