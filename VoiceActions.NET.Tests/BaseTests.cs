@@ -35,6 +35,13 @@ namespace VoiceActions.NET.Tests
         protected void BaseRecorderTest(IRecorder recorder, PlatformID? platformId = null, int timeout = 1000)
         {
             Assert.NotNull(recorder);
+            var autoStopRecorder = recorder as AutoStopRecorder;
+            if (autoStopRecorder != null)
+            {
+                Assert.False(autoStopRecorder.AutoStopEnabled);
+                Assert.InRange(autoStopRecorder.Interval, 1, int.MaxValue);
+            }
+
             if (!CheckPlatform(platformId))
             {
                 Output?.WriteLine($"Recorder: {recorder} not support current system: {Environment.OSVersion}");
@@ -49,7 +56,7 @@ namespace VoiceActions.NET.Tests
             Assert.InRange(recorder.Data.Length, 1, int.MaxValue);
 
             BaseDisposeTest(recorder);
-            if (recorder is AutoStopRecorder autoStopRecorder)
+            if (autoStopRecorder != null)
             {
                 Assert.Null(autoStopRecorder.Recorder);
                 Assert.Null(autoStopRecorder.Timer);

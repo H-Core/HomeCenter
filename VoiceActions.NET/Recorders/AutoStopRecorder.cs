@@ -9,6 +9,7 @@ namespace VoiceActions.NET.Recorders
 
         public Timer Timer { get; private set; } = new Timer();
         public double Interval {  get => Timer.Interval; set => Timer.Interval = value; }
+
         public bool AutoStopEnabled
         {
             get => Timer.Enabled;
