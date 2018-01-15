@@ -8,7 +8,6 @@ namespace VoiceActions.NET
     {
         public IRecorder Recorder { get; set; }
         public IConverter Converter { get; set; }
-        public bool IsHandled { get; set; }
         public byte[] Data { get; set; }
         public string Text { get; set; }
     }

@@ -37,8 +37,8 @@ namespace VoiceActions.NET
 
         public event EventHandler<VoiceActionsEventArgs> NewText;
         private void OnNewText() => NewText?.Invoke(this, CreateArgs());
-
-        private VoiceActionsEventArgs CreateArgs() => new VoiceActionsEventArgs
+        
+        protected VoiceActionsEventArgs CreateArgs() => new VoiceActionsEventArgs
         {
             Recorder = Recorder,
             Converter = Converter,
