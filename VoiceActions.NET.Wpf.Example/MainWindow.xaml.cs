@@ -14,7 +14,7 @@ namespace VoiceActions.NET.Wpf.Example
         private ActionsManager ActionsManager { get; set; } = new ActionsManager
         {
             Recorder = new AutoStopRecorder(new WinmmRecorder(), 3000),
-            Converter = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")
+            Converter = new YandexConverter("1ce29818-0d15-4080-b6a1-ea5267c9fefd"){ Lang = "ru-RU" }
         };
 
         #endregion
