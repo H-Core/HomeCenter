@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using VoiceActions.NET.Converters;
 using VoiceActions.NET.Recorders;
 using VoiceActions.NET.Runners;
@@ -73,6 +74,12 @@ namespace VoiceActions.NET
 
             return CommandsDictionary.ContainsKey(key) || ActionDictionary.ContainsKey(key);
         }
+
+        public List<(string, string)> GetCommands() =>
+            CommandsDictionary.Select(pair => (pair.Key, pair.Value)).ToList();
+
+        public List<(string, Action)> GetActions() =>
+            ActionDictionary.Select(pair => (pair.Key, pair.Value)).ToList();
 
         #endregion
 
