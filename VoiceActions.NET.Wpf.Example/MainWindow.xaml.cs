@@ -69,9 +69,10 @@ namespace VoiceActions.NET.Wpf.Example
 
         private void OnNewText(object source, VoiceActionsEventArgs e) => Dispatcher.Invoke(() => {
             var text = e.Text;
-            if (text.Contains("The remote server returned an error: (400) Bad Request"))
+            if (string.IsNullOrWhiteSpace(text))
             {
-                Console("Bad or empty request");
+                var message = ActionsManager?.Converter?.Exception?.Message;
+                Console($"Bad or empty request. {(!string.IsNullOrWhiteSpace(message) ? $"Message: {message}" : "")}");
                 return;
             }
 

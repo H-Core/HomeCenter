@@ -87,7 +87,14 @@ namespace VoiceActions.NET
 
         private void OnNewText(object sender, VoiceActionsEventArgs args)
         {
-            var key = ToInvariantString(args.Text);
+            var text = args.Text;
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                OnText(false);
+                return;
+            }
+
+            var key = ToInvariantString(text);
             var isHandled = false;
             if (CommandsDictionary.ContainsKey(key))
             {

@@ -56,7 +56,8 @@ namespace VoiceActions.NET.Converters
             (var text, var exception) = request.GetResponseText();
             if (string.IsNullOrWhiteSpace(text))
             {
-                return exception.Message;
+                Exception = exception;
+                return null;
             }
 
             var obj = JsonConvert.DeserializeObject<RootObject>(text);
