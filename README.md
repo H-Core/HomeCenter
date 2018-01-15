@@ -18,16 +18,22 @@ Create manager object:
 
 private ActionsManager ActionsManager { get; set; } = new ActionsManager
 {
-	Recorder = new AutoStopRecorder(new WinmmRecorder(), 3000), // Select recorder which stops after 3000 milliseconds with Windows Multimedia API base recorder
-	Converter = new WitAiConverter("your-token-here") // Select Wit.ai voice-to-text converter
+	// Select recorder which stops after 3000 milliseconds with Windows Multimedia API base recorder
+	Recorder = new AutoStopRecorder(new WinmmRecorder(), 3000),
+	 // Select Wit.ai voice-to-text converter
+	Converter = new WitAiConverter("your-token-here")
 };
+
+ ```
 
 Set up actions:
 
 ```cs
 
-ActionsManager.SetCommand("test", "run explorer.exe C:/"); // when you say "test" the manager runs the explorer.exe with the "C:/" base folder
-ActionsManager.SetAction("test", () => MessageBox.Show("test")); // when you say "test" the manager runs your custom action
+ // when you say "test" the manager runs the explorer.exe with the "C:/" base folder
+ActionsManager.SetCommand("test", "run explorer.exe C:/");
+ // when you say "test" the manager runs your custom action
+ActionsManager.SetAction("test", () => MessageBox.Show("test"));
 
  ```
 
