@@ -81,7 +81,6 @@ namespace VoiceActions.NET.Tests
             Assert.Equal(manager.Converter, args.Converter);
             Assert.Equal(manager.Recorder, args.Recorder);
             Assert.Equal(manager.Data, args.Data);
-            Assert.False(args.IsHandled);
             Assert.Equal(manager.Text, args.Text);
         }
 
