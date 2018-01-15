@@ -84,7 +84,7 @@ namespace VoiceActions.NET.Tests
             Assert.Equal(manager.Text, args.Text);
         }
 
-        protected void BaseVoiceManagerTest(VoiceManager manager, PlatformID? platformId = null, int timeout = 1000, int waitEventTimeout = 10000)
+        protected void BaseVoiceManagerTest(VoiceManager manager, PlatformID? platformId = null, int timeout = 1000, int waitEventTimeout = 20000)
         {
             Assert.NotNull(manager);
             if (!CheckPlatform(platformId))
