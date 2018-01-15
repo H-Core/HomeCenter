@@ -2,6 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>0.9.0</Version>
+    <Authors>Konstantin Stukov</Authors>
+    <Company />
+    <Description>This library allows you to assign any actions performed on the voice command.</Description>
+    <PackageLicenseUrl>https://github.com/HavenDV/VoiceActions.NET/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/HavenDV/VoiceActions.NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/HavenDV/VoiceActions.NET</RepositoryUrl>
+    <PackageTags>voice, speech, speech-to-text, voice-actions, record, sound</PackageTags>
+    <AssemblyVersion>0.9.0.0</AssemblyVersion>
+    <FileVersion>0.9.0.0</FileVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
