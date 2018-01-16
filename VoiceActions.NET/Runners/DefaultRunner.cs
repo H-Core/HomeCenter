@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Linq;
 using VoiceActions.NET.Runners.Core;
 
 namespace VoiceActions.NET.Runners
@@ -26,9 +25,14 @@ namespace VoiceActions.NET.Runners
 
         #region Private methods
 
-        private void RunInternal(string command)
+        private static void RunInternal(string command)
         {
-            (var prefix, var postfix) = GetPrefixPostfix(command, ' ');
+            if (string.IsNullOrWhiteSpace(command))
+            {
+                return;
+            }
+
+            (var prefix, var postfix) = command.SplitOnlyFirst(' ');
 
             switch (prefix.ToLowerInvariant())
             {
@@ -38,19 +42,11 @@ namespace VoiceActions.NET.Runners
             }
         }
 
-        private void RunProcess(string command)
+        private static void RunProcess(string command)
         {
-            (var prefix, var postfix) = GetPrefixPostfix(command, ' ');
+            (var prefix, var postfix) = command.SplitOnlyFirst(' ');
 
             Process.Start(prefix, postfix);
-        }
-
-        private (string, string) GetPrefixPostfix(string command, char separator)
-        {
-            var prefix = command.Split(separator).FirstOrDefault();
-            var postfix = command.Replace(prefix, string.Empty).Trim();
-
-            return (prefix, postfix);
         }
 
         #endregion
