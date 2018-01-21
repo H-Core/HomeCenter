@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace VoiceActions.NET.Runners.Core
+namespace VoiceActions.NET.Utilities
 {
     public static class StringExtensions
     {
