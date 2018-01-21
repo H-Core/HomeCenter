@@ -13,7 +13,7 @@ namespace VoiceActions.NET.Runners.Core
             }
 
             var prefix = text.Split(separator).FirstOrDefault();
-            var postfix = text.Replace(prefix, string.Empty).Trim(separator);
+            var postfix = text.Replace(prefix ?? "", string.Empty).Trim(separator);
 
             return (prefix, postfix);
         }

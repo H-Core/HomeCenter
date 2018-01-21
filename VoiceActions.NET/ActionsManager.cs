@@ -4,6 +4,7 @@ using System.Linq;
 using VoiceActions.NET.Converters;
 using VoiceActions.NET.Recorders;
 using VoiceActions.NET.Runners;
+using VoiceActions.NET.Runners.Core;
 
 namespace VoiceActions.NET
 {
@@ -80,6 +81,21 @@ namespace VoiceActions.NET
 
         public List<(string, Action)> GetActions() =>
             ActionDictionary.Select(pair => (pair.Key, pair.Value)).ToList();
+
+        public string Export() => string.Join(Environment.NewLine + Environment.NewLine,
+            CommandsDictionary.Select(pair => $"{pair.Key};{pair.Value}"));
+
+        public void Import(string data)
+        {
+            var commands = data
+                .Split(new[] {Environment.NewLine + Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
+                .Select(line => line.SplitOnlyFirst(';'));
+
+            foreach ((var name, var command) in commands)
+            {
+                SetCommand(name, command);
+            }
+        }
 
         #endregion
 
