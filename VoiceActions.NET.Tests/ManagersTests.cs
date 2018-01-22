@@ -27,13 +27,6 @@ namespace VoiceActions.NET.Tests
         }, PlatformID.Win32NT);
 
         [Fact]
-        public void VoiceManagerConstructorTest() => BaseVoiceManagerTest(
-            new VoiceManager(
-                new WinmmRecorder(), 
-                new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")), 
-            PlatformID.Win32NT);
-
-        [Fact]
         public void WinmmYandexVoiceManagerTest() => BaseVoiceManagerTest(new VoiceManager
         {
             Recorder = new WinmmRecorder(),

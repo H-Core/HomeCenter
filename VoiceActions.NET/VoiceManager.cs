@@ -10,7 +10,6 @@ namespace VoiceActions.NET
         #region Fields
 
         private IRecorder _recorder;
-        private IConverter _converter;
 
         #endregion
 
@@ -19,15 +18,21 @@ namespace VoiceActions.NET
         public IRecorder Recorder {
             get => _recorder;
             set {
-                _recorder = value ?? throw new Exception("Recorder is null");
-                _recorder.Stopped += OnStoppedRecorder;
+                if (value == null && _recorder != null)
+                {
+                    _recorder.Stopped -= OnStoppedRecorder;
+                }
+
+                _recorder = value;
+
+                if (value != null)
+                {
+                    _recorder.Stopped += OnStoppedRecorder;
+                }
             }
         }
 
-        public IConverter Converter {
-            get => _converter;
-            set => _converter = value ?? throw new Exception("Converter is null");
-        }
+        public IConverter Converter { get; set; }
 
         public string Text { get; private set; }
 
@@ -49,16 +54,6 @@ namespace VoiceActions.NET
         #endregion
 
         #region Constructors
-
-        public VoiceManager()
-        {
-        }
-
-        public VoiceManager(IRecorder recorder, IConverter converter) : this()
-        {
-            Recorder = recorder;
-            Converter = converter;
-        }
 
         #endregion
 
@@ -147,8 +142,8 @@ namespace VoiceActions.NET
             _recorder?.Dispose();
             _recorder = null;
 
-            _converter?.Dispose();
-            _converter = null;
+            Converter?.Dispose();
+            Converter = null;
         }
 
         #endregion

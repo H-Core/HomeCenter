@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using VoiceActions.NET.Converters;
-using VoiceActions.NET.Recorders;
 using VoiceActions.NET.Runners;
-using VoiceActions.NET.Runners.Core;
+using VoiceActions.NET.Utilities;
 
 namespace VoiceActions.NET
 {
@@ -12,19 +10,26 @@ namespace VoiceActions.NET
     {
         #region Fields
 
-        private Dictionary<string, Action> ActionDictionary { get; } = new Dictionary<string, Action>();
-        private IRunner _runner = new DefaultRunner();
+        private IRunner _runner;
 
         #endregion
 
         #region Properties
 
-        public IRunner Runner {
+        public IRunner Runner
+        {
             get => _runner;
-            set => _runner = value ?? throw new Exception("Runner is null");
+            set {
+                if (value is DefaultRunner defaultRunner)
+                {
+                    defaultRunner.Dictionary = CommandsDictionary;
+                }
+                _runner = value;
+            }
         }
 
-        private Dictionary<string, string> CommandsDictionary { get; } = new Dictionary<string, string>();
+        private InvariantStringDictionary<Action> ActionDictionary { get; } = new InvariantStringDictionary<Action>();
+        private InvariantStringDictionary<string> CommandsDictionary { get; } = new InvariantStringDictionary<string>();
 
         #endregion
 
@@ -50,31 +55,19 @@ namespace VoiceActions.NET
 
         public ActionsManager()
         {
-            Initialize();
+            Runner = _runner ?? new DefaultRunner();
+            NewText += OnNewText;
         }
-
-        public ActionsManager(IRecorder recorder, IConverter converter, IRunner runner) : base(recorder, converter)
-        {
-            Runner = runner;
-
-            Initialize();
-        }
-
-        private void Initialize() => NewText += OnNewText;
 
         #endregion
 
         #region Public methods
 
-        public void SetCommand(string text, string command) => CommandsDictionary[ToInvariantString(text)] = command;
-        public void SetAction(string text, Action action) => ActionDictionary[ToInvariantString(text)] = action;
+        public void SetCommand(string text, string command) => CommandsDictionary[text] = command;
+        public void SetAction(string text, Action action) => ActionDictionary[text] = action;
 
-        public bool IsHandled(string text)
-        {
-            var key = ToInvariantString(text);
-
-            return CommandsDictionary.ContainsKey(key) || ActionDictionary.ContainsKey(key);
-        }
+        public bool IsHandled(string text) => 
+            CommandsDictionary.ContainsKey(text) || ActionDictionary.ContainsKey(text);
 
         public List<(string, string)> GetCommands() =>
             CommandsDictionary.Select(pair => (pair.Key, pair.Value)).ToList();
@@ -110,30 +103,23 @@ namespace VoiceActions.NET
                 return;
             }
 
-            var key = ToInvariantString(text);
             var isHandled = false;
-            if (CommandsDictionary.ContainsKey(key))
+            if (CommandsDictionary.ContainsKey(text))
             {
                 isHandled = true;
 
-                var command = CommandsDictionary[key];
+                var command = CommandsDictionary[text];
                 Runner?.Run(command);
             }
-            if (ActionDictionary.ContainsKey(key))
+            if (ActionDictionary.ContainsKey(text))
             {
                 isHandled = true;
 
-                ActionDictionary[key]?.Invoke();
+                ActionDictionary[text]?.Invoke();
             }
 
             OnText(isHandled);
         }
-
-        #endregion
-
-        #region Private methods
-
-        private string ToInvariantString(string text) => text.ToLowerInvariant();
 
         #endregion
 
