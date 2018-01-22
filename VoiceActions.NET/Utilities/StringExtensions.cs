@@ -7,14 +7,19 @@ namespace VoiceActions.NET.Utilities
     {
         public static (string, string) SplitOnlyFirst(this string text, char separator)
         {
-            if (string.IsNullOrWhiteSpace(text))
+            if (text == null)
             {
                 throw new ArgumentNullException(nameof(text));
             }
+            if (!text.Contains(separator))
+            {
+                return (text, null);
+            }
 
-            var prefix = text.Split(separator).FirstOrDefault();
-            var postfix = text.Replace(prefix ?? "", string.Empty).Trim(separator);
-
+            var array = text.Split(separator);
+            var prefix = array.FirstOrDefault();
+            var postfix = string.Join(separator.ToString(), array.Skip(1));
+            
             return (prefix, postfix);
         }
     }
