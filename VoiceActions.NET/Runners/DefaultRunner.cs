@@ -1,10 +1,17 @@
 ﻿using System.Diagnostics;
 using VoiceActions.NET.Runners.Core;
+using VoiceActions.NET.Utilities;
 
 namespace VoiceActions.NET.Runners
 {
     public class DefaultRunner : BaseRunner
     {
+        #region Properties
+
+        public InvariantStringDictionary<string> Dictionary { get; set; }
+
+        #endregion
+
         #region Constructors
 
         public DefaultRunner()
@@ -18,14 +25,15 @@ namespace VoiceActions.NET.Runners
 
         public override string[] GetSupportedCommands() => new[]
         {
-            "RUN program.exe arguments"
+            "RUN program.exe arguments",
+            "CASE text"
         };
 
         #endregion
 
         #region Private methods
 
-        private static void RunInternal(string command)
+        private void RunInternal(string command)
         {
             if (string.IsNullOrWhiteSpace(command))
             {
@@ -38,6 +46,10 @@ namespace VoiceActions.NET.Runners
             {
                 case "run":
                     RunProcess(postfix);
+                    break;
+
+                case "case":
+                    RunInternal(Dictionary?[postfix]);
                     break;
             }
         }
