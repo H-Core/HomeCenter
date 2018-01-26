@@ -2,14 +2,8 @@
 
 namespace VoiceActions.NET.Runners.Core
 {
-    public class BaseRunner : IRunner
+    public abstract class BaseRunner : IRunner
     {
-        #region Properties
-
-        protected Action<string> Action { private get; set; }
-
-        #endregion
-
         #region Events
 
         public event EventHandler<VoiceActionsEventArgs> BeforeRun;
@@ -24,16 +18,16 @@ namespace VoiceActions.NET.Runners.Core
 
         #region Public methods
 
-        public virtual void Run(string command)
+        public void Run(string command)
         {
             OnBeforeRun(CreateArgs(command));
 
-            Action?.Invoke(command);
+            RunInternal(command);
 
             OnAfterRun(CreateArgs(command));
         }
 
-        public virtual string[] GetSupportedCommands() => new string[0];
+        public abstract string[] GetSupportedCommands();
 
         public virtual string GetSupportedCommandsText() => $@"Supported commands:
 {string.Join(Environment.NewLine, GetSupportedCommands())}";
@@ -45,6 +39,12 @@ namespace VoiceActions.NET.Runners.Core
         public virtual void Dispose()
         {
         }
+
+        #endregion
+
+        #region Protected methods
+
+        protected abstract void RunInternal(string command);
 
         #endregion
     }

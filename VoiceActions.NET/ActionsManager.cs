@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using VoiceActions.NET.Runners;
 using VoiceActions.NET.Utilities;
 
@@ -8,28 +9,12 @@ namespace VoiceActions.NET
 {
     public class ActionsManager : VoiceManager
     {
-        #region Fields
-
-        private IRunner _runner;
-
-        #endregion
-
         #region Properties
 
-        public IRunner Runner
-        {
-            get => _runner;
-            set {
-                if (value is DefaultRunner defaultRunner)
-                {
-                    defaultRunner.Dictionary = CommandsDictionary;
-                }
-                _runner = value;
-            }
-        }
+        public IRunner Runner { get; set; } = new DefaultRunner();
 
         private InvariantStringDictionary<Action> ActionDictionary { get; } = new InvariantStringDictionary<Action>();
-        private InvariantStringDictionary<string> CommandsDictionary { get; } = new InvariantStringDictionary<string>();
+        private InvariantStringDictionary<string> CommandsDictionary { get; set; } = new InvariantStringDictionary<string>();
 
         #endregion
 
@@ -55,7 +40,6 @@ namespace VoiceActions.NET
 
         public ActionsManager()
         {
-            Runner = _runner ?? new DefaultRunner();
             NewText += OnNewText;
         }
 
@@ -72,22 +56,26 @@ namespace VoiceActions.NET
         public List<(string, string)> GetCommands() =>
             CommandsDictionary.Select(pair => (pair.Key, pair.Value)).ToList();
 
+        public string GetCommand(string text) =>
+            CommandsDictionary.TryGetValue(text, out var result) ? result : null;
+
         public List<(string, Action)> GetActions() =>
             ActionDictionary.Select(pair => (pair.Key, pair.Value)).ToList();
 
-        public string Export() => string.Join(Environment.NewLine + Environment.NewLine,
-            CommandsDictionary.Select(pair => $"{pair.Key};{pair.Value}"));
+        public Action GetAction(string text) =>
+            ActionDictionary.TryGetValue(text, out var result) ? result : null;
+
+        public string Export() => JsonConvert.SerializeObject(CommandsDictionary);
 
         public void Import(string data)
         {
-            var commands = data
-                .Split(new[] {Environment.NewLine + Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries)
-                .Select(line => line.SplitOnlyFirst(';'));
-
-            foreach ((var name, var command) in commands)
+            if (string.IsNullOrWhiteSpace(data))
             {
-                SetCommand(name, command);
+                CommandsDictionary.Clear();
+                return;
             }
+
+            CommandsDictionary = JsonConvert.DeserializeObject<InvariantStringDictionary<string>>(data);
         }
 
         #endregion
@@ -127,8 +115,8 @@ namespace VoiceActions.NET
 
         public override void Dispose()
         {
-            _runner?.Dispose();
-            _runner = null;
+            Runner?.Dispose();
+            Runner = null;
 
             base.Dispose();
         }
