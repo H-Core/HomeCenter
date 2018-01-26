@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using HomeCenter.NET.Properties;
 using HomeCenter.NET.Utilities;
 using VoiceActions.NET;
 using VoiceActions.NET.Converters;
@@ -22,6 +20,8 @@ namespace HomeCenter.NET
         };
 
         private Hook Hook { get; } = new Hook("Global Action Hook");
+
+        private ConsoleManager ConsoleManager { get; } = new ConsoleManager();
 
         #endregion
 
@@ -44,13 +44,13 @@ namespace HomeCenter.NET
                 RecordButton.Content = "🔉";
                 RecordButton.Background = Brushes.LightGray;
             });
-            ActionsManager.SetCommand("проверка", "run explorer.exe C:/");
-            ActionsManager.SetAction("проверка", () => MessageBox.Show("test"));
+            ActionsManager.Import(CommandsStorage.Data);
 
             Hook.KeyUpEvent += Global_KeyUp;
             Hook.KeyDownEvent += Global_KeyDown;
 
-            ActionsManager.Import(Settings.Default.CommandsData);
+            ConsoleManager.ActionsManager = ActionsManager;
+            ConsoleManager.ConsoleTextBox = ConsoleTextBox;
         }
 
         #endregion
@@ -79,7 +79,7 @@ namespace HomeCenter.NET
         {
             if (e.Key == Key.Enter && InputTextBox.Text.Length > 0)
             {
-                ProcessConsoleCommand(InputTextBox.Text);
+                ConsoleManager.Run(InputTextBox.Text);
                 InputTextBox.Clear();
             }
         }
@@ -90,21 +90,21 @@ namespace HomeCenter.NET
         {
             var window = new SettingsWindow();
 
-            Settings.Default.CommandsData = ActionsManager.Export();
+            CommandsStorage.Data = ActionsManager.Export();
             window.ShowDialog();
 
-            ActionsManager.Import(Settings.Default.CommandsData);
+            ActionsManager.Import(CommandsStorage.Data);
         }
 
         private void OnNewText(object source, VoiceActionsEventArgs e) => Dispatcher.Invoke(() => {
             var text = e.Text;
             if (string.IsNullOrWhiteSpace(text) || text.Contains("The remote server returned an error: (400) Bad Request"))
             {
-                Console("Bad or empty request");
+                ConsoleManager.Print("Bad or empty request");
                 return;
             }
 
-            Console(ActionsManager.IsHandled(text)
+            ConsoleManager.Print(ActionsManager.IsHandled(text)
                 ? $"Run action for text: \"{text}\""
                 : $"We don't have handler for text: \"{text}\"");
         });
@@ -153,61 +153,6 @@ namespace HomeCenter.NET
             {
                 e.Handled = true;
             }
-        }
-
-        #endregion
-
-        #region Private methods
-
-        private void Console(string text) => ConsoleTextBox.Text += $"{DateTime.Now:T}: {text}{Environment.NewLine}";
-
-        public static (string, string) GetPrefixPostfix(string command, char separator)
-        {
-            if (string.IsNullOrWhiteSpace(command))
-            {
-                throw new ArgumentNullException(nameof(command));
-            }
-
-            var prefix = command.Split(separator).FirstOrDefault();
-            var postfix = command.Replace(prefix ?? "", string.Empty).Trim();
-
-            return (prefix, postfix);
-        }
-
-        private void ProcessConsoleCommand(string text)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                return;
-            }
-
-            if (!text.StartsWith("/"))
-            {
-                ActionsManager.ProcessText(text);
-                return;
-            }
-
-            (var prefix, var postfix) = GetPrefixPostfix(text, ' ');
-            var command = prefix.ToLowerInvariant().Substring(1);
-            switch (command)
-            {
-                case "add":
-                    (var name, var arguments) = GetPrefixPostfix(postfix, ' ');
-                    ActionsManager.SetCommand(name, arguments);
-                    Console($"Command \"{arguments}\" added");
-                    break;
-
-                case "show":
-                    Console($@"Current commands:
-{string.Join(Environment.NewLine, ActionsManager.GetCommands().Select(pair => $"{pair.Item1} {pair.Item2}"))}");
-                    break;
-
-                default:
-                    Console($"Command is not exists: {command}");
-                    break;
-
-            }
-
         }
 
         #endregion

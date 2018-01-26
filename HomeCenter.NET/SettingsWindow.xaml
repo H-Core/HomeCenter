@@ -4,8 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:properties="clr-namespace:HomeCenter.NET.Properties"
+        xmlns:utilities="clr-namespace:HomeCenter.NET.Utilities"
         mc:Ignorable="d"
         Title="Settings" Height="300" Width="600" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <utilities:CommandsStorage x:Key="CommandsStorage"/>
+    </Window.Resources>
     <Grid Background="#FFE5E5E5">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -41,7 +45,7 @@
             </TabItem>
             <TabItem Header="Commands Data">
                 <Grid Background="#FFE5E5E5">
-                    <TextBox TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Source={x:Static properties:Settings.Default},Path=CommandsData}"/>
+                    <TextBox TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Source={StaticResource CommandsStorage}, Path=Data}"/>
                 </Grid>
             </TabItem>
         </TabControl>

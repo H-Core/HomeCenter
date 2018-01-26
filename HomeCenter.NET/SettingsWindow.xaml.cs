@@ -4,10 +4,16 @@ namespace HomeCenter.NET
 {
     public partial class SettingsWindow
     {
+        #region Properties
+
         public SettingsWindow()
         {
             InitializeComponent();
         }
+
+        #endregion
+
+        #region Event handlers
 
         private void SaveAndClose(object sender, RoutedEventArgs e)
         {
@@ -16,5 +22,8 @@ namespace HomeCenter.NET
         }
 
         private void Close(object sender, RoutedEventArgs e) => Close();
+
+        #endregion
+
     }
 }
