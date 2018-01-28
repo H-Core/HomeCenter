@@ -34,6 +34,7 @@ namespace HomeCenter.NET
             "/edit",
             "/edit text",
             "/edit text full-new-command",
+            "/save",
             "/redirect to from1 from2 from3",
         };
 
@@ -113,6 +114,9 @@ namespace HomeCenter.NET
                     RedirectCommand(postfix);
                     break;
 
+                case "save":
+                    SaveCommand();
+                    break;
 
                 default:
                     Print($"Command is not exists: {command}");
@@ -153,7 +157,7 @@ namespace HomeCenter.NET
             if (string.IsNullOrWhiteSpace(arguments))
             {
                 ShowChangeCommandWindow(GetCommand(key));
-                return;
+                //return;
             }
 
             //ShowChangeCommandWindow(new Command(key, arguments)); // TODO: Currently is not supported
@@ -166,6 +170,12 @@ namespace HomeCenter.NET
 
             Print($@"Current commands:
 {(string.IsNullOrWhiteSpace(text) ? "You have not added any commands yet" : text)}");
+        }
+
+        private void SaveCommand()
+        {
+            CommandsStorage.Data = ActionsManager.Export();
+            Print("Commands saved");
         }
 
         private void RedirectCommand(string postfix)
