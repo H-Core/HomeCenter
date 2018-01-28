@@ -15,7 +15,7 @@ namespace HomeCenter.NET
 
         private ActionsManager ActionsManager { get; set; } = new ActionsManager
         {
-            Recorder = new AutoStopRecorder(new WinmmRecorder(), 3000),
+            Recorder = new WinmmRecorder(),
             Converter = new YandexConverter("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" }
         };
 
@@ -90,7 +90,7 @@ namespace HomeCenter.NET
             }
         }
 
-        private void RecordButton_Click(object sender, RoutedEventArgs e) => ActionsManager.Change();
+        private void RecordButton_Click(object sender, RoutedEventArgs e) => ActionsManager.ChangeWithTimeout(3000);
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
@@ -127,7 +127,7 @@ namespace HomeCenter.NET
         {
             if ((int)e.Key == 192)
             {
-                ActionsManager.StartWithoutAutostop();
+                ActionsManager.Start();
             }
         }
 

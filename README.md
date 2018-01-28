@@ -18,8 +18,8 @@ Create manager object:
 
 var manager = new ActionsManager
 {
-    // Select recorder which stops after 3000 milliseconds with Windows Multimedia API base recorder
-    Recorder = new AutoStopRecorder(new WinmmRecorder(), 3000),
+    // Select Windows Multimedia API recorder
+    Recorder = new WinmmRecorder(),
     // Select Wit.ai voice-to-text converter
     Converter = new WitAiConverter("your-token-here")
 };
@@ -41,14 +41,17 @@ Run:
 
 ```cs
 
-// Start the recording process. It stops after 3 seconds (if AutoStopRecorder is selected from the example)
+// Start the recording process
 manager.Start();
 
-// Start the recording process without autostop
-manager.StartWithoutAutostop();
+// Start the recording process. It stops after 3000 milliseconds
+manager.StartWithTimeout(3000);
 
 // The first click on the button will start the recording process, the second will leave the recording process and start the action
-button.Click += (o, args) => manager.Change(); 
+button.Click += (o, args) => manager.Change();
+
+// The first click on the button will start the recording process, the second or after 3000 milliseconds timeout it will leave the recording process and start the action. 
+button.Click += (o, args) => manager.ChangeWithTimeout(3000);
 
  ```
 

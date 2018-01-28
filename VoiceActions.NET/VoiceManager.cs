@@ -5,29 +5,23 @@ using VoiceActions.NET.Recorders.Core;
 
 namespace VoiceActions.NET
 {
-    public class VoiceManager : BaseRecorder, IRecorder
+    public class VoiceManager : ParentRecorder
     {
-        #region Fields
-
-        private IRecorder _recorder;
-
-        #endregion
-
         #region Properties
 
-        public IRecorder Recorder {
-            get => _recorder;
+        public new IRecorder Recorder {
+            get => base.Recorder;
             set {
-                if (value == null && _recorder != null)
+                if (value == null && base.Recorder != null)
                 {
-                    _recorder.Stopped -= OnStoppedRecorder;
+                    base.Recorder.Stopped -= OnStoppedRecorder;
                 }
 
-                _recorder = value;
+                base.Recorder = value;
 
                 if (value != null)
                 {
-                    _recorder.Stopped += OnStoppedRecorder;
+                    base.Recorder.Stopped += OnStoppedRecorder;
                 }
             }
         }
@@ -35,22 +29,6 @@ namespace VoiceActions.NET
         public IConverter Converter { get; set; }
 
         public string Text { get; private set; }
-
-        public new bool AutoStopEnabled
-        {
-            get => Recorder?.AutoStopEnabled ?? false;
-            set
-            {
-                if (Recorder == null)
-                {
-                    return;
-                }
-
-                Recorder.AutoStopEnabled = value;
-            }
-        }
-
-        public new int Interval => Recorder?.Interval ?? 0;
 
         #endregion
 
@@ -99,25 +77,10 @@ namespace VoiceActions.NET
             OnStarted(CreateArgs());
         }
 
-        public void StartWithoutAutostop()
-        {
-            var recorder = Recorder ?? throw new Exception("Recorder is null");
-
-            if (recorder.Interval > 0)
-            {
-                recorder.AutoStopEnabled = false;
-            }
-            Start();
-        }
-
         public override void Stop()
         {
             var recorder = Recorder ?? throw new Exception("Recorder is null");
 
-            if (recorder.Interval > 0)
-            {
-                recorder.AutoStopEnabled = true;
-            }
             recorder.Stop();
         }
 
@@ -126,18 +89,6 @@ namespace VoiceActions.NET
             if (!IsStarted)
             {
                 Start();
-            }
-            else
-            {
-                Stop();
-            }
-        }
-
-        public void ChangeWithoutAutostop()
-        {
-            if (!IsStarted)
-            {
-                StartWithoutAutostop();
             }
             else
             {
@@ -167,8 +118,8 @@ namespace VoiceActions.NET
 
         public override void Dispose()
         {
-            _recorder?.Dispose();
-            _recorder = null;
+            Recorder?.Dispose();
+            Recorder = null;
 
             Converter?.Dispose();
             Converter = null;

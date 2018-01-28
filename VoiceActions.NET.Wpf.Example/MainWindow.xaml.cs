@@ -13,7 +13,7 @@ namespace VoiceActions.NET.Wpf.Example
 
         private ActionsManager ActionsManager { get; set; } = new ActionsManager
         {
-            Recorder = new AutoStopRecorder(new WinmmRecorder(), 3000),
+            Recorder = new WinmmRecorder(),
             Converter = new YandexConverter("1ce29818-0d15-4080-b6a1-ea5267c9fefd"){ Lang = "ru-RU" }
         };
 
@@ -65,7 +65,7 @@ namespace VoiceActions.NET.Wpf.Example
             }
         }
 
-        private void RecordButton_Click(object sender, RoutedEventArgs e) => ActionsManager.Change();
+        private void RecordButton_Click(object sender, RoutedEventArgs e) => ActionsManager.ChangeWithTimeout(3000);
 
         private void OnNewText(object source, VoiceActionsEventArgs e) => Dispatcher.Invoke(() => {
             var text = e.Text;
@@ -95,7 +95,7 @@ namespace VoiceActions.NET.Wpf.Example
             if (e.Key == Key.OemTilde)
             {
                 e.Handled = true;
-                ActionsManager.StartWithoutAutostop();
+                ActionsManager.Start();
             }
         }
 

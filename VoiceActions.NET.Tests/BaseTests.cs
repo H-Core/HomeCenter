@@ -35,11 +35,6 @@ namespace VoiceActions.NET.Tests
         protected void BaseRecorderTest(IRecorder recorder, PlatformID? platformId = null, int timeout = 1000)
         {
             Assert.NotNull(recorder);
-            var autoStopEnabled = recorder.AutoStopEnabled;
-            if (autoStopEnabled)
-            {
-                Assert.InRange(recorder.Interval, 1, int.MaxValue);
-            }
 
             if (!CheckPlatform(platformId))
             {
@@ -53,14 +48,6 @@ namespace VoiceActions.NET.Tests
 
             Thread.Sleep(timeout);
 
-            if (autoStopEnabled && 1.5 * recorder.Interval < timeout)
-            {
-                Assert.False(recorder.IsStarted);
-            }
-            else
-            {
-                Assert.True(recorder.IsStarted);
-            }
             recorder.Stop();
             Assert.False(recorder.IsStarted);
 
@@ -68,10 +55,6 @@ namespace VoiceActions.NET.Tests
             Assert.InRange(recorder.Data.Length, 1, int.MaxValue);
 
             BaseDisposeTest(recorder);
-            if (recorder is AutoStopRecorder autoStopRecorder)
-            {
-                Assert.Null(autoStopRecorder.Recorder);
-            }
 
             Output?.WriteLine($"Recorder: {recorder} is good!");
         }
@@ -133,14 +116,13 @@ namespace VoiceActions.NET.Tests
             Thread.Sleep(timeout);
             manager.Change();
 
+            manager.StartWithTimeout(timeout);
+            Thread.Sleep(timeout);
+            manager.Stop();
+
             manager.Start();
             Thread.Sleep(timeout);
             manager.Stop();
-
-            manager.StartWithoutAutostop();
-            Thread.Sleep(timeout);
-            manager.Stop();
-
             manager.ProcessSpeech(TestUtilities.GetRawSpeech("speech1.wav"));
 
             Assert.True(startedEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));

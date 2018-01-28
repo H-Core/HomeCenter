@@ -21,7 +21,7 @@ namespace VoiceActions.NET.Tests
             var manager = new ActionsManager
             {
                 // Select recorder which stops after 1000 milliseconds with Windows Multimedia API base recorder
-                Recorder = new AutoStopRecorder(new WinmmRecorder(), 1000),
+                Recorder = new WinmmRecorder(),
                 // Select Wit.ai voice-to-text converter
                 Converter = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")
             };
@@ -40,7 +40,7 @@ namespace VoiceActions.NET.Tests
         }
 
         [Fact]
-        public void ReadmeExampleAutoStopTest()
+        public void ReadmeExampleTest()
         {
             var manager = CreateExampleManager();
 
@@ -57,11 +57,13 @@ namespace VoiceActions.NET.Tests
 
             Thread.Sleep(2000);
 
+            Assert.True(manager.IsStarted);
+            manager.Stop();
             Assert.False(manager.IsStarted);
         }
 
         [Fact]
-        public void ReadmeExampleWithoutAutoStopTest()
+        public void ReadmeExampleWithTimeoutTest()
         {
             var manager = CreateExampleManager();
 
@@ -73,13 +75,11 @@ namespace VoiceActions.NET.Tests
 
             // Start the recording process without autostop
             Assert.False(manager.IsStarted);
-            manager.StartWithoutAutostop();
+            manager.StartWithTimeout(1000);
             Assert.True(manager.IsStarted);
 
             Thread.Sleep(2000);
 
-            Assert.True(manager.IsStarted);
-            manager.Stop();
             Assert.False(manager.IsStarted);
         }
 
@@ -101,6 +101,8 @@ namespace VoiceActions.NET.Tests
 
             Thread.Sleep(2000);
 
+            Assert.True(manager.IsStarted);
+            manager.Change();
             Assert.False(manager.IsStarted);
         }
 
@@ -117,13 +119,11 @@ namespace VoiceActions.NET.Tests
 
             // The first run will start the recording process, the second will leave the recording process and start the action. Auto stop is disabled
             Assert.False(manager.IsStarted);
-            manager.ChangeWithoutAutostop();
+            manager.ChangeWithTimeout(1000);
             Assert.True(manager.IsStarted);
 
             Thread.Sleep(2000);
 
-            Assert.True(manager.IsStarted);
-            manager.Change();
             Assert.False(manager.IsStarted);
         }
     }
