@@ -95,7 +95,7 @@ namespace VoiceActions.NET.Wpf.Example
             if (e.Key == Key.OemTilde)
             {
                 e.Handled = true;
-                ActionsManager.Start(true);
+                ActionsManager.StartWithoutAutostop();
             }
         }
 

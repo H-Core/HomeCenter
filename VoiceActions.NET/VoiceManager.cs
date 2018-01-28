@@ -5,7 +5,7 @@ using VoiceActions.NET.Recorders.Core;
 
 namespace VoiceActions.NET
 {
-    public class VoiceManager : BaseRecorder
+    public class VoiceManager : BaseRecorder, IRecorder
     {
         #region Fields
 
@@ -35,6 +35,22 @@ namespace VoiceActions.NET
         public IConverter Converter { get; set; }
 
         public string Text { get; private set; }
+
+        public new bool AutoStopEnabled
+        {
+            get => Recorder?.AutoStopEnabled ?? false;
+            set
+            {
+                if (Recorder == null)
+                {
+                    return;
+                }
+
+                Recorder.AutoStopEnabled = value;
+            }
+        }
+
+        public new int Interval => Recorder?.Interval ?? 0;
 
         #endregion
 
@@ -86,22 +102,22 @@ namespace VoiceActions.NET
         public void StartWithoutAutostop()
         {
             var recorder = Recorder ?? throw new Exception("Recorder is null");
-            if (recorder is IAutoStopRecorder autoStopRecorder)
-            {
-                autoStopRecorder.AutoStopEnabled = false;
-            }
 
+            if (recorder.Interval > 0)
+            {
+                recorder.AutoStopEnabled = false;
+            }
             Start();
         }
 
         public override void Stop()
         {
             var recorder = Recorder ?? throw new Exception("Recorder is null");
-            if (recorder is IAutoStopRecorder autoStopRecorder)
-            {
-                autoStopRecorder.AutoStopEnabled = true;
-            }
 
+            if (recorder.Interval > 0)
+            {
+                recorder.AutoStopEnabled = true;
+            }
             recorder.Stop();
         }
 

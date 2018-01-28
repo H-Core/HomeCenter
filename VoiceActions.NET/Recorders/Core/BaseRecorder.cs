@@ -8,6 +8,8 @@ namespace VoiceActions.NET.Recorders.Core
 
         public bool IsStarted { get; protected set; }
         public byte[] Data { get; protected set; }
+        public bool AutoStopEnabled { get; set; }
+        public int Interval { get; protected set; }
 
         #endregion
 

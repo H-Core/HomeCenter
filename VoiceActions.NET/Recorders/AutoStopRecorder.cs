@@ -1,18 +1,16 @@
-﻿using System;
-using System.Timers;
+﻿using System.Timers;
 using VoiceActions.NET.Recorders.Core;
 
 namespace VoiceActions.NET.Recorders
 {
-    public class AutoStopRecorder : BaseRecorder, IAutoStopRecorder
+    public class AutoStopRecorder : BaseRecorder, IRecorder
     {
         #region Properties
 
         public IRecorder Recorder { get; private set; }
-        public double Interval { get; set; }
 
         private bool _autoStopEnabled = true;
-        public bool AutoStopEnabled
+        public new bool AutoStopEnabled
         {
             get => _autoStopEnabled;
             set

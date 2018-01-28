@@ -35,11 +35,10 @@ namespace VoiceActions.NET.Tests
         protected void BaseRecorderTest(IRecorder recorder, PlatformID? platformId = null, int timeout = 1000)
         {
             Assert.NotNull(recorder);
-            var autoStopRecorder = recorder as AutoStopRecorder;
-            if (autoStopRecorder != null)
+            var autoStopEnabled = recorder.AutoStopEnabled;
+            if (autoStopEnabled)
             {
-                Assert.False(autoStopRecorder.AutoStopEnabled);
-                Assert.InRange(autoStopRecorder.Interval, 1, int.MaxValue);
+                Assert.InRange(recorder.Interval, 1, int.MaxValue);
             }
 
             if (!CheckPlatform(platformId))
@@ -48,15 +47,28 @@ namespace VoiceActions.NET.Tests
                 return;
             }
 
+            Assert.False(recorder.IsStarted);
             recorder.Start();
+            Assert.True(recorder.IsStarted);
+
             Thread.Sleep(timeout);
+
+            if (autoStopEnabled && 1.5 * recorder.Interval < timeout)
+            {
+                Assert.False(recorder.IsStarted);
+            }
+            else
+            {
+                Assert.True(recorder.IsStarted);
+            }
             recorder.Stop();
+            Assert.False(recorder.IsStarted);
 
             Assert.NotNull(recorder.Data);
             Assert.InRange(recorder.Data.Length, 1, int.MaxValue);
 
             BaseDisposeTest(recorder);
-            if (autoStopRecorder != null)
+            if (recorder is AutoStopRecorder autoStopRecorder)
             {
                 Assert.Null(autoStopRecorder.Recorder);
             }

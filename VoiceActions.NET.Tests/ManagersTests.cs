@@ -15,7 +15,7 @@ namespace VoiceActions.NET.Tests
         [Fact]
         public void AutoWinmmWitAiVoiceManagerTest() => BaseVoiceManagerTest(new VoiceManager
         {
-            Recorder = new AutoStopRecorder(new WinmmRecorder(), 1000),
+            Recorder = new AutoStopRecorder(new WinmmRecorder(), 500),
             Converter = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")
         }, PlatformID.Win32NT);
 
@@ -40,7 +40,7 @@ namespace VoiceActions.NET.Tests
         [Fact]
         public void AutoWinmmYandexVoiceManagerTest() => BaseVoiceManagerTest(new VoiceManager
         {
-            Recorder = new AutoStopRecorder(new WinmmRecorder(), 1000),
+            Recorder = new AutoStopRecorder(new WinmmRecorder(), 500),
             Converter = new YandexConverter("1ce29818-0d15-4080-b6a1-ea5267c9fefd")
             {
                 Lang = "ru-RU",

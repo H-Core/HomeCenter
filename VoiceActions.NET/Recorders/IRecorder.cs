@@ -12,5 +12,8 @@ namespace VoiceActions.NET.Recorders
 
         event EventHandler<VoiceActionsEventArgs> Started;
         event EventHandler<VoiceActionsEventArgs> Stopped;
+
+        bool AutoStopEnabled { get; set; }
+        int Interval { get; }
     }
 }
