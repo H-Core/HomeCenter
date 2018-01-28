@@ -3,11 +3,19 @@ using System.Threading;
 using VoiceActions.NET.Converters;
 using VoiceActions.NET.Recorders;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace VoiceActions.NET.Tests
 {
     public class ReadmeExampleTests
     {
+        private ITestOutputHelper Output { get; }
+
+        public ReadmeExampleTests(ITestOutputHelper output)
+        {
+            Output = output;
+        }
+
         private static ActionsManager CreateExampleManager()
         {
             var manager = new ActionsManager
@@ -36,6 +44,12 @@ namespace VoiceActions.NET.Tests
         {
             var manager = CreateExampleManager();
 
+            if (!BaseTests.CheckPlatform(PlatformID.Win32NT))
+            {
+                Output?.WriteLine($"Current system is not supported: {Environment.OSVersion}");
+                return;
+            }
+
             // Start the recording process. It stops after 1 second (if AutoStopRecorder is selected from the example)
             Assert.False(manager.IsStarted);
             manager.Start();
@@ -50,6 +64,12 @@ namespace VoiceActions.NET.Tests
         public void ReadmeExampleWithoutAutoStopTest()
         {
             var manager = CreateExampleManager();
+
+            if (!BaseTests.CheckPlatform(PlatformID.Win32NT))
+            {
+                Output?.WriteLine($"Current system is not supported: {Environment.OSVersion}");
+                return;
+            }
 
             // Start the recording process without autostop
             Assert.False(manager.IsStarted);
@@ -68,6 +88,12 @@ namespace VoiceActions.NET.Tests
         {
             var manager = CreateExampleManager();
 
+            if (!BaseTests.CheckPlatform(PlatformID.Win32NT))
+            {
+                Output?.WriteLine($"Current system is not supported: {Environment.OSVersion}");
+                return;
+            }
+
             // The first run will start the recording process, the second will leave the recording process and start the action
             Assert.False(manager.IsStarted);
             manager.Change();
@@ -82,6 +108,12 @@ namespace VoiceActions.NET.Tests
         public void ReadmeExampleChangeWithoutAutoStopTest()
         {
             var manager = CreateExampleManager();
+
+            if (!BaseTests.CheckPlatform(PlatformID.Win32NT))
+            {
+                Output?.WriteLine($"Current system is not supported: {Environment.OSVersion}");
+                return;
+            }
 
             // The first run will start the recording process, the second will leave the recording process and start the action. Auto stop is disabled
             Assert.False(manager.IsStarted);

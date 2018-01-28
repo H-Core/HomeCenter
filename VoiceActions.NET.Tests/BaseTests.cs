@@ -29,7 +29,7 @@ namespace VoiceActions.NET.Tests
             obj.Dispose();
         }
 
-        protected bool CheckPlatform(PlatformID? platformId) => 
+        public static bool CheckPlatform(PlatformID? platformId) => 
             platformId == null || platformId == Environment.OSVersion.Platform;
 
         protected void BaseRecorderTest(IRecorder recorder, PlatformID? platformId = null, int timeout = 1000)
