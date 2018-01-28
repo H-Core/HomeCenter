@@ -1,12 +1,49 @@
-﻿namespace HomeCenter.NET.Utilities
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace HomeCenter.NET.Utilities
 {
     public class Command
     {
         #region Properties
 
         public string Data { get; set; }
-        public string Key { get; set; }
-        //public string Redirections { get; set; }
+        public List<string> Keys { get; set; }
+        //public List<string> DeletedKeys { get; set; } TODO: Add
+
+        public string KeysString
+        {
+            get => string.Join(Environment.NewLine, Keys);
+            set => Keys = value.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+        }
+
+        #endregion
+
+        #region Constructors
+
+        public Command()
+        {
+        }
+
+        public Command(List<string> keys)
+        {
+            Keys = keys;
+        }
+
+        public Command(List<string> keys, string data) : this(keys)
+        {
+            Data = data;
+        }
+
+        public Command(string key) : this(new List<string> { key })
+        {
+        }
+
+        public Command(string key, string data) : this(key)
+        {
+            Data = data;
+        }
 
         #endregion
     }

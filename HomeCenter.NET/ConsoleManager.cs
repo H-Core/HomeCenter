@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Windows.Controls;
+using HomeCenter.NET.Utilities;
 using VoiceActions.NET;
 using VoiceActions.NET.Runners.Core;
 using VoiceActions.NET.Utilities;
@@ -12,39 +12,78 @@ namespace HomeCenter.NET
         #region Properties
 
         public ActionsManager ActionsManager { get; set; }
-        public TextBox ConsoleTextBox { get; set; }
 
-        public InvariantStringDictionary<string> Redirections { get; } = new InvariantStringDictionary<string>();
+        #endregion
+
+        #region Events
+
+        public event EventHandler<ConsoleEventArgs> NewOutput;
+        private void Print(string text) => NewOutput?.Invoke(this, new ConsoleEventArgs(text));
 
         #endregion
 
         #region Public methods
 
-        public void Print(string text) => ConsoleTextBox.Text += $"{DateTime.Now:T}: {text}{Environment.NewLine}";
-
         public override string[] GetSupportedCommands() => new[]
         {
             "/add text full-command",
+            "/add text",
+            "/add",
             "/show",
+            "/show text",
+            "/edit",
+            "/edit text",
+            "/edit text full-new-command",
             "/redirect to from1 from2 from3",
         };
+
+        public Command GetCommand(string key)
+        {
+            var data = ActionsManager.GetCommand(key);
+            if (string.IsNullOrWhiteSpace(data))
+            {
+                return new Command(key);
+            }
+
+            var keys = ActionsManager.GetCommands().Where(i => string.Equals(data, i.Item2)).Select(i => i.Item1).ToList();
+            return new Command(keys, data);
+        }
+
+        public void SaveCommand(Command command)
+        {
+            // TODO: delete initial command keys
+            foreach (var key in command.Keys)
+            {
+                ActionsManager.SetCommand(key, command.Data);
+            }
+
+            if (!command.Keys.Any())
+            {
+                return;
+            }
+
+            Print($"Command \"{command.Keys.First()}\" saved");
+        }
 
         #endregion
 
         #region Protected methods
 
-        protected override void RunInternal(string text)
+        protected void ShowChangeCommandWindow(Command command)
         {
-            if (string.IsNullOrWhiteSpace(text))
+            var window = new ChangeCommandWindow(command);
+            if (window.ShowDialog() != true)
             {
                 return;
             }
 
-            if (Redirections.ContainsKey(text))
+            SaveCommand(window.Command);
+        }
+
+        protected override void RunInternal(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
             {
-                var value = Redirections[text];
-                Print($"Redirected from {text} to {value}");
-                RunInternal(value);
                 return;
             }
 
@@ -60,6 +99,10 @@ namespace HomeCenter.NET
             {
                 case "add":
                     AddCommand(postfix);
+                    break;
+
+                case "edit":
+                    EditCommand(postfix);
                     break;
 
                 case "show":
@@ -83,9 +126,37 @@ namespace HomeCenter.NET
 
         private void AddCommand(string postfix)
         {
-            (var name, var arguments) = postfix.SplitOnlyFirst(' ');
-            ActionsManager.SetCommand(name, arguments);
-            Print($"Command \"{arguments}\" added");
+            if (string.IsNullOrWhiteSpace(postfix))
+            {
+                ShowChangeCommandWindow(new Command());
+                return;
+            }
+
+            (var key, var arguments) = postfix.SplitOnlyFirst(' ');
+            if (string.IsNullOrWhiteSpace(arguments))
+            {
+                ShowChangeCommandWindow(GetCommand(key));
+                return;
+            }
+
+            ShowChangeCommandWindow(new Command(key, arguments));
+        }
+
+        private void EditCommand(string postfix)
+        {
+            if (string.IsNullOrWhiteSpace(postfix))
+            {
+                return; // TODO: Currently is not supported
+            }
+
+            (var key, var arguments) = postfix.SplitOnlyFirst(' ');
+            if (string.IsNullOrWhiteSpace(arguments))
+            {
+                ShowChangeCommandWindow(GetCommand(key));
+                return;
+            }
+
+            //ShowChangeCommandWindow(new Command(key, arguments)); // TODO: Currently is not supported
         }
 
         private void ShowCommand()

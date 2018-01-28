@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET
@@ -7,19 +8,17 @@ namespace HomeCenter.NET
     {
         #region Properties
 
-        public Command Command { get; set; }
+        public Command Command { get; }
 
         #endregion
 
         #region Constructors
 
-        public ChangeCommandWindow()
+        public ChangeCommandWindow(Command command)
         {
-            InitializeComponent();
-        }
+            Command = command ?? throw new ArgumentNullException(nameof(command));
 
-        public ChangeCommandWindow(Command command) : this()
-        {
+            InitializeComponent();
         }
 
         #endregion
@@ -28,7 +27,7 @@ namespace HomeCenter.NET
 
         private void SaveAndClose(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.Save();
+            DialogResult = true;
             Close();
         }
 

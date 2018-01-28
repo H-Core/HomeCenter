@@ -81,6 +81,7 @@
     </Compile>
     <Compile Include="Utilities\Command.cs" />
     <Compile Include="Utilities\CommandsStorage.cs" />
+    <Compile Include="Utilities\ConsoleEventArgs.cs" />
     <Compile Include="Utilities\Hook.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
