@@ -13,6 +13,18 @@ namespace VoiceActions.NET.Utilities
 
         public new bool ContainsKey(string key) => base.ContainsKey(ToInvariantString(key));
 
+        public new bool TryGetValue(string key, out T value)
+        {
+            if (!ContainsKey(key))
+            {
+                value = default(T);
+                return false;
+            }
+
+            value = this[key];
+            return true;
+        }
+
         #endregion
 
         #region Private methods
