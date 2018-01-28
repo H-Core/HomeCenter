@@ -121,7 +121,7 @@ namespace HomeCenter.NET
         {
             if ((int)e.Key == 192)
             {
-                ActionsManager.Start(true);
+                ActionsManager.StartWithoutAutostop();
             }
         }
 

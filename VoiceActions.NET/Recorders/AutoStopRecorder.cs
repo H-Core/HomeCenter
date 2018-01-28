@@ -1,4 +1,5 @@
-﻿using System.Timers;
+﻿using System;
+using System.Timers;
 using VoiceActions.NET.Recorders.Core;
 
 namespace VoiceActions.NET.Recorders
@@ -7,20 +8,24 @@ namespace VoiceActions.NET.Recorders
     {
         #region Properties
 
-        public Timer Timer { get; private set; } = new Timer();
-        public double Interval {  get => Timer.Interval; set => Timer.Interval = value; }
+        public IRecorder Recorder { get; private set; }
+        public double Interval { get; set; }
 
+        private bool _autoStopEnabled = true;
         public bool AutoStopEnabled
         {
-            get => Timer.Enabled;
+            get => _autoStopEnabled;
             set
             {
-                Timer.Stop();
-                Timer.Enabled = value;
+                _autoStopEnabled = value;
+                if (!value)
+                {
+                    StopTimer();
+                }
             }
         }
 
-        public IRecorder Recorder { get; private set; }
+        private Timer Timer { get; set; }
 
         #endregion
 
@@ -30,8 +35,7 @@ namespace VoiceActions.NET.Recorders
         {
             Recorder = recorder;
 
-            Timer.Interval = interval;
-            Timer.Elapsed += OnTimerOnElapsed;
+            Interval = interval;
         }
 
         #endregion
@@ -40,14 +44,19 @@ namespace VoiceActions.NET.Recorders
 
         public override void Start()
         {
-            Timer.Start();
+            if (AutoStopEnabled)
+            {
+                StartTimer();
+            }
+
             Recorder.Start();
             base.Start();
         }
 
         public override void Stop()
         {
-            Timer.Stop();
+            StopTimer();
+
             Recorder.Stop();
             Data = Recorder.Data;
             base.Stop();
@@ -71,6 +80,24 @@ namespace VoiceActions.NET.Recorders
         #region Event Handlers
 
         private void OnTimerOnElapsed(object sender, ElapsedEventArgs args) => Stop();
+
+        #endregion
+
+        #region Private methods
+
+        private void StartTimer()
+        {
+            Timer = new Timer(Interval);
+            Timer.Elapsed += OnTimerOnElapsed;
+            Timer.Start();
+        }
+
+        private void StopTimer()
+        {
+            Timer?.Stop();
+            Timer?.Dispose();
+            Timer = null;
+        }
 
         #endregion
     }

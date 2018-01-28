@@ -59,7 +59,6 @@ namespace VoiceActions.NET.Tests
             if (autoStopRecorder != null)
             {
                 Assert.Null(autoStopRecorder.Recorder);
-                Assert.Null(autoStopRecorder.Timer);
             }
 
             Output?.WriteLine($"Recorder: {recorder} is good!");
@@ -126,7 +125,7 @@ namespace VoiceActions.NET.Tests
             Thread.Sleep(timeout);
             manager.Stop();
 
-            manager.Start(true);
+            manager.StartWithoutAutostop();
             Thread.Sleep(timeout);
             manager.Stop();
 

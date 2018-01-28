@@ -83,10 +83,10 @@ namespace VoiceActions.NET
             OnStarted(CreateArgs());
         }
 
-        public void Start(bool disableAutoStopIfExists)
+        public void StartWithoutAutostop()
         {
             var recorder = Recorder ?? throw new Exception("Recorder is null");
-            if (disableAutoStopIfExists && recorder is IAutoStopRecorder autoStopRecorder)
+            if (recorder is IAutoStopRecorder autoStopRecorder)
             {
                 autoStopRecorder.AutoStopEnabled = false;
             }
@@ -110,6 +110,18 @@ namespace VoiceActions.NET
             if (!IsStarted)
             {
                 Start();
+            }
+            else
+            {
+                Stop();
+            }
+        }
+
+        public void ChangeWithoutAutostop()
+        {
+            if (!IsStarted)
+            {
+                StartWithoutAutostop();
             }
             else
             {

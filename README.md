@@ -16,12 +16,12 @@ Create manager object:
 
 ```cs
 
-private ActionsManager ActionsManager { get; set; } = new ActionsManager
+var manager = new ActionsManager
 {
-	// Select recorder which stops after 3000 milliseconds with Windows Multimedia API base recorder
-	Recorder = new AutoStopRecorder(new WinmmRecorder(), 3000),
-	 // Select Wit.ai voice-to-text converter
-	Converter = new WitAiConverter("your-token-here")
+    // Select recorder which stops after 3000 milliseconds with Windows Multimedia API base recorder
+    Recorder = new AutoStopRecorder(new WinmmRecorder(), 3000),
+    // Select Wit.ai voice-to-text converter
+    Converter = new WitAiConverter("your-token-here")
 };
 
  ```
@@ -31,9 +31,9 @@ Set up actions:
 ```cs
 
  // when you say "test" the manager runs the explorer.exe with the "C:/" base folder
-ActionsManager.SetCommand("test", "run explorer.exe C:/");
+manager.SetCommand("test", "run explorer.exe C:/");
  // when you say "test" the manager runs your custom action
-ActionsManager.SetAction("test", () => MessageBox.Show("test"));
+manager.SetAction("test", () => Console.WriteLine("test"));
 
  ```
 
@@ -42,13 +42,13 @@ Run:
 ```cs
 
 // Start the recording process. It stops after 3 seconds (if AutoStopRecorder is selected from the example)
-ActionsManager.Start();
+manager.Start();
 
 // Start the recording process without autostop
-ActionsManager.Start(disableAutoStopIfExists: true);
+manager.StartWithoutAutostop();
 
 // The first click on the button will start the recording process, the second will leave the recording process and start the action
-button.Click += (o, args) => ActionsManager.Change(); 
+button.Click += (o, args) => manager.Change(); 
 
  ```
 
