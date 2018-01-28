@@ -50,7 +50,7 @@ namespace HomeCenter.NET
             Hook.KeyDownEvent += Global_KeyDown;
 
             ConsoleManager.ActionsManager = ActionsManager;
-            ConsoleManager.ConsoleTextBox = ConsoleTextBox;
+            ConsoleManager.NewOutput += (o, args) => Print(args.Text);
         }
 
         #endregion
@@ -70,6 +70,12 @@ namespace HomeCenter.NET
             ActionsManager?.Dispose();
             ActionsManager = null;
         }
+
+        #endregion
+
+        #region Private methods
+
+        private void Print(string text) => ConsoleTextBox.Text += $"{DateTime.Now:T}: {text}{Environment.NewLine}";
 
         #endregion
 
@@ -100,11 +106,11 @@ namespace HomeCenter.NET
             var text = e.Text;
             if (string.IsNullOrWhiteSpace(text) || text.Contains("The remote server returned an error: (400) Bad Request"))
             {
-                ConsoleManager.Print("Bad or empty request");
+                Print("Bad or empty request");
                 return;
             }
 
-            ConsoleManager.Print(ActionsManager.IsHandled(text)
+            Print(ActionsManager.IsHandled(text)
                 ? $"Run action for text: \"{text}\""
                 : $"We don't have handler for text: \"{text}\"");
         });
