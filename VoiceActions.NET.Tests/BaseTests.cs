@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
+using Nito.AsyncEx;
 using VoiceActions.NET.Converters;
 using VoiceActions.NET.Recorders;
 using VoiceActions.NET.Tests.Utilities;
@@ -32,7 +32,7 @@ namespace VoiceActions.NET.Tests
         public static bool CheckPlatform(PlatformID? platformId) => 
             platformId == null || platformId == Environment.OSVersion.Platform;
 
-        protected void BaseRecorderTest(IRecorder recorder, PlatformID? platformId = null, int timeout = 1000)
+        protected async Task BaseRecorderTest(IRecorder recorder, PlatformID? platformId = null, int timeout = 1000)
         {
             Assert.NotNull(recorder);
 
@@ -46,7 +46,7 @@ namespace VoiceActions.NET.Tests
             recorder.Start();
             Assert.True(recorder.IsStarted);
 
-            Thread.Sleep(timeout);
+            await Task.Delay(timeout);
 
             recorder.Stop();
             Assert.False(recorder.IsStarted);
@@ -78,7 +78,7 @@ namespace VoiceActions.NET.Tests
             Assert.Equal(manager.Text, args.Text);
         }
 
-        protected void BaseVoiceManagerTest(VoiceManager manager, PlatformID? platformId = null, int timeout = 1000, int waitEventTimeout = 20000)
+        protected async Task BaseVoiceManagerTest(VoiceManager manager, PlatformID? platformId = null, int timeout = 1000, int waitEventTimeout = 20000)
         {
             Assert.NotNull(manager);
             if (!CheckPlatform(platformId))
@@ -87,10 +87,10 @@ namespace VoiceActions.NET.Tests
                 return;
             }
 
-            var startedEvent = new AutoResetEvent(false);
-            var stoppedEvent = new AutoResetEvent(false);
-            var newTextEvent = new AutoResetEvent(false);
-            var actionEvent = new AutoResetEvent(false);
+            var startedEvent = new AsyncAutoResetEvent(false);
+            var stoppedEvent = new AsyncAutoResetEvent(false);
+            var newTextEvent = new AsyncAutoResetEvent(false);
+            var actionEvent = new AsyncAutoResetEvent(false);
             manager.Started += (s, e) =>
             {
                 startedEvent.Set();
@@ -113,24 +113,24 @@ namespace VoiceActions.NET.Tests
             };
 
             manager.Change();
-            Thread.Sleep(timeout);
+            await Task.Delay(timeout);
             manager.Change();
 
             manager.StartWithTimeout(timeout);
-            Thread.Sleep(timeout);
+            await Task.Delay(timeout);
             manager.Stop();
 
             manager.Start();
-            Thread.Sleep(timeout);
+            await Task.Delay(timeout);
             manager.Stop();
             manager.ProcessSpeech(TestUtilities.GetRawSpeech("speech1.wav"));
 
-            Assert.True(startedEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
-            Assert.True(stoppedEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
-            Assert.True(newTextEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
-            Assert.True(actionEvent.WaitOne(TimeSpan.FromMilliseconds(waitEventTimeout)));
+            await startedEvent.WaitAsync();
+            await stoppedEvent.WaitAsync();
+            await newTextEvent.WaitAsync();
+            await actionEvent.WaitAsync();
 
-            BaseRecorderTest(manager);
+            await BaseRecorderTest(manager);
 
             Assert.Null(manager.Recorder);
             Assert.Null(manager.Converter);

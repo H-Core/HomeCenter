@@ -1,4 +1,5 @@
 ﻿using System;
+using Nito.AsyncEx;
 using VoiceActions.NET.Recorders;
 using Xunit;
 using Xunit.Abstractions;
@@ -12,7 +13,7 @@ namespace VoiceActions.NET.Tests
         }
 
         [Fact]
-        public void WinmmRecorderTest() => BaseRecorderTest(
-            new WinmmRecorder(), PlatformID.Win32NT);
+        public void WinmmRecorderTest() => 
+            AsyncContext.Run(async () => await BaseRecorderTest(new WinmmRecorder(), PlatformID.Win32NT));
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Nito.AsyncEx;
 using VoiceActions.NET.Converters;
 using VoiceActions.NET.Recorders;
 using Xunit;
@@ -39,14 +40,23 @@ namespace VoiceActions.NET.Tests
             return manager;
         }
 
-        [Fact]
-        public async Task ReadmeExampleTest()
+        private bool CheckPlatform()
         {
-            var manager = CreateExampleManager();
-
             if (!BaseTests.CheckPlatform(PlatformID.Win32NT))
             {
                 Output?.WriteLine($"Current system is not supported: {Environment.OSVersion}");
+                return false;
+            }
+
+            return true;
+        }
+
+        [Fact]
+        public void ReadmeExampleTest() => AsyncContext.Run(async () =>
+        {
+            var manager = CreateExampleManager();
+            if (!CheckPlatform())
+            {
                 return;
             }
 
@@ -60,16 +70,14 @@ namespace VoiceActions.NET.Tests
             Assert.True(manager.IsStarted);
             manager.Stop();
             Assert.False(manager.IsStarted);
-        }
+        });
 
         [Fact]
-        public async Task ReadmeExampleWithTimeoutTest()
+        public void ReadmeExampleWithTimeoutTest() => AsyncContext.Run(async () =>
         {
             var manager = CreateExampleManager();
-
-            if (!BaseTests.CheckPlatform(PlatformID.Win32NT))
+            if (!CheckPlatform())
             {
-                Output?.WriteLine($"Current system is not supported: {Environment.OSVersion}");
                 return;
             }
 
@@ -81,16 +89,14 @@ namespace VoiceActions.NET.Tests
             await Task.Delay(2000);
 
             Assert.False(manager.IsStarted);
-        }
+        });
 
         [Fact]
-        public async Task ReadmeExampleChangeTest()
+        public void ReadmeExampleChangeTest() => AsyncContext.Run(async () =>
         {
             var manager = CreateExampleManager();
-
-            if (!BaseTests.CheckPlatform(PlatformID.Win32NT))
+            if (!CheckPlatform())
             {
-                Output?.WriteLine($"Current system is not supported: {Environment.OSVersion}");
                 return;
             }
 
@@ -104,16 +110,14 @@ namespace VoiceActions.NET.Tests
             Assert.True(manager.IsStarted);
             manager.Change();
             Assert.False(manager.IsStarted);
-        }
+        });
 
         [Fact]
-        public async Task ReadmeExampleChangeWithTimeoutTest()
+        public void ReadmeExampleChangeWithTimeoutTest() => AsyncContext.Run(async () =>
         {
             var manager = CreateExampleManager();
-
-            if (!BaseTests.CheckPlatform(PlatformID.Win32NT))
+            if (!CheckPlatform())
             {
-                Output?.WriteLine($"Current system is not supported: {Environment.OSVersion}");
                 return;
             }
 
@@ -125,6 +129,6 @@ namespace VoiceActions.NET.Tests
             await Task.Delay(2000);
 
             Assert.False(manager.IsStarted);
-        }
+        });
     }
 }
