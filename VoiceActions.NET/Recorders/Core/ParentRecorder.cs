@@ -1,4 +1,6 @@
-﻿namespace VoiceActions.NET.Recorders.Core
+﻿using System;
+
+namespace VoiceActions.NET.Recorders.Core
 {
     public class ParentRecorder : BaseRecorder
     {
@@ -8,16 +10,14 @@
 
         #endregion
 
+        #region Events
+
+        protected override VoiceActionsEventArgs CreateArgs() =>
+            new VoiceActionsEventArgs { Recorder = Recorder, Data = Data };
+
+        #endregion
+
         #region Constructors
-
-        public ParentRecorder()
-        {
-        }
-
-        public ParentRecorder(IRecorder recorder)
-        {
-            Recorder = recorder;
-        }
 
         #endregion
 
@@ -25,14 +25,18 @@
 
         public override void Start()
         {
-            Recorder.Start();
+            var recorder = Recorder ?? throw new Exception("Recorder is null");
+
+            recorder.Start();
             base.Start();
         }
 
         public override void Stop()
         {
-            Recorder.Stop();
-            Data = Recorder.Data;
+            var recorder = Recorder ?? throw new Exception("Recorder is null");
+
+            recorder.Stop();
+            Data = recorder.Data;
             base.Stop();
         }
 

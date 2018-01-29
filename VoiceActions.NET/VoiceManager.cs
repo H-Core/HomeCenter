@@ -37,7 +37,7 @@ namespace VoiceActions.NET
         public event EventHandler<VoiceActionsEventArgs> NewText;
         private void OnNewText() => NewText?.Invoke(this, CreateArgs());
         
-        protected VoiceActionsEventArgs CreateArgs() => new VoiceActionsEventArgs
+        protected override VoiceActionsEventArgs CreateArgs() => new VoiceActionsEventArgs
         {
             Recorder = Recorder,
             Converter = Converter,
@@ -68,20 +68,8 @@ namespace VoiceActions.NET
 
         public override void Start()
         {
-            var recorder = Recorder ?? throw new Exception("Recorder is null");
-
-            recorder.Start();
-            IsStarted = true;
             Text = null;
-            Data = null;
-            OnStarted(CreateArgs());
-        }
-
-        public override void Stop()
-        {
-            var recorder = Recorder ?? throw new Exception("Recorder is null");
-
-            recorder.Stop();
+            base.Start();
         }
 
         public void Change()

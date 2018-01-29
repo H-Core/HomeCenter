@@ -19,7 +19,7 @@ namespace VoiceActions.NET.Recorders.Core
         public event EventHandler<VoiceActionsEventArgs> Stopped;
         protected void OnStopped(VoiceActionsEventArgs args) => Stopped?.Invoke(this, args);
 
-        private VoiceActionsEventArgs CreateArgs() => 
+        protected virtual VoiceActionsEventArgs CreateArgs() => 
             new VoiceActionsEventArgs { Recorder = this, Data = Data };
 
         #endregion
