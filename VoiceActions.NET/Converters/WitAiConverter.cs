@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VoiceActions.NET.Converters.Core;
@@ -25,7 +26,7 @@ namespace VoiceActions.NET.Converters
 
         #region Public methods
 
-        public async Task<string> Convert(byte[] bytes) => await ProcessSpokenText(bytes);
+        public async Task<string> Convert(byte[] bytes) => await ProcessSpeech(bytes);
 
         #endregion
 
@@ -42,27 +43,28 @@ namespace VoiceActions.NET.Converters
             public string msg_id { get; set; }
         }
 
-        private Task<string> ProcessSpokenText(byte[] bytes) => Task.Run(() => ProcessSpeech(bytes));
-        
-        private string ProcessSpeech(byte[] bytes)
+        private async Task<string> ProcessSpeech(byte[] bytes)
         {
-            var request = (HttpWebRequest)WebRequest.Create("https://api.wit.ai/speech");
-            request.Method = "POST";
-            request.Headers["Authorization"] = "Bearer " + Token;
-            request.ContentType = "audio/wav";
-            request.ContentLength = bytes.Length;
-            request.GetRequestStream().Write(bytes, 0, bytes.Length);
-
-            (var text, var exception) = request.GetResponseText();
-            if (string.IsNullOrWhiteSpace(text))
+            using (var client = new HttpClient())
             {
-                Exception = exception;
-                return null;
+                client.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("Bearer " + Token);
+
+                var content = new ByteArrayContent(bytes);
+                content.Headers.ContentType = new MediaTypeHeaderValue("audio/wav");
+
+                var message = await client.PostAsync("https://api.wit.ai/speech", content);
+
+                (var text, var exception) = await message.GetResponseText();
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    Exception = exception;
+                    return null;
+                }
+
+                var obj = JsonConvert.DeserializeObject<RootObject>(text);
+
+                return obj._text;
             }
-
-            var obj = JsonConvert.DeserializeObject<RootObject>(text);
-
-            return obj._text;
         }
 
         #endregion
