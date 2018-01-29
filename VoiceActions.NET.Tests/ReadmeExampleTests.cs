@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading;
+using System.Threading.Tasks;
 using VoiceActions.NET.Converters;
 using VoiceActions.NET.Recorders;
 using Xunit;
@@ -40,7 +40,7 @@ namespace VoiceActions.NET.Tests
         }
 
         [Fact]
-        public void ReadmeExampleTest()
+        public async Task ReadmeExampleTest()
         {
             var manager = CreateExampleManager();
 
@@ -55,7 +55,7 @@ namespace VoiceActions.NET.Tests
             manager.Start();
             Assert.True(manager.IsStarted);
 
-            Thread.Sleep(2000);
+            await Task.Delay(2000);
 
             Assert.True(manager.IsStarted);
             manager.Stop();
@@ -63,7 +63,7 @@ namespace VoiceActions.NET.Tests
         }
 
         [Fact]
-        public void ReadmeExampleWithTimeoutTest()
+        public async Task ReadmeExampleWithTimeoutTest()
         {
             var manager = CreateExampleManager();
 
@@ -78,13 +78,13 @@ namespace VoiceActions.NET.Tests
             manager.StartWithTimeout(1000);
             Assert.True(manager.IsStarted);
 
-            Thread.Sleep(2000);
+            await Task.Delay(2000);
 
             Assert.False(manager.IsStarted);
         }
 
         [Fact]
-        public void ReadmeExampleChangeTest()
+        public async Task ReadmeExampleChangeTest()
         {
             var manager = CreateExampleManager();
 
@@ -99,7 +99,7 @@ namespace VoiceActions.NET.Tests
             manager.Change();
             Assert.True(manager.IsStarted);
 
-            Thread.Sleep(2000);
+            await Task.Delay(2000);
 
             Assert.True(manager.IsStarted);
             manager.Change();
@@ -107,7 +107,7 @@ namespace VoiceActions.NET.Tests
         }
 
         [Fact]
-        public void ReadmeExampleChangeWithoutAutoStopTest()
+        public async Task ReadmeExampleChangeWithTimeoutTest()
         {
             var manager = CreateExampleManager();
 
@@ -122,7 +122,7 @@ namespace VoiceActions.NET.Tests
             manager.ChangeWithTimeout(1000);
             Assert.True(manager.IsStarted);
 
-            Thread.Sleep(2000);
+            await Task.Delay(2000);
 
             Assert.False(manager.IsStarted);
         }
