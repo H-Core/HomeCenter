@@ -11,7 +11,7 @@ namespace HomeCenter.NET
     {
         #region Properties
 
-        public ActionsManager ActionsManager { get; set; }
+        public RunnerManager Manager { get; set; }
 
         #endregion
 
@@ -40,13 +40,13 @@ namespace HomeCenter.NET
 
         public Command GetCommand(string key)
         {
-            var data = ActionsManager.GetCommand(key);
+            var data = Manager.GetCommand(key);
             if (string.IsNullOrWhiteSpace(data))
             {
                 return new Command(key);
             }
 
-            var keys = ActionsManager.GetCommands().Where(i => string.Equals(data, i.Item2)).Select(i => i.Item1).ToList();
+            var keys = Manager.GetCommands().Where(i => string.Equals(data, i.Item2)).Select(i => i.Item1).ToList();
             return new Command(keys, data);
         }
 
@@ -55,7 +55,7 @@ namespace HomeCenter.NET
             // TODO: delete initial command keys
             foreach (var key in command.Keys)
             {
-                ActionsManager.SetCommand(key, command.Data);
+                Manager.SetCommand(key, command.Data);
             }
 
             if (!command.Keys.Any())
@@ -90,7 +90,7 @@ namespace HomeCenter.NET
 
             if (!text.StartsWith("/"))
             {
-                ActionsManager.ProcessText(text);
+                Manager.ProcessText(text);
                 return;
             }
 
@@ -166,7 +166,7 @@ namespace HomeCenter.NET
         private void ShowCommand()
         {
             var text = string.Join(Environment.NewLine,
-                ActionsManager.GetCommands().Select(pair => $"{pair.Item1} {pair.Item2}"));
+                Manager.GetCommands().Select(pair => $"{pair.Item1} {pair.Item2}"));
 
             Print($@"Current commands:
 {(string.IsNullOrWhiteSpace(text) ? "You have not added any commands yet" : text)}");
@@ -174,7 +174,7 @@ namespace HomeCenter.NET
 
         private void SaveCommand()
         {
-            CommandsStorage.Data = ActionsManager.Export();
+            CommandsStorage.Data = Manager.Export();
             Print("Commands saved");
         }
 
@@ -184,7 +184,7 @@ namespace HomeCenter.NET
             var alternativeNames = arguments.Split(' ');
             foreach (var alternativeName in alternativeNames)
             {
-                ActionsManager.SetCommand(alternativeName, ActionsManager.GetCommand(name));
+                Manager.SetCommand(alternativeName, Manager.GetCommand(name));
             }
         }
 

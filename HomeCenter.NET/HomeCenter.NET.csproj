@@ -80,6 +80,10 @@
     <Compile Include="ChangeCommandWindow.xaml.cs">
       <DependentUpon>ChangeCommandWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RunnerManager.cs" />
+    <Compile Include="Runners\Core\BaseRunner.cs" />
+    <Compile Include="Runners\DefaultRunner.cs" />
+    <Compile Include="Runners\IRunner.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>

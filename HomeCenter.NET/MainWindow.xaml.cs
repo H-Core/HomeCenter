@@ -13,7 +13,7 @@ namespace HomeCenter.NET
     {
         #region Properties
 
-        private ActionsManager ActionsManager { get; set; } = new ActionsManager
+        private RunnerManager Manager { get; set; } = new RunnerManager
         {
             Recorder = new WinmmRecorder(),
             Converter = new YandexConverter("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" }
@@ -33,23 +33,23 @@ namespace HomeCenter.NET
 
             InputTextBox.Focus();
 
-            ActionsManager.NewText += OnNewText;
-            ActionsManager.Started += (sender, args) => Dispatcher.Invoke(() =>
+            Manager.NewText += OnNewText;
+            Manager.Started += (sender, args) => Dispatcher.Invoke(() =>
             {
                 RecordButton.Content = "🔊";
                 RecordButton.Background = Brushes.LightSkyBlue;
             });
-            ActionsManager.Stopped += (sender, args) => Dispatcher.Invoke(() =>
+            Manager.Stopped += (sender, args) => Dispatcher.Invoke(() =>
             {
                 RecordButton.Content = "🔉";
                 RecordButton.Background = Brushes.LightGray;
             });
-            ActionsManager.Import(CommandsStorage.Data);
+            Manager.Import(CommandsStorage.Data);
 
             Hook.KeyUpEvent += Global_KeyUp;
             Hook.KeyDownEvent += Global_KeyDown;
 
-            ConsoleManager.ActionsManager = ActionsManager;
+            ConsoleManager.Manager = Manager;
             ConsoleManager.NewOutput += (o, args) => Print(args.Text);
         }
 
@@ -67,8 +67,8 @@ namespace HomeCenter.NET
                 TaskbarIcon = null;
             }
 
-            ActionsManager?.Dispose();
-            ActionsManager = null;
+            Manager?.Dispose();
+            Manager = null;
         }
 
         #endregion
@@ -90,16 +90,16 @@ namespace HomeCenter.NET
             }
         }
 
-        private void RecordButton_Click(object sender, RoutedEventArgs e) => ActionsManager.ChangeWithTimeout(3000);
+        private void RecordButton_Click(object sender, RoutedEventArgs e) => Manager.ChangeWithTimeout(3000);
 
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             var window = new SettingsWindow();
 
-            CommandsStorage.Data = ActionsManager.Export();
+            CommandsStorage.Data = Manager.Export();
             window.ShowDialog();
 
-            ActionsManager.Import(CommandsStorage.Data);
+            Manager.Import(CommandsStorage.Data);
         }
 
         private void OnNewText(object source, VoiceActionsEventArgs e) => Dispatcher.Invoke(() => {
@@ -110,7 +110,7 @@ namespace HomeCenter.NET
                 return;
             }
 
-            Print(ActionsManager.IsHandled(text)
+            Print(Manager.IsHandled(text)
                 ? $"Run action for text: \"{text}\""
                 : $"We don't have handler for text: \"{text}\"");
         });
@@ -119,7 +119,7 @@ namespace HomeCenter.NET
         {
             if ((int)e.Key == 192)
             {
-                ActionsManager.Stop();
+                Manager.Stop();
             }
         }
 
@@ -127,7 +127,7 @@ namespace HomeCenter.NET
         {
             if ((int)e.Key == 192)
             {
-                ActionsManager.Start();
+                Manager.Start();
             }
         }
 
