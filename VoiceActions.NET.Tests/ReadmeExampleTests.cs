@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Nito.AsyncEx;
 using VoiceActions.NET.Converters;
@@ -27,15 +28,14 @@ namespace VoiceActions.NET.Tests
                 Converter = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")
             };
 
-            // when you say "test" the manager runs the explorer.exe with the "C:/" base folder
-            manager.SetCommand("test", "run explorer.exe C:/");
+            // when you say "open file explorer" the manager runs the explorer.exe with the "C:/" base folder
+            manager.SetAction("open file explorer", () => Process.Start("explorer.exe", "C:/"));
             // when you say "test" the manager runs your custom action
             manager.SetAction("test", () => Console.WriteLine("test"));
 
-            Assert.Equal("run explorer.exe C:/", manager.GetCommand("test"));
-            Assert.Single(manager.GetCommands());
             Assert.NotNull(manager.GetAction("test"));
-            Assert.Single(manager.GetActions());
+            Assert.NotNull(manager.GetAction("open file explorer"));
+            Assert.Equal(2, manager.GetActions().Count);
 
             return manager;
         }

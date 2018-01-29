@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -38,7 +39,7 @@ namespace VoiceActions.NET.Wpf.Example
                 RecordButton.Content = "🔉";
                 RecordButton.Background = Brushes.LightGray;
             });
-            ActionsManager.SetCommand("проверка", "run explorer.exe C:/");
+            ActionsManager.SetAction("открой диспетчер файлов", () => Process.Start("explorer.exe", "C:/"));
             ActionsManager.SetAction("проверка", () => MessageBox.Show("test"));
         }
 
