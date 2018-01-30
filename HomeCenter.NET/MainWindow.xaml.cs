@@ -33,6 +33,7 @@ namespace HomeCenter.NET
 
             InputTextBox.Focus();
 
+            Manager.Recorder.Stopped += (sender, args) => args.Data.Play();
             Manager.NewText += OnNewText;
             Manager.Started += (sender, args) => Dispatcher.Invoke(() =>
             {

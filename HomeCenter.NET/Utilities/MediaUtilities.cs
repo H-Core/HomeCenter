@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Media;
 
 namespace HomeCenter.NET.Utilities
@@ -7,7 +8,9 @@ namespace HomeCenter.NET.Utilities
     {
         public static void Play(this byte[] bytes)
         {
-            using (var stream = new MemoryStream())
+            bytes = bytes ?? throw new ArgumentNullException(nameof(bytes));
+
+            using (var stream = new MemoryStream(bytes))
             using (var player = new SoundPlayer(stream))
             {
                 player.Play();
