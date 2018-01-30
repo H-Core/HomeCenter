@@ -111,6 +111,8 @@ namespace VoiceActions.NET
 
             Converter?.Dispose();
             Converter = null;
+
+            base.Dispose();
         }
 
         #endregion
