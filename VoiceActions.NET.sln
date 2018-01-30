@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2024
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VoiceActions.NET", "VoiceActions.NET\VoiceActions.NET.csproj", "{E2BDD04C-F9A7-47C1-8875-48ED16CB8DAE}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceActions.NET.Wpf.Example", "VoiceActions.NET.Wpf.Example\VoiceActions.NET.Wpf.Example.csproj", "{31165983-28FF-4121-9054-7C9CE85DF449}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCenter.NET", "HomeCenter.NET\HomeCenter.NET.csproj", "{140E973F-93DC-483F-AA62-046E9A8536B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoiceActions.NET.Recorders.Windows.NAudio", "VoiceActions.NET.Recorders.Windows.NAudio\VoiceActions.NET.Recorders.Windows.NAudio.csproj", "{95808986-9E46-41CD-BBB1-2DF3D91209AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{140E973F-93DC-483F-AA62-046E9A8536B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{140E973F-93DC-483F-AA62-046E9A8536B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{140E973F-93DC-483F-AA62-046E9A8536B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95808986-9E46-41CD-BBB1-2DF3D91209AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95808986-9E46-41CD-BBB1-2DF3D91209AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95808986-9E46-41CD-BBB1-2DF3D91209AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95808986-9E46-41CD-BBB1-2DF3D91209AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
