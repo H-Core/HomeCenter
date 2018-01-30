@@ -11,7 +11,7 @@ namespace VoiceActions.NET
     {
         #region Properties
 
-        public IRunner Runner { get; set; }
+        public IRunner Runner { get; set; } = new DefaultRunner();
 
         private InvariantStringDictionary<string> CommandsDictionary { get; set; } = new InvariantStringDictionary<string>();
 
