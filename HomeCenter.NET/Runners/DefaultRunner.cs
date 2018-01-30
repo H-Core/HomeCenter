@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
-using VoiceActions.NET.Runners.Core;
+using HomeCenter.NET.Runners.Core;
 using VoiceActions.NET.Utilities;
 
-namespace VoiceActions.NET.Runners
+namespace HomeCenter.NET.Runners
 {
     public class DefaultRunner : BaseRunner
     {

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HomeCenter.NET.Runners;
 using Newtonsoft.Json;
-using VoiceActions.NET.Runners;
+using VoiceActions.NET;
 using VoiceActions.NET.Utilities;
 
-namespace VoiceActions.NET
+namespace HomeCenter.NET
 {
     public class RunnerManager : VoiceManager
     {
