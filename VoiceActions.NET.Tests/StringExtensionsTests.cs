@@ -1,4 +1,5 @@
-﻿using VoiceActions.NET.Utilities;
+﻿using System;
+using VoiceActions.NET.Utilities;
 using Xunit;
 
 namespace VoiceActions.NET.Tests
@@ -20,6 +21,12 @@ namespace VoiceActions.NET.Tests
             BaseTwoStringTupleTest(("test", null), "test".SplitOnlyFirst(' '));
             BaseTwoStringTupleTest(("", ""), " ".SplitOnlyFirst(' '));
             BaseTwoStringTupleTest(("", null), "".SplitOnlyFirst(' '));
+
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                string test = null;
+                test.SplitOnlyFirst(' ');
+            });
         }
     }
 }
