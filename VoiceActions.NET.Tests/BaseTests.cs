@@ -116,6 +116,10 @@ namespace VoiceActions.NET.Tests
             await Task.Delay(timeout);
             manager.Change();
 
+            manager.ChangeWithTimeout(timeout);
+            await Task.Delay(timeout);
+            manager.ChangeWithTimeout(timeout);
+
             manager.StartWithTimeout(timeout);
             await Task.Delay(timeout);
             manager.Stop();
