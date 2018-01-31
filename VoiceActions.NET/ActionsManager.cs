@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using VoiceActions.NET.Utilities;
 
 namespace VoiceActions.NET
@@ -9,7 +7,8 @@ namespace VoiceActions.NET
     {
         #region Properties
 
-        private InvariantStringDictionary<Action> ActionDictionary { get; } = new InvariantStringDictionary<Action>();
+        public Action<string> GlobalAction { get; set; }
+        public InvariantStringDictionary<Action> Actions { get; } = new InvariantStringDictionary<Action>();
 
         #endregion
 
@@ -42,15 +41,7 @@ namespace VoiceActions.NET
 
         #region Public methods
 
-        public void SetAction(string text, Action action) => ActionDictionary[text] = action;
-
-        public bool IsHandled(string text) => ActionDictionary.ContainsKey(text);
-
-        public List<(string, Action)> GetActions() =>
-            ActionDictionary.Select(pair => (pair.Key, pair.Value)).ToList();
-
-        public Action GetAction(string text) =>
-            ActionDictionary.TryGetValue(text, out var result) ? result : null;
+        public bool IsHandled(string text) => GlobalAction != null || Actions.ContainsKey(text);
 
         #endregion
 
@@ -59,19 +50,19 @@ namespace VoiceActions.NET
         private void OnNewText(object sender, VoiceActionsEventArgs args)
         {
             var text = args.Text;
+            GlobalAction?.Invoke(text);
             if (string.IsNullOrWhiteSpace(text))
             {
                 OnText(false);
                 return;
             }
 
-            var isHandled = ActionDictionary.ContainsKey(text);
-            if (isHandled)
+            if (Actions.ContainsKey(text))
             {
-                ActionDictionary[text]?.Invoke();
+                Actions[text]?.Invoke();
             }
 
-            OnText(isHandled);
+            OnText(IsHandled(text));
         }
 
         #endregion

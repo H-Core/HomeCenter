@@ -30,10 +30,10 @@ Set up actions:
 
 ```cs
 
-// when you say "open file explorer" the manager runs the explorer.exe with the "C:/" base folder
-manager.SetAction("open file explorer", () => Process.Start("explorer.exe", "C:/"));
- // when you say "test" the manager runs your custom action
-manager.SetAction("test", () => Console.WriteLine("test"));
+// when you say "open file explorer"(case insensitive) the manager runs the explorer.exe with the "C:/" base folder
+manager.Actions["open file explorer"] = () => Process.Start("explorer.exe", "C:/");
+// when you say any text(include empty text) the manager runs your custom action
+manager.GlobalAction = text => Console.WriteLine($"You say: {text}");
 
  ```
 

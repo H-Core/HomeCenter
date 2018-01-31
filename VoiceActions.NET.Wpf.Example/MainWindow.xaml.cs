@@ -12,7 +12,7 @@ namespace VoiceActions.NET.Wpf.Example
     {
         #region Properties
 
-        private ActionsManager ActionsManager { get; set; } = new ActionsManager
+        private ActionsManager Manager { get; set; } = new ActionsManager
         {
             Recorder = new WinmmRecorder(),
             Converter = new YandexConverter("1ce29818-0d15-4080-b6a1-ea5267c9fefd"){ Lang = "ru-RU" }
@@ -28,19 +28,20 @@ namespace VoiceActions.NET.Wpf.Example
 
             InputTextBox.Focus();
 
-            ActionsManager.NewText += OnNewText;
-            ActionsManager.Started += (sender, args) => Dispatcher.Invoke(() =>
+            Manager.NewText += OnNewText;
+            Manager.Started += (sender, args) => Dispatcher.Invoke(() =>
             {
                 RecordButton.Content = "🔊";
                 RecordButton.Background = Brushes.LightSkyBlue;
             });
-            ActionsManager.Stopped += (sender, args) => Dispatcher.Invoke(() =>
+            Manager.Stopped += (sender, args) => Dispatcher.Invoke(() =>
             {
                 RecordButton.Content = "🔉";
                 RecordButton.Background = Brushes.LightGray;
             });
-            ActionsManager.SetAction("открой диспетчер файлов", () => Process.Start("explorer.exe", "C:/"));
-            ActionsManager.SetAction("проверка", () => MessageBox.Show("test"));
+
+            Manager.Actions["открой диспетчер файлов"] = () => Process.Start("explorer.exe", "C:/");
+            Manager.Actions["проверка"] = () => MessageBox.Show("test");
         }
 
         #endregion
@@ -49,8 +50,8 @@ namespace VoiceActions.NET.Wpf.Example
 
         public void Dispose()
         {
-            ActionsManager?.Dispose();
-            ActionsManager = null;
+            Manager?.Dispose();
+            Manager = null;
         }
 
         #endregion
@@ -61,23 +62,23 @@ namespace VoiceActions.NET.Wpf.Example
         {
             if (e.Key == Key.Enter && InputTextBox.Text.Length > 0)
             {
-                ActionsManager.ProcessText(InputTextBox.Text);
+                Manager.ProcessText(InputTextBox.Text);
                 InputTextBox.Clear();
             }
         }
 
-        private void RecordButton_Click(object sender, RoutedEventArgs e) => ActionsManager.ChangeWithTimeout(3000);
+        private void RecordButton_Click(object sender, RoutedEventArgs e) => Manager.ChangeWithTimeout(3000);
 
         private void OnNewText(object source, VoiceActionsEventArgs e) => Dispatcher.Invoke(() => {
             var text = e.Text;
             if (string.IsNullOrWhiteSpace(text))
             {
-                var message = ActionsManager?.Converter?.Exception?.Message;
+                var message = Manager?.Converter?.Exception?.Message;
                 Console($"Bad or empty request. {(!string.IsNullOrWhiteSpace(message) ? $"Message: {message}" : "")}");
                 return;
             }
 
-            Console(ActionsManager.IsHandled(text)
+            Console(Manager.IsHandled(text)
                 ? $"Run action for text: \"{text}\""
                 : $"We don't have handler for text: \"{text}\"");
         });
@@ -87,7 +88,7 @@ namespace VoiceActions.NET.Wpf.Example
             if (e.Key == Key.OemTilde)
             {
                 e.Handled = true;
-                ActionsManager.Stop();
+                Manager.Stop();
             }
         }
 
@@ -96,7 +97,7 @@ namespace VoiceActions.NET.Wpf.Example
             if (e.Key == Key.OemTilde)
             {
                 e.Handled = true;
-                ActionsManager.Start();
+                Manager.Start();
             }
         }
 
