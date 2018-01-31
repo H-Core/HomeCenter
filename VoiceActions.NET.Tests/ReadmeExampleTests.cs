@@ -38,6 +38,11 @@ namespace VoiceActions.NET.Tests
 
             Assert.NotNull(manager.GlobalAction);
 
+            Assert.True(manager.IsHandled("open file explorer"));
+            Assert.True(manager.IsHandled("any text"));
+            Assert.True(manager.IsHandled(""));
+            Assert.True(manager.IsHandled(null));
+
             return manager;
         }
 
