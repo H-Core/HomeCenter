@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -84,10 +85,25 @@ namespace HomeCenter.NET
 
         private void InputTextBox_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter && InputTextBox.Text.Length > 0)
+            switch (e.Key)
             {
-                ConsoleManager.Run(InputTextBox.Text);
-                InputTextBox.Clear();
+                case Key.Enter:
+                    if (InputTextBox.Text.Length == 0)
+                    {
+                        break;
+                    }
+
+                    ConsoleManager.Run(InputTextBox.Text);
+                    InputTextBox.Clear();
+                    break;
+
+                case Key.Up:
+                    if (ConsoleManager.History.Any())
+                    {
+                        InputTextBox.Text = ConsoleManager.History.LastOrDefault() ?? "";
+                        ConsoleManager.History.RemoveAt(ConsoleManager.History.Count - 1);
+                    }
+                    break;
             }
         }
 

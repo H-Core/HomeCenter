@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HomeCenter.NET.Runners.Core;
 using HomeCenter.NET.Utilities;
@@ -11,6 +12,8 @@ namespace HomeCenter.NET
         #region Properties
 
         public RunnerManager Manager { get; set; }
+
+        public List<string> History { get; } = new List<string>();
 
         #endregion
 
@@ -89,6 +92,8 @@ namespace HomeCenter.NET
                 return;
             }
 
+            History.Add(text);
+
             if (!text.StartsWith("/"))
             {
                 Manager.ProcessText(text);
@@ -129,7 +134,6 @@ namespace HomeCenter.NET
                     break;
 
             }
-
         }
 
         #region Commands
