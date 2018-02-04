@@ -30,7 +30,7 @@ namespace VoiceActions.NET.Synthesizers
 
         #region Public methods
 
-        public async Task<byte[]> Convert(string text)
+        protected override async Task<byte[]> InternalConvert(string text)
         {
             try
             {
@@ -46,7 +46,9 @@ namespace VoiceActions.NET.Synthesizers
                 return null;
             }
         }
-        
+
+        protected override string TextToKey(string text) => $"{text}_{Speaker}_{Lang}_{Emotion}_{Speed}_{Format}_{Quality}";
+
         #endregion
     }
 }
