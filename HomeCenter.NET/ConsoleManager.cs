@@ -25,6 +25,7 @@ namespace HomeCenter.NET
 
         public override string[] GetSupportedCommands() => new[]
         {
+            "/?",
             "/add text full-command",
             "/add text",
             "/add",
@@ -63,6 +64,7 @@ namespace HomeCenter.NET
             }
 
             Print($"Command \"{command.Keys.First()}\" saved");
+            Save();
         }
 
         #endregion
@@ -97,6 +99,10 @@ namespace HomeCenter.NET
             var command = prefix.ToLowerInvariant().Substring(1);
             switch (command)
             {
+                case "?":
+                    Print(GetSupportedCommandsText());
+                    break;
+
                 case "add":
                     AddCommand(postfix);
                     break;
@@ -114,7 +120,8 @@ namespace HomeCenter.NET
                     break;
 
                 case "save":
-                    SaveCommand();
+                    Save();
+                    Print("Commands saved");
                     break;
 
                 default:
@@ -171,11 +178,7 @@ namespace HomeCenter.NET
 {(string.IsNullOrWhiteSpace(text) ? "You have not added any commands yet" : text)}");
         }
 
-        private void SaveCommand()
-        {
-            CommandsStorage.Data = Manager.Export();
-            Print("Commands saved");
-        }
+        private void Save() => CommandsStorage.Data = Manager.Export();
 
         private void RedirectCommand(string postfix)
         {

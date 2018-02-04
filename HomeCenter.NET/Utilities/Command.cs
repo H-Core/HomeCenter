@@ -9,7 +9,7 @@ namespace HomeCenter.NET.Utilities
         #region Properties
 
         public string Data { get; set; }
-        public List<string> Keys { get; set; }
+        public List<string> Keys { get; set; } = new List<string>();
         //public List<string> DeletedKeys { get; set; } TODO: Add
 
         public string KeysString
