@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Nito.AsyncEx;
 using VoiceActions.NET.Converters;
 using VoiceActions.NET.Recorders;
+using VoiceActions.NET.Synthesizers;
 using VoiceActions.NET.Tests.Utilities;
 using Xunit;
 using Xunit.Abstractions;
@@ -29,6 +30,12 @@ namespace VoiceActions.NET.Tests
             obj.Dispose();
         }
 
+        protected static void BaseDataTest(byte[] bytes)
+        {
+            Assert.NotNull(bytes);
+            Assert.InRange(bytes.Length, 1, int.MaxValue);
+        }
+
         public static bool CheckPlatform(PlatformID? platformId) => 
             platformId == null || platformId == Environment.OSVersion.Platform;
 
@@ -51,9 +58,7 @@ namespace VoiceActions.NET.Tests
             recorder.Stop();
             Assert.False(recorder.IsStarted);
 
-            Assert.NotNull(recorder.Data);
-            Assert.InRange(recorder.Data.Length, 1, int.MaxValue);
-
+            BaseDataTest(recorder.Data);
             BaseDisposeTest(recorder);
 
             Output?.WriteLine($"Recorder: {recorder} is good!");
@@ -68,6 +73,17 @@ namespace VoiceActions.NET.Tests
             Assert.Equal(expected, await converter.Convert(data));
 
             BaseDisposeTest(converter);
+        }
+
+        protected static async Task BaseSynthesizerTest(string text, ISynthesizer synthesizer)
+        {
+            Assert.NotNull(text);
+            Assert.NotNull(synthesizer);
+
+            var bytes = await synthesizer.Convert(text);
+
+            BaseDataTest(bytes);
+            BaseDisposeTest(synthesizer);
         }
 
         protected static void BaseArgsTest(VoiceManager manager, VoiceActionsEventArgs args)
