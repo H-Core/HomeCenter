@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET
 {
@@ -9,6 +10,8 @@ namespace HomeCenter.NET
         public SettingsWindow()
         {
             InitializeComponent();
+
+            StartupCheckBox.IsChecked = Startup.IsStartup(Options.FileName);
         }
 
         #endregion
@@ -18,6 +21,8 @@ namespace HomeCenter.NET
         private void SaveAndClose(object sender, RoutedEventArgs e)
         {
             Properties.Settings.Default.Save();
+            Startup.Set(Options.FileName, StartupCheckBox.IsChecked ?? false);
+
             Close();
         }
 

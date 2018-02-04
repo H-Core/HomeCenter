@@ -121,6 +121,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Utilities\MediaUtilities.cs" />
+    <Compile Include="Utilities\Options.cs" />
+    <Compile Include="Utilities\Startup.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
