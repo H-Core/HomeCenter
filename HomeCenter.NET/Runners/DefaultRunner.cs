@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using HomeCenter.NET.Runners.Core;
 using VoiceActions.NET.Utilities;
 
@@ -10,26 +11,40 @@ namespace HomeCenter.NET.Runners
 
         public override string[] GetSupportedCommands() => new[]
         {
-            "RUN program.exe arguments"
+            "RUN program.exe arguments",
+            "SAY text"
         };
 
         #endregion
 
         #region Private methods
 
-        protected override void RunInternal(string command)
+        protected override void RunInternal(string text)
         {
-            if (string.IsNullOrWhiteSpace(command))
+            if (string.IsNullOrWhiteSpace(text))
             {
                 return;
             }
 
+            var commands = text.Split(Environment.NewLine.ToCharArray());
+            foreach (var command in commands)
+            {
+                RunSingleCommand(command);
+            }
+        }
+
+        private void RunSingleCommand(string command)
+        {
             (var prefix, var postfix) = command.SplitOnlyFirst(' ');
 
             switch (prefix.ToLowerInvariant())
             {
                 case "run":
                     RunProcess(postfix);
+                    break;
+
+                case "say":
+                    Say(postfix);
                     break;
             }
         }

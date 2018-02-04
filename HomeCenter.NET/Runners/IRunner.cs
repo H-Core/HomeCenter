@@ -7,6 +7,7 @@ namespace HomeCenter.NET.Runners
     {
         void Run(string command);
 
+        event EventHandler<VoiceActionsEventArgs> NewSpeech;
         event EventHandler<VoiceActionsEventArgs> BeforeRun;
         event EventHandler<VoiceActionsEventArgs> AfterRun;
 

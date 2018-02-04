@@ -13,6 +13,9 @@ namespace HomeCenter.NET.Runners.Core
         public event EventHandler<VoiceActionsEventArgs> AfterRun;
         private void OnAfterRun(VoiceActionsEventArgs args) => AfterRun?.Invoke(this, args);
 
+        public event EventHandler<VoiceActionsEventArgs> NewSpeech;
+        protected void Say(string text) => NewSpeech?.Invoke(this, new VoiceActionsEventArgs { Text = text });
+
         private VoiceActionsEventArgs CreateArgs(string command) => new VoiceActionsEventArgs{ Text = command };
 
         #endregion

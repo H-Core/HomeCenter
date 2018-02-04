@@ -7,6 +7,7 @@ using HomeCenter.NET.Utilities;
 using VoiceActions.NET;
 using VoiceActions.NET.Converters;
 using VoiceActions.NET.Recorders;
+using VoiceActions.NET.Synthesizers;
 
 namespace HomeCenter.NET
 {
@@ -21,8 +22,8 @@ namespace HomeCenter.NET
         };
 
         private Hook Hook { get; } = new Hook("Global Action Hook");
-
         private ConsoleManager ConsoleManager { get; } = new ConsoleManager();
+        private ISynthesizer Synthesizer { get; } = new YandexSynthesizer("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" };
 
         #endregion
 
@@ -34,7 +35,6 @@ namespace HomeCenter.NET
 
             InputTextBox.Focus();
 
-            Manager.Recorder.Stopped += (sender, args) => args.Data.Play();
             Manager.NewText += OnNewText;
             Manager.Started += (sender, args) => Dispatcher.Invoke(() =>
             {
@@ -47,12 +47,14 @@ namespace HomeCenter.NET
                 RecordButton.Background = Brushes.LightGray;
             });
             Manager.Import(CommandsStorage.Data);
+            Manager.Runner.NewSpeech += (o, args) => Say(args.Text);
 
             Hook.KeyUpEvent += Global_KeyUp;
             Hook.KeyDownEvent += Global_KeyDown;
 
             ConsoleManager.Manager = Manager;
             ConsoleManager.NewOutput += (o, args) => Print(args.Text);
+            ConsoleManager.NewSpeech += (o, args) => Say(args.Text);
         }
 
         #endregion
@@ -78,6 +80,9 @@ namespace HomeCenter.NET
         #region Private methods
 
         private void Print(string text) => ConsoleTextBox.Text += $"{DateTime.Now:T}: {text}{Environment.NewLine}";
+
+        private static void Say(byte[] bytes) => bytes?.Play();
+        private async void Say(string text) => Say(await Synthesizer.Convert(text));
 
         #endregion
 
