@@ -26,24 +26,7 @@ namespace VoiceActions.NET.Converters
 
         #region Public methods
 
-        public async Task<string> Convert(byte[] bytes) => await ProcessSpeech(bytes);
-
-        #endregion
-
-        #region Private methods
-
-        public class Entities
-        {
-        }
-
-        public class RootObject
-        {
-            public string _text { get; set; }
-            public Entities entities { get; set; }
-            public string msg_id { get; set; }
-        }
-
-        private async Task<string> ProcessSpeech(byte[] bytes)
+        public async Task<string> Convert(byte[] bytes)
         {
             using (var client = new HttpClient())
             {
@@ -65,6 +48,13 @@ namespace VoiceActions.NET.Converters
 
                 return obj._text;
             }
+        }
+
+        private class RootObject
+        {
+            public string _text { get; set; }
+            public object entities { get; set; }
+            public string msg_id { get; set; }
         }
 
         #endregion

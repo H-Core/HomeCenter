@@ -30,13 +30,7 @@ namespace VoiceActions.NET.Converters
 
         #region Public methods
 
-        public async Task<string> Convert(byte[] bytes) => await ProcessSpeech(bytes);
-
-        #endregion
-
-        #region Private methods
-        
-        private async Task<string> ProcessSpeech(byte[] bytes)
+        public async Task<string> Convert(byte[] bytes)
         {
             using (var client = new HttpClient())
             {
