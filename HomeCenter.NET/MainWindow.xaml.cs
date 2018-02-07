@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using HomeCenter.NET.Properties;
 using HomeCenter.NET.Utilities;
 using VoiceActions.NET;
 using VoiceActions.NET.Converters;
@@ -32,6 +33,11 @@ namespace HomeCenter.NET
         public MainWindow()
         {
             InitializeComponent();
+
+            if (Settings.Default.IsStartMinimized)
+            {
+                Visibility = Visibility.Hidden;
+            }
 
             InputTextBox.Focus();
 

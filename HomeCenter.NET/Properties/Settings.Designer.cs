@@ -82,5 +82,17 @@ namespace HomeCenter.NET.Properties {
                 this["CommandsData"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsStartMinimized {
+            get {
+                return ((bool)(this["IsStartMinimized"]));
+            }
+            set {
+                this["IsStartMinimized"] = value;
+            }
+        }
     }
 }
