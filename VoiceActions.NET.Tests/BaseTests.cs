@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Nito.AsyncEx;
 using VoiceActions.NET.Converters;
+using VoiceActions.NET.Managers;
 using VoiceActions.NET.Recorders;
 using VoiceActions.NET.Synthesizers;
 using VoiceActions.NET.Tests.Utilities;
@@ -86,7 +87,7 @@ namespace VoiceActions.NET.Tests
             BaseDisposeTest(synthesizer);
         }
 
-        protected static void BaseArgsTest(VoiceManager manager, VoiceActionsEventArgs args)
+        protected static void BaseArgsTest(BaseManager manager, VoiceActionsEventArgs args)
         {
             Assert.Equal(manager.Converter, args.Converter);
             Assert.Equal(manager.Recorder, args.Recorder);
@@ -94,7 +95,7 @@ namespace VoiceActions.NET.Tests
             Assert.Equal(manager.Text, args.Text);
         }
 
-        protected async Task BaseVoiceManagerTest(VoiceManager manager, PlatformID? platformId = null, int timeout = 1000, int waitEventTimeout = 20000)
+        protected async Task BaseManagerTest(BaseManager manager, PlatformID? platformId = null, int timeout = 1000, int waitEventTimeout = 20000)
         {
             Assert.NotNull(manager);
             if (!CheckPlatform(platformId))
@@ -117,10 +118,10 @@ namespace VoiceActions.NET.Tests
                 stoppedEvent.Set();
                 BaseArgsTest(manager, e);
             };
-            manager.NewText += (s, e) =>
+            manager.NewText += text =>
             {
                 newTextEvent.Set();
-                BaseArgsTest(manager, e);
+                Assert.Equal(manager.Text, text);
 
                 if (string.Equals(manager.Text, "проверка", StringComparison.OrdinalIgnoreCase))
                 {

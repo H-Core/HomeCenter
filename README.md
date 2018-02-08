@@ -16,7 +16,7 @@ Create manager object:
 
 ```cs
 
-var manager = new ActionsManager
+var manager = new Manager<Action>
 {
     // Select Windows Multimedia API recorder
     Recorder = new WinmmRecorder(),
@@ -31,9 +31,9 @@ Set up actions:
 ```cs
 
 // when you say "open file explorer"(case insensitive) the manager runs the explorer.exe with the "C:/" base folder
-manager.Actions["open file explorer"] = () => Process.Start("explorer.exe", "C:/");
+manager.Storage["open file explorer"] = () => Process.Start("explorer.exe", "C:/");
 // when you say any text(include empty text) the manager runs your custom action
-manager.GlobalAction = text => Console.WriteLine($"You say: {text}");
+manager.NewText += text => Console.WriteLine($"You say: {text}");
 
  ```
 

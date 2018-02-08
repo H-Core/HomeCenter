@@ -1,7 +1,7 @@
 ﻿using System;
-using VoiceActions.NET;
+using VoiceActions.NET.Managers;
 
-namespace HomeCenter.NET.Runners
+namespace VoiceActions.NET.Runners
 {
     public interface IRunner : IDisposable
     {

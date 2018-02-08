@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Nito.AsyncEx;
 using VoiceActions.NET.Converters;
+using VoiceActions.NET.Managers;
 using VoiceActions.NET.Recorders;
 using Xunit;
 using Xunit.Abstractions;
@@ -18,9 +19,9 @@ namespace VoiceActions.NET.Tests
             Output = output;
         }
 
-        private static ActionsManager CreateExampleManager()
+        private static Manager<Action> CreateExampleManager()
         {
-            var manager = new ActionsManager
+            var manager = new Manager<Action>
             {
                 // Select recorder which stops after 1000 milliseconds with Windows Multimedia API base recorder
                 Recorder = new WinmmRecorder(),
@@ -29,19 +30,17 @@ namespace VoiceActions.NET.Tests
             };
 
             // when you say "open file explorer" the manager runs the explorer.exe with the "C:/" base folder
-            manager.Actions["open file explorer"] = () => Process.Start("explorer.exe", "C:/");
+            manager.Storage["open file explorer"] = () => Process.Start("explorer.exe", "C:/");
             // when you say any text(include empty text) the manager runs your custom action
-            manager.GlobalAction = text => Console.WriteLine($"You say: {text}");
+            manager.NewText += text => Console.WriteLine($"You say: {text}");
 
-            Assert.Single(manager.Actions);
-            Assert.True(manager.Actions.ContainsKey("open file explorer"));
-
-            Assert.NotNull(manager.GlobalAction);
-
+            Assert.Single(manager.Storage);
+            Assert.True(manager.Storage.ContainsKey("open file explorer"));
+            
             Assert.True(manager.IsHandled("open file explorer"));
-            Assert.True(manager.IsHandled("any text"));
-            Assert.True(manager.IsHandled(""));
-            Assert.True(manager.IsHandled(null));
+            Assert.False(manager.IsHandled("any text"));
+            Assert.False(manager.IsHandled(""));
+            Assert.False(manager.IsHandled(null));
 
             return manager;
         }

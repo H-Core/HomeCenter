@@ -1,6 +1,7 @@
 ﻿using System;
 using Nito.AsyncEx;
 using VoiceActions.NET.Converters;
+using VoiceActions.NET.Managers;
 using VoiceActions.NET.Recorders;
 using Xunit;
 using Xunit.Abstractions;
@@ -14,16 +15,16 @@ namespace VoiceActions.NET.Tests
         }
 
         [Fact]
-        public void WinmmWitAiVoiceManagerTest() =>
-            AsyncContext.Run(async () => await BaseVoiceManagerTest(new VoiceManager
+        public void WinmmWitAiManagerTest() =>
+            AsyncContext.Run(async () => await BaseManagerTest(new BaseManager
             {
                 Recorder = new WinmmRecorder(),
                 Converter = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")
             }, PlatformID.Win32NT));
 
         [Fact]
-        public void WinmmYandexVoiceManagerTest() =>
-            AsyncContext.Run(async () => await BaseVoiceManagerTest(new VoiceManager
+        public void WinmmYandexManagerTest() =>
+            AsyncContext.Run(async () => await BaseManagerTest(new BaseManager
             {
                 Recorder = new WinmmRecorder(),
                 Converter = new YandexConverter("1ce29818-0d15-4080-b6a1-ea5267c9fefd")

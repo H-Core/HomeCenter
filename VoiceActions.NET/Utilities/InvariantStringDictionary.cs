@@ -20,7 +20,7 @@ namespace VoiceActions.NET.Utilities
                 value = default(T);
                 return false;
             }
-
+            
             value = this[key];
             return true;
         }

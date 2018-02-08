@@ -1,7 +1,6 @@
 ﻿using System;
-using VoiceActions.NET;
 
-namespace HomeCenter.NET.Runners.Core
+namespace VoiceActions.NET.Runners.Core
 {
     public abstract class BaseRunner : IRunner
     {

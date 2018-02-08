@@ -3,9 +3,9 @@ using VoiceActions.NET.Converters;
 using VoiceActions.NET.Recorders;
 using VoiceActions.NET.Recorders.Core;
 
-namespace VoiceActions.NET
+namespace VoiceActions.NET.Managers
 {
-    public class VoiceManager : ParentRecorder
+    public class BaseManager : ParentRecorder
     {
         #region Properties
 
@@ -34,8 +34,9 @@ namespace VoiceActions.NET
 
         #region Events
 
-        public event EventHandler<VoiceActionsEventArgs> NewText;
-        private void OnNewText() => NewText?.Invoke(this, CreateArgs());
+        public delegate void TextDelegate(string key);
+        public event TextDelegate NewText;
+        private void OnNewText() => NewText?.Invoke(Text);
         
         protected override VoiceActionsEventArgs CreateArgs() => new VoiceActionsEventArgs
         {

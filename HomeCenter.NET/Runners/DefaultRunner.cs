@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using HomeCenter.NET.Runners.Core;
+using VoiceActions.NET.Runners.Core;
 using VoiceActions.NET.Utilities;
 
 namespace HomeCenter.NET.Runners
