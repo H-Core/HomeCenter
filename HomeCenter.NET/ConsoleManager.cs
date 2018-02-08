@@ -100,7 +100,7 @@ namespace HomeCenter.NET
                 return;
             }
 
-            (var prefix, var postfix) = text.SplitOnlyFirst(' ');
+            (var prefix, var postfix) = text.SplitOnlyFirstIgnoreQuote(' ');
             var command = prefix.ToLowerInvariant().Substring(1);
             switch (command)
             {
@@ -146,7 +146,7 @@ namespace HomeCenter.NET
                 return;
             }
 
-            (var key, var arguments) = postfix.SplitOnlyFirst(' ');
+            (var key, var arguments) = postfix.SplitOnlyFirstIgnoreQuote(' ');
             if (string.IsNullOrWhiteSpace(arguments))
             {
                 ShowChangeCommandWindow(GetCommand(key));
@@ -163,7 +163,7 @@ namespace HomeCenter.NET
                 return; // TODO: Currently is not supported
             }
 
-            (var key, var arguments) = postfix.SplitOnlyFirst(' ');
+            (var key, var arguments) = postfix.SplitOnlyFirstIgnoreQuote(' ');
             if (string.IsNullOrWhiteSpace(arguments))
             {
                 ShowChangeCommandWindow(GetCommand(key));
@@ -186,7 +186,7 @@ namespace HomeCenter.NET
 
         private void RedirectCommand(string postfix)
         {
-            (var name, var arguments) = postfix.SplitOnlyFirst(' ');
+            (var name, var arguments) = postfix.SplitOnlyFirstIgnoreQuote(' ');
             var alternativeNames = arguments.Split(' ');
             foreach (var alternativeName in alternativeNames)
             {

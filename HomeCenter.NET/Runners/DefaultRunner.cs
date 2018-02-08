@@ -35,7 +35,7 @@ namespace HomeCenter.NET.Runners
 
         private void RunSingleCommand(string command)
         {
-            (var prefix, var postfix) = command.SplitOnlyFirst(' ');
+            (var prefix, var postfix) = command.SplitOnlyFirstIgnoreQuote(' ');
 
             switch (prefix.ToLowerInvariant())
             {
@@ -56,9 +56,10 @@ namespace HomeCenter.NET.Runners
                 return;
             }
 
-            (var prefix, var postfix) = command.SplitOnlyFirst(' ');
+            (var prefix, var postfix) = command.SplitOnlyFirstIgnoreQuote(' ');
 
-            Process.Start(prefix, postfix);
+            var path = prefix.Trim('\"', '\\').Replace("\\\"", "\"").Replace("\\\\", "\\").Replace("\\", "/");
+            Process.Start(path, postfix);
         }
 
         #endregion

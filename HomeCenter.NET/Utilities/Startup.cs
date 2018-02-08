@@ -83,27 +83,7 @@ namespace HomeCenter.NET.Utilities
                 return (null, null);
             }
 
-            value = value.Trim();
-            var index = value.IndexOf(' ');
-            if (value[0] == '\"')
-            {
-                value = value.Substring(1);
-
-                index = value.IndexOf('\"');
-                if (index < 0)
-                {
-                    return value.SplitOnlyFirst(' ');
-                }
-            }
-            if (index < 0)
-            {
-                return (value, null);
-            }
-
-            var fileName = value.Substring(0, index);
-            var arguments = value.Substring(index + 1);
-
-            return (fileName, arguments);
+            return value.Trim().SplitOnlyFirstIgnoreQuote(' ');
         }
 
         #endregion
