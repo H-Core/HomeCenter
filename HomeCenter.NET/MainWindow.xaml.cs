@@ -26,6 +26,8 @@ namespace HomeCenter.NET
         private ConsoleManager ConsoleManager { get; } = new ConsoleManager();
         private ISynthesizer Synthesizer { get; } = new YandexSynthesizer("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" };
 
+        private bool CanClose { get; set; }
+
         #endregion
 
         #region Constructors
@@ -159,19 +161,11 @@ namespace HomeCenter.NET
             }
         }
 
-        private void ShowHide_Click(object sender, RoutedEventArgs e)
+        private void Close_Click(object sender, RoutedEventArgs e)
         {
-            if (Visibility == Visibility.Visible)
-            {
-                Hide();
-            }
-            else
-            {
-                Show();
-            }
-        }
-
-        private void Close_Click(object sender, RoutedEventArgs e) => Close();
+            CanClose = true;
+            Close();
+        } 
 
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
@@ -189,7 +183,15 @@ namespace HomeCenter.NET
             }
         }
 
-        #endregion
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!CanClose)
+            {
+                Visibility = Visibility.Hidden;
+                e.Cancel = true;
+            }
+        }
 
+        #endregion
     }
 }
