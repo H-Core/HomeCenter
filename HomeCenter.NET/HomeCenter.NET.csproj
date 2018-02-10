@@ -116,6 +116,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\ShowHideCommand.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Runners\Core\BaseRunner.cs" />
+    <Compile Include="Runners\IRunner.cs" />
+    <Compile Include="Utilities\AppDataFile.cs" />
     <Compile Include="Utilities\MediaUtilities.cs" />
     <Compile Include="Utilities\Options.cs" />
     <Compile Include="Utilities\Startup.cs" />
@@ -127,19 +131,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ConsoleManager.cs" />
+    <Compile Include="Runners\ConsoleRunner.cs" />
     <Compile Include="ChangeCommandWindow.xaml.cs">
       <DependentUpon>ChangeCommandWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RunnerManager.cs" />
-    <Compile Include="Runners\Core\BaseRunner.cs" />
     <Compile Include="Runners\DefaultRunner.cs" />
-    <Compile Include="Runners\IRunner.cs" />
     <Compile Include="SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\Command.cs" />
-    <Compile Include="Utilities\CommandsStorage.cs" />
+    <Compile Include="Storages\CommandsStorage.cs" />
     <Compile Include="Utilities\ConsoleEventArgs.cs" />
     <Compile Include="Utilities\Hook.cs" />
     <Compile Include="MainWindow.xaml.cs">

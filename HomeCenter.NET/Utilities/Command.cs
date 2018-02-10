@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace HomeCenter.NET.Utilities
 {
@@ -12,6 +13,7 @@ namespace HomeCenter.NET.Utilities
         public List<string> Keys { get; set; } = new List<string>();
         //public List<string> DeletedKeys { get; set; } TODO: Add
 
+        [JsonIgnore]
         public string KeysString
         {
             get => string.Join(Environment.NewLine, Keys);
