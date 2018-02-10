@@ -4,9 +4,11 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using HomeCenter.NET.Properties;
+using HomeCenter.NET.Runners;
+using HomeCenter.NET.Storages;
 using HomeCenter.NET.Utilities;
-using VoiceActions.NET;
 using VoiceActions.NET.Converters;
+using VoiceActions.NET.Managers;
 using VoiceActions.NET.Recorders;
 using VoiceActions.NET.Synthesizers;
 
@@ -16,15 +18,16 @@ namespace HomeCenter.NET
     {
         #region Properties
 
-        private RunnerManager Manager { get; set; } = new RunnerManager
+        private Manager<Command> Manager { get; set; } = new Manager<Command>(new CommandsStorage())
         {
             Recorder = new WinmmRecorder(),
             Converter = new YandexConverter("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" }
         };
 
         private Hook Hook { get; } = new Hook("Global Action Hook");
-        private ConsoleManager ConsoleManager { get; } = new ConsoleManager();
-        private ISynthesizer Synthesizer { get; } = new YandexSynthesizer("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" };
+        private ConsoleRunner ConsoleRunner { get; set; } = new ConsoleRunner();
+        private DefaultRunner Runner { get; set; } = new DefaultRunner();
+        private ISynthesizer Synthesizer { get; set; } = new YandexSynthesizer("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" };
 
         private bool CanClose { get; set; }
 
@@ -54,15 +57,15 @@ namespace HomeCenter.NET
                 RecordButton.Content = "🔉";
                 RecordButton.Background = Brushes.LightGray;
             });
-            Manager.Import(CommandsStorage.Data);
-            Manager.Runner.NewSpeech += (o, args) => Say(args.Text);
+            Runner.NewSpeech += (o, args) => Say(args.Text);
+            Manager.NewValue += command => Runner?.Run(command.Data);
 
             Hook.KeyUpEvent += Global_KeyUp;
             Hook.KeyDownEvent += Global_KeyDown;
 
-            ConsoleManager.Manager = Manager;
-            ConsoleManager.NewOutput += (o, args) => Print(args.Text);
-            ConsoleManager.NewSpeech += (o, args) => Say(args.Text);
+            ConsoleRunner.Manager = Manager;
+            ConsoleRunner.NewOutput += (o, args) => Print(args.Text);
+            ConsoleRunner.NewSpeech += (o, args) => Say(args.Text);
         }
 
         #endregion
@@ -81,6 +84,15 @@ namespace HomeCenter.NET
 
             Manager?.Dispose();
             Manager = null;
+
+            Runner?.Dispose();
+            Runner = null;
+
+            ConsoleRunner?.Dispose();
+            ConsoleRunner = null;
+
+            Synthesizer?.Dispose();
+            Synthesizer = null;
         }
 
         #endregion
@@ -106,15 +118,15 @@ namespace HomeCenter.NET
                         break;
                     }
 
-                    ConsoleManager.Run(InputTextBox.Text);
+                    ConsoleRunner.Run(InputTextBox.Text);
                     InputTextBox.Clear();
                     break;
 
                 case Key.Up:
-                    if (ConsoleManager.History.Any())
+                    if (ConsoleRunner.History.Any())
                     {
-                        InputTextBox.Text = ConsoleManager.History.LastOrDefault() ?? "";
-                        ConsoleManager.History.RemoveAt(ConsoleManager.History.Count - 1);
+                        InputTextBox.Text = ConsoleRunner.History.LastOrDefault() ?? "";
+                        ConsoleRunner.History.RemoveAt(ConsoleRunner.History.Count - 1);
                     }
                     break;
             }
@@ -126,21 +138,17 @@ namespace HomeCenter.NET
         {
             var window = new SettingsWindow();
 
-            CommandsStorage.Data = Manager.Export();
             window.ShowDialog();
-
-            Manager.Import(CommandsStorage.Data);
         }
 
-        private void OnNewText(object source, VoiceActionsEventArgs e) => Dispatcher.Invoke(() => {
-            var text = e.Text;
+        private void OnNewText(string text) => Dispatcher.Invoke(() => {
             if (string.IsNullOrWhiteSpace(text) || text.Contains("The remote server returned an error: (400) Bad Request"))
             {
                 Print("Bad or empty request");
                 return;
             }
 
-            Print(Manager.IsHandled(text)
+            Print(Manager.Storage.ContainsKey(text)
                 ? $"Run action for text: \"{text}\""
                 : $"We don't have handler for text: \"{text}\"");
         });
