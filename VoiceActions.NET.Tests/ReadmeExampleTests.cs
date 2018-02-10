@@ -37,10 +37,10 @@ namespace VoiceActions.NET.Tests
             Assert.Single(manager.Storage);
             Assert.True(manager.Storage.ContainsKey("open file explorer"));
             
-            Assert.True(manager.IsHandled("open file explorer"));
-            Assert.False(manager.IsHandled("any text"));
-            Assert.False(manager.IsHandled(""));
-            Assert.False(manager.IsHandled(null));
+            Assert.True(manager.Storage.ContainsKey("open file explorer"));
+            Assert.False(manager.Storage.ContainsKey("any text"));
+            Assert.False(manager.Storage.ContainsKey(""));
+            Assert.Throws<ArgumentNullException>(() => manager.Storage.ContainsKey(null));
 
             return manager;
         }

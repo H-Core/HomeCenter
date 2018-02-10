@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using VoiceActions.NET.Storages;
+﻿using VoiceActions.NET.Storages;
 
 namespace VoiceActions.NET.Managers
 {
@@ -8,7 +6,7 @@ namespace VoiceActions.NET.Managers
     {
         #region Properties
 
-        public IStorage<T> Storage { get; set; }
+        public IStorage<T> Storage { get; }
 
         #endregion
 
@@ -27,22 +25,10 @@ namespace VoiceActions.NET.Managers
         public Manager(IStorage<T> storage = null)
         {
             Storage = storage ?? new InvariantDictionaryStorage<T>();
+            Storage.Load();
+
             NewText += OnNewText;
         }
-
-        #endregion
-
-        #region Public methods
-
-        public void SetValue(string key, T command) => Storage[key] = command;
-
-        public bool IsHandled(string key) => !string.IsNullOrWhiteSpace(key) && Storage.ContainsKey(key);
-
-        public List<(string, T)> GetValues() =>
-            Storage.Select(pair => (pair.Key, pair.Value)).ToList();
-
-        public T GetValue(string key) =>
-            Storage.TryGetValue(key, out var result) ? result : default(T);
 
         #endregion
 

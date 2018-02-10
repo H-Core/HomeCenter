@@ -78,7 +78,7 @@ namespace VoiceActions.NET.Wpf.Example
                 return;
             }
 
-            Console(Manager.IsHandled(text)
+            Console(Manager.Storage.ContainsKey(text)
                 ? $"Run action for text: \"{text}\""
                 : $"We don't have handler for text: \"{text}\"");
         });

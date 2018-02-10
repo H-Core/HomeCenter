@@ -29,7 +29,7 @@ namespace VoiceActions.NET.Utilities
 
         #region Private methods
 
-        private string ToInvariantString(string text) => text.ToLowerInvariant();
+        private static string ToInvariantString(string text) => text?.ToLowerInvariant();
 
         #endregion
     }
