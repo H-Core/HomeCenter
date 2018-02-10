@@ -76,7 +76,7 @@ namespace HomeCenter.NET.Runners
 
         protected void ShowChangeCommandWindow(Command command)
         {
-            var window = new ChangeCommandWindow(command);
+            var window = new Windows.ChangeCommandWindow(command);
             if (window.ShowDialog() != true)
             {
                 return;

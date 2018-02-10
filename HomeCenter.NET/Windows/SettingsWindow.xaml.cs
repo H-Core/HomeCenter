@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using HomeCenter.NET.Utilities;
 
-namespace HomeCenter.NET
+namespace HomeCenter.NET.Windows
 {
     public partial class SettingsWindow
     {

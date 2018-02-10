@@ -123,7 +123,7 @@
     <Compile Include="Utilities\MediaUtilities.cs" />
     <Compile Include="Utilities\Options.cs" />
     <Compile Include="Utilities\Startup.cs" />
-    <Page Include="MainWindow.xaml">
+    <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -132,26 +132,26 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Runners\ConsoleRunner.cs" />
-    <Compile Include="ChangeCommandWindow.xaml.cs">
+    <Compile Include="Windows\ChangeCommandWindow.xaml.cs">
       <DependentUpon>ChangeCommandWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Runners\DefaultRunner.cs" />
-    <Compile Include="SettingsWindow.xaml.cs">
+    <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\Command.cs" />
     <Compile Include="Storages\CommandsStorage.cs" />
     <Compile Include="Utilities\ConsoleEventArgs.cs" />
     <Compile Include="Utilities\Hook.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ChangeCommandWindow.xaml">
+    <Page Include="Windows\ChangeCommandWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SettingsWindow.xaml">
+    <Page Include="Windows\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

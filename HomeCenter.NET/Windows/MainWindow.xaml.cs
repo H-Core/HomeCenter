@@ -12,7 +12,7 @@ using VoiceActions.NET.Managers;
 using VoiceActions.NET.Recorders;
 using VoiceActions.NET.Synthesizers;
 
-namespace HomeCenter.NET
+namespace HomeCenter.NET.Windows
 {
     public partial class MainWindow : IDisposable
     {
