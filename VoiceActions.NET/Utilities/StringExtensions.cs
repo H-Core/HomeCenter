@@ -7,7 +7,7 @@ namespace VoiceActions.NET.Utilities
 {
     public static class StringExtensions
     {
-        public static (string, string) SplitOnlyFirst(this string text, char separator)
+        public static (string prefix, string postfix) SplitOnlyFirst(this string text, char separator)
         {
             if (text == null)
             {
@@ -25,7 +25,7 @@ namespace VoiceActions.NET.Utilities
             return (prefix, postfix);
         }
 
-        public static (string, string) SplitOnlyFirstIgnoreQuote(this string text, char separator, char quoteSeparator = '\"')
+        public static (string prefix, string postfix) SplitOnlyFirstIgnoreQuote(this string text, char separator, char quoteSeparator = '\"')
         {
             if (text == null)
             {
@@ -50,8 +50,8 @@ namespace VoiceActions.NET.Utilities
             var pair = replacedText.SplitOnlyFirst(separator);
             for (var j = 0; j < i; j++)
             {
-                pair.Item1 = pair.Item1?.Replace(GetVariableName(j), matches[j]);
-                pair.Item2 = pair.Item2?.Replace(GetVariableName(j), matches[j]);
+                pair.prefix = pair.prefix?.Replace(GetVariableName(j), matches[j]);
+                pair.postfix = pair.postfix?.Replace(GetVariableName(j), matches[j]);
             }
 
             return pair;
