@@ -1,11 +1,35 @@
 ﻿using System;
 using System.Windows;
 using HomeCenter.NET.Utilities;
+using VoiceActions.NET.Storages;
 
 namespace HomeCenter.NET.Windows
 {
     public partial class ChangeCommandWindow
     {
+        #region Static methods
+
+        public static bool Show(Command command) => new ChangeCommandWindow(command).ShowDialog() == true;
+
+        public static bool ShowAndSaveIfNeeded(Command command, IStorage<Command> storage)
+        {
+            var result = Show(command);
+            if (!result)
+            {
+                return false;
+            }
+
+            // TODO: delete initial command keys
+            foreach (var key in command.Keys)
+            {
+                storage[key] = command;
+            }
+
+            return true;
+        }
+
+        #endregion
+
         #region Properties
 
         public Command Command { get; }
