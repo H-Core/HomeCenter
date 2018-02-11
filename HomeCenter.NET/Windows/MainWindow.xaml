@@ -12,7 +12,7 @@
         Width="500" 
         WindowStartupLocation="CenterScreen" 
         ResizeMode="NoResize"
-        Icon="Properties/Icons/icon.ico" 
+        Icon="../Properties/Icons/icon.ico" 
         KeyDown="Window_KeyDown" 
         KeyUp="Window_KeyUp" Closing="Window_Closing">
     <Grid Margin="10,10,10,10">
@@ -28,7 +28,7 @@
                 Click="SettingsButton_Click"/>
         <tb:TaskbarIcon 
             x:Name="TaskbarIcon" 
-            IconSource="Properties/Icons/icon.ico" 
+            IconSource="../Properties/Icons/icon.ico" 
             PopupActivation="RightClick" 
             LeftClickCommand="{StaticResource ShowHideCommand}"
             LeftClickCommandParameter="{x:Reference Name=Window}"
