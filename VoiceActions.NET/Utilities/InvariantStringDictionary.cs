@@ -25,6 +25,8 @@ namespace VoiceActions.NET.Utilities
             return true;
         }
 
+        public new bool Remove(string key) => base.Remove(ToInvariantString(key));
+
         #endregion
 
         #region Private methods

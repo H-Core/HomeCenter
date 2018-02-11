@@ -7,6 +7,7 @@ namespace VoiceActions.NET.Storages
         T this[string key] { get; set; }
         bool ContainsKey(string key);
         bool TryGetValue(string key, out T value);
+        bool Remove(string key);
 
         void Load();
         void Save();
