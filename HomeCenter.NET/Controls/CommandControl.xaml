@@ -8,8 +8,8 @@
              d:DesignHeight="25" d:DesignWidth="600">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50*" />
-            <ColumnDefinition Width="50*" />
+            <ColumnDefinition Width="30*" />
+            <ColumnDefinition Width="70*" />
             <ColumnDefinition Width="50" />
             <ColumnDefinition Width="25" />
         </Grid.ColumnDefinitions>

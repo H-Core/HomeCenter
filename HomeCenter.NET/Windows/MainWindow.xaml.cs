@@ -145,6 +145,13 @@ namespace HomeCenter.NET.Windows
 
         private void RecordButton_Click(object sender, RoutedEventArgs e) => Manager.ChangeWithTimeout(3000);
 
+        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new CommandsWindow(GlobalRunner.Storage);
+
+            window.ShowDialog();
+        }
+
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             var window = new SettingsWindow();

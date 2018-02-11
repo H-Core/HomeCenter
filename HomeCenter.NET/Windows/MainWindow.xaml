@@ -19,11 +19,13 @@
         <Grid.Resources>
             <commands:ShowHideCommand x:Key="ShowHideCommand" />
         </Grid.Resources>
-        <TextBox x:Name="InputTextBox" HorizontalAlignment="Left" Height="45" Margin="0,496,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="404" 
+        <TextBox x:Name="InputTextBox" HorizontalAlignment="Left" Height="45" Margin="0,496,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="374" 
                  KeyUp="InputTextBox_KeyUp" MaxLength="255"/>
         <TextBox x:Name="ConsoleTextBox" Height="491" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
-        <Button x:Name="RecordButton" Content="🔉" HorizontalAlignment="Left" Margin="409,510,0,0" VerticalAlignment="Top" Width="25" Height="27"
+        <Button x:Name="RecordButton" Content="🔉" HorizontalAlignment="Left" Margin="379,510,0,0" VerticalAlignment="Top" Width="25" Height="27"
                 Click="RecordButton_Click"/>
+        <Button Content="☰" HorizontalAlignment="Left" Margin="409,510,0,0" VerticalAlignment="Top" Width="25" Height="27"
+                Click="MenuButton_Click"/>
         <Button Content="⚙" HorizontalAlignment="Left" Margin="439,510,0,0" VerticalAlignment="Top" Width="25" Height="27"
                 Click="SettingsButton_Click"/>
         <tb:TaskbarIcon 

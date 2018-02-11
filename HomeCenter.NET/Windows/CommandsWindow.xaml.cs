@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using HomeCenter.NET.Controls;
 using HomeCenter.NET.Utilities;
 using VoiceActions.NET.Storages;
 
@@ -9,30 +10,62 @@ namespace HomeCenter.NET.Windows
     {
         #region Properties
 
-        public IStorage<Command> Commands { get; }
+        public IStorage<Command> Storage { get; }
 
         #endregion
 
         #region Constructors
 
-        public CommandsWindow(IStorage<Command> commands)
+        public CommandsWindow(IStorage<Command> storage)
         {
-            Commands = commands ?? throw new ArgumentNullException(nameof(commands));
+            Storage = storage ?? throw new ArgumentNullException(nameof(storage));
 
             InitializeComponent();
+
+            ShowCommands();
         }
 
         #endregion
 
         #region Event handlers
 
+        private void Add_Click(object sender, RoutedEventArgs e)
+        {
+            ChangeCommandWindow.ShowAndSaveIfNeeded(new Command(), Storage);
+            ShowCommands();
+        } 
+
         private void SaveAndClose(object sender, RoutedEventArgs e)
         {
+            Storage.Save();
+
             DialogResult = true;
             Close();
         }
 
         private void Close(object sender, RoutedEventArgs e) => Close();
+
+        #endregion
+
+        #region Private methods
+
+        public void ShowCommands()
+        {
+            CommandsPanel.Children.Clear();
+            foreach (var pair in Storage)
+            {
+                var control = new CommandControl(pair.Value);
+                control.CommandDeleted += (sender, args) =>
+                {
+                    foreach (var key in pair.Value.Keys)
+                    {
+                        Storage.Remove(key);
+                    }
+                    ShowCommands();
+                };
+                CommandsPanel.Children.Add(control);
+            }
+        }
 
         #endregion
     }

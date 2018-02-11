@@ -1,5 +1,6 @@
 ﻿using System;
 using HomeCenter.NET.Utilities;
+using HomeCenter.NET.Windows;
 
 namespace HomeCenter.NET.Controls
 {
@@ -8,6 +9,12 @@ namespace HomeCenter.NET.Controls
         #region Properties
 
         public Command Command { get; }
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler CommandDeleted;
 
         #endregion
 
@@ -24,15 +31,11 @@ namespace HomeCenter.NET.Controls
 
         #region Event handlers
 
-        private void Edit_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
+        private void Edit_Click(object sender, System.Windows.RoutedEventArgs e) => 
+            ChangeCommandWindow.Show(Command);
 
-        }
-
-        private void Delete_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-
-        }
+        private void Delete_Click(object sender, System.Windows.RoutedEventArgs e) =>
+            CommandDeleted?.Invoke(this, EventArgs.Empty);
 
         #endregion
     }
