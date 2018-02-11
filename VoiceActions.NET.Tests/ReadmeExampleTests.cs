@@ -28,6 +28,7 @@ namespace VoiceActions.NET.Tests
                 // Select Wit.ai voice-to-text converter
                 Converter = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")
             };
+            manager.NewValue += (key, value) => value?.Invoke();
 
             // when you say "open file explorer" the manager runs the explorer.exe with the "C:/" base folder
             manager.Storage["open file explorer"] = () => Process.Start("explorer.exe", "C:/");

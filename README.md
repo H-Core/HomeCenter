@@ -16,6 +16,7 @@ Create manager object:
 
 ```cs
 
+// Create an action manager with InvariantDictionaryStorage by default(null in constructor). This will give the keys a case-insensitive
 var manager = new Manager<Action>
 {
     // Select Windows Multimedia API recorder
@@ -23,6 +24,8 @@ var manager = new Manager<Action>
     // Select Wit.ai voice-to-text converter
     Converter = new WitAiConverter("your-token-here")
 };
+// Set action after successful finding the key
+manager.NewValue += (key, value) => value?.Invoke();
 
  ```
 

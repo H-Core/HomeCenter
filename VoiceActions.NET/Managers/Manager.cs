@@ -15,7 +15,7 @@ namespace VoiceActions.NET.Managers
         public event TextDelegate NotHandledText;
         public event TextDelegate HandledText;
 
-        public delegate void ValueDelegate(T value);
+        public delegate void ValueDelegate(string key, T value);
         public event ValueDelegate NewValue;
 
         #endregion
@@ -46,7 +46,7 @@ namespace VoiceActions.NET.Managers
             HandledText?.Invoke(Text);
 
             var value = Storage[text];
-            NewValue?.Invoke(value);
+            NewValue?.Invoke(text, value);
         }
 
         #endregion
