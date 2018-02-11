@@ -38,7 +38,7 @@ namespace VoiceActions.NET.Converters
                 var message = await client.PostAsync("https://api.wit.ai/speech", content);
 
                 (var text, var exception) = await message.GetResponseText();
-                if (string.IsNullOrWhiteSpace(text))
+                if (string.IsNullOrWhiteSpace(text) || string.Equals(text, "The remote server returned an error: (400) Bad Request"))
                 {
                     Exception = exception;
                     return null;
