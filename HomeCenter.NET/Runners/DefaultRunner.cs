@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using HomeCenter.NET.Runners.Core;
+using HomeCenter.NET.Utilities;
 using VoiceActions.NET.Utilities;
 
 namespace HomeCenter.NET.Runners
@@ -19,21 +20,16 @@ namespace HomeCenter.NET.Runners
 
         #region Private methods
 
-        protected override void RunInternal(string text)
+        protected override void RunInternal(string key, Command command)
         {
-            if (string.IsNullOrWhiteSpace(text))
+            var lines = command.Data.Split(Environment.NewLine.ToCharArray());
+            foreach (var line in lines)
             {
-                return;
-            }
-
-            var commands = text.Split(Environment.NewLine.ToCharArray());
-            foreach (var command in commands)
-            {
-                RunSingleCommand(command);
+                RunSingleLine(line);
             }
         }
 
-        private void RunSingleCommand(string command)
+        private void RunSingleLine(string command)
         {
             (var prefix, var postfix) = command.SplitOnlyFirstIgnoreQuote(' ');
 

@@ -116,13 +116,25 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\ShowHideCommand.cs" />
+    <Compile Include="Controls\CommandControl.xaml.cs">
+      <DependentUpon>CommandControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Runners\Core\BaseRunner.cs" />
     <Compile Include="Runners\IRunner.cs" />
+    <Compile Include="Runners\GlobalRunner.cs" />
     <Compile Include="Utilities\AppDataFile.cs" />
     <Compile Include="Utilities\MediaUtilities.cs" />
     <Compile Include="Utilities\Options.cs" />
     <Compile Include="Utilities\Startup.cs" />
+    <Page Include="Controls\CommandControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\CommandsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -132,6 +144,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Runners\ConsoleRunner.cs" />
+    <Compile Include="Windows\CommandsWindow.xaml.cs">
+      <DependentUpon>CommandsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ChangeCommandWindow.xaml.cs">
       <DependentUpon>ChangeCommandWindow.xaml</DependentUpon>
     </Compile>
@@ -141,7 +156,7 @@
     </Compile>
     <Compile Include="Utilities\Command.cs" />
     <Compile Include="Storages\CommandsStorage.cs" />
-    <Compile Include="Utilities\ConsoleEventArgs.cs" />
+    <Compile Include="Runners\RunnerEventArgs.cs" />
     <Compile Include="Utilities\Hook.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

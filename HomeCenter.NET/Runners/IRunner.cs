@@ -1,15 +1,22 @@
 ﻿using System;
-using VoiceActions.NET;
+using HomeCenter.NET.Utilities;
+using VoiceActions.NET.Storages;
 
 namespace HomeCenter.NET.Runners
 {
     public interface IRunner : IDisposable
     {
-        void Run(string command);
+        IStorage<Command> Storage { get; set; }
 
-        event EventHandler<VoiceActionsEventArgs> NewSpeech;
-        event EventHandler<VoiceActionsEventArgs> BeforeRun;
-        event EventHandler<VoiceActionsEventArgs> AfterRun;
+        void Run(string key, string data);
+        bool IsSupport(string key, string data);
+
+        event EventHandler<RunnerEventArgs> NewSpeech;
+        event EventHandler<RunnerEventArgs> NewOutput;
+        event EventHandler<RunnerEventArgs> NewCommand;
+
+        event EventHandler<RunnerEventArgs> BeforeRun;
+        event EventHandler<RunnerEventArgs> AfterRun;
 
         string[] GetSupportedCommands();
         string GetSupportedCommandsText();

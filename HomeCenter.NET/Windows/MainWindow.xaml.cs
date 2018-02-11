@@ -18,15 +18,14 @@ namespace HomeCenter.NET.Windows
     {
         #region Properties
 
-        private Manager<Command> Manager { get; set; } = new Manager<Command>(new CommandsStorage())
+        private BaseManager Manager { get; set; } = new BaseManager
         {
             Recorder = new WinmmRecorder(),
             Converter = new YandexConverter("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" }
         };
 
         private Hook Hook { get; } = new Hook("Global Action Hook");
-        private ConsoleRunner ConsoleRunner { get; set; } = new ConsoleRunner();
-        private DefaultRunner Runner { get; set; } = new DefaultRunner();
+        private GlobalRunner GlobalRunner { get; set; } = new GlobalRunner(new CommandsStorage());
         private ISynthesizer Synthesizer { get; set; } = new YandexSynthesizer("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" };
 
         private bool CanClose { get; set; }
@@ -37,6 +36,8 @@ namespace HomeCenter.NET.Windows
 
         public MainWindow()
         {
+            #region UI
+
             InitializeComponent();
 
             if (Settings.Default.IsStartMinimized)
@@ -46,7 +47,27 @@ namespace HomeCenter.NET.Windows
 
             InputTextBox.Focus();
 
-            Manager.NewText += OnNewText;
+            #endregion
+
+            #region Hook
+
+            Hook.KeyUpEvent += Global_KeyUp;
+            Hook.KeyDownEvent += Global_KeyDown;
+
+            #endregion
+
+            #region Global Runner
+
+            GlobalRunner.AddRunner(new ConsoleRunner());
+            GlobalRunner.NewOutput += (o, args) => Print(args.Text);
+            GlobalRunner.NewSpeech += (o, args) => Say(args.Text);
+            GlobalRunner.NewCommand += (o, args) => Manager.ProcessText(args.Text);
+
+            #endregion
+
+            #region Manager
+
+            Manager.NewText += text => GlobalRunner.Run(text, null);
             Manager.Started += (sender, args) => Dispatcher.Invoke(() =>
             {
                 RecordButton.Content = "🔊";
@@ -57,15 +78,8 @@ namespace HomeCenter.NET.Windows
                 RecordButton.Content = "🔉";
                 RecordButton.Background = Brushes.LightGray;
             });
-            Runner.NewSpeech += (o, args) => Say(args.Text);
-            Manager.NewValue += command => Runner?.Run(command.Data);
 
-            Hook.KeyUpEvent += Global_KeyUp;
-            Hook.KeyDownEvent += Global_KeyDown;
-
-            ConsoleRunner.Manager = Manager;
-            ConsoleRunner.NewOutput += (o, args) => Print(args.Text);
-            ConsoleRunner.NewSpeech += (o, args) => Say(args.Text);
+            #endregion
         }
 
         #endregion
@@ -85,11 +99,8 @@ namespace HomeCenter.NET.Windows
             Manager?.Dispose();
             Manager = null;
 
-            Runner?.Dispose();
-            Runner = null;
-
-            ConsoleRunner?.Dispose();
-            ConsoleRunner = null;
+            GlobalRunner?.Dispose();
+            GlobalRunner = null;
 
             Synthesizer?.Dispose();
             Synthesizer = null;
@@ -99,7 +110,7 @@ namespace HomeCenter.NET.Windows
 
         #region Private methods
 
-        private void Print(string text) => ConsoleTextBox.Text += $"{DateTime.Now:T}: {text}{Environment.NewLine}";
+        private void Print(string text) => Dispatcher.Invoke(() => ConsoleTextBox.Text += $"{DateTime.Now:T}: {text}{Environment.NewLine}");
 
         private static void Say(byte[] bytes) => bytes?.Play();
         private async void Say(string text) => Say(await Synthesizer.Convert(text));
@@ -118,15 +129,15 @@ namespace HomeCenter.NET.Windows
                         break;
                     }
 
-                    ConsoleRunner.Run(InputTextBox.Text);
+                    GlobalRunner.Run(InputTextBox.Text, null);
                     InputTextBox.Clear();
                     break;
 
                 case Key.Up:
-                    if (ConsoleRunner.History.Any())
+                    if (GlobalRunner.History.Any())
                     {
-                        InputTextBox.Text = ConsoleRunner.History.LastOrDefault() ?? "";
-                        ConsoleRunner.History.RemoveAt(ConsoleRunner.History.Count - 1);
+                        InputTextBox.Text = GlobalRunner.History.LastOrDefault() ?? "";
+                        GlobalRunner.History.RemoveAt(GlobalRunner.History.Count - 1);
                     }
                     break;
             }
@@ -140,18 +151,6 @@ namespace HomeCenter.NET.Windows
 
             window.ShowDialog();
         }
-
-        private void OnNewText(string text) => Dispatcher.Invoke(() => {
-            if (string.IsNullOrWhiteSpace(text) || text.Contains("The remote server returned an error: (400) Bad Request"))
-            {
-                Print("Bad or empty request");
-                return;
-            }
-
-            Print(Manager.Storage.ContainsKey(text)
-                ? $"Run action for text: \"{text}\""
-                : $"We don't have handler for text: \"{text}\"");
-        });
 
         private void Global_KeyUp(KeyboardHookEventArgs e)
         {

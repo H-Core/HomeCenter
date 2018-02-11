@@ -1,31 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Runners.Core;
 using HomeCenter.NET.Utilities;
-using VoiceActions.NET.Managers;
+using HomeCenter.NET.Windows;
 using VoiceActions.NET.Utilities;
 
 namespace HomeCenter.NET.Runners
 {
     public class ConsoleRunner : BaseRunner
     {
-        #region Properties
-
-        public Manager<Command> Manager { get; set; }
-
-        public List<string> History { get; } = new List<string>();
-
-        #endregion
-
-        #region Events
-
-        public event EventHandler<ConsoleEventArgs> NewOutput;
-        private void Print(string text) => NewOutput?.Invoke(this, new ConsoleEventArgs(text));
-
-        #endregion
-
         #region Public methods
 
         public override string[] GetSupportedCommands() => new[]
@@ -41,26 +25,14 @@ namespace HomeCenter.NET.Runners
             "/edit text full-new-command",
             "/save",
             "/redirect to from1 from2 from3",
+            "$key_enter",
+            "$key_up"
         };
 
-        public Command GetCommand(string key)
-        {
-            if (!Manager.Storage.ContainsKey(key))
-            {
-                Manager.Storage[key] = new Command(key);
-            }
-
-            return Manager.Storage[key];
-        }
+        public override bool IsSupport(string key, string data) => base.IsSupport(key, key);
 
         public void SaveCommand(Command command)
         {
-            // TODO: delete initial command keys
-            foreach (var key in command.Keys)
-            {
-                Manager.Storage[key] = command;
-            }
-
             if (!command.Keys.Any())
             {
                 return;
@@ -76,33 +48,29 @@ namespace HomeCenter.NET.Runners
 
         protected void ShowChangeCommandWindow(Command command)
         {
-            var window = new Windows.ChangeCommandWindow(command);
-            if (window.ShowDialog() != true)
+            if (!ChangeCommandWindow.ShowAndSaveIfNeeded(command, Storage))
             {
                 return;
             }
 
-            SaveCommand(window.Command);
+            SaveCommand(command);
         }
 
-        protected override void RunInternal(string text)
+        protected override void RunInternal(string key, Command command)
         {
-            if (string.IsNullOrWhiteSpace(text))
+            if (string.IsNullOrWhiteSpace(key))
             {
                 return;
             }
 
-            History.Add(text);
-
-            if (!text.StartsWith("/"))
+            if (!key.StartsWith("/"))
             {
-                Manager.ProcessText(text);
                 return;
             }
 
-            (var prefix, var postfix) = text.SplitOnlyFirstIgnoreQuote(' ');
-            var command = prefix.ToLowerInvariant().Substring(1);
-            switch (command)
+            (var prefix, var postfix) = key.SplitOnlyFirstIgnoreQuote(' ');
+            var value = prefix.ToLowerInvariant().Substring(1);
+            switch (value)
             {
                 case "?":
                     Print(GetSupportedCommandsText());
@@ -149,7 +117,7 @@ namespace HomeCenter.NET.Runners
             (var key, var arguments) = postfix.SplitOnlyFirstIgnoreQuote(' ');
             if (string.IsNullOrWhiteSpace(arguments))
             {
-                ShowChangeCommandWindow(GetCommand(key));
+                ShowChangeCommandWindow(new Command(key));
                 return;
             }
 
@@ -166,7 +134,7 @@ namespace HomeCenter.NET.Runners
             (var key, var arguments) = postfix.SplitOnlyFirstIgnoreQuote(' ');
             if (string.IsNullOrWhiteSpace(arguments))
             {
-                ShowChangeCommandWindow(GetCommand(key));
+                ShowChangeCommandWindow(new Command(key));
                 //return;
             }
 
@@ -176,13 +144,13 @@ namespace HomeCenter.NET.Runners
         private void ShowCommand()
         {
             var text = string.Join(Environment.NewLine,
-                Manager.Storage.UniqueValues(command => command.Value.Data).Select(command => $"({string.Join(", ", command.Value.Keys)}) {command.Value.Data}"));
+                Storage.UniqueValues(command => command.Value.Data).Select(command => $"({string.Join(", ", command.Value.Keys)}) {command.Value.Data}"));
 
             Print($@"Current commands:
 {(string.IsNullOrWhiteSpace(text) ? "You have not added any commands yet" : text)}");
         }
 
-        private void Save() => Manager.Storage.Save();
+        private void Save() => Storage.Save();
 
         private void RedirectCommand(string postfix)
         {
@@ -190,7 +158,7 @@ namespace HomeCenter.NET.Runners
             var alternativeNames = arguments.Split(' ');
             foreach (var alternativeName in alternativeNames)
             {
-                Manager.Storage[alternativeName] = Manager.Storage[name];
+                Storage[alternativeName] = Storage[name];
             }
         }
 

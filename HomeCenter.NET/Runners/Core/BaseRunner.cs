@@ -1,40 +1,77 @@
 ﻿using System;
-using VoiceActions.NET;
+using HomeCenter.NET.Utilities;
+using VoiceActions.NET.Storages;
+using VoiceActions.NET.Utilities;
 
 namespace HomeCenter.NET.Runners.Core
 {
     public abstract class BaseRunner : IRunner
     {
+        #region Properties
+
+        public IStorage<Command> Storage { get; set; }
+
+        #endregion
+
         #region Events
 
-        public event EventHandler<VoiceActionsEventArgs> BeforeRun;
-        private void OnBeforeRun(VoiceActionsEventArgs args) => BeforeRun?.Invoke(this, args);
+        public event EventHandler<RunnerEventArgs> BeforeRun;
+        private void OnBeforeRun(string text) => BeforeRun?.Invoke(this, CreateArgs(text));
 
-        public event EventHandler<VoiceActionsEventArgs> AfterRun;
-        private void OnAfterRun(VoiceActionsEventArgs args) => AfterRun?.Invoke(this, args);
+        public event EventHandler<RunnerEventArgs> AfterRun;
+        private void OnAfterRun(string text) => AfterRun?.Invoke(this, CreateArgs(text));
 
-        public event EventHandler<VoiceActionsEventArgs> NewSpeech;
-        protected void Say(string text) => NewSpeech?.Invoke(this, new VoiceActionsEventArgs { Text = text });
+        public event EventHandler<RunnerEventArgs> NewSpeech;
+        protected void OnNewSpeech(object sender, RunnerEventArgs args) => NewSpeech?.Invoke(sender, args);
+        protected void Say(string text) => OnNewSpeech(this, CreateArgs(text));
 
-        private VoiceActionsEventArgs CreateArgs(string command) => new VoiceActionsEventArgs{ Text = command };
+        public event EventHandler<RunnerEventArgs> NewOutput;
+        protected void OnNewOutput(object sender, RunnerEventArgs args) => NewOutput?.Invoke(sender, args);
+        protected void Print(string text) => OnNewOutput(this, CreateArgs(text));
+
+        public event EventHandler<RunnerEventArgs> NewCommand;
+        protected void OnNewCommand(object sender, RunnerEventArgs args) => NewCommand?.Invoke(sender, args);
+        protected void RunCommand(string text) => OnNewCommand(this, CreateArgs(text));
+
+        private RunnerEventArgs CreateArgs(string text) => new RunnerEventArgs { Runner = this, Text = text };
 
         #endregion
 
         #region Public methods
 
-        public void Run(string command)
+        public void Run(string key, string data)
         {
-            OnBeforeRun(CreateArgs(command));
+            OnBeforeRun(key);
 
-            RunInternal(command);
+            var value = key != null ? Storage.GetOrAdd(key, new Command(key)) : new Command();
+            RunInternal(key, value);
 
-            OnAfterRun(CreateArgs(command));
+            OnAfterRun(key);
         }
 
         public abstract string[] GetSupportedCommands();
 
         public virtual string GetSupportedCommandsText() => $@"Supported commands:
 {string.Join(Environment.NewLine, GetSupportedCommands())}";
+
+        public virtual bool IsSupport(string key, string data)
+        {
+            if (string.IsNullOrWhiteSpace(data))
+            {
+                return false;
+            }
+
+            foreach (var supportedCommandText in GetSupportedCommands())
+            {
+                (var prefix, var _) = supportedCommandText.SplitOnlyFirst(' ');
+                if (data.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
 
         #endregion
 
@@ -48,7 +85,7 @@ namespace HomeCenter.NET.Runners.Core
 
         #region Protected methods
 
-        protected abstract void RunInternal(string command);
+        protected abstract void RunInternal(string key, Command command);
 
         #endregion
     }
