@@ -1,9 +1,20 @@
-﻿namespace VoiceActions.NET.Storages
+﻿using System;
+
+namespace VoiceActions.NET.Storages
 {
     public static class StorageExtensions
     {
         public static T GetOrAdd<T>(this IStorage<T> storage, string key, T value = default(T))
         {
+            if (storage == null)
+            {
+                throw new ArgumentNullException(nameof(storage));
+            }
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
             if (!storage.ContainsKey(key))
             {
                 storage[key] = value;
