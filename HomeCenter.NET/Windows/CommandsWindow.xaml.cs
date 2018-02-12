@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using HomeCenter.NET.Controls;
+using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Utilities;
 using VoiceActions.NET.Storages;
 
@@ -31,7 +32,7 @@ namespace HomeCenter.NET.Windows
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            ChangeCommandWindow.ShowAndSaveIfNeeded(new Command(), Storage);
+            CommandWindow.ShowAndSaveIfNeeded(new Command(), Storage);
             ShowCommands();
         } 
 
@@ -58,15 +59,21 @@ namespace HomeCenter.NET.Windows
         public void ShowCommands()
         {
             CommandsPanel.Children.Clear();
-            foreach (var pair in Storage)
+            foreach (var pair in Storage.UniqueValues(entry => entry.Value.Data))
             {
-                var control = new CommandControl(pair.Value);
+                var command = pair.Value;
+                var control = new CommandControl(command) {Height = 25};
                 control.CommandDeleted += (sender, args) =>
                 {
-                    foreach (var key in pair.Value.Keys)
+                    foreach (var key in command.Keys)
                     {
                         Storage.Remove(key);
                     }
+                    ShowCommands();
+                };
+                control.CommandEdited += (sender, args) =>
+                {
+                    CommandWindow.ShowAndSaveIfNeeded(command, Storage);
                     ShowCommands();
                 };
                 CommandsPanel.Children.Add(control);

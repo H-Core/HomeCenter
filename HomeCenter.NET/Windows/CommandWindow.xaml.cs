@@ -5,24 +5,34 @@ using VoiceActions.NET.Storages;
 
 namespace HomeCenter.NET.Windows
 {
-    public partial class ChangeCommandWindow
+    public partial class CommandWindow
     {
         #region Static methods
 
-        public static bool Show(Command command) => new ChangeCommandWindow(command).ShowDialog() == true;
+        public static (bool isSaved, Command newCommand) Show(Command command)
+        {
+            var window = new CommandWindow(command);
+            var result = window.ShowDialog() == true;
+
+            return (result, window.Command);
+        } 
 
         public static bool ShowAndSaveIfNeeded(Command command, IStorage<Command> storage)
         {
-            var result = Show(command);
+            var (result, newCommand) = Show(command);
             if (!result)
             {
                 return false;
             }
 
-            // TODO: delete initial command keys
             foreach (var key in command.Keys)
             {
-                storage[key] = command;
+                storage.Remove(key);
+            }
+
+            foreach (var key in newCommand.Keys)
+            {
+                storage[key] = newCommand;
             }
 
             return true;
@@ -38,9 +48,9 @@ namespace HomeCenter.NET.Windows
 
         #region Constructors
 
-        public ChangeCommandWindow(Command command)
+        public CommandWindow(Command command)
         {
-            Command = command ?? throw new ArgumentNullException(nameof(command));
+            Command = command?.Clone() as Command ?? throw new ArgumentNullException(nameof(command));
 
             InitializeComponent();
         }
