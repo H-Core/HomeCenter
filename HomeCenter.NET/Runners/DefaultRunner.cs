@@ -13,7 +13,9 @@ namespace HomeCenter.NET.Runners
         public override string[] GetSupportedCommands() => new[]
         {
             "RUN program.exe arguments",
-            "SAY text"
+            "SAY text",
+            "PRINT text",
+            "REDIRECT command-key"
         };
 
         #endregion
@@ -41,6 +43,14 @@ namespace HomeCenter.NET.Runners
 
                 case "say":
                     Say(postfix);
+                    break;
+
+                case "print":
+                    Print(postfix);
+                    break;
+
+                case "redirect":
+                    RunCommand(postfix);
                     break;
             }
         }
