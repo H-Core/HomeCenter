@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Utilities;
@@ -41,7 +42,17 @@ namespace HomeCenter.NET.Storages
                     this[key] = command;
                 }
             }
+
+            CreateCopy(text);
         }
+
+        public void CreateCopy(string text)
+        {
+            var _ = new AppDataFile("VoiceActions.NET", "copies", $"commands_{DateTime.Now:MM_dd_yyyy_hh_mm_ss_tt}.json")
+            {
+                FileData = text
+            };
+        } 
 
         #endregion
     }
