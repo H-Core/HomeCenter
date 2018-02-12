@@ -43,7 +43,7 @@ namespace HomeCenter.NET.Runners.Core
         {
             OnBeforeRun(key);
 
-            var value = key != null ? Storage.GetOrAdd(key, new Command(key)) : new Command();
+            var value = key != null ? Storage.TryGetValue(key, out var command) ? command : new Command(key) : new Command();
             RunInternal(key, value);
 
             OnAfterRun(key);
