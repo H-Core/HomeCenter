@@ -58,7 +58,6 @@ namespace HomeCenter.NET.Windows
 
             #region Global Runner
 
-            GlobalRunner.AddRunner(new ConsoleRunner());
             GlobalRunner.NewOutput += (o, args) => Print(args.Text);
             GlobalRunner.NewSpeech += (o, args) => Say(args.Text);
             GlobalRunner.NewCommand += (o, args) => Manager.ProcessText(args.Text);
