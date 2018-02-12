@@ -7,11 +7,14 @@ namespace HomeCenter.NET.Utilities
     {
         #region Properties
 
-        public string CompanyName { get; }
-        public string FileName { get; }
+        public string SubPath { get; }
+        public string SubDirectory => Path.GetDirectoryName(SubPath);
+        public string FileName => Path.GetFileName(SubPath);
+
+        public string AppDataFolder => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
         public string Folder => Directory.CreateDirectory(
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), CompanyName))
+            Path.Combine(AppDataFolder, SubDirectory))
             .FullName;
 
         public string FullPath => Path.Combine(Folder, FileName);
@@ -26,10 +29,9 @@ namespace HomeCenter.NET.Utilities
 
         #region Constructors
 
-        public AppDataFile(string companyName, string fileName)
+        public AppDataFile(params string[] needToCombinedPathStrings)
         {
-            CompanyName = companyName ?? throw new ArgumentNullException(nameof(companyName));
-            FileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
+            SubPath = Path.Combine(needToCombinedPathStrings);
         }
 
         #endregion
