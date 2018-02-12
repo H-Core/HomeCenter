@@ -29,6 +29,7 @@ namespace HomeCenter.NET.Runners
             runner.Storage = Storage;
             runner.NewSpeech += OnNewSpeech;
             runner.NewOutput += OnNewOutput;
+            runner.NewCommand += OnNewCommand;
 
             Runners.Add(runner);
         }
