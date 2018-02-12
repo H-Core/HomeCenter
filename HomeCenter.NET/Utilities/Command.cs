@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace HomeCenter.NET.Utilities
 {
-    public class Command
+    public class Command : ICloneable
     {
         #region Properties
 
@@ -46,6 +46,12 @@ namespace HomeCenter.NET.Utilities
         {
             Data = data;
         }
+
+        #endregion
+
+        #region ICloneable
+
+        public object Clone() => new Command(Keys.ToList(), Data);
 
         #endregion
     }
