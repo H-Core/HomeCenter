@@ -43,7 +43,13 @@ namespace HomeCenter.NET.Windows
             Close();
         }
 
-        private void Close(object sender, RoutedEventArgs e) => Close();
+        private void Close(object sender, RoutedEventArgs e)
+        {
+            Storage.Load(); // Cancel changes
+
+            DialogResult = false;
+            Close();
+        } 
 
         #endregion
 
