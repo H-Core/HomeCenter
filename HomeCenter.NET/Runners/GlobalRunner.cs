@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using HomeCenter.NET.Runners.Core;
 using HomeCenter.NET.Utilities;
 using VoiceActions.NET.Managers;
@@ -10,6 +11,7 @@ namespace HomeCenter.NET.Runners
     {
         #region Properties
 
+        public IStorage<Command> Storage { get; set; }
         private List<IRunner> Runners { get; set; } = new List<IRunner>();
         public List<string> History { get; } = new List<string>();
 
@@ -39,7 +41,6 @@ namespace HomeCenter.NET.Runners
 
         public void AddRunner(IRunner runner)
         {
-            runner.Storage = Storage;
             runner.NewSpeech += OnNewSpeech;
             runner.NewOutput += OnNewOutput;
             runner.NewCommand += OnNewCommand;
@@ -47,11 +48,11 @@ namespace HomeCenter.NET.Runners
             Runners.Add(runner);
         }
 
-        public IRunner GetRunnerFor(string key, string data)
+        public IRunner GetRunnerFor(string key, Command command)
         {
             foreach (var runner in Runners)
             {
-                if (runner.IsSupport(key, data))
+                if (runner.IsSupport(key, command))
                 {
                     return runner;
                 }
@@ -64,6 +65,50 @@ namespace HomeCenter.NET.Runners
 
         #region Protected methods
 
+        private (string key, Command command) GetCommand(string key)
+        {
+            key = key ?? throw new ArgumentNullException(nameof(key));
+
+            if (Storage.TryGetValue(key, out var result))
+            {
+                return (key, result);
+            }
+
+            foreach (var pair in Storage)
+            {
+                var tryKey = pair.Key;
+                if (!tryKey.Contains("*"))
+                {
+                    continue;
+                }
+
+                var subKeys = tryKey.Split('*');
+                if (subKeys.Length < 2)
+                {
+                    continue;
+                }
+
+                if (string.IsNullOrWhiteSpace(subKeys[0]))
+                {
+                    continue;
+                }
+
+                if (key.StartsWith(subKeys[0]))
+                {
+                    var command = pair.Value?.Clone() as Command;
+                    if (command != null)
+                    {
+                        var argument = key.Substring(subKeys[0].Length);
+                        command.Data = command.Data.Replace("*", argument);
+                    }
+
+                    return (pair.Key, command);
+                }
+            }
+
+            return (key, null);
+        }
+
         protected override void RunInternal(string key, Command command)
         {
             if (string.IsNullOrWhiteSpace(key))
@@ -75,13 +120,15 @@ namespace HomeCenter.NET.Runners
 
             History.Add(key);
 
-            var runner = GetRunnerFor(key, command.Data);
+            var (newKey, newCommand) = GetCommand(key);
+
+            var runner = GetRunnerFor(newKey, newCommand);
             var isHandled = runner != null;
             Print(isHandled
                 ? $"Run action for text: \"{key}\""
                 : $"We don't have handler for text: \"{key}\"");
 
-            runner?.Run(key, command.Data);
+            runner?.Run(newKey, newCommand);
 
             if (!isHandled)
             {

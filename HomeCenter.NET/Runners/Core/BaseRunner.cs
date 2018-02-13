@@ -1,18 +1,11 @@
 ﻿using System;
 using HomeCenter.NET.Utilities;
-using VoiceActions.NET.Storages;
 using VoiceActions.NET.Utilities;
 
 namespace HomeCenter.NET.Runners.Core
 {
     public abstract class BaseRunner : IRunner
     {
-        #region Properties
-
-        public IStorage<Command> Storage { get; set; }
-
-        #endregion
-
         #region Events
 
         public event EventHandler<RunnerEventArgs> BeforeRun;
@@ -39,12 +32,11 @@ namespace HomeCenter.NET.Runners.Core
 
         #region Public methods
 
-        public void Run(string key, string data)
+        public void Run(string key, Command command)
         {
             OnBeforeRun(key);
-
-            var value = key != null ? Storage.TryGetValue(key, out var command) ? command : new Command(key) : new Command();
-            RunInternal(key, value);
+            
+            RunInternal(key, command);
 
             OnAfterRun(key);
         }
@@ -54,8 +46,9 @@ namespace HomeCenter.NET.Runners.Core
         public virtual string GetSupportedCommandsText() => $@"Supported commands:
 {string.Join(Environment.NewLine, GetSupportedCommands())}";
 
-        public virtual bool IsSupport(string key, string data)
+        public virtual bool IsSupport(string key, Command command)
         {
+            var data = command?.Data;
             if (string.IsNullOrWhiteSpace(data))
             {
                 return false;

@@ -69,6 +69,10 @@ namespace HomeCenter.NET.Windows
                 }
                 alternativeConverterLastData = Manager.Data;
 
+                if (Manager.Data == null)
+                {
+                    return;
+                }
                 var text = await AlternativeConverter.Convert(Manager.Data);
                 GlobalRunner.Run(text, null);
             };
