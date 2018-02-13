@@ -8,14 +8,14 @@
              d:DesignHeight="25" d:DesignWidth="600">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="30*" />
-            <ColumnDefinition Width="70*" />
-            <ColumnDefinition Width="50" />
+            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="100*" />
+            <ColumnDefinition Width="25" />
             <ColumnDefinition Width="25" />
         </Grid.ColumnDefinitions>
         <Label Content="{Binding Path=Command.KeysString}" Grid.Column="0"/>
         <Label Content="{Binding Path=Command.Data}" Grid.Column="1"/>
-        <Button Content="Edit" Grid.Column="2" Click="Edit_Click"/>
-        <Button Content="X" Grid.Column="3" Click="Delete_Click"/>
+        <Button Content="⚙" Grid.Column="2" Click="Edit_Click"/>
+        <Button Content="✖" Grid.Column="3" Click="Delete_Click"/>
     </Grid>
 </UserControl>
