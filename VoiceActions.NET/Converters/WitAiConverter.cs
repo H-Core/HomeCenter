@@ -11,7 +11,7 @@ namespace VoiceActions.NET.Converters
     {
         #region Properties
 
-        private string Token { get; }
+        public string Token { get; }
 
         #endregion
 

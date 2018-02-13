@@ -23,7 +23,7 @@ namespace HomeCenter.NET.Windows
 
             InitializeComponent();
 
-            ShowCommands();
+            Update();
         }
 
         #endregion
@@ -33,7 +33,7 @@ namespace HomeCenter.NET.Windows
         private void Add_Click(object sender, RoutedEventArgs e)
         {
             CommandWindow.ShowAndSaveIfNeeded(new Command(), Storage);
-            ShowCommands();
+            Update();
         } 
 
         private void SaveAndClose(object sender, RoutedEventArgs e)
@@ -50,31 +50,31 @@ namespace HomeCenter.NET.Windows
 
             DialogResult = false;
             Close();
-        } 
+        }
 
         #endregion
 
         #region Private methods
 
-        public void ShowCommands()
+        private void Update()
         {
             CommandsPanel.Children.Clear();
             foreach (var pair in Storage.UniqueValues(entry => entry.Value.Data))
             {
                 var command = pair.Value;
-                var control = new ObjectControl(command.KeysString, command.Data) {Height = 25};
+                var control = new ObjectControl(command.KeysString, command.Data) { Height = 25 };
                 control.Deleted += (sender, args) =>
                 {
                     foreach (var key in command.Keys)
                     {
                         Storage.Remove(key);
                     }
-                    ShowCommands();
+                    Update();
                 };
                 control.Edited += (sender, args) =>
                 {
                     CommandWindow.ShowAndSaveIfNeeded(command, Storage);
-                    ShowCommands();
+                    Update();
                 };
                 CommandsPanel.Children.Add(control);
             }

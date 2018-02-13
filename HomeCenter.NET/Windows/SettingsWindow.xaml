@@ -55,13 +55,25 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Recorders">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <ScrollViewer Grid.Row="0">
+                        <StackPanel x:Name="RecordersPanel"/>
+                    </ScrollViewer>
+                </Grid>
             </TabItem>
             <TabItem Header="Converters">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <ScrollViewer Grid.Row="0">
+                        <StackPanel x:Name="ConvertersPanel"/>
+                    </ScrollViewer>
+                </Grid>
             </TabItem>
             <TabItem Header="Runners">
-                <Grid Background="#FFE5E5E5"/>
+                <Grid Background="#FFE5E5E5">
+                    <ScrollViewer Grid.Row="0">
+                        <StackPanel x:Name="RunnersPanel"/>
+                    </ScrollViewer>
+                </Grid>
             </TabItem>
         </TabControl>
         <Grid Grid.Row="1" Margin="5">
