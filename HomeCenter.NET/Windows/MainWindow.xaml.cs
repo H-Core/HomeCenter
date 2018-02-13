@@ -24,6 +24,8 @@ namespace HomeCenter.NET.Windows
             Converter = new YandexConverter("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" }
         };
 
+        private IConverter AlternativeConverter { get; set; } = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS");
+
         private Hook Hook { get; } = new Hook("Global Action Hook");
         private GlobalRunner GlobalRunner { get; set; } = new GlobalRunner(new CommandsStorage());
         private ISynthesizer Synthesizer { get; set; } = new YandexSynthesizer("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" };
@@ -58,6 +60,18 @@ namespace HomeCenter.NET.Windows
 
             #region Global Runner
 
+            byte[] alternativeConverterLastData = null;
+            GlobalRunner.NotHandledText += async _ =>
+            {
+                if (alternativeConverterLastData == Manager.Data)
+                {
+                    return;
+                }
+                alternativeConverterLastData = Manager.Data;
+
+                var text = await AlternativeConverter.Convert(Manager.Data);
+                GlobalRunner.Run(text, null);
+            };
             GlobalRunner.NewOutput += (o, args) => Print(args.Text);
             GlobalRunner.NewSpeech += (o, args) => Say(args.Text);
             GlobalRunner.NewCommand += (o, args) => Manager.ProcessText(args.Text);
@@ -65,7 +79,7 @@ namespace HomeCenter.NET.Windows
             #endregion
 
             #region Manager
-
+            
             Manager.NewText += text => GlobalRunner.Run(text, null);
             Manager.Started += (sender, args) => Dispatcher.Invoke(() =>
             {
@@ -94,6 +108,9 @@ namespace HomeCenter.NET.Windows
                 TaskbarIcon.Dispose();
                 TaskbarIcon = null;
             }
+
+            AlternativeConverter?.Dispose();
+            AlternativeConverter = null;
 
             Manager?.Dispose();
             Manager = null;
