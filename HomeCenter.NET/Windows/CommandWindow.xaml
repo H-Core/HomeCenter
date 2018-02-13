@@ -11,14 +11,14 @@
             <RowDefinition Height="35" />
         </Grid.RowDefinitions>
         <TabControl Grid.Row="0" TabStripPlacement="Left">
-            <TabItem Header="Data">
-                <Grid Background="#FFE5E5E5">
-                    <TextBox Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=Command.Data}" TextWrapping="Wrap" AcceptsReturn="True"/>
-                </Grid>
-            </TabItem>
             <TabItem Header="Keys">
                 <Grid Background="#FFE5E5E5">
                     <TextBox Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=Command.KeysString}" TextWrapping="Wrap" AcceptsReturn="True"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Data">
+                <Grid Background="#FFE5E5E5">
+                    <TextBox Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}, Path=Command.Data}" TextWrapping="Wrap" AcceptsReturn="True"/>
                 </Grid>
             </TabItem>
         </TabControl>
