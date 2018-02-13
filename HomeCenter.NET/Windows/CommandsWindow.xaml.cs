@@ -62,8 +62,8 @@ namespace HomeCenter.NET.Windows
             foreach (var pair in Storage.UniqueValues(entry => entry.Value.Data))
             {
                 var command = pair.Value;
-                var control = new CommandControl(command) {Height = 25};
-                control.CommandDeleted += (sender, args) =>
+                var control = new ObjectControl(command.KeysString, command.Data) {Height = 25};
+                control.Deleted += (sender, args) =>
                 {
                     foreach (var key in command.Keys)
                     {
@@ -71,7 +71,7 @@ namespace HomeCenter.NET.Windows
                     }
                     ShowCommands();
                 };
-                control.CommandEdited += (sender, args) =>
+                control.Edited += (sender, args) =>
                 {
                     CommandWindow.ShowAndSaveIfNeeded(command, Storage);
                     ShowCommands();
