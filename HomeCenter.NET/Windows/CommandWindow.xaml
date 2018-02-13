@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Change Command" Height="253.714" Width="463.714">
+        Title="Change Command" Height="300" Width="400">
     <Grid Background="#FFE5E5E5">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
