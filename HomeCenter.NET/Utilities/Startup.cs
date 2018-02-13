@@ -32,7 +32,8 @@ namespace HomeCenter.NET.Utilities
 
                 if (autoStart)
                 {
-                    key.SetValue(name, ToValue(fileName, arguments));
+                    var value = ToValue(fileName, arguments);
+                    key.SetValue(name, value);
                 }
                 else
                 {
@@ -62,8 +63,8 @@ namespace HomeCenter.NET.Utilities
                     return false;
                 }
 
-                (var valueFileName, _) = FromValue(value);
-                if (!string.Equals(fileName, valueFileName, StringComparison.OrdinalIgnoreCase))
+                var valueFileName = ToFileName(value);
+                if (!Compare(fileName, valueFileName))
                 {
                     return false;
                 }
@@ -74,17 +75,20 @@ namespace HomeCenter.NET.Utilities
 
         #region Private methods
 
-        private static string ToValue(string fileName, string arguments) => $"\"{fileName ?? ""}\" {arguments ?? ""}";
+        private static string ToValue(string fileName, string arguments) => $"\"{fileName ?? ""}\" {arguments ?? ""}".Trim();
 
-        private static (string, string) FromValue(string value)
+        private static string ToFileName(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
             {
-                return (null, null);
+                return null;
             }
 
-            return value.Trim().SplitOnlyFirstIgnoreQuote(' ');
+            return value.Trim().SplitOnlyFirstIgnoreQuote(' ').prefix;
         }
+
+        private static bool Compare(string first, string second) => 
+            string.Equals(first.Trim(' ', '\"'), second.Trim(' ', '\"'), StringComparison.OrdinalIgnoreCase);
 
         #endregion
 
