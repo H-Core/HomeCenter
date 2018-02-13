@@ -73,6 +73,13 @@ namespace VoiceActions.NET.Managers
             base.Start();
         }
 
+        public override void Stop()
+        {
+            var recorder = Recorder ?? throw new Exception("Recorder is null");
+
+            recorder.Stop();
+        }
+
         public void Change()
         {
             if (!IsStarted)
