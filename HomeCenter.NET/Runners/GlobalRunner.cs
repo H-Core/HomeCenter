@@ -11,8 +11,8 @@ namespace HomeCenter.NET.Runners
     {
         #region Properties
 
-        public IStorage<Command> Storage { get; set; }
-        private List<IRunner> Runners { get; set; } = new List<IRunner>();
+        public IStorage<Command> Storage { get; }
+        private List<IRunner> Runners { get; } = new List<IRunner>();
         public List<string> History { get; } = new List<string>();
 
         #endregion
