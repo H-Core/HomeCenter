@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows;
 using WindowsInput;
@@ -23,7 +24,8 @@ namespace HomeCenter.NET.Runners
             "REDIRECT command-key",
             "PASTE text",
             "CLIPBOARD text",
-            "KEYBOARD CONTROL+V"
+            "KEYBOARD CONTROL+V",
+            "SHOW_WINDOW EXE"
         };
 
         #endregion
@@ -75,6 +77,10 @@ namespace HomeCenter.NET.Runners
                 case "sleep":
                     SleepCommand(postfix);
                     break;
+
+                case "show_window":
+                    ShowWindowCommand(postfix);
+                    break;
             }
         }
 
@@ -89,6 +95,29 @@ namespace HomeCenter.NET.Runners
 
             var path = prefix.Trim('\"', '\\').Replace("\\\"", "\"").Replace("\\\\", "\\").Replace("\\", "/");
             Process.Start(path, postfix);
+        }
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern bool ShowWindow(HandleRef hwnd, int nCmdShow);
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(HandleRef hwnd);
+        [DllImport("user32.dll")]
+        private static extern IntPtr SetFocus(HandleRef hwnd);
+
+        public static void ShowWindowCommand(string command)
+        {
+            var processes = Process.GetProcessesByName(command).Where(i => !string.IsNullOrWhiteSpace(i.MainWindowTitle));
+            var process = processes.FirstOrDefault();
+            if (process == null)
+            {
+                return;
+            }
+
+            var ptr = new HandleRef(null, process.MainWindowHandle);
+            const int swShow = 5;
+            ShowWindow(ptr, swShow);
+            SetForegroundWindow(ptr);
+            SetFocus(ptr);
         }
 
         private static void SleepCommand(string command)
