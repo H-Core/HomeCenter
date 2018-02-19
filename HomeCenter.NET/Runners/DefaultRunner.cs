@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows;
 using WindowsInput;
 using WindowsInput.Native;
@@ -28,10 +27,9 @@ namespace HomeCenter.NET.Runners
 
         protected override void RunInternal(string key, Command command)
         {
-            var lines = command.Data.Split(Environment.NewLine.ToCharArray());
-            foreach (var line in lines)
+            foreach (var line in command.Commands)
             {
-                RunSingleLine(line);
+                RunSingleLine(line.Text);
             }
         }
 

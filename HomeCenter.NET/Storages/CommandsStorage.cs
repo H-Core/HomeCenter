@@ -39,7 +39,7 @@ namespace HomeCenter.NET.Storages
             {
                 foreach (var key in command.Keys)
                 {
-                    this[key] = command;
+                    this[key.Text] = command;
                 }
             }
 

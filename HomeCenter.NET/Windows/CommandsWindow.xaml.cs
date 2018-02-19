@@ -32,7 +32,11 @@ namespace HomeCenter.NET.Windows
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            CommandWindow.ShowAndSaveIfNeeded(new Command(), Storage);
+            var command = new Command();
+            command.Keys.Add(new SingleKey(string.Empty));
+            command.Commands.Add(new SingleCommand(string.Empty));
+
+            CommandWindow.ShowAndSaveIfNeeded(command, Storage);
             Update();
         } 
 
@@ -67,7 +71,7 @@ namespace HomeCenter.NET.Windows
                 {
                     foreach (var key in command.Keys)
                     {
-                        Storage.Remove(key);
+                        Storage.Remove(key.Text);
                     }
                     Update();
                 };

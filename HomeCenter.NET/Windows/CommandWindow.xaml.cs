@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
+using HomeCenter.NET.Controls;
 using HomeCenter.NET.Utilities;
 using VoiceActions.NET.Storages;
 
@@ -27,12 +29,12 @@ namespace HomeCenter.NET.Windows
 
             foreach (var key in command.Keys)
             {
-                storage.Remove(key);
+                storage.Remove(key.Text);
             }
 
             foreach (var key in newCommand.Keys)
             {
-                storage[key] = newCommand;
+                storage[key.Text] = newCommand;
             }
 
             return true;
@@ -53,19 +55,80 @@ namespace HomeCenter.NET.Windows
             Command = command?.Clone() as Command ?? throw new ArgumentNullException(nameof(command));
 
             InitializeComponent();
+
+            Update();
         }
 
         #endregion
 
         #region Event handlers
-
-        private void SaveAndClose(object sender, RoutedEventArgs e)
+        
+        private void Save_Click(object sender, RoutedEventArgs e)
         {
+            Save();
+
             DialogResult = true;
             Close();
         }
 
-        private void Close(object sender, RoutedEventArgs e) => Close();
+        private void Cancel_Click(object sender, RoutedEventArgs e) => Close();
+
+        private void AddKeyButton_Click(object sender, RoutedEventArgs e)
+        {
+            Save();
+            Command.Keys.Add(new SingleKey(string.Empty));
+            Update();
+        }
+
+        private void AddDataButton_Click(object sender, RoutedEventArgs e)
+        {
+            Save();
+            Command.Commands.Add(new SingleCommand(string.Empty));
+            Update();
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private void Save()
+        {
+            Command.Commands = DataPanel.Children.OfType<TextControl>().Select(c => new SingleCommand(c.Text)).ToList();
+            Command.Keys = KeysPanel.Children.OfType<TextControl>().Select(c => new SingleKey(c.Text)).ToList();
+        }
+
+        private void Update()
+        {
+            KeysPanel.Children.Clear();
+            foreach (var key in Command.Keys)
+            {
+                var control = new TextControl(key.Text)
+                {
+                    Height = 25
+                };
+                control.Deleted += (sender, args) =>
+                {
+                    Command.Keys.Remove(key);
+                    Update();
+                };
+                KeysPanel.Children.Add(control);
+            }
+
+            DataPanel.Children.Clear();
+            foreach (var line in Command.Commands)
+            {
+                var control = new TextControl(line.Text)
+                {
+                    MinHeight = 25
+                };
+                control.Deleted += (sender, args) =>
+                {
+                    Command.Commands.Remove(line);
+                    Update();
+                };
+                DataPanel.Children.Add(control);
+            }
+        }
 
         #endregion
     }

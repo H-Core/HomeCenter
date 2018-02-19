@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
-        Title="Change Command" Height="300" Width="400">
+        Title="Change Command" Height="300" Width="800">
     <Grid Background="#FFE5E5E5">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -14,23 +14,35 @@
         <TabControl Grid.Row="0" TabStripPlacement="Left">
             <TabItem Header="Keys">
                 <Grid Background="#FFE5E5E5">
-                    <TextBox Text="{Binding Path=Command.KeysString}" TextWrapping="Wrap" AcceptsReturn="True"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ScrollViewer Grid.Row="0">
+                        <StackPanel x:Name="KeysPanel"/>
+                    </ScrollViewer>
+                    <Button Grid.Row="0" Content="+" Margin="0,0,20,0" Width="25" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="AddKeyButton_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Data">
                 <Grid Background="#FFE5E5E5">
-                    <TextBox Text="{Binding Path=Command.Data}" TextWrapping="Wrap" AcceptsReturn="True"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <ScrollViewer Background="#FFE5E5E5">
+                        <StackPanel x:Name="DataPanel"/>
+                    </ScrollViewer>
+                    <Button Grid.Row="0" Content="+" Margin="0,0,20,0" Width="25" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="AddDataButton_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>
         <Grid Grid.Row="1" Margin="5">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50*" />
-                <ColumnDefinition Width="25*" />
-                <ColumnDefinition Width="25*" />
+                <ColumnDefinition Width="40*"/>
+                <ColumnDefinition Width="30*" />
+                <ColumnDefinition Width="30*" />
             </Grid.ColumnDefinitions>
-            <Button Height="25" Content="Save" Grid.Column="1" Click="SaveAndClose"/>
-            <Button Height="25" Content="Cancel" Grid.Column="2" Click="Close"/>
+            <Button Height="25" Content="Save" Grid.Column="1" Click="Save_Click"/>
+            <Button Height="25" Content="Cancel" Grid.Column="2" Click="Cancel_Click"/>
         </Grid>
     </Grid>
 </Window>

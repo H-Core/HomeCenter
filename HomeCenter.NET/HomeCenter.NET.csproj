@@ -119,6 +119,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\ShowHideCommand.cs" />
+    <Compile Include="Controls\TextControl.xaml.cs">
+      <DependentUpon>TextControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ObjectControl.xaml.cs">
       <DependentUpon>ObjectControl.xaml</DependentUpon>
     </Compile>
@@ -129,7 +132,14 @@
     <Compile Include="Utilities\AppDataFile.cs" />
     <Compile Include="Utilities\MediaUtilities.cs" />
     <Compile Include="Utilities\Options.cs" />
+    <Compile Include="Utilities\TextObject.cs" />
+    <Compile Include="Utilities\SingleCommand.cs" />
+    <Compile Include="Utilities\SingleKey.cs" />
     <Compile Include="Utilities\Startup.cs" />
+    <Page Include="Controls\TextControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\ObjectControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

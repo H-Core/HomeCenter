@@ -9,16 +9,14 @@ namespace HomeCenter.NET.Utilities
     {
         #region Properties
 
-        public string Data { get; set; }
-        public List<string> Keys { get; set; } = new List<string>();
-        //public List<string> DeletedKeys { get; set; } TODO: Add
+        public List<SingleCommand> Commands { get; set; } = new List<SingleCommand>();
+        public List<SingleKey> Keys { get; set; } = new List<SingleKey>();
 
         [JsonIgnore]
-        public string KeysString
-        {
-            get => string.Join(Environment.NewLine, Keys);
-            set => Keys = value.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-        }
+        public string KeysString => string.Join(Environment.NewLine, Keys);
+
+        [JsonIgnore]
+        public string Data => string.Join(Environment.NewLine, Commands);
 
         #endregion
 
@@ -30,12 +28,12 @@ namespace HomeCenter.NET.Utilities
 
         public Command(List<string> keys)
         {
-            Keys = keys;
+            Keys = keys.Select(text => new SingleKey(text)).ToList();
         }
 
-        public Command(List<string> keys, string data) : this(keys)
+        public Command(List<string> keys, List<string> dataLines) : this(keys)
         {
-            Data = data;
+            Commands = dataLines.Select(text => new SingleCommand(text)).ToList();
         }
 
         public Command(string key) : this(new List<string> { key })
@@ -44,14 +42,16 @@ namespace HomeCenter.NET.Utilities
 
         public Command(string key, string data) : this(key)
         {
-            Data = data;
+            Commands.Add(new SingleCommand(data));
         }
 
         #endregion
 
         #region ICloneable
 
-        public object Clone() => new Command(Keys.ToList(), Data);
+        public object Clone() => new Command(
+            Keys.Select(key => key.Text).ToList(),
+            Commands.Select(command => command.Text).ToList());
 
         #endregion
     }

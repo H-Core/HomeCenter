@@ -99,7 +99,10 @@ namespace HomeCenter.NET.Runners
                     if (command != null)
                     {
                         var argument = key.Substring(subKeys[0].Length);
-                        command.Data = command.Data.Replace("*", argument);
+                        foreach (var line in command.Commands)
+                        {
+                            line.Text = line.Text.Replace("*", argument);
+                        }
                     }
 
                     return (pair.Key, command);
