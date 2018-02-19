@@ -35,10 +35,16 @@ namespace HomeCenter.NET.Runners.Core
         public void Run(string key, Command command)
         {
             OnBeforeRun(key);
-            
-            RunInternal(key, command);
 
-            OnAfterRun(key);
+            try
+            {
+                RunInternal(key, command);
+                OnAfterRun(key);
+            }
+            catch (Exception exception)
+            {
+                Print($"Exception while running command: \"{command.Data}\": {exception}");
+            }
         }
 
         public abstract string[] GetSupportedCommands();
