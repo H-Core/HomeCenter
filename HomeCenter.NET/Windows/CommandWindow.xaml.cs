@@ -78,6 +78,18 @@ namespace HomeCenter.NET.Windows
             Save();
             Command.Keys.Add(new SingleKey(string.Empty));
             Update();
+
+            /* TODO: Focus last element
+            var control = DataPanel.Children.OfType<TextControl>().LastOrDefault();
+            if (control == null)
+            {
+                return;
+            }
+
+            control.TextBox.Focusable = true;
+            FocusManager.SetFocusedElement(FocusManager.GetFocusScope(control.TextBox), control.TextBox);
+            Keyboard.Focus(control.TextBox);
+            control.TextBox.Focus();*/
         }
 
         private void AddDataButton_Click(object sender, RoutedEventArgs e)
