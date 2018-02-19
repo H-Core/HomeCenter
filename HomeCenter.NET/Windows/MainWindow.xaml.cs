@@ -181,7 +181,7 @@ namespace HomeCenter.NET.Windows
 
         private void Global_KeyUp(KeyboardHookEventArgs e)
         {
-            if ((int)e.Key == 192)
+            if ((int)e.Key == 192 || e.isAltPressed && e.isCtrlPressed)
             {
                 Manager.Stop();
             }
@@ -189,7 +189,7 @@ namespace HomeCenter.NET.Windows
 
         private void Global_KeyDown(KeyboardHookEventArgs e)
         {
-            if ((int)e.Key == 192)
+            if ((int)e.Key == 192 || e.isAltPressed && e.isCtrlPressed)
             {
                 Manager.Start();
             }

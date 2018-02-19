@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Windows;
+using WindowsInput;
+using WindowsInput.Native;
 using HomeCenter.NET.Runners.Core;
 using HomeCenter.NET.Utilities;
 using VoiceActions.NET.Utilities;
@@ -15,7 +18,8 @@ namespace HomeCenter.NET.Runners
             "RUN program.exe arguments",
             "SAY text",
             "PRINT text",
-            "REDIRECT command-key"
+            "REDIRECT command-key",
+            "PASTE text"
         };
 
         #endregion
@@ -52,6 +56,10 @@ namespace HomeCenter.NET.Runners
                 case "redirect":
                     RunCommand(postfix);
                     break;
+
+                case "paste":
+                    Paste(postfix);
+                    break;
             }
         }
 
@@ -66,6 +74,17 @@ namespace HomeCenter.NET.Runners
 
             var path = prefix.Trim('\"', '\\').Replace("\\\"", "\"").Replace("\\\\", "\\").Replace("\\", "/");
             Process.Start(path, postfix);
+        }
+
+        private static void Paste(string command)
+        {
+            if (string.IsNullOrWhiteSpace(command))
+            {
+                return;
+            }
+
+            Clipboard.SetText(command);
+            new InputSimulator().Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
         }
 
         #endregion

@@ -11,7 +11,7 @@
             <RowDefinition Height="35" />
         </Grid.RowDefinitions>
         <ScrollViewer Grid.Row="0">
-            <StackPanel x:Name="CommandsPanel"/>
+            <StackPanel x:Name="Panel"/>
         </ScrollViewer>
         <Grid Grid.Row="1" Margin="5">
             <Grid.ColumnDefinitions>

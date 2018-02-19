@@ -58,7 +58,7 @@ namespace HomeCenter.NET.Windows
 
         private void Update()
         {
-            CommandsPanel.Children.Clear();
+            Panel.Children.Clear();
             foreach (var pair in Storage.UniqueValues(entry => entry.Value.Data))
             {
                 var command = pair.Value;
@@ -76,7 +76,7 @@ namespace HomeCenter.NET.Windows
                     CommandWindow.ShowAndSaveIfNeeded(command, Storage);
                     Update();
                 };
-                CommandsPanel.Children.Add(control);
+                Panel.Children.Add(control);
             }
         }
 
