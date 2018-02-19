@@ -21,7 +21,7 @@ namespace HomeCenter.NET.Storages
         public override void Save()
         {
             var uniqueCommands = this.UniqueValues(command => command.Value.Data).Select(pair => pair.Value);
-            AppDataFile.FileData = JsonConvert.SerializeObject(uniqueCommands);
+            AppDataFile.FileData = JsonConvert.SerializeObject(uniqueCommands, Formatting.Indented);
         }
 
         public override void Load()
