@@ -11,7 +11,7 @@
             <ColumnDefinition Width="100*" />
             <ColumnDefinition Width="25" />
         </Grid.ColumnDefinitions>
-        <TextBox Text="{Binding Path=Text}" Grid.Column="0"/>
-        <Button Content="✖" Grid.Column="1" Click="Delete_Click"/>
+        <TextBox Grid.Column="0" Text="{Binding Path=Text}" TextWrapping="Wrap" AcceptsReturn="True"/>
+        <Button Grid.Column="1" Content="✖" Click="Delete_Click"/>
     </Grid>
 </UserControl>
