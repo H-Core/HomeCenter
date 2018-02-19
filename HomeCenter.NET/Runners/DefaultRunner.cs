@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using WindowsInput;
 using WindowsInput.Native;
@@ -70,6 +71,10 @@ namespace HomeCenter.NET.Runners
                 case "keyboard":
                     KeyboardCommand(postfix);
                     break;
+
+                case "sleep":
+                    SleepCommand(postfix);
+                    break;
             }
         }
 
@@ -84,6 +89,14 @@ namespace HomeCenter.NET.Runners
 
             var path = prefix.Trim('\"', '\\').Replace("\\\"", "\"").Replace("\\\\", "\\").Replace("\\", "/");
             Process.Start(path, postfix);
+        }
+
+        private static void SleepCommand(string command)
+        {
+            var timeout = int.TryParse(command, out var result) ? result : 1000;
+
+            // TODO: to sync await
+            Thread.Sleep(timeout);
         }
 
         private static void ClipboardCommand(string command)
@@ -111,11 +124,15 @@ namespace HomeCenter.NET.Runners
             {
                 text = "CONTROL";
             }
+            else if (key.ToLowerInvariant() == "enter")
+            {
+                text = "RETURN";
+            }
             else
             {
                 text = key;
             }
-
+            
             return (VirtualKeyCode)Enum.Parse(typeof(VirtualKeyCode), text, true);
         } 
 
