@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using WindowsInput;
 using WindowsInput.Native;
@@ -18,7 +20,9 @@ namespace HomeCenter.NET.Runners
             "SAY text",
             "PRINT text",
             "REDIRECT command-key",
-            "PASTE text"
+            "PASTE text",
+            "CLIPBOARD text",
+            "KEYBOARD CONTROL+V"
         };
 
         #endregion
@@ -58,6 +62,14 @@ namespace HomeCenter.NET.Runners
                 case "paste":
                     Paste(postfix);
                     break;
+
+                case "clipboard":
+                    ClipboardCommand(postfix);
+                    break;
+
+                case "keyboard":
+                    KeyboardCommand(postfix);
+                    break;
             }
         }
 
@@ -74,7 +86,7 @@ namespace HomeCenter.NET.Runners
             Process.Start(path, postfix);
         }
 
-        private static void Paste(string command)
+        private static void ClipboardCommand(string command)
         {
             if (string.IsNullOrWhiteSpace(command))
             {
@@ -82,7 +94,54 @@ namespace HomeCenter.NET.Runners
             }
 
             Clipboard.SetText(command);
-            new InputSimulator().Keyboard.ModifiedKeyStroke(VirtualKeyCode.CONTROL, VirtualKeyCode.VK_V);
+        }
+
+        private static VirtualKeyCode ToVirtualKey(string key)
+        {
+            string text;
+            if (key.Length == 1)
+            {
+                text = $"VK_{key}";
+            }
+            else if (key.ToLowerInvariant() == "alt")
+            {
+                text = "MENU";
+            }
+            else if (key.ToLowerInvariant() == "ctrl")
+            {
+                text = "CONTROL";
+            }
+            else
+            {
+                text = key;
+            }
+
+            return (VirtualKeyCode)Enum.Parse(typeof(VirtualKeyCode), text, true);
+        } 
+
+        private static void KeyboardCommand(string command)
+        {
+            if (string.IsNullOrWhiteSpace(command))
+            {
+                return;
+            }
+
+            var keys = command.Split('+');
+            var mainKey = ToVirtualKey(keys.LastOrDefault());
+            var otherKeys = keys.Take(keys.Length - 1).Select(ToVirtualKey);
+            
+            new InputSimulator().Keyboard.ModifiedKeyStroke(otherKeys, mainKey);
+        }
+
+        private static void Paste(string command)
+        {
+            if (string.IsNullOrWhiteSpace(command))
+            {
+                return;
+            }
+
+            ClipboardCommand(command);
+            KeyboardCommand("Control+V");
         }
 
         #endregion
