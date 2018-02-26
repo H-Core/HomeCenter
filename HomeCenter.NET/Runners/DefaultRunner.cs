@@ -14,6 +14,29 @@ namespace HomeCenter.NET.Runners
 {
     public class DefaultRunner : BaseRunner
     {
+        #region Properties
+
+        private InvariantStringDictionary<Action<string>> HandlerDictionary { get; } = new InvariantStringDictionary<Action<string>>();
+
+        #endregion
+
+        #region Constructors
+
+        public DefaultRunner()
+        {
+            HandlerDictionary["run"] = RunProcess;
+            HandlerDictionary["say"] = Say;
+            HandlerDictionary["print"] = Print;
+            HandlerDictionary["redirect"] = RunCommand;
+            HandlerDictionary["paste"] = Paste;
+            HandlerDictionary["clipboard"] = ClipboardCommand;
+            HandlerDictionary["keyboard"] = KeyboardCommand;
+            HandlerDictionary["sleep"] = SleepCommand;
+            HandlerDictionary["show"] = ShowWindowCommand;
+        }
+
+        #endregion
+
         #region Public methods
 
         public override string[] GetSupportedCommands() => new[]
@@ -21,11 +44,11 @@ namespace HomeCenter.NET.Runners
             "RUN program.exe arguments",
             "SAY text",
             "PRINT text",
-            "REDIRECT command-key",
+            "REDIRECT other_command_key",
             "PASTE text",
             "CLIPBOARD text",
             "KEYBOARD CONTROL+V",
-            "SHOW_WINDOW EXE"
+            "SHOW process_name"
         };
 
         #endregion
@@ -43,45 +66,8 @@ namespace HomeCenter.NET.Runners
         private void RunSingleLine(string command)
         {
             (var prefix, var postfix) = command.SplitOnlyFirstIgnoreQuote(' ');
-
-            switch (prefix.ToLowerInvariant())
-            {
-                case "run":
-                    RunProcess(postfix);
-                    break;
-
-                case "say":
-                    Say(postfix);
-                    break;
-
-                case "print":
-                    Print(postfix);
-                    break;
-
-                case "redirect":
-                    RunCommand(postfix);
-                    break;
-
-                case "paste":
-                    Paste(postfix);
-                    break;
-
-                case "clipboard":
-                    ClipboardCommand(postfix);
-                    break;
-
-                case "keyboard":
-                    KeyboardCommand(postfix);
-                    break;
-
-                case "sleep":
-                    SleepCommand(postfix);
-                    break;
-
-                case "show_window":
-                    ShowWindowCommand(postfix);
-                    break;
-            }
+            HandlerDictionary.TryGetValue(prefix, out var handler);
+            handler?.Invoke(postfix);
         }
 
         private static void RunProcess(string command)
