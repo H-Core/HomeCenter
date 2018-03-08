@@ -34,9 +34,10 @@
             // textBoxSearch
             // 
             this.textBoxSearch.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.textBoxSearch.Location = new System.Drawing.Point(0, 0);
             this.textBoxSearch.Name = "textBoxSearch";
-            this.textBoxSearch.Size = new System.Drawing.Size(262, 28);
+            this.textBoxSearch.Size = new System.Drawing.Size(262, 40);
             this.textBoxSearch.TabIndex = 0;
             this.textBoxSearch.Text = "";
             this.textBoxSearch.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxSearch_KeyUp);
@@ -48,9 +49,9 @@
             this.BackColor = System.Drawing.Color.Transparent;
             this.Controls.Add(this.textBoxSearch);
             this.MaximumSize = new System.Drawing.Size(262, 40);
-            this.MinimumSize = new System.Drawing.Size(262, 20);
+            this.MinimumSize = new System.Drawing.Size(262, 32);
             this.Name = "DeskBandControl";
-            this.Size = new System.Drawing.Size(262, 28);
+            this.Size = new System.Drawing.Size(262, 40);
             this.ResumeLayout(false);
 
         }

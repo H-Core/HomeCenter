@@ -48,18 +48,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComUtilities.cs" />
-    <Compile Include="DeskBandUI.cs">
+    <Compile Include="DeskBandControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="DeskBandUI.Designer.cs">
-      <DependentUpon>DeskBandUI.cs</DependentUpon>
+    <Compile Include="DeskBandControl.Designer.cs">
+      <DependentUpon>DeskBandControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchDeskBand.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DeskBandUI.resx">
-      <DependentUpon>DeskBandUI.cs</DependentUpon>
+    <EmbeddedResource Include="DeskBandControl.resx">
+      <DependentUpon>DeskBandControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
