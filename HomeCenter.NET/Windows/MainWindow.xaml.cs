@@ -117,26 +117,29 @@ namespace HomeCenter.NET.Windows
 
             Watcher.EnableRaisingEvents = true;
             Watcher.IncludeSubdirectories = true;
-            Watcher.Created += async (sender, args) =>
-            {
-                try
-                {
-                    await Task.Delay(100);
-
-                    var command = File.ReadAllText(args.FullPath);
-
-                    GlobalRunner.Run(command.Trim(), null);
-
-                    //File.Delete(args.FullPath);
-                }
-                catch (Exception exception)
-                {
-                    MessageBox.Show(exception.ToString());
-                }
-            };
+            //Watcher.Created += OnWatcherOnCreated;
+            Watcher.Changed += OnWatcherOnCreated;
 
             #endregion
 
+        }
+
+        private async void OnWatcherOnCreated(object sender, FileSystemEventArgs args)
+        {
+            try
+            {
+                await Task.Delay(100);
+
+                var command = File.ReadAllText(args.FullPath);
+
+                GlobalRunner.Run(command.Trim(), null);
+
+                //File.Delete(args.FullPath);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString());
+            }
         }
 
         #endregion
