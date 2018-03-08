@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -31,6 +33,19 @@ namespace HomeCenter.NET.Windows
         private ISynthesizer Synthesizer { get; set; } = new YandexSynthesizer("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" };
 
         private bool CanClose { get; set; }
+
+        #region FileSystemWatcher
+
+        public static string SharedDirectory => Directory.CreateDirectory(
+            Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "HomeCenter.NET",
+                "commands")
+        ).FullName;
+
+        private FileSystemWatcher Watcher { get; } = new FileSystemWatcher(SharedDirectory, "*.txt");
+
+        #endregion
 
         #endregion
 
@@ -83,7 +98,7 @@ namespace HomeCenter.NET.Windows
             #endregion
 
             #region Manager
-            
+
             Manager.NewText += text => GlobalRunner.Run(text, null);
             Manager.Started += (sender, args) => Dispatcher.Invoke(() =>
             {
@@ -97,6 +112,31 @@ namespace HomeCenter.NET.Windows
             });
 
             #endregion
+
+            #region FileSystemWatcher
+
+            Watcher.EnableRaisingEvents = true;
+            Watcher.IncludeSubdirectories = true;
+            Watcher.Created += async (sender, args) =>
+            {
+                try
+                {
+                    await Task.Delay(100);
+
+                    var command = File.ReadAllText(args.FullPath);
+
+                    GlobalRunner.Run(command.Trim(), null);
+
+                    //File.Delete(args.FullPath);
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.ToString());
+                }
+            };
+
+            #endregion
+
         }
 
         #endregion
@@ -199,7 +239,7 @@ namespace HomeCenter.NET.Windows
         {
             CanClose = true;
             Close();
-        } 
+        }
 
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
