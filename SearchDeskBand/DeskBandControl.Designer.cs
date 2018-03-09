@@ -28,40 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.TextBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
-            // 
-            // TextBox
-            // 
-            this.TextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.TextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.TextBox.ForeColor = System.Drawing.Color.Navy;
-            this.TextBox.Location = new System.Drawing.Point(6, 6);
-            this.TextBox.Name = "TextBox";
-            this.TextBox.Size = new System.Drawing.Size(250, 28);
-            this.TextBox.TabIndex = 0;
-            this.TextBox.Text = "";
-            this.TextBox.Click += new System.EventHandler(this.TextBoxSearch_Click);
-            this.TextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxSearch_KeyUp);
             // 
             // DeskBandControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.Controls.Add(this.TextBox);
+            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.MaximumSize = new System.Drawing.Size(262, 40);
             this.MinimumSize = new System.Drawing.Size(262, 40);
             this.Name = "DeskBandControl";
-            this.Padding = new System.Windows.Forms.Padding(6);
-            this.Size = new System.Drawing.Size(262, 40);
+            this.Size = new System.Drawing.Size(260, 38);
+            this.Click += new System.EventHandler(this.OnClick);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.RichTextBox TextBox;
     }
 }
