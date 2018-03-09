@@ -28,29 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBoxSearch = new System.Windows.Forms.RichTextBox();
+            this.TextBox = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
-            // textBoxSearch
+            // TextBox
             // 
-            this.textBoxSearch.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBoxSearch.Location = new System.Drawing.Point(0, 0);
-            this.textBoxSearch.Name = "textBoxSearch";
-            this.textBoxSearch.Size = new System.Drawing.Size(262, 40);
-            this.textBoxSearch.TabIndex = 0;
-            this.textBoxSearch.Text = "";
-            this.textBoxSearch.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textBoxSearch_KeyUp);
+            this.TextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.TextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextBox.ForeColor = System.Drawing.Color.Navy;
+            this.TextBox.Location = new System.Drawing.Point(6, 6);
+            this.TextBox.Name = "TextBox";
+            this.TextBox.Size = new System.Drawing.Size(250, 28);
+            this.TextBox.TabIndex = 0;
+            this.TextBox.Text = "";
+            this.TextBox.Click += new System.EventHandler(this.TextBoxSearch_Click);
+            this.TextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBoxSearch_KeyUp);
             // 
             // DeskBandControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Transparent;
-            this.Controls.Add(this.textBoxSearch);
+            this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.TextBox);
             this.MaximumSize = new System.Drawing.Size(262, 40);
-            this.MinimumSize = new System.Drawing.Size(262, 32);
+            this.MinimumSize = new System.Drawing.Size(262, 40);
             this.Name = "DeskBandControl";
+            this.Padding = new System.Windows.Forms.Padding(6);
             this.Size = new System.Drawing.Size(262, 40);
             this.ResumeLayout(false);
 
@@ -58,6 +62,6 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox textBoxSearch;
+        private System.Windows.Forms.RichTextBox TextBox;
     }
 }
