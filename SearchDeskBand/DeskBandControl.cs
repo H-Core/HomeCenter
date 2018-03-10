@@ -11,6 +11,8 @@ namespace SearchDeskBand
         public DeskBandControl()
         {
             InitializeComponent();
+
+            Window.VisibleChanged += (sender, args) => Label.Visible = !Window.Visible;
         }
         
         private void OnClick(object sender, EventArgs e)
