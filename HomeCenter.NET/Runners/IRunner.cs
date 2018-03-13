@@ -1,5 +1,5 @@
 ﻿using System;
-using HomeCenter.NET.Utilities;
+using HomeCenter.NET.Storages;
 
 namespace HomeCenter.NET.Runners
 {

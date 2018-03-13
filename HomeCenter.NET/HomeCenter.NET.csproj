@@ -129,9 +129,12 @@
     <Compile Include="Runners\Core\BaseRunner.cs" />
     <Compile Include="Runners\IRunner.cs" />
     <Compile Include="Runners\GlobalRunner.cs" />
-    <Compile Include="Utilities\AppDataFile.cs" />
+    <Compile Include="Utilities\SpecialFolders.cs" />
+    <Compile Include="Utilities\SpecialFolderFiles.cs" />
     <Compile Include="Utilities\MediaUtilities.cs" />
     <Compile Include="Utilities\Options.cs" />
+    <Compile Include="Utilities\SpecialFolder.cs" />
+    <Compile Include="Utilities\SpecialFolderFile.cs" />
     <Compile Include="Utilities\TextObject.cs" />
     <Compile Include="Utilities\SingleCommand.cs" />
     <Compile Include="Utilities\SingleKey.cs" />
@@ -173,7 +176,7 @@
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\Command.cs" />
+    <Compile Include="Storages\Command.cs" />
     <Compile Include="Storages\CommandsStorage.cs" />
     <Compile Include="Runners\RunnerEventArgs.cs" />
     <Compile Include="Utilities\Hook.cs" />

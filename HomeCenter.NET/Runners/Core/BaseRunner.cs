@@ -1,5 +1,5 @@
 ﻿using System;
-using HomeCenter.NET.Utilities;
+using HomeCenter.NET.Storages;
 using VoiceActions.NET.Utilities;
 
 namespace HomeCenter.NET.Runners.Core

@@ -2,6 +2,7 @@
 using System.Windows;
 using HomeCenter.NET.Controls;
 using HomeCenter.NET.Extensions;
+using HomeCenter.NET.Storages;
 using HomeCenter.NET.Utilities;
 using VoiceActions.NET.Storages;
 

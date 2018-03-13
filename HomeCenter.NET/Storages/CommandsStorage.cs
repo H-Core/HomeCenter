@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Utilities;
@@ -52,6 +53,14 @@ namespace HomeCenter.NET.Storages
             {
                 FileData = text
             };
+
+            const int maxCount = 50;
+            new AppDataFolder("VoiceActions.NET", "copies")
+                .Files
+                .OrderByDescending(File.GetLastWriteTimeUtc)
+                .Skip(maxCount)
+                .AsParallel()
+                .ForAll(File.Delete);
         } 
 
         #endregion

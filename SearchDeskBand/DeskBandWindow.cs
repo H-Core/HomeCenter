@@ -46,6 +46,7 @@ namespace SearchDeskBand
 
             CreateNewCommandFile(TextBox.Text);
             TextBox.Clear();
+            Hide();
         }
 
         private void Panel_Click(object sender, EventArgs e)
