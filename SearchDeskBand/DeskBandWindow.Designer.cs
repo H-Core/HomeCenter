@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.Panel = new System.Windows.Forms.Panel();
-            this.TextBox = new System.Windows.Forms.RichTextBox();
+            this.TextBox = new System.Windows.Forms.TextBox();
             this.Panel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -40,22 +40,23 @@
             this.Panel.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Panel.Location = new System.Drawing.Point(0, 284);
             this.Panel.Name = "Panel";
-            this.Panel.Padding = new System.Windows.Forms.Padding(7);
+            this.Panel.Padding = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.Panel.Size = new System.Drawing.Size(264, 40);
             this.Panel.TabIndex = 0;
             this.Panel.Click += new System.EventHandler(this.Panel_Click);
             // 
             // TextBox
             // 
+            this.TextBox.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.TextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.TextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.TextBox.ForeColor = System.Drawing.Color.Navy;
-            this.TextBox.Location = new System.Drawing.Point(7, 7);
+            this.TextBox.Location = new System.Drawing.Point(6, 9);
             this.TextBox.Name = "TextBox";
-            this.TextBox.Size = new System.Drawing.Size(250, 26);
+            this.TextBox.Size = new System.Drawing.Size(252, 22);
             this.TextBox.TabIndex = 1;
-            this.TextBox.Text = "";
             this.TextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyUp);
             // 
             // DeskBandWindow
@@ -79,6 +80,7 @@
             this.Activated += new System.EventHandler(this.DeskBandWindow_Activated);
             this.Deactivate += new System.EventHandler(this.DeskBandWindow_Deactivate);
             this.Panel.ResumeLayout(false);
+            this.Panel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -86,6 +88,6 @@
         #endregion
 
         private System.Windows.Forms.Panel Panel;
-        private System.Windows.Forms.RichTextBox TextBox;
+        private System.Windows.Forms.TextBox TextBox;
     }
 }

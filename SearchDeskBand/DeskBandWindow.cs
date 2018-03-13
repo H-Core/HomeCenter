@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using H.Storages;
 
 namespace SearchDeskBand
 {
@@ -9,6 +11,13 @@ namespace SearchDeskBand
         public DeskBandWindow()
         {
             InitializeComponent();
+
+            var storage = new CommandsStorage();
+            storage.Load();
+
+            var collection = new AutoCompleteStringCollection();
+            collection.AddRange(storage.Select(i => i.Key).ToArray());
+            TextBox.AutoCompleteCustomSource = collection;
         }
 
         private void DeskBandWindow_Deactivate(object sender, EventArgs e)
