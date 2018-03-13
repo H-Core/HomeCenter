@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchDeskBand", "SearchDes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.Storages.CommandsStorage", "H.Storages.CommandsStorage\H.Storages.CommandsStorage.csproj", "{9C0197EC-B353-4CDD-ADDC-E23876C7B72F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchDeskBand.TestApp", "SearchDeskBand.TestApp\SearchDeskBand.TestApp.csproj", "{FF391D32-B326-4661-AB2C-4D209E4DADD9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,10 @@ Global
 		{9C0197EC-B353-4CDD-ADDC-E23876C7B72F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C0197EC-B353-4CDD-ADDC-E23876C7B72F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C0197EC-B353-4CDD-ADDC-E23876C7B72F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF391D32-B326-4661-AB2C-4D209E4DADD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF391D32-B326-4661-AB2C-4D209E4DADD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF391D32-B326-4661-AB2C-4D209E4DADD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF391D32-B326-4661-AB2C-4D209E4DADD9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
