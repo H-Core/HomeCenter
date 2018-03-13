@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using H.Storages;
 using HomeCenter.NET.Controls;
-using HomeCenter.NET.Storages;
-using HomeCenter.NET.Utilities;
 using VoiceActions.NET.Storages;
 
 namespace HomeCenter.NET.Windows

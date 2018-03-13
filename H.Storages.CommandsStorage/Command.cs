@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using HomeCenter.NET.Utilities;
 using Newtonsoft.Json;
 
-namespace HomeCenter.NET.Storages
+namespace H.Storages
 {
     public class Command : ICloneable
     {

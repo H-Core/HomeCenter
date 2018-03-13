@@ -125,19 +125,11 @@
     <Compile Include="Controls\ObjectControl.xaml.cs">
       <DependentUpon>ObjectControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Runners\Core\BaseRunner.cs" />
     <Compile Include="Runners\IRunner.cs" />
     <Compile Include="Runners\GlobalRunner.cs" />
-    <Compile Include="Utilities\SpecialFolders.cs" />
-    <Compile Include="Utilities\SpecialFolderFiles.cs" />
     <Compile Include="Utilities\MediaUtilities.cs" />
     <Compile Include="Utilities\Options.cs" />
-    <Compile Include="Utilities\SpecialFolder.cs" />
-    <Compile Include="Utilities\SpecialFolderFile.cs" />
-    <Compile Include="Utilities\TextObject.cs" />
-    <Compile Include="Utilities\SingleCommand.cs" />
-    <Compile Include="Utilities\SingleKey.cs" />
     <Compile Include="Utilities\Startup.cs" />
     <Page Include="Controls\TextControl.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -176,8 +168,6 @@
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Storages\Command.cs" />
-    <Compile Include="Storages\CommandsStorage.cs" />
     <Compile Include="Runners\RunnerEventArgs.cs" />
     <Compile Include="Utilities\Hook.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
@@ -228,6 +218,10 @@
     <Resource Include="Properties\Icons\icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\H.Storages.CommandsStorage\H.Storages.CommandsStorage.csproj">
+      <Project>{9c0197ec-b353-4cdd-addc-e23876c7b72f}</Project>
+      <Name>H.Storages.CommandsStorage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\VoiceActions.NET\VoiceActions.NET.csproj">
       <Project>{e2bdd04c-f9a7-47c1-8875-48ed16cb8dae}</Project>
       <Name>VoiceActions.NET</Name>

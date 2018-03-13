@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace HomeCenter.NET.Extensions
+namespace H.Storages.Extensions
 {
     public static class EnumerableExtensions
     {

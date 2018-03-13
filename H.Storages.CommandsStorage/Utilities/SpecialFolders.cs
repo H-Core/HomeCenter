@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HomeCenter.NET.Utilities
+namespace H.Storages.Utilities
 {
     public class AppDataFolder : SpecialFolder
     {

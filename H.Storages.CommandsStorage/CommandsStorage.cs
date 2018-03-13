@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using HomeCenter.NET.Extensions;
-using HomeCenter.NET.Utilities;
+using H.Storages.Extensions;
+using H.Storages.Utilities;
 using Newtonsoft.Json;
 using VoiceActions.NET.Storages;
 
-namespace HomeCenter.NET.Storages
+namespace H.Storages
 {
     public class CommandsStorage : InvariantDictionaryStorage<Command>
     {

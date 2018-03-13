@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace HomeCenter.NET.Utilities
+namespace H.Storages.Utilities
 {
     public class SpecialFolderFile : SpecialFolder
     {
