@@ -137,6 +137,10 @@ namespace HomeCenter.NET.Runners
             {
                 NotHandledText?.Invoke(key);
             }
+            else
+            {
+                CommandsHistory.Add(key);
+            }
         }
 
         #endregion

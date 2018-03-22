@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using H.Storages;
 
@@ -12,12 +13,30 @@ namespace SearchDeskBand
         {
             InitializeComponent();
 
+            #region Auto Complete
+
             var storage = new CommandsStorage();
             storage.Load();
 
             var collection = new AutoCompleteStringCollection();
             collection.AddRange(storage.Select(i => i.Key).ToArray());
             TextBox.AutoCompleteCustomSource = collection;
+
+            #endregion
+
+            UpdateHistory();
+        }
+
+        private void UpdateHistory()
+        {
+            historyListBox.Items.Clear();
+
+            var history = CommandsHistory.Load();
+            history.Reverse();
+            foreach (var command in history)
+            {
+                historyListBox.Items.Add(command);
+            }
         }
 
         private void DeskBandWindow_Deactivate(object sender, EventArgs e)
@@ -46,6 +65,16 @@ namespace SearchDeskBand
             File.WriteAllText(path, message);
         }
 
+        private async void Run(string command)
+        {
+            CreateNewCommandFile(command);
+            Hide();
+
+            await Task.Delay(1000); // TODO: fix
+
+            UpdateHistory();
+        }
+
         private void TextBox_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode != Keys.Enter)
@@ -53,14 +82,20 @@ namespace SearchDeskBand
                 return;
             }
 
-            CreateNewCommandFile(TextBox.Text);
+            Run(TextBox.Text);
             TextBox.Clear();
-            Hide();
         }
 
         private void Panel_Click(object sender, EventArgs e)
         {
             TextBox.Focus();
+        }
+
+        private void HistoryListBox_DoubleClick(object sender, EventArgs e)
+        {
+            var item = historyListBox.SelectedItem as string;
+
+            Run(item);
         }
     }
 }

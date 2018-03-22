@@ -30,7 +30,12 @@
         {
             this.Panel = new System.Windows.Forms.Panel();
             this.TextBox = new System.Windows.Forms.TextBox();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.historyTabPage = new System.Windows.Forms.TabPage();
+            this.historyListBox = new System.Windows.Forms.ListBox();
             this.Panel.SuspendLayout();
+            this.tabControl.SuspendLayout();
+            this.historyTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // Panel
@@ -40,7 +45,7 @@
             this.Panel.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.Panel.Location = new System.Drawing.Point(0, 284);
             this.Panel.Name = "Panel";
-            this.Panel.Padding = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.Panel.Padding = new System.Windows.Forms.Padding(6, 7, 6, 6);
             this.Panel.Size = new System.Drawing.Size(264, 40);
             this.Panel.TabIndex = 0;
             this.Panel.Click += new System.EventHandler(this.Panel_Click);
@@ -51,13 +56,48 @@
             this.TextBox.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.TextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.TextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.TextBox.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.TextBox.ForeColor = System.Drawing.Color.Navy;
-            this.TextBox.Location = new System.Drawing.Point(6, 9);
+            this.TextBox.Location = new System.Drawing.Point(6, 7);
             this.TextBox.Name = "TextBox";
-            this.TextBox.Size = new System.Drawing.Size(252, 22);
+            this.TextBox.Size = new System.Drawing.Size(252, 26);
             this.TextBox.TabIndex = 1;
             this.TextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox_KeyUp);
+            // 
+            // tabControl
+            // 
+            this.tabControl.Alignment = System.Windows.Forms.TabAlignment.Right;
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl.Controls.Add(this.historyTabPage);
+            this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Multiline = true;
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(264, 285);
+            this.tabControl.TabIndex = 1;
+            // 
+            // historyTabPage
+            // 
+            this.historyTabPage.Controls.Add(this.historyListBox);
+            this.historyTabPage.Location = new System.Drawing.Point(4, 4);
+            this.historyTabPage.Name = "historyTabPage";
+            this.historyTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.historyTabPage.Size = new System.Drawing.Size(237, 277);
+            this.historyTabPage.TabIndex = 0;
+            this.historyTabPage.Text = "History";
+            this.historyTabPage.UseVisualStyleBackColor = true;
+            // 
+            // historyListBox
+            // 
+            this.historyListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.historyListBox.FormattingEnabled = true;
+            this.historyListBox.Location = new System.Drawing.Point(3, 3);
+            this.historyListBox.Name = "historyListBox";
+            this.historyListBox.Size = new System.Drawing.Size(231, 271);
+            this.historyListBox.TabIndex = 0;
+            this.historyListBox.DoubleClick += new System.EventHandler(this.HistoryListBox_DoubleClick);
             // 
             // DeskBandWindow
             // 
@@ -66,12 +106,13 @@
             this.BackColor = System.Drawing.Color.LightSkyBlue;
             this.ClientSize = new System.Drawing.Size(264, 325);
             this.ControlBox = false;
+            this.Controls.Add(this.tabControl);
             this.Controls.Add(this.Panel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DeskBandWindow";
-            this.Opacity = 0.8D;
+            this.Opacity = 0.9D;
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -81,6 +122,8 @@
             this.Deactivate += new System.EventHandler(this.DeskBandWindow_Deactivate);
             this.Panel.ResumeLayout(false);
             this.Panel.PerformLayout();
+            this.tabControl.ResumeLayout(false);
+            this.historyTabPage.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -89,5 +132,8 @@
 
         private System.Windows.Forms.Panel Panel;
         private System.Windows.Forms.TextBox TextBox;
+        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage historyTabPage;
+        private System.Windows.Forms.ListBox historyListBox;
     }
 }
