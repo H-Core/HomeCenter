@@ -49,6 +49,7 @@
     <Compile Include="CommandsStorage.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server.cs" />
     <Compile Include="SingleCommand.cs" />
     <Compile Include="SingleKey.cs" />
     <Compile Include="TextObject.cs" />

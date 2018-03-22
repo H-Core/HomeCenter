@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -50,24 +49,21 @@ namespace SearchDeskBand
             //deskBandControl1.Focus();
         }
 
-        private static string SharedDirectory => Directory.CreateDirectory(
-            Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "HomeCenter.NET",
-                "commands")
-        ).FullName;
-
-        private static void CreateNewCommandFile(string message)
+        private static async void SendCommand(string message)
         {
-            var fileName = $"{new Random().Next()}.txt";
-            var path = Path.Combine(SharedDirectory, fileName);
-
-            File.WriteAllText(path, message);
+            try
+            {
+                await Client.Write(message);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString(), @"Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void Run(string command)
         {
-            CreateNewCommandFile(command);
+            SendCommand(command);
             Hide();
 
             await Task.Delay(1000); // TODO: fix
