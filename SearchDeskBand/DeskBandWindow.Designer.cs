@@ -33,6 +33,7 @@
             this.tabControl = new System.Windows.Forms.TabControl();
             this.historyTabPage = new System.Windows.Forms.TabPage();
             this.historyListBox = new System.Windows.Forms.ListBox();
+            this.clearHistoryButton = new System.Windows.Forms.Button();
             this.Panel.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.historyTabPage.SuspendLayout();
@@ -80,6 +81,7 @@
             // 
             // historyTabPage
             // 
+            this.historyTabPage.Controls.Add(this.clearHistoryButton);
             this.historyTabPage.Controls.Add(this.historyListBox);
             this.historyTabPage.Location = new System.Drawing.Point(4, 4);
             this.historyTabPage.Name = "historyTabPage";
@@ -91,13 +93,24 @@
             // 
             // historyListBox
             // 
-            this.historyListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.historyListBox.Dock = System.Windows.Forms.DockStyle.Top;
             this.historyListBox.FormattingEnabled = true;
             this.historyListBox.Location = new System.Drawing.Point(3, 3);
             this.historyListBox.Name = "historyListBox";
-            this.historyListBox.Size = new System.Drawing.Size(231, 271);
+            this.historyListBox.Size = new System.Drawing.Size(231, 238);
             this.historyListBox.TabIndex = 0;
             this.historyListBox.DoubleClick += new System.EventHandler(this.HistoryListBox_DoubleClick);
+            // 
+            // clearHistoryButton
+            // 
+            this.clearHistoryButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.clearHistoryButton.Location = new System.Drawing.Point(3, 243);
+            this.clearHistoryButton.Name = "clearHistoryButton";
+            this.clearHistoryButton.Size = new System.Drawing.Size(231, 31);
+            this.clearHistoryButton.TabIndex = 1;
+            this.clearHistoryButton.Text = "Clear History";
+            this.clearHistoryButton.UseVisualStyleBackColor = true;
+            this.clearHistoryButton.Click += new System.EventHandler(this.ClearHistoryButton_Click);
             // 
             // DeskBandWindow
             // 
@@ -135,5 +148,6 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage historyTabPage;
         private System.Windows.Forms.ListBox historyListBox;
+        private System.Windows.Forms.Button clearHistoryButton;
     }
 }

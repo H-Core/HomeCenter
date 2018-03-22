@@ -8,7 +8,7 @@ namespace H.Storages
     {
         #region Properties
 
-        public static AppDataFile AppDataFile { get; } = new AppDataFile("VoiceActions.NET", "commands-history.json");
+        private static AppDataFile AppDataFile { get; } = new AppDataFile("VoiceActions.NET", "commands-history.json");
 
         #endregion
 
@@ -31,6 +31,11 @@ namespace H.Storages
             }
 
             return JsonConvert.DeserializeObject<List<string>>(text);
+        }
+
+        public static void Clear()
+        {
+            AppDataFile.Clear();
         }
 
         #endregion

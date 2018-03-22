@@ -93,5 +93,11 @@ namespace SearchDeskBand
 
             Run(item);
         }
+
+        private void ClearHistoryButton_Click(object sender, EventArgs e)
+        {
+            CommandsHistory.Clear();
+            UpdateHistory();
+        }
     }
 }

@@ -30,5 +30,19 @@ namespace H.Storages.Utilities
         }
 
         #endregion
+
+        #region Public Methods
+
+        public void Clear()
+        {
+            FileData = string.Empty;
+        }
+
+        public void Delete()
+        {
+            File.Delete(FullPath);
+        }
+
+        #endregion
     }
 }
