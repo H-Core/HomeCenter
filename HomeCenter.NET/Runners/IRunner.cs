@@ -16,6 +16,5 @@ namespace HomeCenter.NET.Runners
         event EventHandler<RunnerEventArgs> AfterRun;
 
         string[] GetSupportedCommands();
-        string GetSupportedCommandsText();
     }
 }

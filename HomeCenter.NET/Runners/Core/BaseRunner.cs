@@ -49,9 +49,6 @@ namespace HomeCenter.NET.Runners.Core
 
         public abstract string[] GetSupportedCommands();
 
-        public virtual string GetSupportedCommandsText() => $@"Supported commands:
-{string.Join(Environment.NewLine, GetSupportedCommands())}";
-
         public virtual bool IsSupport(string key, Command command)
         {
             var data = command?.Data;
