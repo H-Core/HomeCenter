@@ -124,6 +124,13 @@ namespace HomeCenter.NET.Windows
             }
 
             #endregion
+
+            #region Default Runner
+
+            DefaultRunner.ShowSettingsAction = () => Dispatcher.Invoke(() => SettingsButton_Click(this, EventArgs.Empty));
+            DefaultRunner.ShowCommandsAction = () => Dispatcher.Invoke(() => MenuButton_Click(this, EventArgs.Empty));
+
+            #endregion
         }
 
         #endregion
@@ -194,14 +201,14 @@ namespace HomeCenter.NET.Windows
 
         private void RecordButton_Click(object sender, RoutedEventArgs e) => Manager.ChangeWithTimeout(3000);
 
-        private void MenuButton_Click(object sender, RoutedEventArgs e)
+        private void MenuButton_Click(object sender, EventArgs e)
         {
             var window = new CommandsWindow(GlobalRunner.Storage);
 
             window.ShowDialog();
         }
 
-        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        private void SettingsButton_Click(object sender, EventArgs e)
         {
             var window = new SettingsWindow();
 

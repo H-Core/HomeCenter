@@ -13,6 +13,13 @@ namespace HomeCenter.NET.Runners
 {
     public class DefaultRunner : SimpleRunner
     {
+        #region Properties
+
+        public static Action ShowSettingsAction { get; set; }
+        public static Action ShowCommandsAction { get; set; }
+
+        #endregion
+
         #region Constructors
 
         public DefaultRunner()
@@ -26,6 +33,8 @@ namespace HomeCenter.NET.Runners
             AddAction("keyboard", KeyboardCommand, "CONTROL+V");
             AddAction("sleep", SleepCommand, "integer");
             AddAction("show", ShowWindowCommand, "process_name");
+            AddAction("show-settings", command => ShowSettingsAction?.Invoke());
+            AddAction("show-commands", command => ShowCommandsAction?.Invoke());
         }
 
         #endregion
