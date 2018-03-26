@@ -15,7 +15,7 @@ Available voice to text converters:
 | master(stable) |               |
 |----------------|---------------|
 |    Travic CI   |    AppVeyor   |  
-| [![Build Status](https://api.travis-ci.org/HavenDV/HomeCenter.NET.svg?branch=master)](https://travis-ci.org/HavenDV/HomeCenter.NET) | [![Build status](https://ci.appveyor.com/api/projects/status/6d1qhja444di11pt/branch/master?svg=true)](https://ci.appveyor.com/project/HavenDV/homecenter-net/branch/master) |
+| [![Build Status](https://api.travis-ci.org/HavenDV/HomeCenter.NET.svg?branch=master)](https://travis-ci.org/HavenDV/HomeCenter.NET) | [![Build status](https://ci.appveyor.com/api/projects/status/lmdn7ds44jy1hiwt/branch/master?svg=true)](https://ci.appveyor.com/project/HavenDV/homecenter-net/branch/master) |
 
 # Contacts
 * [mail](mailto:havendv@gmail.com)
