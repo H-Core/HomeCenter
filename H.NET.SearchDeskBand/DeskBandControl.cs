@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using H.NET.SearchDeskBand;
 
-namespace SearchDeskBand
+namespace H.NET.SearchDeskBand
 {
     public partial class DeskBandControl : UserControl, IDisposable
     {
+        #region Properties
+
         private DeskBandWindow Window { get; } = new DeskBandWindow();
+
+        #endregion
 
         public DeskBandControl()
         {
@@ -15,7 +18,9 @@ namespace SearchDeskBand
 
             Window.VisibleChanged += (sender, args) => Label.Visible = !Window.Visible;
         }
-        
+
+        #region Event handlers
+
         private void OnClick(object sender, EventArgs e)
         {
             Window.Visible = !Window.Visible;
@@ -26,10 +31,21 @@ namespace SearchDeskBand
             Window.Left -= 1; // border
         }
 
+        private void MenuButton_Click(object sender, EventArgs e)
+        {
+            DeskBandWindow.SendCommand("show-commands");
+        }
+
+        #endregion
+
+        #region IDisposable
+
         public new void Dispose()
         {
             Window.Dispose();
             base.Dispose();
         }
+
+        #endregion
     }
 }

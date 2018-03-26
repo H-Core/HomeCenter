@@ -1,9 +1,9 @@
-﻿using SharpShell.Attributes;
-using SharpShell.SharpDeskBand;
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
+using SharpShell.Attributes;
+using SharpShell.SharpDeskBand;
 
-namespace SearchDeskBand
+namespace H.NET.SearchDeskBand
 {
     [ComVisible(true)]
     [DisplayName("Home Center Search")]

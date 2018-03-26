@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Win32;
 using SharpShell.Attributes;
 
-namespace SearchDeskBand
+namespace H.NET.SearchDeskBand
 {
     internal static class ComUtilities
     {

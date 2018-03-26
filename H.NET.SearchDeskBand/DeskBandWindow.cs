@@ -50,7 +50,7 @@ namespace H.NET.SearchDeskBand
             //deskBandControl1.Focus();
         }
 
-        private static async void SendCommand(string message)
+        public static async void SendCommand(string message)
         {
             try
             {
