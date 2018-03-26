@@ -75,6 +75,40 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
+            <TabItem Header="Plugins">
+                <TabControl TabStripPlacement="Left">
+                    <TabItem Header="Assemblies">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="25" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="25" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <ScrollViewer Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                                <StackPanel x:Name="AssembliesPanel"/>
+                            </ScrollViewer>
+                            <Button Grid.Row="1" Grid.Column="0" Content="+"  Height="25" Click="AddButton_Click"/>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Available Types">
+                        <Grid>
+                            <ScrollViewer>
+                                <StackPanel x:Name="AvailableTypesPanel"/>
+                            </ScrollViewer>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Modules">
+                        <Grid>
+                            <ScrollViewer>
+                                <StackPanel x:Name="ModulesPanel"/>
+                            </ScrollViewer>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </TabItem>
         </TabControl>
         <Grid Grid.Row="1" Margin="5">
             <Grid.ColumnDefinitions>
@@ -82,8 +116,8 @@
                 <ColumnDefinition Width="25*" />
                 <ColumnDefinition Width="25*" />
             </Grid.ColumnDefinitions>
-            <Button Height="25" Content="Save" Grid.Column="1" Click="SaveAndClose"/>
-            <Button Height="25" Content="Cancel" Grid.Column="2" Click="Close"/>
+            <Button Height="25" Content="Save" Grid.Column="1" Click="SaveButton_Click"/>
+            <Button Height="25" Content="Cancel" Grid.Column="2" Click="CancelButton_Click"/>
         </Grid>
     </Grid>
 </Window>

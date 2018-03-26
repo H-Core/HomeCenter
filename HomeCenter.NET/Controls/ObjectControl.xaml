@@ -8,14 +8,16 @@
              d:DesignHeight="25" d:DesignWidth="600">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="100*" />
-            <ColumnDefinition Width="25" />
-            <ColumnDefinition Width="25" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <Label Content="{Binding Path=ObjectName}" Grid.Column="0"/>
+        <Label x:Name="NameLabel" Content="{Binding Path=ObjectName}" Width="100" Grid.Column="0"/>
         <Label Content="{Binding Path=ObjectDescription}" Grid.Column="1"/>
-        <Button Content="⚙" Grid.Column="2" Click="Edit_Click"/>
-        <Button Content="✖" Grid.Column="3" Click="Delete_Click"/>
+        <Button x:Name="AddButtton" Width="25" Content="+" Grid.Column="2" Click="AddButton_Click"/>
+        <Button x:Name="EditButtton" Width="25" Content="⚙" Grid.Column="3" Click="EditButton_Click"/>
+        <Button x:Name="DeleteButtton" Content="✖" Width="25" Grid.Column="4" Click="DeleteButton_Click"/>
     </Grid>
 </UserControl>

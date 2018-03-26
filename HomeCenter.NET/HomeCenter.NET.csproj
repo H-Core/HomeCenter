@@ -44,6 +44,12 @@
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ookii.Dialogs.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ookii.Dialogs.1.0\lib\net35\Ookii.Dialogs.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
@@ -116,6 +122,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\ShowHideCommand.cs" />
+    <Compile Include="Controls\SettingControl.xaml.cs">
+      <DependentUpon>SettingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TextControl.xaml.cs">
       <DependentUpon>TextControl.xaml</DependentUpon>
     </Compile>
@@ -123,9 +132,15 @@
       <DependentUpon>ObjectControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Runners\GlobalRunner.cs" />
+    <Compile Include="Utilities\DialogUtilities.cs" />
     <Compile Include="Utilities\MediaUtilities.cs" />
+    <Compile Include="Utilities\ModuleManager.cs" />
     <Compile Include="Utilities\Options.cs" />
     <Compile Include="Utilities\Startup.cs" />
+    <Page Include="Controls\SettingControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\TextControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -160,6 +175,9 @@
       <DependentUpon>CommandWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Runners\DefaultRunner.cs" />
+    <Compile Include="Windows\ModuleSettingsWindow.xaml.cs">
+      <DependentUpon>ModuleSettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -171,6 +189,10 @@
     <Page Include="Windows\CommandWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ModuleSettingsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\SettingsWindow.xaml">
       <SubType>Designer</SubType>

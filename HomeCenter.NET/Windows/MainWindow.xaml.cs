@@ -6,6 +6,7 @@ using System.Windows.Media;
 using H.NET.Converters;
 using H.NET.Core;
 using H.NET.Core.Managers;
+using H.NET.Core.Notifiers;
 using H.NET.Core.Recorders;
 using H.NET.Recorders;
 using H.NET.Storages;
@@ -104,6 +105,25 @@ namespace HomeCenter.NET.Windows
             #endregion
 
             Server.NewMessage += message => GlobalRunner.Run(message, null);
+
+            #region Modules
+
+            Module.LogAction = Print;
+            Notifier.RunAction = command => Print($"Command run: {command}");
+
+            Print("Loading modules...");
+            try
+            {
+                ModuleManager.Instance.Load();
+
+                Print("Loaded");
+            }
+            catch (Exception exception)
+            {
+                Print(exception.ToString());
+            }
+
+            #endregion
         }
 
         #endregion
