@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
+using H.NET.Core.Utilities;
 using Microsoft.Win32;
-using VoiceActions.NET.Utilities;
 
 namespace HomeCenter.NET.Utilities
 {
@@ -84,7 +84,7 @@ namespace HomeCenter.NET.Utilities
                 return null;
             }
 
-            return value.Trim().SplitOnlyFirstIgnoreQuote(' ').prefix;
+            return value.Trim().SplitOnlyFirstIgnoreQuote(' ')[0];
         }
 
         private static bool Compare(string first, string second) => 

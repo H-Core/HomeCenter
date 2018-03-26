@@ -3,14 +3,17 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using H.NET.Converters;
+using H.NET.Core;
+using H.NET.Core.Managers;
+using H.NET.Core.Recorders;
+using H.NET.Recorders;
+using H.NET.Synthesizers;
 using H.Storages;
+using H.Utilities;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Runners;
 using HomeCenter.NET.Utilities;
-using VoiceActions.NET.Converters;
-using VoiceActions.NET.Managers;
-using VoiceActions.NET.Recorders;
-using VoiceActions.NET.Synthesizers;
 
 namespace HomeCenter.NET.Windows
 {

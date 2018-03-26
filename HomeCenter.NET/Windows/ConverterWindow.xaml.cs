@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
-using VoiceActions.NET.Converters;
+using H.NET.Converters;
+using H.NET.Core;
 
 namespace HomeCenter.NET.Windows
 {

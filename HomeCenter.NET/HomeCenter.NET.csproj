@@ -122,9 +122,6 @@
     <Compile Include="Controls\ObjectControl.xaml.cs">
       <DependentUpon>ObjectControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Runners\Core\BaseRunner.cs" />
-    <Compile Include="Runners\Core\SimpleRunner.cs" />
-    <Compile Include="Runners\IRunner.cs" />
     <Compile Include="Runners\GlobalRunner.cs" />
     <Compile Include="Utilities\MediaUtilities.cs" />
     <Compile Include="Utilities\Options.cs" />
@@ -166,7 +163,6 @@
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Runners\RunnerEventArgs.cs" />
     <Compile Include="Utilities\Hook.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -216,13 +212,37 @@
     <Resource Include="Properties\Icons\icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\H.NET.Converters.WebConverters\H.NET.Converters.WebConverters.csproj">
+      <Project>{f88cf118-c192-4354-ae09-5479622fa5fa}</Project>
+      <Name>H.NET.Converters.WebConverters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\H.NET.Core\H.NET.Core.csproj">
+      <Project>{e3ee7480-fd57-43e0-b6e1-b69255068dcb}</Project>
+      <Name>H.NET.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\H.NET.Plugins\H.NET.Plugins.csproj">
+      <Project>{72121390-8576-4234-94fd-ecbff98dabb4}</Project>
+      <Name>H.NET.Plugins</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\H.NET.Recorders.WinmmRecorder\H.NET.Recorders.WinmmRecorder.csproj">
+      <Project>{1bfb7e2d-e190-4394-8720-fb23d5a4edbf}</Project>
+      <Name>H.NET.Recorders.WinmmRecorder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\H.NET.Runners.TelegramRunner\H.NET.Runners.TelegramRunner.csproj">
+      <Project>{fad16b4c-5ced-4799-a4bc-4dc3221314da}</Project>
+      <Name>H.NET.Runners.TelegramRunner</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\H.NET.Synthesizers.WebSynthesizers\H.NET.Synthesizers.WebSynthesizers.csproj">
+      <Project>{6abf69b3-3f17-4d93-b69a-092e3cbd1dbf}</Project>
+      <Name>H.NET.Synthesizers.WebSynthesizers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\H.Storages.CommandsStorage\H.Storages.CommandsStorage.csproj">
       <Project>{9c0197ec-b353-4cdd-addc-e23876c7b72f}</Project>
       <Name>H.Storages.CommandsStorage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VoiceActions.NET\VoiceActions.NET.csproj">
-      <Project>{e2bdd04c-f9a7-47c1-8875-48ed16cb8dae}</Project>
-      <Name>VoiceActions.NET</Name>
+    <ProjectReference Include="..\H.Utilities.IPC\H.Utilities.IPC.csproj">
+      <Project>{a2cb840c-0158-4227-bd1e-6b03b098d5e6}</Project>
+      <Name>H.Utilities.IPC</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -6,8 +6,8 @@ using System.Threading;
 using System.Windows;
 using WindowsInput;
 using WindowsInput.Native;
-using HomeCenter.NET.Runners.Core;
-using VoiceActions.NET.Utilities;
+using H.NET.Core.Runners;
+using H.NET.Core.Utilities;
 
 namespace HomeCenter.NET.Runners
 {
@@ -39,10 +39,10 @@ namespace HomeCenter.NET.Runners
                 return;
             }
 
-            (var prefix, var postfix) = command.SplitOnlyFirstIgnoreQuote(' ');
+            var values = command.SplitOnlyFirstIgnoreQuote(' ');
 
-            var path = prefix.Trim('\"', '\\').Replace("\\\"", "\"").Replace("\\\\", "\\").Replace("\\", "/");
-            Process.Start(path, postfix);
+            var path = values[0].Trim('\"', '\\').Replace("\\\"", "\"").Replace("\\\\", "\\").Replace("\\", "/");
+            Process.Start(path, values[1]);
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]

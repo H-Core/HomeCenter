@@ -77,13 +77,17 @@
     <None Include="unregister.cmd" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\H.NET.Core\H.NET.Core.csproj">
+      <Project>{e3ee7480-fd57-43e0-b6e1-b69255068dcb}</Project>
+      <Name>H.NET.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\H.Storages.CommandsStorage\H.Storages.CommandsStorage.csproj">
       <Project>{9c0197ec-b353-4cdd-addc-e23876c7b72f}</Project>
       <Name>H.Storages.CommandsStorage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\VoiceActions.NET\VoiceActions.NET.csproj">
-      <Project>{e2bdd04c-f9a7-47c1-8875-48ed16cb8dae}</Project>
-      <Name>VoiceActions.NET</Name>
+    <ProjectReference Include="..\H.Utilities.IPC\H.Utilities.IPC.csproj">
+      <Project>{a2cb840c-0158-4227-bd1e-6b03b098d5e6}</Project>
+      <Name>H.Utilities.IPC</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

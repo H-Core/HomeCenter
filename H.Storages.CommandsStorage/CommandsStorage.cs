@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using H.NET.Core.Runners;
+using H.NET.Core.Storages;
 using H.Storages.Extensions;
-using H.Storages.Utilities;
+using H.Utilities;
 using Newtonsoft.Json;
-using VoiceActions.NET.Storages;
 
 namespace H.Storages
 {
@@ -13,7 +14,9 @@ namespace H.Storages
     {
         #region Properties
 
-        public AppDataFile AppDataFile { get; } = new AppDataFile("VoiceActions.NET", "commands.json");
+        public const string CompanyName = "VoiceActions.NET";
+        public const int MaxCopiesCount = 50;
+        public AppDataFile AppDataFile { get; } = new AppDataFile(CompanyName, "commands.json");
 
         #endregion
 
@@ -49,16 +52,15 @@ namespace H.Storages
 
         public void CreateCopy(string text)
         {
-            var _ = new AppDataFile("VoiceActions.NET", "copies", $"commands_{DateTime.Now:MM_dd_yyyy_hh_mm_ss_tt}.json")
+            var _ = new AppDataFile(CompanyName, "copies", $"commands_{DateTime.Now:MM_dd_yyyy_hh_mm_ss_tt}.json")
             {
                 FileData = text
             };
-
-            const int maxCount = 50;
-            new AppDataFolder("VoiceActions.NET", "copies")
+            
+            new AppDataFolder(CompanyName, "copies")
                 .Files
                 .OrderByDescending(File.GetLastWriteTimeUtc)
-                .Skip(maxCount)
+                .Skip(MaxCopiesCount)
                 .AsParallel()
                 .ForAll(File.Delete);
         } 

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using H.NET.Core;
+using H.NET.Core.Managers;
+using H.NET.Core.Runners;
+using H.NET.Core.Storages;
 using H.Storages;
-using HomeCenter.NET.Runners.Core;
-using VoiceActions.NET.Managers;
-using VoiceActions.NET.Storages;
 
 namespace HomeCenter.NET.Runners
 {
