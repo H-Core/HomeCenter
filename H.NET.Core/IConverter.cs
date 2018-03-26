@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace H.NET.Core
 {
-    public interface IConverter : IDisposable
+    public interface IConverter : IModule
     {
         Exception Exception { get; }
 

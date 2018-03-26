@@ -2,7 +2,7 @@
 
 namespace H.NET.Core
 {
-    public interface IRecorder : IDisposable
+    public interface IRecorder : IModule
     {
         bool IsStarted { get; }
         byte[] Data { get; }

@@ -3,7 +3,7 @@ using H.NET.Core.Runners;
 
 namespace H.NET.Core
 {
-    public interface IRunner : IDisposable
+    public interface IRunner : IModule
     {
         void Run(string key, Command command);
         bool IsSupport(string key, Command command);
