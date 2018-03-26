@@ -9,14 +9,14 @@ build:
 before_build:
   - appveyor-retry dotnet restore -v Minimal  
 build_script:
-  - dotnet build "VoiceActions.NET" -c %CONFIGURATION% --no-dependencies
+  - dotnet build "HomeCenter.NET" -c %CONFIGURATION% --no-dependencies
 test_script:
-  - dotnet test "VoiceActions.NET.Tests" -c %CONFIGURATION%
+  - dotnet test "H.NET.Tests" -c %CONFIGURATION%
 on_success:
   - ps: >-
       if ($env:Configuration -eq "Release") {
         choco install opencover.portable
         choco install codecov
-        OpenCover.Console.exe -target:"c:\Program Files\dotnet\dotnet.exe" -targetargs:"test --logger:trx;LogFileName=results.trx /p:DebugType=full VoiceActions.NET.Tests" -hideskipped:File -output:coverage.xml -oldStyle -filter:"+[VoiceActions.NET*]* -[VoiceActions.NET.Tests*]*" -register:user
+        OpenCover.Console.exe -target:"c:\Program Files\dotnet\dotnet.exe" -targetargs:"test --logger:trx;LogFileName=results.trx /p:DebugType=full H.NET.Tests" -hideskipped:File -output:coverage.xml -oldStyle -filter:"+[H.NET*]* -[H.NET.Tests*]*" -register:user
         codecov -f "coverage.xml" -t 859daacd-d023-4e20-813e-e5baf7f1911d
       }

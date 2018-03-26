@@ -6,6 +6,6 @@ mono: none
 dotnet: 2.0.0
 script:
   - dotnet restore
-  - cd VoiceActions.NET.Tests
+  - cd H.NET.Tests
   - dotnet build
   - dotnet test
