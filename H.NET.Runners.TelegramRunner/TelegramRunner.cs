@@ -3,7 +3,7 @@ using H.NET.Core.Runners;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace H.NET.Targets
+namespace H.NET.Runners
 {
     public class TelegramRunner : SimpleRunner
     {

@@ -104,12 +104,12 @@ namespace HomeCenter.NET.Windows
 
             #endregion
 
-            Server.NewMessage += message => GlobalRunner.Run(message, null);
+            Server.NewMessage += Run;
 
             #region Modules
 
             Module.LogAction = Print;
-            Notifier.RunAction = command => Print($"Command run: {command}");
+            Notifier.RunAction = Run;
 
             Print("Loading modules...");
             try
@@ -161,6 +161,8 @@ namespace HomeCenter.NET.Windows
 
         private static void Say(byte[] bytes) => bytes?.Play();
         private async void Say(string text) => Say(await Synthesizer.Convert(text));
+
+        private void Run(string message) => GlobalRunner.Run(message, null);
 
         #endregion
 

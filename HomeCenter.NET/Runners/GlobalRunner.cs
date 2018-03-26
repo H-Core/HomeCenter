@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using H.NET.Core;
 using H.NET.Core.Managers;
 using H.NET.Core.Runners;
 using H.NET.Core.Storages;
 using H.NET.Storages;
+using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Runners
 {
@@ -49,12 +51,20 @@ namespace HomeCenter.NET.Runners
 
         public IRunner GetRunnerFor(string key, Command command)
         {
-            foreach (var runner in Runners)
+            var runtimeRunners = ModuleManager.Instance.ActivePlugins
+                .Where(i => i.Value is IRunner)
+                .Select(i => i.Value)
+                .Cast<IRunner>();
+
+            foreach (var runner in runtimeRunners.Concat(Runners))
             {
                 if (runner.IsSupport(key, command))
                 {
+                    //Log($"Runner: {runner.Name} supported command with {key}{command?.Data}");
                     return runner;
                 }
+
+                //Log($"Runner: {runner.Name} is not supported command with {key}{command?.Data}");
             }
 
             return null;
@@ -108,7 +118,7 @@ namespace HomeCenter.NET.Runners
                 }
             }
 
-            return (key, null);
+            return (null, new Command(null, key));
         }
 
         protected override void RunInternal(string key, Command command)
