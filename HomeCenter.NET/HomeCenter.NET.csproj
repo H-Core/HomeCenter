@@ -123,6 +123,7 @@
       <DependentUpon>ObjectControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Runners\Core\BaseRunner.cs" />
+    <Compile Include="Runners\Core\SimpleRunner.cs" />
     <Compile Include="Runners\IRunner.cs" />
     <Compile Include="Runners\GlobalRunner.cs" />
     <Compile Include="Utilities\MediaUtilities.cs" />

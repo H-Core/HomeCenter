@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using H.Storages;
 using VoiceActions.NET.Utilities;
 
@@ -6,6 +7,13 @@ namespace HomeCenter.NET.Runners.Core
 {
     public abstract class BaseRunner : IRunner
     {
+        #region Properties
+
+        private InvariantStringDictionary<(string description, Action<string> action)> HandlerDictionary { get; } = 
+            new InvariantStringDictionary<(string, Action<string>)>();
+
+        #endregion
+
         #region Events
 
         public event EventHandler<RunnerEventArgs> BeforeRun;
@@ -47,7 +55,7 @@ namespace HomeCenter.NET.Runners.Core
             }
         }
 
-        public abstract string[] GetSupportedCommands();
+        public string[] GetSupportedCommands() => HandlerDictionary.Select(i => $"{i.Key} {i.Value.description}").ToArray();
 
         public virtual bool IsSupport(string key, Command command)
         {
@@ -57,16 +65,9 @@ namespace HomeCenter.NET.Runners.Core
                 return false;
             }
 
-            foreach (var supportedCommandText in GetSupportedCommands())
-            {
-                (var prefix, var _) = supportedCommandText.SplitOnlyFirst(' ');
-                if (data.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
-                {
-                    return true;
-                }
-            }
+            (var prefix, var _) = data.SplitOnlyFirst(' ');
 
-            return false;
+            return HandlerDictionary.ContainsKey(prefix);
         }
 
         #endregion
@@ -82,6 +83,11 @@ namespace HomeCenter.NET.Runners.Core
         #region Protected methods
 
         protected abstract void RunInternal(string key, Command command);
+
+        protected void AddAction(string key, Action<string> action, string description = null) => HandlerDictionary[key] = (description, action);
+
+        protected (string description, Action<string> action) GetHandler(string key) => 
+            HandlerDictionary.TryGetValue(key, out var handler) ? handler : (string.Empty, null);
 
         #endregion
     }

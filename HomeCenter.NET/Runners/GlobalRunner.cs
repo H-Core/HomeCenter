@@ -37,8 +37,6 @@ namespace HomeCenter.NET.Runners
 
         #region Public methods
 
-        public override string[] GetSupportedCommands() => new string[0];
-
         public void AddRunner(IRunner runner)
         {
             runner.NewSpeech += OnNewSpeech;

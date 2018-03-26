@@ -6,69 +6,31 @@ using System.Threading;
 using System.Windows;
 using WindowsInput;
 using WindowsInput.Native;
-using H.Storages;
 using HomeCenter.NET.Runners.Core;
 using VoiceActions.NET.Utilities;
 
 namespace HomeCenter.NET.Runners
 {
-    public class DefaultRunner : BaseRunner
+    public class DefaultRunner : SimpleRunner
     {
-        #region Properties
-
-        private InvariantStringDictionary<Action<string>> HandlerDictionary { get; } = new InvariantStringDictionary<Action<string>>();
-
-        #endregion
-
         #region Constructors
 
         public DefaultRunner()
         {
-            HandlerDictionary["run"] = RunProcess;
-            HandlerDictionary["say"] = Say;
-            HandlerDictionary["print"] = Print;
-            HandlerDictionary["redirect"] = RunCommand;
-            HandlerDictionary["paste"] = Paste;
-            HandlerDictionary["clipboard"] = ClipboardCommand;
-            HandlerDictionary["keyboard"] = KeyboardCommand;
-            HandlerDictionary["sleep"] = SleepCommand;
-            HandlerDictionary["show"] = ShowWindowCommand;
+            AddAction("run", RunProcess, "program.exe arguments");
+            AddAction("say", Say, "text");
+            AddAction("print", Print, "text");
+            AddAction("redirect", RunCommand, "other_command_key");
+            AddAction("paste", Paste, "text");
+            AddAction("clipboard", ClipboardCommand, "text");
+            AddAction("keyboard", KeyboardCommand, "CONTROL+V");
+            AddAction("sleep", SleepCommand, "integer");
+            AddAction("show", ShowWindowCommand, "process_name");
         }
-
-        #endregion
-
-        #region Public methods
-
-        public override string[] GetSupportedCommands() => new[]
-        {
-            "RUN program.exe arguments",
-            "SAY text",
-            "PRINT text",
-            "REDIRECT other_command_key",
-            "PASTE text",
-            "CLIPBOARD text",
-            "KEYBOARD CONTROL+V",
-            "SHOW process_name"
-        };
 
         #endregion
 
         #region Private methods
-
-        protected override void RunInternal(string key, Command command)
-        {
-            foreach (var line in command.Commands)
-            {
-                RunSingleLine(line.Text);
-            }
-        }
-
-        private void RunSingleLine(string command)
-        {
-            (var prefix, var postfix) = command.SplitOnlyFirstIgnoreQuote(' ');
-            HandlerDictionary.TryGetValue(prefix, out var handler);
-            handler?.Invoke(postfix);
-        }
 
         private static void RunProcess(string command)
         {
