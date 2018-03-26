@@ -4,7 +4,7 @@ using H.NET.Core;
 using H.NET.Core.Managers;
 using H.NET.Core.Runners;
 using H.NET.Core.Storages;
-using H.Storages;
+using H.NET.Storages;
 
 namespace HomeCenter.NET.Runners
 {

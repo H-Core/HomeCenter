@@ -236,13 +236,13 @@
       <Project>{6abf69b3-3f17-4d93-b69a-092e3cbd1dbf}</Project>
       <Name>H.NET.Synthesizers.WebSynthesizers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\H.Storages.CommandsStorage\H.Storages.CommandsStorage.csproj">
+    <ProjectReference Include="..\H.NET.Storages.CommandsStorage\H.NET.Storages.CommandsStorage.csproj">
       <Project>{9c0197ec-b353-4cdd-addc-e23876c7b72f}</Project>
-      <Name>H.Storages.CommandsStorage</Name>
+      <Name>H.NET.Storages.CommandsStorage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\H.Utilities.IPC\H.Utilities.IPC.csproj">
+    <ProjectReference Include="..\H.NET.Utilities.IPC\H.NET.Utilities.IPC.csproj">
       <Project>{a2cb840c-0158-4227-bd1e-6b03b098d5e6}</Project>
-      <Name>H.Utilities.IPC</Name>
+      <Name>H.NET.Utilities.IPC</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

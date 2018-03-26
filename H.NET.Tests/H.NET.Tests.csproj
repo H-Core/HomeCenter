@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <OutputPath>bin\Any CPU\Debug\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>bin\Any CPU\Release\</OutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+    <PackageReference Include="Nito.AsyncEx" Version="5.0.0-pre-05" />
+    <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\H.NET.Converters.WebConverters\H.NET.Converters.WebConverters.csproj" />
+    <ProjectReference Include="..\H.NET.Core\H.NET.Core.csproj" />
+    <ProjectReference Include="..\H.NET.Recorders.WinmmRecorder\H.NET.Recorders.WinmmRecorder.csproj" />
+    <ProjectReference Include="..\H.NET.Synthesizers.WebSynthesizers\H.NET.Synthesizers.WebSynthesizers.csproj" />
+  </ItemGroup>
+
+</Project>

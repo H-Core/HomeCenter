@@ -2,7 +2,7 @@
 using System.Windows;
 using H.NET.Core;
 using H.NET.Core.Runners;
-using H.Storages.Extensions;
+using H.NET.Storages.Extensions;
 using HomeCenter.NET.Controls;
 
 namespace HomeCenter.NET.Windows
