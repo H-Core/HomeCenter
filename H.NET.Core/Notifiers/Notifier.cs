@@ -1,7 +1,9 @@
 ﻿using System;
+using H.NET.Core.Attributes;
 
 namespace H.NET.Core.Notifiers
 {
+    [DisableAutoCreateInstance]
     public class Notifier : Module, INotifier
     {
         #region Properties
