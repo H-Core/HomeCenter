@@ -1,11 +1,12 @@
 ﻿using System;
-using System.IO;
 using System.Threading;
 using H.NET.Core;
+using H.NET.Core.Attributes;
 using H.NET.Core.Recorders;
 
 namespace H.NET.Recorders
 {
+    [DisableAutoCreateInstance]
     public class StreamEmulatorRecorder : ParentRecorder
     {
         #region Properties

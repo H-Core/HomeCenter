@@ -8,7 +8,6 @@ using H.NET.Core;
 using H.NET.Core.Managers;
 using H.NET.Core.Notifiers;
 using H.NET.Core.Recorders;
-using H.NET.Recorders;
 using H.NET.Storages;
 using H.NET.Utilities;
 using HomeCenter.NET.Properties;
@@ -23,7 +22,6 @@ namespace HomeCenter.NET.Windows
 
         private BaseManager Manager { get; set; } = new BaseManager
         {
-            Recorder = new WinmmRecorder(),
             Converter = new YandexConverter("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" }
         };
 
@@ -204,7 +202,21 @@ namespace HomeCenter.NET.Windows
             }
         }
 
-        private void RecordButton_Click(object sender, RoutedEventArgs e) => Manager.ChangeWithTimeout(3000);
+        private void RecordButton_Click(object sender, RoutedEventArgs e)
+        {
+            var recorder = ModuleManager.Instance.GetPluginsOfSubtype<IRecorder>().FirstOrDefault().Value;
+            if (recorder != null)
+            {
+                Manager.Recorder = recorder;
+            }
+            if (Manager.Recorder == null)
+            {
+                Print("Recorder is not found");
+                return;
+            }
+
+            Manager.ChangeWithTimeout(3000);
+        }
 
         private void MenuButton_Click(object sender, EventArgs e)
         {

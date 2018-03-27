@@ -98,6 +98,15 @@ namespace H.NET.Plugins
 
         public void Install(string path) => Install(Assembly.LoadFile(path));
 
+        public Assembly InstallAndGet(string path)
+        {
+            var assembly = Assembly.LoadFile(path);
+
+            Install(assembly);
+
+            return assembly;
+        } 
+
         public void Deinstall(Assembly assembly)
         {
             TryClean();

@@ -69,6 +69,13 @@ namespace H.NET.Plugins
                 .ToList();
         }
 
+        public void AddInstance(string name, string typeName)
+        {
+            File.WriteAllText(Path.Combine(SettingsFolder, $"{name}-{typeName}{SettingsExtension}"), string.Empty);
+        }
+
+        public void AddInstance(string name, Type type) => AddInstance(name, type.FullName);
+
         #endregion
 
         #region Private methods
@@ -111,7 +118,7 @@ namespace H.NET.Plugins
         private Dictionary<string, T> LoadPlugins()
         {
             var plugins = new Dictionary<string, T>();
-            foreach (var path in Directory.EnumerateFiles(SettingsFolder, "*.json"))
+            foreach (var path in Directory.EnumerateFiles(SettingsFolder, $"*{SettingsExtension}"))
             {
                 var fileName = Path.GetFileNameWithoutExtension(path);
                 var values = fileName.Split('-');

@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿using System.Reflection;
+using System.Windows;
 using System.Windows.Media;
+using H.NET.Core;
+using H.NET.Core.Attributes;
+using H.NET.Plugins.Extensions;
 using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Windows
@@ -46,7 +50,17 @@ namespace HomeCenter.NET.Windows
                 return;
             }
 
-            ModuleManager.Instance.Install(path);
+            var assembly = ModuleManager.Instance.InstallAndGet(path);
+            var types = assembly.GetTypesOfInterface<IModule>();
+            foreach (var type in types)
+            {
+                if (type.GetCustomAttribute(typeof(DisableAutoCreateInstanceAttribute)) != null)
+                {
+                    continue;
+                }
+
+                ModuleManager.Instance.AddInstance(type.Name, type);
+            }
 
             Update();
         }

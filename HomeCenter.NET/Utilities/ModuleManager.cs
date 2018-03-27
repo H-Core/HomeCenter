@@ -16,6 +16,11 @@ namespace HomeCenter.NET.Utilities
             (module, text) =>
             {
                 var list = JsonConvert.DeserializeObject<List<BaseSetting>>(text);
+                if (list == null)
+                {
+                    return;
+                }
+
                 foreach (var value in list)
                 {
                     module.Settings.CopyFrom(value.Key, value);

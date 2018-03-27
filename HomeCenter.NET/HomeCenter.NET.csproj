@@ -246,14 +246,6 @@
       <Project>{72121390-8576-4234-94fd-ecbff98dabb4}</Project>
       <Name>H.NET.Plugins</Name>
     </ProjectReference>
-    <ProjectReference Include="..\H.NET.Recorders.WinmmRecorder\H.NET.Recorders.WinmmRecorder.csproj">
-      <Project>{1bfb7e2d-e190-4394-8720-fb23d5a4edbf}</Project>
-      <Name>H.NET.Recorders.WinmmRecorder</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\H.NET.Runners.TelegramRunner\H.NET.Runners.TelegramRunner.csproj">
-      <Project>{fad16b4c-5ced-4799-a4bc-4dc3221314da}</Project>
-      <Name>H.NET.Runners.TelegramRunner</Name>
-    </ProjectReference>
     <ProjectReference Include="..\H.NET.Storages.CommandsStorage\H.NET.Storages.CommandsStorage.csproj">
       <Project>{9c0197ec-b353-4cdd-addc-e23876c7b72f}</Project>
       <Name>H.NET.Storages.CommandsStorage</Name>
