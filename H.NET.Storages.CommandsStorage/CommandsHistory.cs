@@ -4,17 +4,30 @@ using Newtonsoft.Json;
 
 namespace H.NET.Storages
 {
-    public static class CommandsHistory
+    public class CommandsHistory
     {
         #region Properties
 
-        private static AppDataFile AppDataFile { get; } = new AppDataFile("VoiceActions.NET", "commands-history.json");
+        public const string FileName = "commands-history.json";
+
+        public string CompanyName { get; }
+        public AppDataFile AppDataFile { get; }
+
+        #endregion
+
+        #region Constructors
+
+        public CommandsHistory(string companyName)
+        {
+            CompanyName = companyName;
+            AppDataFile = new AppDataFile(CompanyName, FileName);
+        }
 
         #endregion
 
         #region Public methods
 
-        public static void Add(string command)
+        public void Add(string command)
         {
             var history = Load();
             history.Add(command);
@@ -22,7 +35,7 @@ namespace H.NET.Storages
             AppDataFile.FileData = JsonConvert.SerializeObject(history, Formatting.Indented);
         }
 
-        public static List<string> Load()
+        public List<string> Load()
         {
             var text = AppDataFile.FileData;
             if (string.IsNullOrWhiteSpace(text))
@@ -30,10 +43,13 @@ namespace H.NET.Storages
                 return new List<string>();
             }
 
-            return JsonConvert.DeserializeObject<List<string>>(text);
+            var list = JsonConvert.DeserializeObject<List<string>>(text);
+            list.Reverse();
+
+            return list;
         }
 
-        public static void Clear()
+        public void Clear()
         {
             AppDataFile.Clear();
         }

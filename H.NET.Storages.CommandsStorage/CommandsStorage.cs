@@ -14,9 +14,23 @@ namespace H.NET.Storages
     {
         #region Properties
 
-        public const string CompanyName = "VoiceActions.NET";
-        public const int MaxCopiesCount = 50;
-        public AppDataFile AppDataFile { get; } = new AppDataFile(CompanyName, "commands.json");
+        public const string FileName = "commands.json";
+        public const string CopiesSubFolder = "copies";
+
+        public string CompanyName { get; }
+        public int MaxCopiesCount { get; }
+        public AppDataFile AppDataFile { get; }
+
+        #endregion
+
+        #region Constructors
+
+        public CommandsStorage(string companyName, int maxCopiesCount = 50)
+        {
+            CompanyName = companyName;
+            MaxCopiesCount = maxCopiesCount;
+            AppDataFile = new AppDataFile(CompanyName, FileName);
+        }
 
         #endregion
 
@@ -55,12 +69,13 @@ namespace H.NET.Storages
 
         public void CreateCopy(string text)
         {
-            var _ = new AppDataFile(CompanyName, "copies", $"commands_{DateTime.Now:MM_dd_yyyy_hh_mm_ss_tt}.json")
+            var _ = new AppDataFile(CompanyName, CopiesSubFolder, 
+                $"{Path.GetFileNameWithoutExtension(FileName)}_{DateTime.Now:MM_dd_yyyy_hh_mm_ss_tt}{Path.GetExtension(FileName)}")
             {
                 FileData = text
             };
             
-            new AppDataFolder(CompanyName, "copies")
+            new AppDataFolder(CompanyName, CopiesSubFolder)
                 .Files
                 .OrderByDescending(File.GetLastWriteTimeUtc)
                 .Skip(MaxCopiesCount)

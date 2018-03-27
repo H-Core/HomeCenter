@@ -9,13 +9,15 @@ namespace H.NET.SearchDeskBand
 {
     public partial class DeskBandWindow : Form
     {
+        public new const string CompanyName = "HomeCenter.NET";
+
         public DeskBandWindow()
         {
             InitializeComponent();
 
             #region Auto Complete
 
-            var storage = new CommandsStorage();
+            var storage = new CommandsStorage(CompanyName);
             storage.Load();
 
             var collection = new AutoCompleteStringCollection();
@@ -31,8 +33,7 @@ namespace H.NET.SearchDeskBand
         {
             historyListBox.Items.Clear();
 
-            var history = CommandsHistory.Load();
-            history.Reverse();
+            var history = new CommandsHistory(CompanyName).Load();
             foreach (var command in history)
             {
                 historyListBox.Items.Add(command);
@@ -46,6 +47,8 @@ namespace H.NET.SearchDeskBand
 
         private void DeskBandWindow_Activated(object sender, EventArgs e)
         {
+            UpdateHistory();
+
             TextBox.Focus();
             //deskBandControl1.Focus();
         }
@@ -97,7 +100,7 @@ namespace H.NET.SearchDeskBand
 
         private void ClearHistoryButton_Click(object sender, EventArgs e)
         {
-            CommandsHistory.Clear();
+            new CommandsHistory(CompanyName).Clear();
             UpdateHistory();
         }
     }
