@@ -25,7 +25,10 @@ namespace H.NET.Storages
         public override void Save()
         {
             var uniqueCommands = this.UniqueValues(command => command.Value.Data).Select(pair => pair.Value);
-            AppDataFile.FileData = JsonConvert.SerializeObject(uniqueCommands, Formatting.Indented);
+            AppDataFile.FileData = JsonConvert.SerializeObject(uniqueCommands, Formatting.Indented, new JsonSerializerSettings
+            {
+                ContractResolver = new GoodPropertiesOnlyResolver()
+            });
         }
 
         public override void Load()

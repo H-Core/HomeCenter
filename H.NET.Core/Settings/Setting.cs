@@ -2,8 +2,13 @@
 
 namespace H.NET.Core.Settings
 {
-    public class Setting : BaseSetting
+    public class Setting
     {
+        public string Key { get; set; }
+        public object Value { get; set; }
+        public object DefaultValue { get; set; }
+        public SettingType SettingType { get; set; }
+
         public Type Type => DefaultValue.GetType();
 
         public Func<object, bool> CheckFunc { get; set; }
