@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
-using H.NET.Converters;
 using H.NET.Core;
 using H.NET.Core.Managers;
 using H.NET.Core.Notifiers;
@@ -20,14 +19,11 @@ namespace HomeCenter.NET.Windows
     {
         #region Properties
 
-        private BaseManager Manager { get; set; } = new BaseManager
-        {
-            Converter = new YandexConverter("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" }
-        };
+        private BaseManager Manager { get; set; } = new BaseManager();
 
         private Server Server { get; } = new Server();
 
-        private IConverter AlternativeConverter { get; set; } = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS");
+        private IConverter AlternativeConverter { get; set; }
 
         private Hook Hook { get; } = new Hook("Global Action Hook");
         private GlobalRunner GlobalRunner { get; set; } = new GlobalRunner(new CommandsStorage());
@@ -65,19 +61,22 @@ namespace HomeCenter.NET.Windows
             byte[] alternativeConverterLastData = null;
             GlobalRunner.NotHandledText += async _ =>
             {
-                if (alternativeConverterLastData == Manager.Data)
+                if (AlternativeConverter == null || 
+                    alternativeConverterLastData == Manager.Data)
                 {
                     return;
                 }
-                alternativeConverterLastData = Manager.Data;
 
+                alternativeConverterLastData = Manager.Data;
                 if (Manager.Data == null)
                 {
                     return;
                 }
+
                 var text = await AlternativeConverter.Convert(Manager.Data);
                 GlobalRunner.Run(text, null);
             };
+
             GlobalRunner.NewOutput += (o, args) => Print(args.Text);
             GlobalRunner.NewSpeech += (o, args) => Say(args.Text);
             GlobalRunner.NewCommand += (o, args) => Manager.ProcessText(args.Text);
@@ -112,6 +111,8 @@ namespace HomeCenter.NET.Windows
             {
                 ModuleManager.Instance.Load();
 
+                SetUpRuntimeModule();
+
                 Print("Loaded");
             }
             catch (Exception exception)
@@ -142,9 +143,6 @@ namespace HomeCenter.NET.Windows
                 TaskbarIcon.Dispose();
                 TaskbarIcon = null;
             }
-
-            AlternativeConverter?.Dispose();
-            AlternativeConverter = null;
 
             Manager?.Dispose();
             Manager = null;
@@ -204,17 +202,6 @@ namespace HomeCenter.NET.Windows
 
         private void RecordButton_Click(object sender, RoutedEventArgs e)
         {
-            var recorder = ModuleManager.Instance.GetPluginsOfSubtype<IRecorder>().FirstOrDefault().Value;
-            if (recorder != null)
-            {
-                Manager.Recorder = recorder;
-            }
-            if (Manager.Recorder == null)
-            {
-                Print("Recorder is not found");
-                return;
-            }
-
             Manager.ChangeWithTimeout(3000);
         }
 
@@ -230,6 +217,17 @@ namespace HomeCenter.NET.Windows
             var window = new SettingsWindow();
 
             window.ShowDialog();
+
+            SetUpRuntimeModule();
+        }
+
+        private void SetUpRuntimeModule()
+        {
+            Manager.Recorder = ModuleManager.Instance.GetPluginsOfSubtype<IRecorder>().FirstOrDefault().Value;
+
+            var converters = ModuleManager.Instance.GetPluginsOfSubtype<IConverter>();
+            Manager.Converter = converters.FirstOrDefault().Value;
+            AlternativeConverter = converters.ElementAtOrDefault(1).Value;
         }
 
         private void Global_KeyUp(KeyboardHookEventArgs e)

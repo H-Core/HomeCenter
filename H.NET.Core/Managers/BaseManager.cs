@@ -1,5 +1,4 @@
-﻿using System;
-using H.NET.Core.Recorders;
+﻿using H.NET.Core.Recorders;
 
 namespace H.NET.Core.Managers
 {
@@ -60,9 +59,13 @@ namespace H.NET.Core.Managers
 
         public async void ProcessSpeech(byte[] bytes)
         {
-            var converter = Converter ?? throw new Exception("Converter is null");
+            if (Converter == null)
+            {
+                Log("Converter is not found");
+                return;
+            }
 
-            ProcessText(await converter.Convert(bytes));
+            ProcessText(await Converter.Convert(bytes));
         }
 
         public override void Start()
@@ -73,9 +76,13 @@ namespace H.NET.Core.Managers
 
         public override void Stop()
         {
-            var recorder = Recorder ?? throw new Exception("Recorder is null");
+            if (Recorder == null)
+            {
+                Log("Recorder is not found");
+                return;
+            }
 
-            recorder.Stop();
+            Recorder.Stop();
         }
 
         public void Change()
@@ -98,9 +105,13 @@ namespace H.NET.Core.Managers
         {
             IsStarted = false;
 
-            var recorder = Recorder ?? throw new Exception("Recorder is null");
+            if (Recorder == null)
+            {
+                Log("Recorder is not found");
+                return;
+            }
 
-            Data = recorder.Data;
+            Data = Recorder.Data;
             OnStopped(CreateArgs());
 
             ProcessSpeech(Data);

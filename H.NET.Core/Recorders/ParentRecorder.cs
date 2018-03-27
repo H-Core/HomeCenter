@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace H.NET.Core.Recorders
+﻿namespace H.NET.Core.Recorders
 {
     public class ParentRecorder : Recorder
     {
@@ -25,18 +23,26 @@ namespace H.NET.Core.Recorders
 
         public override void Start()
         {
-            var recorder = Recorder ?? throw new Exception("Recorder is null");
+            if (Recorder == null)
+            {
+                Log("Recorder is not found");
+                return;
+            }
 
-            recorder.Start();
+            Recorder.Start();
             base.Start();
         }
 
         public override void Stop()
         {
-            var recorder = Recorder ?? throw new Exception("Recorder is null");
+            if (Recorder == null)
+            {
+                Log("Recorder is not found");
+                return;
+            }
 
-            recorder.Stop();
-            Data = recorder.Data;
+            Recorder.Stop();
+            Data = Recorder.Data;
             base.Stop();
         }
 
