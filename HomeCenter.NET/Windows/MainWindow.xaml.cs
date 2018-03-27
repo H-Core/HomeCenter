@@ -10,7 +10,6 @@ using H.NET.Core.Notifiers;
 using H.NET.Core.Recorders;
 using H.NET.Recorders;
 using H.NET.Storages;
-using H.NET.Synthesizers;
 using H.NET.Utilities;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Runners;
@@ -34,7 +33,6 @@ namespace HomeCenter.NET.Windows
 
         private Hook Hook { get; } = new Hook("Global Action Hook");
         private GlobalRunner GlobalRunner { get; set; } = new GlobalRunner(new CommandsStorage());
-        private ISynthesizer Synthesizer { get; set; } = new YandexSynthesizer("1ce29818-0d15-4080-b6a1-ea5267c9fefd") { Lang = "ru-RU" };
 
         private bool CanClose { get; set; }
 
@@ -155,9 +153,6 @@ namespace HomeCenter.NET.Windows
 
             GlobalRunner?.Dispose();
             GlobalRunner = null;
-
-            Synthesizer?.Dispose();
-            Synthesizer = null;
         }
 
         #endregion
@@ -167,7 +162,17 @@ namespace HomeCenter.NET.Windows
         private void Print(string text) => Dispatcher.Invoke(() => ConsoleTextBox.Text += $"{DateTime.Now:T}: {text}{Environment.NewLine}");
 
         private static void Say(byte[] bytes) => bytes?.Play();
-        private async void Say(string text) => Say(await Synthesizer.Convert(text));
+        private async void Say(string text)
+        {
+            var synthesizer = ModuleManager.Instance.GetPluginsOfSubtype<ISynthesizer>().FirstOrDefault().Value;
+            if (synthesizer == null)
+            {
+                Print("Synthesizer is not found");
+                return;
+            }
+
+            Say(await synthesizer.Convert(text));
+        } 
 
         private void Run(string message) => GlobalRunner.Run(message, null);
 

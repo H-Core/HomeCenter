@@ -61,6 +61,13 @@ namespace H.NET.Plugins
 
         #endregion
 
+        public List<KeyValuePair<string, T1>> GetPluginsOfSubtype<T1>() where T1 : T
+        {
+            return ActivePlugins
+                .Where(i => i.Value is T1)
+                .Select(i => new KeyValuePair<string, T1>(i.Key, (T1)i.Value))
+                .ToList();
+        }
 
         #endregion
 

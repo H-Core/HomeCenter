@@ -51,11 +51,7 @@ namespace HomeCenter.NET.Runners
 
         public IRunner GetRunnerFor(string key, Command command)
         {
-            var runtimeRunners = ModuleManager.Instance.ActivePlugins
-                .Where(i => i.Value is IRunner)
-                .Select(i => i.Value)
-                .Cast<IRunner>();
-
+            var runtimeRunners = ModuleManager.Instance.GetPluginsOfSubtype<IRunner>().Select(i => i.Value);
             foreach (var runner in runtimeRunners.Concat(Runners))
             {
                 if (runner.IsSupport(key, command))

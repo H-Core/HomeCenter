@@ -50,8 +50,8 @@ namespace H.NET.Runners
 
         public TelegramRunner()
         {
-            AddSetting("Token", o => Token = o, TokenIsValid, string.Empty);
-            AddSetting("UserId", o => UserId = o, UsedIdIsValid, 0);
+            AddSetting(nameof(Token), o => Token = o, TokenIsValid, string.Empty);
+            AddSetting(nameof(UserId), o => UserId = o, UsedIdIsValid, 0);
 
             AddAction("telegram", SendMessage, "text");
         }
@@ -78,9 +78,9 @@ namespace H.NET.Runners
 
         #endregion
 
-        #region Protected methods
+        #region Private methods
 
-        public async void SendMessage(string text) => 
+        private async void SendMessage(string text) => 
             await Client.SendTextMessageAsync(ChatId, text);
 
         #endregion

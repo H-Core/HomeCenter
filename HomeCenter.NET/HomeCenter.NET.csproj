@@ -254,10 +254,6 @@
       <Project>{fad16b4c-5ced-4799-a4bc-4dc3221314da}</Project>
       <Name>H.NET.Runners.TelegramRunner</Name>
     </ProjectReference>
-    <ProjectReference Include="..\H.NET.Synthesizers.WebSynthesizers\H.NET.Synthesizers.WebSynthesizers.csproj">
-      <Project>{6abf69b3-3f17-4d93-b69a-092e3cbd1dbf}</Project>
-      <Name>H.NET.Synthesizers.WebSynthesizers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\H.NET.Storages.CommandsStorage\H.NET.Storages.CommandsStorage.csproj">
       <Project>{9c0197ec-b353-4cdd-addc-e23876c7b72f}</Project>
       <Name>H.NET.Storages.CommandsStorage</Name>

@@ -51,7 +51,9 @@ namespace H.NET.Core
             setting.Set();
         }
 
-        protected void AddSetting<T>(string key, Action<T> action, Func<T, bool> checkFunc, T defaultValue, SettingType type = SettingType.Default)
+        #region Settings
+
+        protected void AddSetting<T>(string key, Action<T> setAction, Func<T, bool> checkFunc, T defaultValue, SettingType type = SettingType.Default)
         {
             key = key ?? throw new ArgumentNullException(nameof(key));
             Settings[key] = new Setting
@@ -60,10 +62,14 @@ namespace H.NET.Core
                 Value = defaultValue,
                 DefaultValue = defaultValue,
                 SettingType = type,
-                CheckFunc = o => CanConvert<T>(o) && checkFunc?.Invoke(ConvertTo<T>(o)) == true, 
-                SetAction = o => action?.Invoke(ConvertTo<T>(o))
+                CheckFunc = o => CanConvert<T>(o) && checkFunc?.Invoke(ConvertTo<T>(o)) == true,
+                SetAction = o => setAction?.Invoke(ConvertTo<T>(o))
             };
         }
+
+        protected static bool NoEmpty(string key) => !string.IsNullOrEmpty(key);
+
+        #endregion
 
         private bool CanConvert<T>(object value)
         {
