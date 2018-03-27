@@ -5,13 +5,36 @@ using System.Threading.Tasks;
 
 namespace H.NET.Utilities
 {
-    public static class Client
+    public class Client
     {
-        public static async Task Write(string message)
+        #region Static methods
+
+        public static async Task Write(string message, int port) => await new Client(port).Write(message);
+
+        #endregion
+
+        #region Properties
+
+        public int Port { get; }
+
+        #endregion
+
+        #region Constructors
+
+        public Client(int port)
+        {
+            Port = port;
+        }
+
+        #endregion
+
+        #region Public methods
+
+        public async Task Write(string message)
         {
             using (var client = new TcpClient())
             {
-                await client.ConnectAsync(IPAddress.Parse("127.0.0.1"), Server.Port);
+                await client.ConnectAsync(IPAddress.Parse("127.0.0.1"), Port);
 
                 using (var writer = new StreamWriter(client.GetStream()))
                 {
@@ -19,5 +42,7 @@ namespace H.NET.Utilities
                 }
             }
         }
+
+        #endregion
     }
 }

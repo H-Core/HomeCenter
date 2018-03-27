@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using H.NET.Utilities;
 
 namespace H.NET.SearchDeskBand
 {
@@ -9,6 +10,7 @@ namespace H.NET.SearchDeskBand
         #region Properties
 
         private DeskBandWindow Window { get; } = new DeskBandWindow();
+        private Server Server { get; } = new Server(Options.IpcPortToDeskBand);
 
         #endregion
 
@@ -17,6 +19,8 @@ namespace H.NET.SearchDeskBand
             InitializeComponent();
 
             Window.VisibleChanged += (sender, args) => Label.Visible = !Window.Visible;
+
+            Server.NewMessage += message => Label.Invoke(new Action(() => Label.Text = message));
         }
 
         #region Event handlers

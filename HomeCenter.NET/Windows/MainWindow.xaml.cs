@@ -22,7 +22,7 @@ namespace HomeCenter.NET.Windows
 
         private BaseManager Manager { get; set; } = new BaseManager();
 
-        private Server Server { get; } = new Server();
+        private Server Server { get; } = new Server(Options.IpcPortToHomeCenter);
 
         private IConverter AlternativeConverter { get; set; }
 

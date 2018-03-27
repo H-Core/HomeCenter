@@ -9,8 +9,20 @@ namespace H.NET.Utilities
     {
         #region Properties
 
-        public static int Port { get; } = 19445;
-        private TcpListener Listener { get; } = new TcpListener(new IPEndPoint(IPAddress.Any, Port));
+        public int Port { get; }
+        private TcpListener Listener { get; }
+
+        #endregion
+
+        #region Constructors
+
+        public Server(int port)
+        {
+            Port = port;
+            Listener = new TcpListener(new IPEndPoint(IPAddress.Any, Port));
+            Listener.Start();
+            Listener.BeginAcceptTcpClient(OnClientAccepted, Listener);
+        }
 
         #endregion
 
@@ -40,13 +52,6 @@ namespace H.NET.Utilities
             {
                 listener.BeginAcceptTcpClient(OnClientAccepted, listener);
             }
-        }
-
-        public Server()
-        {
-            Listener.Start();
-
-            Listener.BeginAcceptTcpClient(OnClientAccepted, Listener);
         }
     }
 }

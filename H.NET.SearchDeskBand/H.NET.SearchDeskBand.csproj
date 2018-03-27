@@ -61,6 +61,7 @@
     <Compile Include="DeskBandWindow.Designer.cs">
       <DependentUpon>DeskBandWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Options.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchDeskBand.cs" />
   </ItemGroup>

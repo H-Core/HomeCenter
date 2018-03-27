@@ -8,6 +8,8 @@ using WindowsInput;
 using WindowsInput.Native;
 using H.NET.Core.Runners;
 using H.NET.Core.Utilities;
+using H.NET.Utilities;
+using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Runners
 {
@@ -35,6 +37,7 @@ namespace HomeCenter.NET.Runners
             AddAction("show", ShowWindowCommand, "process_name");
             AddAction("show-settings", command => ShowSettingsAction?.Invoke());
             AddAction("show-commands", command => ShowCommandsAction?.Invoke());
+            AddAction("deskband", async command => await Client.Write(command, Options.IpcPortToDeskBand));
         }
 
         #endregion

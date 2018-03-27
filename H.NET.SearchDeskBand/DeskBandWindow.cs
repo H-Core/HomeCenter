@@ -57,7 +57,7 @@ namespace H.NET.SearchDeskBand
         {
             try
             {
-                await Client.Write(message);
+                await Client.Write(message, Options.IpcPortToHomeCenter);
             }
             catch (Exception exception)
             {
