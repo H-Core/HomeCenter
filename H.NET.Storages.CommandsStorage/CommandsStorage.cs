@@ -14,8 +14,8 @@ namespace H.NET.Storages
     {
         #region Properties
 
-        public const string FileName = "commands.json";
-        public const string CopiesSubFolder = "copies";
+        public const string FileName = "Commands.json";
+        public const string CopiesSubFolder = "Copies";
 
         public string CompanyName { get; }
         public int MaxCopiesCount { get; }

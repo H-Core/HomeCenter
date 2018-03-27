@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using H.NET.Core;
@@ -40,6 +41,13 @@ namespace HomeCenter.NET.Windows
         {
             DialogResult = false;
             Close();
+        }
+
+        private void ReloadPluginsButton_Click(object sender, RoutedEventArgs e)
+        {
+            ModuleManager.Instance.Load();
+
+            Update();
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -104,7 +112,8 @@ namespace HomeCenter.NET.Windows
                 {
                     Height = 25,
                     Color = Colors.LightGreen,
-                    EnableEditing = false
+                    EnableEditing = false,
+                    EnableAdding = type.GetCustomAttribute<DisableAutoCreateInstanceAttribute>() != null
                 };
                 control.Deleted += (sender, args) =>
                 {
@@ -113,9 +122,9 @@ namespace HomeCenter.NET.Windows
                 };
                 control.Added += (sender, args) =>
                 {
-                    //var window = new ModuleSettingsWindow(module);
-                    //window.ShowDialog();
-                    //Update();
+                    ModuleManager.Instance.AddInstance($"{type.Name}_{new Random().Next()}", type);
+
+                    Update();
                 };
                 AvailableTypesPanel.Children.Add(control);
             }
@@ -128,15 +137,25 @@ namespace HomeCenter.NET.Windows
             foreach (var pair in modules)
             {
                 var module = pair.Value;
-                var control = new Controls.ObjectControl(pair.Key, module.Name)
+                var control = new Controls.ObjectControl(pair.Key, module?.Name ?? string.Empty)
                 {
                     Height = 25,
-                    Color = module.IsValid() ? Colors.LightGreen : Colors.Bisque,
-                    EnableAdding = false
+                    Color = module != null ? Colors.LightGreen : Colors.Bisque,
+                    EnableAdding = false,
+                    EnableEditing = module != null
                 };
                 control.Deleted += (sender, args) =>
                 {
-                    ModuleManager.Instance.Deinstall(module);
+                    var result = MessageBox.Show(
+                        "Are you sure that you want to delete this instance of module?", "Warning",
+                        MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+                    if (result != MessageBoxResult.Yes)
+                    {
+                        return;
+                    }
+
+                    ModuleManager.Instance.DeleteInstance(pair.Key);
+
                     Update();
                 };
                 control.Edited += (sender, args) =>

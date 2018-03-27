@@ -28,6 +28,11 @@ namespace HomeCenter.NET.Utilities
                 }
             }, module =>
             {
+                if (module == null)
+                {
+                    return null;
+                }
+
                 var list = module.Settings.Select(i => i.Value).ToList();
 
                 return JsonConvert.SerializeObject(list, Formatting.Indented, new JsonSerializerSettings

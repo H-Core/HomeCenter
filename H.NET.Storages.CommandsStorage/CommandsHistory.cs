@@ -8,7 +8,7 @@ namespace H.NET.Storages
     {
         #region Properties
 
-        public const string FileName = "commands-history.json";
+        public const string FileName = "Commands-History.json";
 
         public string CompanyName { get; }
         public AppDataFile AppDataFile { get; }

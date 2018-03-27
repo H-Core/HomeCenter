@@ -7,6 +7,7 @@ using H.NET.Core;
 using H.NET.Core.Managers;
 using H.NET.Core.Notifiers;
 using H.NET.Core.Recorders;
+using H.NET.Plugins;
 using H.NET.Storages;
 using H.NET.Utilities;
 using HomeCenter.NET.Properties;
@@ -103,6 +104,7 @@ namespace HomeCenter.NET.Windows
 
             #region Modules
 
+            AssembliesManager.LogAction = Print;
             Module.LogAction = Print;
             Notifier.RunAction = Run;
 

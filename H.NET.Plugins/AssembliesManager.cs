@@ -24,6 +24,9 @@ namespace H.NET.Plugins
         public string ActiveFolder { get; private set; } = string.Empty;
         public List<Assembly> ActiveAssemblies { get; private set; } = new List<Assembly>();
 
+        public static Action<string> LogAction { get; set; }
+        public static void Log(string text) => LogAction?.Invoke(text);
+
         #endregion
 
         #region Constructors

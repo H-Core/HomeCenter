@@ -7,17 +7,19 @@ using H.NET.Plugins.Utilities;
 
 namespace H.NET.Plugins
 {
-    public class PluginsManager<T> : AssembliesManager, IDisposable
+    public class PluginsManager<T> : AssembliesManager, IDisposable where T : class
     {
         #region Properties
 
-        public const string SettingsSubFolder = "Settings";
+        public const string InstancesSubFolder = "Instances";
+        public const string DeletedSubFolder = "Deleted";
         public const string SettingsExtension = ".json";
 
         public Action<T, string> LoadAction { get; }
         public Func<T, string> SaveFunc { get; }
 
         public string SettingsFolder { get; }
+        public string DeletedSettingsFolder { get; }
         public List<Type> AvailableTypes { get; private set; } = new List<Type>();
         public Dictionary<string, T> ActivePlugins { get; private set; } = new Dictionary<string, T>();
 
@@ -30,7 +32,8 @@ namespace H.NET.Plugins
             LoadAction = loadAction;
             SaveFunc = saveFunc;
 
-            SettingsFolder = DirectoryUtilities.CombineAndCreateDirectory(BaseFolder, SettingsSubFolder);
+            SettingsFolder = DirectoryUtilities.CombineAndCreateDirectory(BaseFolder, InstancesSubFolder);
+            DeletedSettingsFolder = DirectoryUtilities.CombineAndCreateDirectory(SettingsFolder, DeletedSubFolder);
         }
 
         #endregion
@@ -75,6 +78,20 @@ namespace H.NET.Plugins
         }
 
         public void AddInstance(string name, Type type) => AddInstance(name, type.FullName);
+
+        public void DeleteInstance(string name) => Directory
+            .EnumerateFiles(SettingsFolder, $"*{SettingsExtension}")
+            .Where(i => Path.GetFileName(i)?.StartsWith(name) ?? false)
+            .AsParallel()
+            .ForAll(from =>
+            {
+                var fileName = Path.GetFileNameWithoutExtension(from);
+                var extension = Path.GetExtension(from);
+                var to = Path.Combine(DeletedSettingsFolder, $"{fileName}_{new Random().Next()}{extension}");
+
+                File.Copy(from, to, true);
+                File.Delete(from);
+            });
 
         #endregion
 
@@ -127,23 +144,34 @@ namespace H.NET.Plugins
                 if (string.IsNullOrWhiteSpace(name) ||
                     string.IsNullOrWhiteSpace(typeName))
                 {
+                    Log($"Load Plugins: Invalids file name: {fileName}");
+
                     continue;
                 }
 
                 var type = GetTypeByFullName(typeName);
                 if (type == null)
                 {
+                    Log($"Load Plugins: Type \"{typeName}\" is not found in current assemblies");
+
+                    plugins.Add(name, null);
                     continue;
                 }
 
-                var obj = (T)Activator.CreateInstance(type);
+                try
+                {
+                    var obj = (T) Activator.CreateInstance(type);
 
-                plugins.Add(name, obj);
-            }
+                    LoadPluginSettings(name, obj);
 
-            foreach (var pair in plugins)
-            {
-                LoadPluginSettings(pair.Key, pair.Value);
+                    plugins.Add(name, obj);
+                }
+                catch (Exception exception)
+                {
+                    Log($"Load Plugins: {exception}");
+
+                    plugins.Add(name, null);
+                }
             }
 
             return plugins;
