@@ -26,7 +26,7 @@ namespace HomeCenter.NET.Windows
         private IConverter AlternativeConverter { get; set; }
 
         private Hook Hook { get; } = new Hook("Global Action Hook");
-        private GlobalRunner GlobalRunner { get; set; } = new GlobalRunner(new CommandsStorage("HomeCenter.NET"));
+        private GlobalRunner GlobalRunner { get; set; } = new GlobalRunner(new CommandsStorage(Options.CompanyName));
 
         private bool CanClose { get; set; }
 

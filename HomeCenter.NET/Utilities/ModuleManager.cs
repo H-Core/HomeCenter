@@ -13,7 +13,7 @@ namespace HomeCenter.NET.Utilities
     {
         #region Properties
 
-        public static PluginsManager<IModule> Instance { get; } = new PluginsManager<IModule>("H.NET",
+        public static PluginsManager<IModule> Instance { get; } = new PluginsManager<IModule>(Options.CompanyName,
             (module, text) =>
             {
                 var list = JsonConvert.DeserializeObject<List<Setting>>(text);

@@ -144,7 +144,7 @@ namespace HomeCenter.NET.Runners
             }
             else
             {
-                new CommandsHistory("HomeCenter.NET").Add(key);
+                new CommandsHistory(Options.CompanyName).Add(key);
             }
         }
 
