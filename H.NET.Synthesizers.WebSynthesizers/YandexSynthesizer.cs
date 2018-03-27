@@ -8,26 +8,32 @@ namespace H.NET.Synthesizers
     {
         #region Properties
 
-        public string Key { get; }
-        public string Lang { get; set; } = "en-US";
-        public string Format { get; set; } = "wav";
-        public string Speaker { get; set; } = "oksana";
-        public string Emotion { get; set; } = "good";
-        public string Quality { get; set; } = "hi";
-        public string Speed { get; set; } = "1.0";
+        public string Key { get; set; }
+        public string Lang { get; set; }
+        public string Format { get; set; }
+        public string Speaker { get; set; } 
+        public string Emotion { get; set; }
+        public string Quality { get; set; }
+        public string Speed { get; set; }
 
         #endregion
 
         #region Constructors
 
-        public YandexSynthesizer(string key)
+        public YandexSynthesizer()
         {
-            Key = key ?? throw new ArgumentNullException(nameof(key));
+            AddSetting(nameof(Key), o => Key = o, NoEmpty, string.Empty);
+            AddSetting(nameof(Lang), o => Lang = o, NoEmpty, "en-US");
+            AddSetting(nameof(Format), o => Format = o, NoEmpty, "wav");
+            AddSetting(nameof(Speaker), o => Speaker = o, NoEmpty, "oksana");
+            AddSetting(nameof(Emotion), o => Emotion = o, NoEmpty, "good");
+            AddSetting(nameof(Quality), o => Quality = o, NoEmpty, "hi");
+            AddSetting(nameof(Speed), o => Speed = o, NoEmpty, "1.0");
         }
 
         #endregion
 
-        #region Public methods
+        #region Protected methods
 
         protected override async Task<byte[]> InternalConvert(string text)
         {
