@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using H.NET.Converters.Utilities;
@@ -12,15 +11,15 @@ namespace H.NET.Converters
     {
         #region Properties
 
-        public string Token { get; }
+        public string Token { get; set; }
 
         #endregion
 
         #region Constructors
 
-        public WitAiConverter(string token)
+        public WitAiConverter()
         {
-            Token = token ?? throw new ArgumentNullException(nameof(token));
+            AddSetting(nameof(Token), o => Token = o, NoEmpty, string.Empty);
         }
 
         #endregion

@@ -13,18 +13,21 @@ namespace H.NET.Converters
     {
         #region Properties
 
-        public string Key { get; }
-        public string Uuid { get; } = Guid.NewGuid().ToString().Replace("-", string.Empty);
-        public string Topic { get; set; } = "queries";
-        public string Lang { get; set; } = "en-US";
+        public string Key { get; set; }
+        public string Uuid { get; set; }
+        public string Topic { get; set; }
+        public string Lang { get; set; }
         
         #endregion
 
         #region Constructors
 
-        public YandexConverter(string key)
+        public YandexConverter()
         {
-            Key = key ?? throw new ArgumentNullException(nameof(key));
+            AddSetting(nameof(Key), o => Key = o, NoEmpty, string.Empty);
+            AddSetting(nameof(Uuid), o => Uuid = o, NoEmpty, Guid.NewGuid().ToString().Replace("-", string.Empty));
+            AddSetting(nameof(Topic), o => Topic = o, NoEmpty, "queries");
+            AddSetting(nameof(Lang), o => Lang = o, NoEmpty, "en-US");
         }
 
         #endregion
