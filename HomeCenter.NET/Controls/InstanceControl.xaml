@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="HomeCenter.NET.Controls.InstanceControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             DataContext="{Binding RelativeSource={RelativeSource Self}}"
+             d:DesignHeight="25" d:DesignWidth="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="100*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Label x:Name="NameLabel" Content="{Binding Path=ObjectName}" Width="100" Grid.Column="0"/>
+        <Label Content="{Binding Path=ObjectDescription}" Grid.Column="1"/>
+        <Button x:Name="EnableButtton" Width="25" Content="On" Grid.Column="2" Click="EnableButton_Click" Background="LightGreen"/>
+        <Button x:Name="EditButtton" Width="25" Content="⚙" Grid.Column="3" Click="EditButton_Click"/>
+        <Button x:Name="DeleteButtton" Content="✖" Width="25" Grid.Column="4" Click="DeleteButton_Click"/>
+    </Grid>
+</UserControl>

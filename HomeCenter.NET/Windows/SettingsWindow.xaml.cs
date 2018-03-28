@@ -58,19 +58,26 @@ namespace HomeCenter.NET.Windows
                 return;
             }
 
-            var assembly = ModuleManager.Instance.InstallAndGet(path);
-            var types = assembly.GetTypesOfInterface<IModule>();
-            foreach (var type in types)
+            try
             {
-                if (type.GetCustomAttribute(typeof(DisableAutoCreateInstanceAttribute)) != null)
+                var assembly = ModuleManager.Instance.InstallAndGet(path);
+                var types = assembly.GetTypesOfInterface<IModule>();
+                foreach (var type in types)
                 {
-                    continue;
+                    if (type.GetCustomAttribute(typeof(DisableAutoCreateInstanceAttribute)) != null)
+                    {
+                        continue;
+                    }
+
+                    ModuleManager.Instance.AddInstance(type.Name, type);
                 }
 
-                ModuleManager.Instance.AddInstance(type.Name, type);
+                Update();
             }
-
-            Update();
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.ToString(), "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         #endregion
@@ -136,13 +143,14 @@ namespace HomeCenter.NET.Windows
             ModulesPanel.Children.Clear();
             foreach (var pair in modules)
             {
-                var module = pair.Value;
-                var control = new Controls.ObjectControl(pair.Key, module?.Name ?? string.Empty)
+                var module = pair.Value.Value;
+                var control = new Controls.InstanceControl(pair.Key, module?.Name ?? pair.Value.Exception?.Message ?? string.Empty)
                 {
                     Height = 25,
                     Color = module != null ? Colors.LightGreen : Colors.Bisque,
-                    EnableAdding = false,
-                    EnableEditing = module != null
+                    EnableEditing = module != null,
+                    EnableEnabling = pair.Value.Exception == null,
+                    ObjectIsEnabled = pair.Value.IsEnabled
                 };
                 control.Deleted += (sender, args) =>
                 {
@@ -162,6 +170,12 @@ namespace HomeCenter.NET.Windows
                 {
                     var window = new ModuleSettingsWindow(module);
                     window.ShowDialog();
+                    Update();
+                };
+                control.EnabledChanged += enabled =>
+                {
+                    ModuleManager.Instance.SetInstanceIsEnabled(pair.Key, enabled);
+
                     Update();
                 };
                 ModulesPanel.Children.Add(control);
