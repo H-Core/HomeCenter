@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using H.NET.Core.Runners;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -53,7 +54,7 @@ namespace H.NET.Runners
             AddSetting(nameof(Token), o => Token = o, TokenIsValid, string.Empty);
             AddSetting(nameof(UserId), o => UserId = o, UsedIdIsValid, 0);
 
-            AddAction("telegram", SendMessage, "text");
+            AddAsyncAction("telegram", SendMessage, "text");
         }
 
         public static bool TokenIsValid(string token)
@@ -80,7 +81,7 @@ namespace H.NET.Runners
 
         #region Private methods
 
-        private async void SendMessage(string text) => 
+        private async Task SendMessage(string text) =>
             await Client.SendTextMessageAsync(ChatId, text);
 
         #endregion

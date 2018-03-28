@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using H.NET.Core.Utilities;
 
 namespace H.NET.Core.Runners
@@ -87,21 +88,22 @@ namespace H.NET.Core.Runners
             }
         }
 
-        protected void AddAction(string key, Action<string> action, string description = null) =>
+        protected void AddAction(string key, Action<string> action, string description = null, bool isInternal = false) =>
             AddAction(key, new RunInformation
             {
                 Description = description,
                 Action = action,
-                IsInternal = false
+                IsInternal = isInternal
             });
 
         protected void AddInternalAction(string key, Action<string> action, string description = null) =>
-            AddAction(key, new RunInformation
-            {
-                Description = description,
-                Action = action,
-                IsInternal = true
-            });
+            AddAction(key, action, description, true);
+
+        protected void AddAsyncAction(string key, Func<string, Task> func, string description = null, bool isInternal = false) =>
+            AddAction(key, text => AsyncHelpers.RunSync(() => func?.Invoke(text)), description, isInternal);
+
+        protected void AddInternalAsyncAction(string key, Func<string, Task> func, string description = null) =>
+            AddAsyncAction(key, func, description, true);
 
         protected void AddAction(string key, RunInformation information) =>
             HandlerDictionary[key] = information;
