@@ -31,6 +31,8 @@ namespace HomeCenter.NET.Windows
 
         private bool CanClose { get; set; }
 
+        private bool DeskBandRecordStarted { get; set; }
+
         #endregion
 
         #region Constructors
@@ -91,11 +93,23 @@ namespace HomeCenter.NET.Windows
             {
                 RecordButton.Content = "🔊";
                 RecordButton.Background = Brushes.LightSkyBlue;
+
+                if (!DeskBandRecordStarted)
+                {
+                    Run("deskband start");
+                    DeskBandRecordStarted = true;
+                }
             });
             Manager.Stopped += (sender, args) => Dispatcher.Invoke(() =>
             {
                 RecordButton.Content = "🔉";
                 RecordButton.Background = Brushes.LightGray;
+
+                if (DeskBandRecordStarted)
+                {
+                    Run("deskband stop");
+                    DeskBandRecordStarted = false;
+                }
             });
 
             #endregion
@@ -128,6 +142,7 @@ namespace HomeCenter.NET.Windows
 
             DefaultRunner.ShowSettingsAction = () => Dispatcher.Invoke(() => SettingsButton_Click(this, EventArgs.Empty));
             DefaultRunner.ShowCommandsAction = () => Dispatcher.Invoke(() => MenuButton_Click(this, EventArgs.Empty));
+            DefaultRunner.StartRecordAction = () => Dispatcher.Invoke(() => RecordButton_Click(this, EventArgs.Empty));
 
             #endregion
         }
@@ -202,7 +217,7 @@ namespace HomeCenter.NET.Windows
             }
         }
 
-        private void RecordButton_Click(object sender, RoutedEventArgs e)
+        private void RecordButton_Click(object sender, EventArgs e)
         {
             Manager.ChangeWithTimeout(3000);
         }

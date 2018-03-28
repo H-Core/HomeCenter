@@ -138,13 +138,13 @@ namespace HomeCenter.NET.Runners
 
             runner?.Run(newKey, newCommand);
 
-            if (!isHandled)
+            if (isHandled)
             {
-                NotHandledText?.Invoke(key);
+                new CommandsHistory(Options.CompanyName).Add(key);
             }
             else
             {
-                new CommandsHistory(Options.CompanyName).Add(key);
+                NotHandledText?.Invoke(key);
             }
         }
 

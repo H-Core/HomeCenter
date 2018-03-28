@@ -19,6 +19,7 @@ namespace HomeCenter.NET.Runners
 
         public static Action ShowSettingsAction { get; set; }
         public static Action ShowCommandsAction { get; set; }
+        public static Action StartRecordAction { get; set; }
 
         #endregion
 
@@ -37,12 +38,25 @@ namespace HomeCenter.NET.Runners
             AddAction("show", ShowWindowCommand, "process_name");
             AddAction("show-settings", command => ShowSettingsAction?.Invoke());
             AddAction("show-commands", command => ShowCommandsAction?.Invoke());
-            AddAction("deskband", async command => await Client.Write(command, Options.IpcPortToDeskBand));
+            AddAction("start-record", command => StartRecordAction?.Invoke());
+            AddAction("deskband", DeskBandCommand);
         }
 
         #endregion
 
         #region Private methods
+
+        private static async void DeskBandCommand(string command)
+        {
+            try
+            {
+                await Client.Write(command, Options.IpcPortToDeskBand);
+            }
+            catch (Exception exception)
+            {
+                Log(exception.Message);
+            }
+        }
 
         private static void RunProcess(string command)
         {
