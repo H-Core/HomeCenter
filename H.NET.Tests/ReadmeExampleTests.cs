@@ -27,7 +27,10 @@ namespace H.NET.Tests
                 // Select recorder which stops after 1000 milliseconds with Windows Multimedia API base recorder
                 Recorder = new WinmmRecorder(),
                 // Select Wit.ai voice-to-text converter
-                Converter = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")
+                Converter = new WitAiConverter
+                {
+                    Token = "OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS"
+                }
             };
             manager.NewValue += (key, value) => value?.Invoke();
 

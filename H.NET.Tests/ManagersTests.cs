@@ -19,7 +19,10 @@ namespace H.NET.Tests
             AsyncContext.Run(async () => await BaseManagerTest(new BaseManager
             {
                 Recorder = new WinmmRecorder(),
-                Converter = new WitAiConverter("OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS")
+                Converter = new WitAiConverter
+                {
+                    Token = "OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS"
+                }
             }, PlatformID.Win32NT));
 
         [Fact]
@@ -27,8 +30,9 @@ namespace H.NET.Tests
             AsyncContext.Run(async () => await BaseManagerTest(new BaseManager
             {
                 Recorder = new WinmmRecorder(),
-                Converter = new YandexConverter("1ce29818-0d15-4080-b6a1-ea5267c9fefd")
+                Converter = new YandexConverter
                 {
+                    Key = "1ce29818-0d15-4080-b6a1-ea5267c9fefd",
                     Lang = "ru-RU",
                     Topic = "queries"
                 }
