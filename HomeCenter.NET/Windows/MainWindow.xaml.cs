@@ -33,6 +33,9 @@ namespace HomeCenter.NET.Windows
 
         private bool DeskBandRecordStarted { get; set; }
 
+        private static Action<string> GlobalRunAction { get; set; }
+        public static void GlobalRun(string text) => GlobalRunAction?.Invoke(text);
+
         #endregion
 
         #region Constructors
@@ -121,6 +124,7 @@ namespace HomeCenter.NET.Windows
             AssembliesManager.LogAction = Print;
             Module.LogAction = Print;
             Notifier.RunAction = Run;
+            GlobalRunAction = Run;
 
             Print("Loading modules...");
             try

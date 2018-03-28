@@ -103,7 +103,7 @@ namespace HomeCenter.NET.Runners
                     if (command != null)
                     {
                         var argument = key.Substring(subKeys[0].Length);
-                        foreach (var line in command.Commands)
+                        foreach (var line in command.Lines)
                         {
                             line.Text = line.Text.Replace("*", argument);
                         }
@@ -127,7 +127,7 @@ namespace HomeCenter.NET.Runners
             History.Add(keyOrData);
 
             var (newKey, newCommand) = GetCommand(keyOrData);
-            foreach (var line in newCommand.Commands)
+            foreach (var line in newCommand.Lines)
             {
                 var information = RunSingleLine(newKey, line.Text);
                 if (information.Exception != null)
@@ -152,7 +152,7 @@ namespace HomeCenter.NET.Runners
             var information = runner.Run(key, data);
             if (information?.IsInternal == false)
             {
-                Print($"Run action for text: \"{data}\"");
+                Print($"Run action for key: \"{key}\": \"{data}\"");
             }
 
             new CommandsHistory(Options.CompanyName).Add(key);

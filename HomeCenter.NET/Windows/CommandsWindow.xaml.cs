@@ -34,7 +34,7 @@ namespace HomeCenter.NET.Windows
         {
             var command = new Command();
             command.Keys.Add(new SingleKey(string.Empty));
-            command.Commands.Add(new SingleCommand(string.Empty));
+            command.Lines.Add(new SingleCommand(string.Empty));
 
             CommandWindow.ShowAndSaveIfNeeded(command, Storage);
             Update();
@@ -66,7 +66,7 @@ namespace HomeCenter.NET.Windows
             foreach (var pair in Storage.UniqueValues(entry => entry.Value.Data))
             {
                 var command = pair.Value;
-                var control = new ObjectControl(command.KeysString, command.Data) { Height = 25 };
+                var control = new CommandControl(command.KeysString, command.Data) { Height = 25 };
                 control.Deleted += (sender, args) =>
                 {
                     foreach (var key in command.Keys)
@@ -79,6 +79,13 @@ namespace HomeCenter.NET.Windows
                 {
                     CommandWindow.ShowAndSaveIfNeeded(command, Storage);
                     Update();
+                };
+                control.Run += (sender, args) =>
+                {
+                    foreach (var line in command.Lines)
+                    {
+                        MainWindow.GlobalRun(line.Text);
+                    }
                 };
                 Panel.Children.Add(control);
             }

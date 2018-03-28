@@ -95,7 +95,7 @@ namespace HomeCenter.NET.Windows
         private void AddDataButton_Click(object sender, RoutedEventArgs e)
         {
             Save();
-            Command.Commands.Add(new SingleCommand(string.Empty));
+            Command.Lines.Add(new SingleCommand(string.Empty));
             Update();
         }
 
@@ -105,7 +105,7 @@ namespace HomeCenter.NET.Windows
 
         private void Save()
         {
-            Command.Commands = DataPanel.Children.OfType<TextControl>().Select(c => new SingleCommand(c.Text)).ToList();
+            Command.Lines = DataPanel.Children.OfType<TextControl>().Select(c => new SingleCommand(c.Text)).ToList();
             Command.Keys = KeysPanel.Children.OfType<TextControl>().Select(c => new SingleKey(c.Text)).ToList();
         }
 
@@ -127,7 +127,7 @@ namespace HomeCenter.NET.Windows
             }
 
             DataPanel.Children.Clear();
-            foreach (var line in Command.Commands)
+            foreach (var line in Command.Lines)
             {
                 var control = new TextControl(line.Text)
                 {
@@ -135,7 +135,7 @@ namespace HomeCenter.NET.Windows
                 };
                 control.Deleted += (sender, args) =>
                 {
-                    Command.Commands.Remove(line);
+                    Command.Lines.Remove(line);
                     Update();
                 };
                 DataPanel.Children.Add(control);
