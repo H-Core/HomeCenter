@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using H.NET.Utilities;
 using Newtonsoft.Json;
 
@@ -43,7 +44,9 @@ namespace H.NET.Storages
                 return new List<string>();
             }
 
-            var list = JsonConvert.DeserializeObject<List<string>>(text);
+            var list = JsonConvert.DeserializeObject<List<string>>(text)
+                .Where(i => !string.IsNullOrWhiteSpace(i))
+                .ToList();
             list.Reverse();
 
             return list;
