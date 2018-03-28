@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using H.NET.Core;
 using H.NET.Storages;
 using HomeCenter.NET.Controls;
@@ -125,6 +126,9 @@ namespace HomeCenter.NET.Windows
                 };
                 KeysPanel.Children.Add(control);
             }
+            var addKeyButton = new Button {Content = "Add New"};
+            addKeyButton.Click += AddKeyButton_Click;
+            KeysPanel.Children.Add(addKeyButton);
 
             DataPanel.Children.Clear();
             foreach (var line in Command.Lines)
@@ -140,6 +144,9 @@ namespace HomeCenter.NET.Windows
                 };
                 DataPanel.Children.Add(control);
             }
+            var addDataButton = new Button { Content = "Add New" };
+            addDataButton.Click += AddDataButton_Click;
+            DataPanel.Children.Add(addDataButton);
         }
 
         #endregion
