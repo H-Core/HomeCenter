@@ -13,7 +13,7 @@ using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Runners
 {
-    public class DefaultRunner : SimpleRunner
+    public class DefaultRunner : Runner
     {
         #region Properties
 
@@ -30,16 +30,17 @@ namespace HomeCenter.NET.Runners
             AddAction("run", RunProcess, "program.exe arguments");
             AddAction("say", Say, "text");
             AddAction("print", Print, "text");
-            AddAction("redirect", RunCommand, "other_command_key");
             AddAction("paste", Paste, "text");
             AddAction("clipboard", ClipboardCommand, "text");
             AddAction("keyboard", KeyboardCommand, "CONTROL+V");
             AddAction("sleep", SleepCommand, "integer");
             AddAction("show", ShowWindowCommand, "process_name");
-            AddAction("show-settings", command => ShowSettingsAction?.Invoke());
-            AddAction("show-commands", command => ShowCommandsAction?.Invoke());
-            AddAction("start-record", command => StartRecordAction?.Invoke());
-            AddAction("deskband", DeskBandCommand);
+
+            AddInternalAction("redirect", RunCommand, "other_command_key");
+            AddInternalAction("show-settings", command => ShowSettingsAction?.Invoke());
+            AddInternalAction("show-commands", command => ShowCommandsAction?.Invoke());
+            AddInternalAction("start-record", command => StartRecordAction?.Invoke());
+            AddInternalAction("deskband", DeskBandCommand);
         }
 
         #endregion

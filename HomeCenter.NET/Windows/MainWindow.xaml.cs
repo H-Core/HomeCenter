@@ -77,18 +77,18 @@ namespace HomeCenter.NET.Windows
                 }
 
                 var text = await AlternativeConverter.Convert(Manager.Data);
-                GlobalRunner.Run(text, null);
+                GlobalRunner.Run(text);
             };
 
-            GlobalRunner.NewOutput += (o, args) => Print(args.Text);
-            GlobalRunner.NewSpeech += (o, args) => Say(args.Text);
-            GlobalRunner.NewCommand += (o, args) => Manager.ProcessText(args.Text);
+            GlobalRunner.NewOutput += Print;
+            GlobalRunner.NewSpeech += Say;
+            GlobalRunner.NewCommand += Manager.ProcessText;
 
             #endregion
 
             #region Manager
 
-            Manager.NewText += text => GlobalRunner.Run(text, null);
+            Manager.NewText += text => GlobalRunner.Run(text);
             Manager.Started += (sender, args) => Dispatcher.Invoke(() =>
             {
                 RecordButton.Content = "🔊";
@@ -187,7 +187,7 @@ namespace HomeCenter.NET.Windows
             Say(await synthesizer.Convert(text));
         } 
 
-        private void Run(string message) => GlobalRunner.Run(message, null);
+        private void Run(string message) => GlobalRunner.Run(message);
 
         #endregion
 
@@ -203,7 +203,7 @@ namespace HomeCenter.NET.Windows
                         break;
                     }
 
-                    GlobalRunner.Run(InputTextBox.Text, null);
+                    GlobalRunner.Run(InputTextBox.Text);
                     InputTextBox.Clear();
                     break;
 

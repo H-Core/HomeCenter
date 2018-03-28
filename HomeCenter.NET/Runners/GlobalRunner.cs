@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using H.NET.Core;
-using H.NET.Core.Managers;
 using H.NET.Core.Runners;
 using H.NET.Core.Storages;
 using H.NET.Storages;
@@ -10,7 +9,7 @@ using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Runners
 {
-    public class GlobalRunner : BaseRunner
+    public class GlobalRunner : Module
     {
         #region Properties
 
@@ -22,7 +21,7 @@ namespace HomeCenter.NET.Runners
 
         #region Events
 
-        public event BaseManager.TextDelegate NotHandledText;
+        public event TextDelegate NotHandledText;
 
         #endregion
 
@@ -42,19 +41,19 @@ namespace HomeCenter.NET.Runners
 
         public void AddRunner(IRunner runner)
         {
-            runner.NewSpeech += OnNewSpeech;
-            runner.NewOutput += OnNewOutput;
-            runner.NewCommand += OnNewCommand;
+            runner.NewSpeech += Say;
+            runner.NewOutput += Print;
+            runner.NewCommand += RunCommand;
 
             Runners.Add(runner);
         }
 
-        public IRunner GetRunnerFor(string key, Command command)
+        public IRunner GetRunnerFor(string key, string data)
         {
             var runtimeRunners = ModuleManager.Instance.GetPluginsOfSubtype<IRunner>().Select(i => i.Value);
             foreach (var runner in runtimeRunners.Concat(Runners))
             {
-                if (runner.IsSupport(key, command))
+                if (runner.IsSupport(key, data))
                 {
                     //Log($"Runner: {runner.Name} supported command with {key}{command?.Data}");
                     return runner;
@@ -117,36 +116,50 @@ namespace HomeCenter.NET.Runners
             return (null, new Command(null, key));
         }
 
-        protected override void RunInternal(string key, Command command)
+        public void Run(string keyOrData)
         {
-            if (string.IsNullOrWhiteSpace(key))
+            if (string.IsNullOrWhiteSpace(keyOrData))
             {
                 Print("Bad or empty request");
-                NotHandledText?.Invoke(key);
-                return;
+                NotHandledText?.Invoke(keyOrData);
             }
 
-            History.Add(key);
+            History.Add(keyOrData);
 
-            var (newKey, newCommand) = GetCommand(key);
-
-            var runner = GetRunnerFor(newKey, newCommand);
-            var isHandled = runner != null;
-            Print(isHandled
-                ? $"Run action for text: \"{key}\""
-                : $"We don't have handler for text: \"{key}\"");
-
-            runner?.Run(newKey, newCommand);
-
-            if (isHandled)
+            var (newKey, newCommand) = GetCommand(keyOrData);
+            foreach (var line in newCommand.Commands)
             {
-                new CommandsHistory(Options.CompanyName).Add(key);
-            }
-            else
-            {
-                NotHandledText?.Invoke(key);
+                var information = RunSingleLine(newKey, line.Text);
+                if (information.Exception != null)
+                {
+                    Print($"{information.Exception}");
+                    return;
+                }
             }
         }
+
+        private RunInformation RunSingleLine(string key, string data)
+        {
+            var runner = GetRunnerFor(key, data);
+            var isHandled = runner != null;
+            if (!isHandled)
+            {
+                NotHandledText?.Invoke(key);
+
+                return new RunInformation(new Exception($"Runner for command \"{data}\" is not found"));
+            }
+
+            var information = runner.Run(key, data);
+            if (information?.IsInternal == false)
+            {
+                Print($"Run action for text: \"{data}\"");
+            }
+
+            new CommandsHistory(Options.CompanyName).Add(key);
+
+            return information;
+        }
+
 
         #endregion
 

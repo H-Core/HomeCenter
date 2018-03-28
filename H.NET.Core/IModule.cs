@@ -9,5 +9,11 @@ namespace H.NET.Core
 
         ISettingsStorage Settings { get; }
         bool IsValid();
+
+        event TextDelegate NewSpeech;
+        event TextDelegate NewOutput;
+        event TextDelegate NewCommand;
     }
+
+    public delegate void TextDelegate(string text);
 }

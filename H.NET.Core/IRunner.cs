@@ -5,12 +5,8 @@ namespace H.NET.Core
 {
     public interface IRunner : IModule
     {
-        void Run(string key, Command command);
-        bool IsSupport(string key, Command command);
-
-        event EventHandler<RunnerEventArgs> NewSpeech;
-        event EventHandler<RunnerEventArgs> NewOutput;
-        event EventHandler<RunnerEventArgs> NewCommand;
+        RunInformation Run(string key, string data);
+        bool IsSupport(string key, string data);
 
         event EventHandler<RunnerEventArgs> BeforeRun;
         event EventHandler<RunnerEventArgs> AfterRun;

@@ -44,21 +44,35 @@ namespace H.NET.Plugins
 
         public override void Load()
         {
-            base.Load();
+            try
+            {
+                base.Load();
 
-            Dispose();
+                Dispose();
 
-            AvailableTypes = ActiveAssemblies.SelectMany(i => i.GetTypesOfInterface<T>()).ToList();
-            ActivePlugins = LoadPlugins();
+                AvailableTypes = ActiveAssemblies.SelectMany(i => i.GetTypesOfInterface<T>()).ToList();
+                ActivePlugins = LoadPlugins();
+            }
+            catch (Exception exception)
+            {
+                Log($"Load Plugins: {exception}");
+            }
         }
 
         public override void Save()
         {
-            base.Save();
-
-            foreach (var pair in ActivePlugins ?? new Dictionary<string, T>())
+            try
             {
-                SavePluginSettings(pair.Key, pair.Value);
+                base.Save();
+
+                foreach (var pair in ActivePlugins ?? new Dictionary<string, T>())
+                {
+                    SavePluginSettings(pair.Key, pair.Value);
+                }
+            }
+            catch (Exception exception)
+            {
+                Log($"Save Plugins: {exception}");
             }
         }
 
@@ -160,7 +174,7 @@ namespace H.NET.Plugins
 
                 try
                 {
-                    var obj = (T) Activator.CreateInstance(type);
+                    var obj = (T)Activator.CreateInstance(type);
 
                     LoadPluginSettings(name, obj);
 

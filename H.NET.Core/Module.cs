@@ -18,6 +18,19 @@ namespace H.NET.Core
 
         #endregion
 
+        #region Events
+
+        public event TextDelegate NewSpeech;
+        protected void Say(string text) => NewSpeech?.Invoke(text);
+
+        public event TextDelegate NewOutput;
+        protected void Print(string text) => NewOutput?.Invoke(text);
+
+        public event TextDelegate NewCommand;
+        protected void RunCommand(string text) => NewCommand?.Invoke(text);
+
+        #endregion
+
         #region Constructors
 
         protected Module()

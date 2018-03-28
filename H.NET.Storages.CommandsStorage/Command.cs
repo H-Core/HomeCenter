@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace H.NET.Core.Runners
+namespace H.NET.Storages
 {
     public class Command
     {

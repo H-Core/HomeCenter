@@ -44,11 +44,15 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Command.cs" />
     <Compile Include="CommandsHistory.cs" />
     <Compile Include="CommandsStorage.cs" />
     <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="GoodPropertiesOnlyResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SingleCommand.cs" />
+    <Compile Include="SingleKey.cs" />
+    <Compile Include="TextObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\H.NET.Core\H.NET.Core.csproj">

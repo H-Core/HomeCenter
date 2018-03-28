@@ -5,7 +5,7 @@ using Telegram.Bot.Types;
 
 namespace H.NET.Runners
 {
-    public class TelegramRunner : SimpleRunner
+    public class TelegramRunner : Runner
     {
         #region Properties
 

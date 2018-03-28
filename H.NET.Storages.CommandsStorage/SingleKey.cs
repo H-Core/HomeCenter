@@ -1,4 +1,4 @@
-﻿namespace H.NET.Core.Runners
+﻿namespace H.NET.Storages
 {
     public class SingleKey : TextObject
     {

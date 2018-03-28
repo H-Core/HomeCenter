@@ -1,4 +1,5 @@
-﻿using H.NET.Core.Recorders;
+﻿using System;
+using H.NET.Core.Recorders;
 
 namespace H.NET.Core.Managers
 {
@@ -31,7 +32,6 @@ namespace H.NET.Core.Managers
 
         #region Events
 
-        public delegate void TextDelegate(string key);
         public event TextDelegate NewText;
         private void OnNewText() => NewText?.Invoke(Text);
         
@@ -65,7 +65,14 @@ namespace H.NET.Core.Managers
                 return;
             }
 
-            ProcessText(await Converter.Convert(bytes));
+            try
+            {
+                ProcessText(await Converter.Convert(bytes));
+            }
+            catch (Exception exception)
+            {
+                Log($"{exception}");
+            }
         }
 
         public override void Start()
