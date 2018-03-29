@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using H.NET.Core;
+using H.NET.Core.Attributes;
 using H.NET.Core.Settings;
 using H.NET.Plugins;
 using H.NET.Storages;
@@ -47,5 +49,18 @@ namespace HomeCenter.NET.Utilities
         {
             AppDomain.CurrentDomain.ProcessExit += (sender, e) => Instance.Dispose();
         }
+
+        public static void AddUniqueInstancesIfNeed() => SafeActions.Run(() =>
+        {
+            var types = Instance.AvailableTypes;
+            foreach (var type in types)
+            {
+                if (!(type.GetCustomAttribute(typeof(AllowMultipleInstanceAttribute)) is AllowMultipleInstanceAttribute) &&
+                    !Instance.Instances.ContainsKey(type.Name.ToLowerInvariant()))
+                {
+                    Instance.AddInstance(type.Name, type);
+                }
+            }
+        });
     }
 }

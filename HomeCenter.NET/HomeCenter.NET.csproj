@@ -92,6 +92,7 @@
     <Compile Include="Utilities\MediaUtilities.cs" />
     <Compile Include="Utilities\ModuleManager.cs" />
     <Compile Include="Utilities\Options.cs" />
+    <Compile Include="Utilities\SafeActions.cs" />
     <Compile Include="Utilities\Startup.cs" />
     <Page Include="Controls\CommandControl.xaml">
       <Generator>MSBuild:Compile</Generator>

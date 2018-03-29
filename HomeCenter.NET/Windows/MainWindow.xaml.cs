@@ -130,6 +130,7 @@ namespace HomeCenter.NET.Windows
             try
             {
                 ModuleManager.Instance.Load();
+                ModuleManager.AddUniqueInstancesIfNeed();
 
                 SetUpRuntimeModule();
 
