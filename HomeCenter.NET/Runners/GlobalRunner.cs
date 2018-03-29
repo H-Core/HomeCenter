@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using H.NET.Core;
 using H.NET.Core.Runners;
 using H.NET.Core.Storages;
@@ -116,7 +117,7 @@ namespace HomeCenter.NET.Runners
             return (null, new Command(null, key));
         }
 
-        public void Run(string keyOrData)
+        public async Task Run(string keyOrData)
         {
             if (string.IsNullOrWhiteSpace(keyOrData))
             {
@@ -130,7 +131,7 @@ namespace HomeCenter.NET.Runners
             var (newKey, newCommand) = GetCommand(keyOrData);
             foreach (var line in newCommand.Lines)
             {
-                var information = RunSingleLine(newKey, line.Text);
+                var information = await RunSingleLine(newKey, line.Text);
                 if (information.Exception != null)
                 {
                     Print($"{information.Exception}");
@@ -139,7 +140,7 @@ namespace HomeCenter.NET.Runners
             }
         }
 
-        private RunInformation RunSingleLine(string key, string data)
+        private async Task<RunInformation> RunSingleLine(string key, string data)
         {
             var runner = GetRunnerFor(key, data);
             var isHandled = runner != null;
@@ -150,7 +151,7 @@ namespace HomeCenter.NET.Runners
                 return new RunInformation(new Exception($"Runner for command \"{data}\" is not found"));
             }
 
-            var information = runner.Run(key, data);
+            var information = await Task.Run(() => runner.Run(key, data));
             if (information?.IsInternal == false)
             {
                 Print($"Run action for key: \"{key}\": \"{data}\"");
