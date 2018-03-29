@@ -12,68 +12,20 @@ namespace H.NET.Plugins
         #region Properties
 
         public const string InstancesSubFolder = "Instances";
-        public const string DeletedSubFolder = "Deleted";
         public const string SettingsExtension = ".txt";
-        public const string EnabledFileName = "enabled.txt";
+        public const string InstancesFileName = "instances.txt";
 
         public Action<T, string> LoadAction { get; }
         public Func<T, string> SaveFunc { get; }
 
         public string SettingsFolder { get; }
-        public string DeletedSettingsFolder { get; }
-        public string EnabledFilePath { get; }
+        public string InstancesFilePath { get; }
+        public InstancesFile<T> InstancesFile { get; }
 
-        public List<string> EnabledInstances => File.Exists(EnabledFilePath)
-            ? File.ReadAllLines(EnabledFilePath).ToList() : new List<string>();
-
-        private List<string> InstanceFiles =>
-            Directory.EnumerateFiles(SettingsFolder, $"*{SettingsExtension}").ToList();
-
-        private static string GetNameFromFileName(string fileName) => fileName.Contains('-') ? fileName?.Substring(0, fileName.IndexOf('-')) : null;
-        private static string GetTypeFromFileName(string fileName)
-        {
-            if (string.IsNullOrWhiteSpace(fileName) || 
-                !fileName.Contains('-'))
-            {
-                return null;
-            }
-
-            var index = fileName.IndexOf('-') + 1;
-            var dotIndex = fileName.LastIndexOf('.');
-
-            return fileName.Substring(index, dotIndex - index);
-        }
-
-        private string GetInstanceFile(string name) => InstanceFiles
-            .FirstOrDefault(i => string.Equals(name, GetNameFromFileName(Path.GetFileName(i)), StringComparison.OrdinalIgnoreCase));
-
-        private KeyValuePair<string, Instance> GetPlugin(string name) => ActivePlugins
-            .FirstOrDefault(i => string.Equals(i.Key, name, StringComparison.OrdinalIgnoreCase));
+        private string GetSettingsFilePath(string name) => Path.Combine(SettingsFolder, $"{name}{SettingsExtension}");
 
         public List<Type> AvailableTypes { get; private set; } = new List<Type>();
-        public Dictionary<string, Instance> ActivePlugins { get; private set; } = new Dictionary<string, Instance>();
-
-        public class Instance
-        {
-            public bool IsEnabled { get; set; }
-            public T Value { get; set; }
-            public Exception Exception { get; set; }
-
-            public Instance()
-            {
-            }
-
-            public Instance(Exception exception)
-            {
-                Exception = exception;
-            }
-
-            public Instance(T value)
-            {
-                Value = value;
-                IsEnabled = true;
-            }
-        }
+        public Dictionary<string, Instance<T>> Instances { get; private set; } = new Dictionary<string, Instance<T>>();
 
         #endregion
 
@@ -85,8 +37,8 @@ namespace H.NET.Plugins
             SaveFunc = saveFunc;
 
             SettingsFolder = DirectoryUtilities.CombineAndCreateDirectory(BaseFolder, InstancesSubFolder);
-            DeletedSettingsFolder = DirectoryUtilities.CombineAndCreateDirectory(SettingsFolder, DeletedSubFolder);
-            EnabledFilePath = Path.Combine(SettingsFolder, EnabledFileName);
+            InstancesFilePath = Path.Combine(SettingsFolder, InstancesFileName);
+            InstancesFile = new InstancesFile<T>(InstancesFilePath);
         }
 
         #endregion
@@ -104,7 +56,7 @@ namespace H.NET.Plugins
                 Dispose();
 
                 AvailableTypes = ActiveAssemblies.SelectMany(i => i.GetTypesOfInterface<T>()).ToList();
-                ActivePlugins = LoadPlugins();
+                Instances = LoadPlugins();
             }
             catch (Exception exception)
             {
@@ -118,7 +70,7 @@ namespace H.NET.Plugins
             {
                 base.Save();
 
-                foreach (var pair in ActivePlugins ?? new Dictionary<string, Instance>())
+                foreach (var pair in Instances ?? new Dictionary<string, Instance<T>>())
                 {
                     SavePluginSettings(pair.Key, pair.Value.Value);
                 }
@@ -133,7 +85,7 @@ namespace H.NET.Plugins
 
         public List<KeyValuePair<string, T1>> GetPluginsOfSubtype<T1>() where T1 : T
         {
-            return ActivePlugins
+            return Instances
                 .Where(i => i.Value.Value is T1)
                 .Select(i => new KeyValuePair<string, T1>(i.Key, (T1)i.Value.Value))
                 .ToList();
@@ -141,52 +93,34 @@ namespace H.NET.Plugins
 
         private void AddInstance(string name, string typeName)
         {
-            File.WriteAllText(Path.Combine(SettingsFolder, $"{name}-{typeName}{SettingsExtension}"), string.Empty);
+            InstancesFile.Add(name, typeName);
+
+            var path = GetSettingsFilePath(name);
+            if (!File.Exists(path))
+            {
+                File.WriteAllText(path, string.Empty);
+            }
         }
 
         public void AddInstance(string name, Type type) => AddInstance(name, type.FullName);
 
-        public void DeleteInstance(string name)
-        {
-            var from = GetInstanceFile(name);
-            if (string.IsNullOrWhiteSpace(from))
-            {
-                return;
-            }
+        public void DeleteInstance(string name) => InstancesFile.Delete(name);
 
-            var fileName = Path.GetFileNameWithoutExtension(from);
-            var extension = Path.GetExtension(from);
-            var to = Path.Combine(DeletedSettingsFolder, $"{fileName}_{new Random().Next()}{extension}");
-
-            File.Copy(from, to, true);
-            File.Delete(from);
-        }
-
-        public bool InstanceIsEnabled(string name) => EnabledInstances.Contains(name.ToLowerInvariant());
-
-        public string GetTypeNameOfName(string name)
-        {
-            var filePath = GetInstanceFile(name);
-            if (string.IsNullOrWhiteSpace(filePath))
-            {
-                return null;
-            }
-
-            var fileName = Path.GetFileName(filePath);
-
-            return GetTypeFromFileName(fileName);
-        }
+        public string GetTypeNameOfName(string name) => InstancesFile.Get(name).TypeName;
 
         public Type GetTypeOfName(string name) => GetTypeByFullName(GetTypeNameOfName(name));
 
         public void SetInstanceIsEnabled(string name, bool value)
         {
             name = name.ToLowerInvariant();
-            var enabled = EnabledInstances;
+            if (!InstancesFile.Contains(name))
+            {
+                throw new InstancesFile<T>.InstanceNotFoundException(name);
+            }
 
+            var instance = InstancesFile.Get(name);
             if (value)
             {
-                var instance = GetPlugin(name).Value;
                 try
                 {
                     var type = GetTypeOfName(name);
@@ -194,15 +128,7 @@ namespace H.NET.Plugins
                     {
                         //Log($"Load Plugins: Type \"{typeName}\" is not found in current assemblies");
 
-                        var exception = new Exception($"Type \"{GetTypeNameOfName(name)}\" is not found in current assemblies");
-                        if (instance != null)
-                        {
-                            instance.Exception = exception;
-                        }
-                        else
-                        {
-                            ActivePlugins.Add(name, new Instance(exception));
-                        }
+                        instance.SetException(new Exception($"Type \"{GetTypeNameOfName(name)}\" is not found in current assemblies"));
                         return;
                     }
 
@@ -210,57 +136,19 @@ namespace H.NET.Plugins
 
                     LoadPluginSettings(name, obj);
 
-                    if (instance != null)
-                    {
-                        instance.IsEnabled = true;
-                        instance.Value = obj;
-                        instance.Exception = null;
-                    }
-                    else
-                    {
-                        ActivePlugins.Add(name, new Instance(obj));
-                    }
-
-                    if (!enabled.Contains(name))
-                    {
-                        enabled.Add(name);
-                    }
+                    instance.SetValue(obj);
                 }
                 catch (Exception exception)
                 {
-                    if (instance != null)
-                    {
-                        instance.IsEnabled = false;
-                        instance.Value = null;
-                        instance.Exception = exception;
-                    }
-                    else
-                    {
-                        ActivePlugins.Add(name, new Instance(exception));
-                    }
+                    instance.SetException(exception);
                 }
             }
             else
             {
-                if (enabled.Contains(name))
-                {
-                    enabled.Remove(name);
-                }
-
-                var instance = GetPlugin(name).Value;
-                if (instance != null)
-                {
-                    instance.IsEnabled = false;
-                    if (instance.Value is IDisposable disposable)
-                    {
-                        disposable.Dispose();
-                    }
-
-                    instance.Value = null;
-                }
+                instance.Dispose();
             }
 
-            File.WriteAllLines(EnabledFilePath, enabled);
+            InstancesFile.Save();
         }
 
         #endregion
@@ -269,13 +157,10 @@ namespace H.NET.Plugins
 
         #region Load/Save Settings
 
-        private string GetDefaultSettingsPath(string name, T plugin) => Path.Combine(SettingsFolder,
-            $"{name}-{plugin.GetType().FullName}{SettingsExtension}");
 
-        private void LoadPluginSettings(string name, T plugin, string path = null)
+        private void LoadPluginSettings(string name, T plugin)
         {
-            path = path ?? GetDefaultSettingsPath(name, plugin);
-
+            var path = GetSettingsFilePath(name);
             if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
             {
                 return;
@@ -285,7 +170,7 @@ namespace H.NET.Plugins
             LoadAction?.Invoke(plugin, text);
         }
 
-        private void SavePluginSettings(string name, T plugin, string path = null)
+        private void SavePluginSettings(string name, T plugin)
         {
             var text = SaveFunc?.Invoke(plugin);
             if (text == null)
@@ -293,8 +178,7 @@ namespace H.NET.Plugins
                 return;
             }
 
-            path = path ?? GetDefaultSettingsPath(name, plugin);
-            File.WriteAllText(path, text);
+            File.WriteAllText(GetSettingsFilePath(name), text);
         }
 
         #endregion
@@ -302,16 +186,13 @@ namespace H.NET.Plugins
         private Type GetTypeByFullName(string name) => AvailableTypes
             .FirstOrDefault(i => string.Equals(i.FullName, name, StringComparison.OrdinalIgnoreCase));
 
-        private Dictionary<string, Instance> LoadPlugins()
+        private Dictionary<string, Instance<T>> LoadPlugins()
         {
-
-            var plugins = new Dictionary<string, Instance>();
-            foreach (var path in InstanceFiles)
+            foreach (var pair in InstancesFile.Items)
             {
-                var fileName = Path.GetFileNameWithoutExtension(path);
-                var values = fileName.Split('-');
-                var name = values.ElementAtOrDefault(0);
-                var typeName = values.ElementAtOrDefault(1);
+                var instance = pair.Value;
+                var name = instance.Name;
+                var typeName = instance.TypeName;
                 if (string.IsNullOrWhiteSpace(name) ||
                     string.IsNullOrWhiteSpace(typeName))
                 {
@@ -324,17 +205,15 @@ namespace H.NET.Plugins
                 if (type == null)
                 {
                     //Log($"Load Plugins: Type \"{typeName}\" is not found in current assemblies");
-
-                    plugins.Add(name, new Instance(new Exception($"Type \"{typeName}\" is not found in current assemblies")));
+                    instance.SetException(new Exception($"Type \"{typeName}\" is not found in current assemblies"));
                     continue;
                 }
 
                 try
                 {
-                    var isEnabled = InstanceIsEnabled(name);
-                    if (!isEnabled)
+                    if (!instance.IsEnabled)
                     {
-                        plugins.Add(name, new Instance());
+                        instance.Dispose();
                         continue;
                     }
 
@@ -342,17 +221,17 @@ namespace H.NET.Plugins
 
                     LoadPluginSettings(name, obj);
 
-                    plugins.Add(name, new Instance(obj));
+                    instance.SetValue(obj);
                 }
                 catch (Exception exception)
                 {
                     //Log($"Load Plugins: {exception}");
 
-                    plugins.Add(name, new Instance(exception));
+                    instance.SetException(exception);
                 }
             }
 
-            return plugins;
+            return InstancesFile.Items;
         }
 
         #endregion
@@ -361,12 +240,12 @@ namespace H.NET.Plugins
 
         public virtual void Dispose()
         {
-            if (ActivePlugins == null)
+            if (Instances == null)
             {
                 return;
             }
 
-            foreach (var plugin in ActivePlugins
+            foreach (var plugin in Instances
                 .Where(i => i.Value.Value is IDisposable)
                 .Select(i => i.Value.Value)
                 .Cast<IDisposable>())
@@ -374,7 +253,7 @@ namespace H.NET.Plugins
                 plugin.Dispose();
             }
 
-            ActivePlugins.Clear();
+            Instances.Clear();
         }
 
         #endregion

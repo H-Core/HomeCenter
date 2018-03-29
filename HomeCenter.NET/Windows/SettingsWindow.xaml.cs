@@ -138,19 +138,20 @@ namespace HomeCenter.NET.Windows
 
             // Modules
 
-            var modules = ModuleManager.Instance.ActivePlugins;
+            var instances = ModuleManager.Instance.Instances;
 
             ModulesPanel.Children.Clear();
-            foreach (var pair in modules)
+            foreach (var pair in instances)
             {
+                var instance = pair.Value;
                 var module = pair.Value.Value;
-                var control = new Controls.InstanceControl(pair.Key, module?.Name ?? pair.Value.Exception?.Message ?? string.Empty)
+                var control = new Controls.InstanceControl(instance.Name, module?.Name ?? pair.Value.Exception?.Message ?? string.Empty)
                 {
                     Height = 25,
                     Color = module != null ? Colors.LightGreen : Colors.Bisque,
                     EnableEditing = module != null && module.Settings?.Count > 0,
-                    EnableEnabling = pair.Value.Exception == null,
-                    ObjectIsEnabled = pair.Value.IsEnabled
+                    EnableEnabling = instance.Exception == null,
+                    ObjectIsEnabled = instance.IsEnabled
                 };
                 control.Deleted += (sender, args) =>
                 {
@@ -162,7 +163,7 @@ namespace HomeCenter.NET.Windows
                         return;
                     }
 
-                    ModuleManager.Instance.DeleteInstance(pair.Key);
+                    ModuleManager.Instance.DeleteInstance(instance.Name);
 
                     Update();
                 };
@@ -174,7 +175,7 @@ namespace HomeCenter.NET.Windows
                 };
                 control.EnabledChanged += enabled =>
                 {
-                    ModuleManager.Instance.SetInstanceIsEnabled(pair.Key, enabled);
+                    ModuleManager.Instance.SetInstanceIsEnabled(instance.Name, enabled);
 
                     Update();
                 };
