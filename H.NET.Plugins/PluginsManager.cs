@@ -22,8 +22,33 @@ namespace H.NET.Plugins
         public string SettingsFolder { get; }
         public string DeletedSettingsFolder { get; }
         public string EnabledFilePath { get; }
+
         public List<string> EnabledInstances => File.Exists(EnabledFilePath)
             ? File.ReadAllLines(EnabledFilePath).ToList() : new List<string>();
+
+        private List<string> InstanceFiles =>
+            Directory.EnumerateFiles(SettingsFolder, $"*{SettingsExtension}").ToList();
+
+        private static string GetNameFromFileName(string fileName) => fileName.Contains('-') ? fileName?.Substring(0, fileName.IndexOf('-')) : null;
+        private static string GetTypeFromFileName(string fileName)
+        {
+            if (string.IsNullOrWhiteSpace(fileName) || 
+                !fileName.Contains('-'))
+            {
+                return null;
+            }
+
+            var index = fileName.IndexOf('-') + 1;
+            var dotIndex = fileName.LastIndexOf('.');
+
+            return fileName.Substring(index, dotIndex - index);
+        }
+
+        private string GetInstanceFile(string name) => InstanceFiles
+            .FirstOrDefault(i => string.Equals(name, GetNameFromFileName(Path.GetFileName(i)), StringComparison.OrdinalIgnoreCase));
+
+        private KeyValuePair<string, Instance> GetPlugin(string name) => ActivePlugins
+            .FirstOrDefault(i => string.Equals(i.Key, name, StringComparison.OrdinalIgnoreCase));
 
         public List<Type> AvailableTypes { get; private set; } = new List<Type>();
         public Dictionary<string, Instance> ActivePlugins { get; private set; } = new Dictionary<string, Instance>();
@@ -33,6 +58,21 @@ namespace H.NET.Plugins
             public bool IsEnabled { get; set; }
             public T Value { get; set; }
             public Exception Exception { get; set; }
+
+            public Instance()
+            {
+            }
+
+            public Instance(Exception exception)
+            {
+                Exception = exception;
+            }
+
+            public Instance(T value)
+            {
+                Value = value;
+                IsEnabled = true;
+            }
         }
 
         #endregion
@@ -106,21 +146,38 @@ namespace H.NET.Plugins
 
         public void AddInstance(string name, Type type) => AddInstance(name, type.FullName);
 
-        public void DeleteInstance(string name) => Directory
-            .EnumerateFiles(SettingsFolder, $"*{SettingsExtension}")
-            .Where(i => Path.GetFileName(i)?.StartsWith(name) ?? false)
-            .AsParallel()
-            .ForAll(from =>
+        public void DeleteInstance(string name)
+        {
+            var from = GetInstanceFile(name);
+            if (string.IsNullOrWhiteSpace(from))
             {
-                var fileName = Path.GetFileNameWithoutExtension(from);
-                var extension = Path.GetExtension(from);
-                var to = Path.Combine(DeletedSettingsFolder, $"{fileName}_{new Random().Next()}{extension}");
+                return;
+            }
 
-                File.Copy(from, to, true);
-                File.Delete(from);
-            });
+            var fileName = Path.GetFileNameWithoutExtension(from);
+            var extension = Path.GetExtension(from);
+            var to = Path.Combine(DeletedSettingsFolder, $"{fileName}_{new Random().Next()}{extension}");
+
+            File.Copy(from, to, true);
+            File.Delete(from);
+        }
 
         public bool InstanceIsEnabled(string name) => EnabledInstances.Contains(name.ToLowerInvariant());
+
+        public string GetTypeNameOfName(string name)
+        {
+            var filePath = GetInstanceFile(name);
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                return null;
+            }
+
+            var fileName = Path.GetFileName(filePath);
+
+            return GetTypeFromFileName(fileName);
+        }
+
+        public Type GetTypeOfName(string name) => GetTypeByFullName(GetTypeNameOfName(name));
 
         public void SetInstanceIsEnabled(string name, bool value)
         {
@@ -129,9 +186,58 @@ namespace H.NET.Plugins
 
             if (value)
             {
-                if (!enabled.Contains(name))
+                var instance = GetPlugin(name).Value;
+                try
                 {
-                    enabled.Add(name);
+                    var type = GetTypeOfName(name);
+                    if (type == null)
+                    {
+                        //Log($"Load Plugins: Type \"{typeName}\" is not found in current assemblies");
+
+                        var exception = new Exception($"Type \"{GetTypeNameOfName(name)}\" is not found in current assemblies");
+                        if (instance != null)
+                        {
+                            instance.Exception = exception;
+                        }
+                        else
+                        {
+                            ActivePlugins.Add(name, new Instance(exception));
+                        }
+                        return;
+                    }
+
+                    var obj = (T)Activator.CreateInstance(type);
+
+                    LoadPluginSettings(name, obj);
+
+                    if (instance != null)
+                    {
+                        instance.IsEnabled = true;
+                        instance.Value = obj;
+                        instance.Exception = null;
+                    }
+                    else
+                    {
+                        ActivePlugins.Add(name, new Instance(obj));
+                    }
+
+                    if (!enabled.Contains(name))
+                    {
+                        enabled.Add(name);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    if (instance != null)
+                    {
+                        instance.IsEnabled = false;
+                        instance.Value = null;
+                        instance.Exception = exception;
+                    }
+                    else
+                    {
+                        ActivePlugins.Add(name, new Instance(exception));
+                    }
                 }
             }
             else
@@ -139,6 +245,18 @@ namespace H.NET.Plugins
                 if (enabled.Contains(name))
                 {
                     enabled.Remove(name);
+                }
+
+                var instance = GetPlugin(name).Value;
+                if (instance != null)
+                {
+                    instance.IsEnabled = false;
+                    if (instance.Value is IDisposable disposable)
+                    {
+                        disposable.Dispose();
+                    }
+
+                    instance.Value = null;
                 }
             }
 
@@ -188,7 +306,7 @@ namespace H.NET.Plugins
         {
 
             var plugins = new Dictionary<string, Instance>();
-            foreach (var path in Directory.EnumerateFiles(SettingsFolder, $"*{SettingsExtension}"))
+            foreach (var path in InstanceFiles)
             {
                 var fileName = Path.GetFileNameWithoutExtension(path);
                 var values = fileName.Split('-');
@@ -207,7 +325,7 @@ namespace H.NET.Plugins
                 {
                     //Log($"Load Plugins: Type \"{typeName}\" is not found in current assemblies");
 
-                    plugins.Add(name, new Instance { Exception = new Exception($"Type \"{typeName}\" is not found in current assemblies") });
+                    plugins.Add(name, new Instance(new Exception($"Type \"{typeName}\" is not found in current assemblies")));
                     continue;
                 }
 
@@ -224,13 +342,13 @@ namespace H.NET.Plugins
 
                     LoadPluginSettings(name, obj);
 
-                    plugins.Add(name, new Instance { IsEnabled = true, Value = obj });
+                    plugins.Add(name, new Instance(obj));
                 }
                 catch (Exception exception)
                 {
                     //Log($"Load Plugins: {exception}");
 
-                    plugins.Add(name, new Instance { Exception = exception });
+                    plugins.Add(name, new Instance(exception));
                 }
             }
 
