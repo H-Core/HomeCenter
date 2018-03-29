@@ -71,8 +71,9 @@ namespace HomeCenter.NET.Windows
             var types = assembly.GetTypesOfInterface<IModule>();
             foreach (var type in types)
             {
-                if (!(type.GetCustomAttribute(typeof(AllowMultipleInstanceAttribute)) is AllowMultipleInstanceAttribute attribute) ||
-                    attribute.AutoCreateInstance)
+                if ((!(type.GetCustomAttribute(typeof(AllowMultipleInstanceAttribute)) is AllowMultipleInstanceAttribute attribute) ||
+                    attribute.AutoCreateInstance) &&
+                    ModuleManager.Instance.TypeIsAvailable(type))
                 {
                     ModuleManager.Instance.AddInstance(type.Name, type);
                 }

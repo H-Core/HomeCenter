@@ -13,8 +13,13 @@ namespace HomeCenter.NET.Utilities
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.ToString(), "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowException(exception);
             }
+        }
+
+        public static void ShowException(Exception exception)
+        {
+            MessageBox.Show(exception.ToString(), "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

@@ -20,18 +20,14 @@ namespace H.NET.Core.Storages
             }
         }
 
-        public void CopyFrom(string key, Setting setting)
+        public void CopyFrom(string key, object value)
         {
             if (!TryGetValue(key, out var thisSetting))
             {
                 return;
             }
 
-            thisSetting.Key = setting.Key;
-            thisSetting.Value = setting.Value;
-            thisSetting.DefaultValue = setting.DefaultValue;
-            thisSetting.SettingType = setting.SettingType;
-
+            thisSetting.Value = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(key));
         }
 

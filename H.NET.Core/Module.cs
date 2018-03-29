@@ -80,6 +80,20 @@ namespace H.NET.Core
             };
         }
 
+        protected void AddEnumerableSetting<T>(string key, Action<T> setAction, Func<T, bool> checkFunc, T[] defaultValues)
+        {
+            key = key ?? throw new ArgumentNullException(nameof(key));
+            Settings[key] = new Setting
+            {
+                Key = key,
+                Value = defaultValues.ElementAtOrDefault(0),
+                DefaultValue = defaultValues,
+                SettingType = SettingType.Enumerable,
+                CheckFunc = o => CanConvert<T>(o) && checkFunc?.Invoke(ConvertTo<T>(o)) == true,
+                SetAction = o => setAction?.Invoke(ConvertTo<T>(o))
+            };
+        }
+
         protected static bool NoEmpty(string key) => !string.IsNullOrEmpty(key);
 
         #endregion

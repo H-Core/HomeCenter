@@ -4,9 +4,7 @@ using System.Linq;
 using System.Reflection;
 using H.NET.Core;
 using H.NET.Core.Attributes;
-using H.NET.Core.Settings;
 using H.NET.Plugins;
-using H.NET.Storages;
 using Newtonsoft.Json;
 
 namespace HomeCenter.NET.Utilities
@@ -15,18 +13,30 @@ namespace HomeCenter.NET.Utilities
     {
         #region Properties
 
+        public class Item
+        {
+            public string Key { get; }
+            public object Value { get; }
+
+            public Item(string key, object value)
+            {
+                Key = key;
+                Value = value;
+            }
+        }
+
         public static PluginsManager<IModule> Instance { get; } = new PluginsManager<IModule>(Options.CompanyName,
             (module, text) =>
             {
-                var list = JsonConvert.DeserializeObject<List<Setting>>(text);
+                var list = JsonConvert.DeserializeObject<List<Item>>(text);
                 if (list == null)
                 {
                     return;
                 }
 
-                foreach (var value in list)
+                foreach (var pair in list)
                 {
-                    module.Settings.CopyFrom(value.Key, value);
+                    module.Settings.CopyFrom(pair.Key, pair.Value);
                 }
             }, module =>
             {
@@ -35,12 +45,9 @@ namespace HomeCenter.NET.Utilities
                     return null;
                 }
 
-                var list = module.Settings.Select(i => i.Value).ToList();
+                var list = module.Settings.Select(pair => new Item(pair.Key, pair.Value.Value)).ToList();
 
-                return JsonConvert.SerializeObject(list, Formatting.Indented, new JsonSerializerSettings
-                {
-                    ContractResolver = new GoodPropertiesOnlyResolver()
-                });
+                return JsonConvert.SerializeObject(list, Formatting.Indented);
             });
 
         #endregion

@@ -10,12 +10,15 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="25"></ColumnDefinition>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
             <ColumnDefinition Width="25"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label Content="{Binding Path=KeyName}" Grid.Column="0"/>
-        <TextBox x:Name="TextBox" Text="{Binding Path=Value}" Grid.Column="1"/>
-        <Button x:Name="BrowseButton" Content="..." Grid.Column="2" Click="BrowseButton_Click"/>
-        <Button Content="⮰" Grid.Column="3" Click="DefaultButton_Click"/>
+        <Label Grid.Column="0" Content="{Binding Path=KeyName}"/>
+        <TextBox Grid.Column="1" x:Name="TextBox" Text="{Binding Path=Value}"/>
+        <Border Grid.Column="1" x:Name="ComboBoxBorder" BorderThickness="1" Visibility="Hidden">
+            <ComboBox x:Name="ComboBox" IsEditable="True" SelectionChanged="ComboBox_SelectionChanged"/>
+        </Border>
+        <Button Width="25" Grid.Column="2" x:Name="BrowseButton" Content="..." Visibility="Collapsed" Click="BrowseButton_Click"/>
+        <Button Grid.Column="3" Content="⮰" Click="DefaultButton_Click"/>
     </Grid>
 </UserControl>

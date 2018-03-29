@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
@@ -21,9 +22,9 @@ namespace HomeCenter.NET.Controls
                     Setting.Value = Convert.ChangeType(value, Setting.Type);
                     OnPropertyChanged(nameof(Value));
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
-                    // ignored
+                    SafeActions.ShowException(exception);
                 }
 
                 UpdateColor();
@@ -52,10 +53,19 @@ namespace HomeCenter.NET.Controls
             switch (Setting.SettingType)
             {
                 case SettingType.Default:
-                    BrowseButton.Visibility = Visibility.Hidden;
-                    Grid.ColumnDefinitions[2].Width = new GridLength(0);
                     break;
                 case SettingType.Path:
+                    BrowseButton.Visibility = Visibility.Visible;
+                    break;
+                case SettingType.Enumerable:
+                    if (Setting.DefaultValue is IEnumerable enumerable)
+                    {
+                        TextBox.Visibility = Visibility.Hidden;
+                        ComboBoxBorder.Visibility = Visibility.Visible;
+                        ComboBox.ItemsSource = enumerable;
+
+                        ComboBox.SelectedItem = Setting.Value;
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -66,7 +76,9 @@ namespace HomeCenter.NET.Controls
 
         public void UpdateColor()
         {
-            TextBox.Background = new SolidColorBrush(Setting.IsValid() ? Colors.LightGreen : Colors.Bisque);
+            var isValid = Setting.IsValid();
+            TextBox.Background = new SolidColorBrush(isValid ? Colors.LightGreen : Colors.Bisque);
+            ComboBoxBorder.BorderBrush = new SolidColorBrush(isValid ? Colors.LightGreen : Colors.Red);
         }
 
         #endregion
@@ -99,6 +111,11 @@ namespace HomeCenter.NET.Controls
             }
 
             Value = Setting.DefaultValue;
+        }
+
+        private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            Value = ComboBox.SelectedItem;
         }
 
         #endregion

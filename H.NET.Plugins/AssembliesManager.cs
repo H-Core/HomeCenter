@@ -52,7 +52,6 @@ namespace H.NET.Plugins
             ActiveFolder = CreateActiveFolder();
             DirectoryUtilities.CopyDirectory(AssembliesFolder, ActiveFolder);
 
-
             ActiveAssemblies = Directory
                 .EnumerateDirectories(ActiveFolder)
                 .Select(folder => Path.Combine(folder, $"{Path.GetFileName(folder) ?? ""}.dll"))

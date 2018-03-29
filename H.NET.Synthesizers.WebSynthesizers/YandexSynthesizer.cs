@@ -23,12 +23,12 @@ namespace H.NET.Synthesizers
         public YandexSynthesizer()
         {
             AddSetting(nameof(Key), o => Key = o, NoEmpty, string.Empty);
-            AddSetting(nameof(Lang), o => Lang = o, NoEmpty, "en-US");
-            AddSetting(nameof(Format), o => Format = o, NoEmpty, "wav");
-            AddSetting(nameof(Speaker), o => Speaker = o, NoEmpty, "oksana");
-            AddSetting(nameof(Emotion), o => Emotion = o, NoEmpty, "good");
-            AddSetting(nameof(Quality), o => Quality = o, NoEmpty, "hi");
-            AddSetting(nameof(Speed), o => Speed = o, NoEmpty, "1.0");
+            AddEnumerableSetting(nameof(Lang), o => Lang = o, NoEmpty, new []{ "en-US", "ru-RU", "uk-UK", "tr-TR" });
+            AddEnumerableSetting(nameof(Format), o => Format = o, NoEmpty, new[] { "wav", "mp3", "opus" });
+            AddEnumerableSetting(nameof(Speaker), o => Speaker = o, NoEmpty, new[] { "oksana", "jane", "alyss", "omazh", "zahar", "ermil" });
+            AddEnumerableSetting(nameof(Emotion), o => Emotion = o, NoEmpty, new[] { "good", "evil", "neutral" });
+            AddEnumerableSetting(nameof(Quality), o => Quality = o, NoEmpty, new[] { "hi", "lo" });
+            AddEnumerableSetting(nameof(Speed), o => Speed = o, NoEmpty, new[] { "1.0", "0.1", "0.25", "0.5", "0.75", "1.25", "1.5", "2.0", "3.0" });
         }
 
         #endregion

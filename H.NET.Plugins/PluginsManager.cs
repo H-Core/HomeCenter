@@ -101,6 +101,8 @@ namespace H.NET.Plugins
             {
                 File.WriteAllText(path, string.Empty);
             }
+
+            SetInstanceIsEnabled(name, true);
         }
 
         public void AddInstance(string name, Type type) => AddInstance(name, type.FullName);
@@ -190,8 +192,10 @@ namespace H.NET.Plugins
 
         private List<Type> GetAvailableTypes() => ActiveAssemblies
             .SelectMany(i => i.GetTypesOfInterface<T>())
-            .Where(i => i.GetConstructors().Any(c => c.IsPublic && c.GetParameters().Length == 0))
+            .Where(TypeIsAvailable)
             .ToList();
+
+        public bool TypeIsAvailable(Type type) => type.GetConstructors().Any(c => c.IsPublic && c.GetParameters().Length == 0);
 
         private Type GetTypeByFullName(string name) => AvailableTypes
             .FirstOrDefault(i => string.Equals(i.FullName, name, StringComparison.OrdinalIgnoreCase));

@@ -17,7 +17,8 @@ namespace H.NET.Converters
         public string Uuid { get; set; }
         public string Topic { get; set; }
         public string Lang { get; set; }
-        
+        public string DisableAntimat { get; set; }
+
         #endregion
 
         #region Constructors
@@ -26,8 +27,9 @@ namespace H.NET.Converters
         {
             AddSetting(nameof(Key), o => Key = o, NoEmpty, string.Empty);
             AddSetting(nameof(Uuid), o => Uuid = o, NoEmpty, Guid.NewGuid().ToString().Replace("-", string.Empty));
-            AddSetting(nameof(Topic), o => Topic = o, NoEmpty, "queries");
-            AddSetting(nameof(Lang), o => Lang = o, NoEmpty, "en-US");
+            AddEnumerableSetting(nameof(Topic), o => Topic = o, NoEmpty, new[] { "queries", "maps", "dates", "names", "numbers", "music", "buying" });
+            AddEnumerableSetting(nameof(Lang), o => Lang = o, NoEmpty, new []{ "en-US", "ru-RU", "uk-UK", "tr-TR" });
+            AddEnumerableSetting(nameof(DisableAntimat), o => DisableAntimat = o, NoEmpty, new[] { "false", "true" });
         }
 
         #endregion
@@ -41,7 +43,7 @@ namespace H.NET.Converters
                 var content = new ByteArrayContent(bytes);
                 content.Headers.ContentType = new MediaTypeHeaderValue("audio/x-wav");
 
-                var message = await client.PostAsync($"https://asr.yandex.net/asr_xml?uuid={Uuid}&key={Key}&topic={Topic}&lang={Lang}", content);
+                var message = await client.PostAsync($"https://asr.yandex.net/asr_xml?uuid={Uuid}&key={Key}&topic={Topic}&lang={Lang}&disableAntimat={DisableAntimat}", content);
 
                 var info = await message.GetResponseText();
                 if (string.IsNullOrWhiteSpace(info.Text))

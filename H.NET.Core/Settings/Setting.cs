@@ -9,7 +9,7 @@ namespace H.NET.Core.Settings
         public object DefaultValue { get; set; }
         public SettingType SettingType { get; set; }
 
-        public Type Type => DefaultValue.GetType();
+        public Type Type => SettingType == SettingType.Enumerable ? DefaultValue.GetType().GetElementType() : DefaultValue.GetType();
 
         public Func<object, bool> CheckFunc { get; set; }
         public bool IsValid() => CheckFunc?.Invoke(Value) ?? true;

@@ -3,6 +3,7 @@
     public enum SettingType
     {
         Default,
-        Path
+        Path,
+        Enumerable
     }
 }
