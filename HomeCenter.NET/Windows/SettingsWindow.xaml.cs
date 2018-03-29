@@ -58,94 +58,46 @@ namespace HomeCenter.NET.Windows
                 return;
             }
 
-            try
-            {
-                var assembly = ModuleManager.Instance.InstallAndGet(path);
-                var types = assembly.GetTypesOfInterface<IModule>();
-                foreach (var type in types)
-                {
-                    if (type.GetCustomAttribute(typeof(DisableAutoCreateInstanceAttribute)) != null)
-                    {
-                        continue;
-                    }
-
-                    ModuleManager.Instance.AddInstance(type.Name, type);
-                }
-
-                Update();
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Show(exception.ToString(), "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            Add(path);
         }
 
         #endregion
 
         #region Private methods
 
-        private void Update()
+        private void Add(string path) => SafeActions.Run(() =>
         {
-            // Assemblies
-
-            var assemblies = ModuleManager.Instance.ActiveAssemblies;
-
-            AssembliesPanel.Children.Clear();
-            foreach (var assembly in assemblies)
-            {
-                var control = new Controls.ObjectControl(assembly.GetName().Name)
-                {
-                    Height = 25,
-                    Color = Colors.LightGreen,
-                    EnableEditing = false,
-                    EnableAdding = false
-                };
-                control.Deleted += (sender, args) =>
-                {
-                    ModuleManager.Instance.Deinstall(assembly);
-                    Update();
-                };
-                AssembliesPanel.Children.Add(control);
-            }
-
-            // Available types
-
-            var types = ModuleManager.Instance.AvailableTypes;
-
-            AvailableTypesPanel.Children.Clear();
+            var assembly = ModuleManager.Instance.InstallAndGet(path);
+            var types = assembly.GetTypesOfInterface<IModule>();
             foreach (var type in types)
             {
-                var control = new Controls.ObjectControl(type.Name)
+                if (!(type.GetCustomAttribute(typeof(AllowMultipleInstanceAttribute)) is AllowMultipleInstanceAttribute attribute) ||
+                    attribute.AutoCreateInstance)
                 {
-                    Height = 25,
-                    Color = Colors.LightGreen,
-                    EnableEditing = false,
-                    EnableAdding = type.GetCustomAttribute<DisableAutoCreateInstanceAttribute>() != null
-                };
-                control.Deleted += (sender, args) =>
-                {
-                    ModuleManager.Instance.Deinstall(type);
-                    Update();
-                };
-                control.Added += (sender, args) =>
-                {
-                    ModuleManager.Instance.AddInstance($"{type.Name}_{new Random().Next()}", type);
-
-                    Update();
-                };
-                AvailableTypesPanel.Children.Add(control);
+                    ModuleManager.Instance.AddInstance(type.Name, type);
+                }
             }
 
-            // Modules
+            Update();
+        });
 
+        private void Update()
+        {
+            UpdateAssemblies();
+            UpdateAvailableTypes();
+            UpdateModules();
+        }
+
+        private void UpdateModules() => SafeActions.Run(() =>
+        {
             var instances = ModuleManager.Instance.Instances;
 
             ModulesPanel.Children.Clear();
             foreach (var pair in instances)
             {
                 var instance = pair.Value;
-                var module = pair.Value.Value;
-                var control = new Controls.InstanceControl(instance.Name, module?.Name ?? pair.Value.Exception?.Message ?? string.Empty)
+                var module = instance.Value;
+                var control = new Controls.InstanceControl(instance.Name, module?.Name ?? instance.Exception?.Message ?? string.Empty)
                 {
                     Height = 25,
                     Color = module != null ? Colors.LightGreen : Colors.Bisque,
@@ -181,7 +133,59 @@ namespace HomeCenter.NET.Windows
                 };
                 ModulesPanel.Children.Add(control);
             }
-        }
+        });
+
+        private void UpdateAvailableTypes() => SafeActions.Run(() =>
+        {
+            var types = ModuleManager.Instance.AvailableTypes;
+
+            AvailableTypesPanel.Children.Clear();
+            foreach (var type in types)
+            {
+                var control = new Controls.ObjectControl(type.Name)
+                {
+                    Height = 25,
+                    Color = Colors.LightGreen,
+                    EnableEditing = false,
+                    EnableAdding = type.GetCustomAttribute<AllowMultipleInstanceAttribute>() != null
+                };
+                control.Deleted += (sender, args) =>
+                {
+                    ModuleManager.Instance.Deinstall(type);
+                    Update();
+                };
+                control.Added += (sender, args) =>
+                {
+                    ModuleManager.Instance.AddInstance($"{type.Name}_{new Random().Next()}", type);
+
+                    Update();
+                };
+                AvailableTypesPanel.Children.Add(control);
+            }
+        });
+
+        private void UpdateAssemblies() => SafeActions.Run(() =>
+        {
+            var assemblies = ModuleManager.Instance.ActiveAssemblies;
+
+            AssembliesPanel.Children.Clear();
+            foreach (var assembly in assemblies)
+            {
+                var control = new Controls.ObjectControl(assembly.GetName().Name)
+                {
+                    Height = 25,
+                    Color = Colors.LightGreen,
+                    EnableEditing = false,
+                    EnableAdding = false
+                };
+                control.Deleted += (sender, args) =>
+                {
+                    ModuleManager.Instance.Deinstall(assembly);
+                    Update();
+                };
+                AssembliesPanel.Children.Add(control);
+            }
+        });
 
         #endregion
     }

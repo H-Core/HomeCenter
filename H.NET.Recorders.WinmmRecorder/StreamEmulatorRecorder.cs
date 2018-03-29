@@ -6,7 +6,7 @@ using H.NET.Core.Recorders;
 
 namespace H.NET.Recorders
 {
-    [DisableAutoCreateInstance]
+    [AllowMultipleInstance(false)]
     public class StreamEmulatorRecorder : ParentRecorder
     {
         #region Properties

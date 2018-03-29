@@ -3,7 +3,7 @@ using H.NET.Core.Attributes;
 
 namespace H.NET.Core.Notifiers
 {
-    [DisableAutoCreateInstance]
+    [AllowMultipleInstance(false)]
     public class Notifier : Module, INotifier
     {
         #region Properties

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace H.NET.Plugins
 {
-    public class InstancesFile<T> where T : class
+    public class InstancesFile<T> : IDisposable where T : class
     {
         public string FilePath { get; set; }
         public Dictionary<string, Instance<T>> Items { get; }
@@ -53,7 +53,7 @@ namespace H.NET.Plugins
                 throw new InstanceNotFoundException(name);
             }
 
-            Items.Remove(name);
+            Items.Remove(name.ToLowerInvariant());
             Save();
         }
 
@@ -63,5 +63,22 @@ namespace H.NET.Plugins
             {
             }
         }
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            foreach (var plugin in Items
+                .Where(i => i.Value.Value is IDisposable)
+                .Select(i => i.Value.Value)
+                .Cast<IDisposable>())
+            {
+                plugin.Dispose();
+            }
+
+            Items.Clear();
+        }
+
+        #endregion
     }
 }

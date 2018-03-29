@@ -20,12 +20,12 @@ namespace H.NET.Plugins
 
         public string SettingsFolder { get; }
         public string InstancesFilePath { get; }
-        public InstancesFile<T> InstancesFile { get; }
+        public InstancesFile<T> InstancesFile { get; private set; }
 
         private string GetSettingsFilePath(string name) => Path.Combine(SettingsFolder, $"{name}{SettingsExtension}");
 
         public List<Type> AvailableTypes { get; private set; } = new List<Type>();
-        public Dictionary<string, Instance<T>> Instances { get; private set; } = new Dictionary<string, Instance<T>>();
+        public Dictionary<string, Instance<T>> Instances => InstancesFile.Items;
 
         #endregion
 
@@ -38,7 +38,6 @@ namespace H.NET.Plugins
 
             SettingsFolder = DirectoryUtilities.CombineAndCreateDirectory(BaseFolder, InstancesSubFolder);
             InstancesFilePath = Path.Combine(SettingsFolder, InstancesFileName);
-            InstancesFile = new InstancesFile<T>(InstancesFilePath);
         }
 
         #endregion
@@ -55,8 +54,10 @@ namespace H.NET.Plugins
 
                 Dispose();
 
-                AvailableTypes = ActiveAssemblies.SelectMany(i => i.GetTypesOfInterface<T>()).ToList();
-                Instances = LoadPlugins();
+                InstancesFile = new InstancesFile<T>(InstancesFilePath);
+                AvailableTypes = GetAvailableTypes();
+
+                LoadPlugins();
             }
             catch (Exception exception)
             {
@@ -104,7 +105,12 @@ namespace H.NET.Plugins
 
         public void AddInstance(string name, Type type) => AddInstance(name, type.FullName);
 
-        public void DeleteInstance(string name) => InstancesFile.Delete(name);
+        public void DeleteInstance(string name)
+        {
+            SetInstanceIsEnabled(name, false);
+
+            InstancesFile.Delete(name);
+        } 
 
         public string GetTypeNameOfName(string name) => InstancesFile.Get(name).TypeName;
 
@@ -157,7 +163,6 @@ namespace H.NET.Plugins
 
         #region Load/Save Settings
 
-
         private void LoadPluginSettings(string name, T plugin)
         {
             var path = GetSettingsFilePath(name);
@@ -183,10 +188,15 @@ namespace H.NET.Plugins
 
         #endregion
 
+        private List<Type> GetAvailableTypes() => ActiveAssemblies
+            .SelectMany(i => i.GetTypesOfInterface<T>())
+            .Where(i => i.GetConstructors().Any(c => c.IsPublic && c.GetParameters().Length == 0))
+            .ToList();
+
         private Type GetTypeByFullName(string name) => AvailableTypes
             .FirstOrDefault(i => string.Equals(i.FullName, name, StringComparison.OrdinalIgnoreCase));
 
-        private Dictionary<string, Instance<T>> LoadPlugins()
+        private void LoadPlugins()
         {
             foreach (var pair in InstancesFile.Items)
             {
@@ -230,8 +240,6 @@ namespace H.NET.Plugins
                     instance.SetException(exception);
                 }
             }
-
-            return InstancesFile.Items;
         }
 
         #endregion
@@ -240,20 +248,8 @@ namespace H.NET.Plugins
 
         public virtual void Dispose()
         {
-            if (Instances == null)
-            {
-                return;
-            }
-
-            foreach (var plugin in Instances
-                .Where(i => i.Value.Value is IDisposable)
-                .Select(i => i.Value.Value)
-                .Cast<IDisposable>())
-            {
-                plugin.Dispose();
-            }
-
-            Instances.Clear();
+            InstancesFile?.Dispose();
+            InstancesFile = null;
         }
 
         #endregion
