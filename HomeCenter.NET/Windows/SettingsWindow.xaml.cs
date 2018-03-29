@@ -148,7 +148,7 @@ namespace HomeCenter.NET.Windows
                 {
                     Height = 25,
                     Color = module != null ? Colors.LightGreen : Colors.Bisque,
-                    EnableEditing = module != null,
+                    EnableEditing = module != null && module.Settings?.Count > 0,
                     EnableEnabling = pair.Value.Exception == null,
                     ObjectIsEnabled = pair.Value.IsEnabled
                 };
@@ -168,7 +168,7 @@ namespace HomeCenter.NET.Windows
                 };
                 control.Edited += (sender, args) =>
                 {
-                    var window = new ModuleSettingsWindow(module);
+                    var window = new ModuleSettingsWindow(module?.Settings);
                     window.ShowDialog();
                     Update();
                 };

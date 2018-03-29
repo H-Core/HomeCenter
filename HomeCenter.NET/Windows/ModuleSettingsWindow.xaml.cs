@@ -8,15 +8,15 @@ namespace HomeCenter.NET.Windows
     {
         #region Properties
 
-        private IModule Module { get; }
+        private ISettingsStorage Storage { get; }
 
         #endregion
 
         #region Contructors
 
-        public ModuleSettingsWindow(IModule module)
+        public ModuleSettingsWindow(ISettingsStorage storage)
         {
-            Module = module ?? throw new ArgumentNullException(nameof(module));
+            Storage = storage ?? throw new ArgumentNullException(nameof(storage));
 
             InitializeComponent();
 
@@ -48,7 +48,7 @@ namespace HomeCenter.NET.Windows
         private void Update()
         {
             Panel.Children.Clear();
-            foreach (var pair in Module.Settings)
+            foreach (var pair in Storage)
             {
                 var control = new Controls.SettingControl(pair.Value) { Height = 25 };
                 Panel.Children.Add(control);
@@ -64,7 +64,7 @@ namespace HomeCenter.NET.Windows
                     continue;
                 }
 
-                Module.Settings[settingControl.Setting.Key] = settingControl.Setting;
+                Storage[settingControl.Setting.Key] = settingControl.Setting;
             }
         }
 
