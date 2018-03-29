@@ -41,6 +41,8 @@ namespace HomeCenter.NET.Runners
             AddInternalAction("show-commands", command => ShowCommandsAction?.Invoke());
             AddInternalAction("start-record", command => StartRecordAction?.Invoke());
             AddInternalAction("deskband", DeskBandCommand);
+            AddInternalAction("enable-module", command => ModuleManager.Instance.SetInstanceIsEnabled(command, true), "name");
+            AddInternalAction("disable-module", command => ModuleManager.Instance.SetInstanceIsEnabled(command, false), "name");
         }
 
         #endregion
