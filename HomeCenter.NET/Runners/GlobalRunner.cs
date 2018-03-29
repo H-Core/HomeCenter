@@ -122,6 +122,7 @@ namespace HomeCenter.NET.Runners
             {
                 Print("Bad or empty request");
                 NotHandledText?.Invoke(keyOrData);
+                return;
             }
 
             History.Add(keyOrData);
