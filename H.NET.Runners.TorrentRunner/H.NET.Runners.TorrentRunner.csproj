@@ -31,12 +31,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MonoTorrent, Version=0.80.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoTorrent.0.9.0\lib\net20\MonoTorrent.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>libraries\MonoTorrent.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoTorrent.Dht">
+      <HintPath>libraries\MonoTorrent.Dht.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="main.cs" />
+    <Compile Include="TestManualConnection.cs" />
+    <Compile Include="Top10Listener.cs" />
     <Compile Include="TorrentRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -45,9 +52,6 @@
       <Project>{e3ee7480-fd57-43e0-b6e1-b69255068dcb}</Project>
       <Name>H.NET.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
