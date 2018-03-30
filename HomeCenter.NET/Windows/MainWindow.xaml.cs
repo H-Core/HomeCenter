@@ -131,6 +131,7 @@ namespace HomeCenter.NET.Windows
             {
                 ModuleManager.Instance.Load();
                 ModuleManager.AddUniqueInstancesIfNeed();
+                ModuleManager.RegisterHandlers(Print, Say, Run);
 
                 SetUpRuntimeModule();
 

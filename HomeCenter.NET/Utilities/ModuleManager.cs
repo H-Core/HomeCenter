@@ -69,5 +69,22 @@ namespace HomeCenter.NET.Utilities
                 }
             }
         });
+
+        public static void RegisterHandlers(TextDelegate outputAction, TextDelegate sayAction, TextDelegate commandAction) => SafeActions.Run(() =>
+        {
+            var instances = Instance.Instances.Values;
+            foreach (var instance in instances)
+            {
+                var module = instance.Value;
+                if (module == null)
+                {
+                    continue;
+                }
+
+                module.NewOutput += outputAction;
+                module.NewSpeech += sayAction;
+                module.NewCommand += commandAction;
+            }
+        });
     }
 }
