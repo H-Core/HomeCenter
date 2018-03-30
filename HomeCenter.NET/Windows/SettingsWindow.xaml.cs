@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Media;
 using H.NET.Core;
 using H.NET.Core.Attributes;
-using H.NET.Plugins.Extensions;
 using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Windows

@@ -10,25 +10,42 @@
         Title="HomeCenter"  
         Height="600" 
         Width="500" 
-        WindowStartupLocation="CenterScreen" 
-        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
         Icon="../Properties/Icons/icon.ico" 
         KeyDown="Window_KeyDown" 
         KeyUp="Window_KeyUp" Closing="Window_Closing">
     <Grid Margin="10,10,10,10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80*"></RowDefinition>
+            <RowDefinition Height="2"></RowDefinition>
+            <RowDefinition Height="20*" MinHeight="80"></RowDefinition>
+        </Grid.RowDefinitions>
         <Grid.Resources>
             <commands:ShowHideCommand x:Key="ShowHideCommand" />
         </Grid.Resources>
-        <TextBox x:Name="InputTextBox" HorizontalAlignment="Left" Height="45" Margin="0,496,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="374" 
-                 KeyUp="InputTextBox_KeyUp" MaxLength="255"/>
-        <TextBox x:Name="ConsoleTextBox" Height="491" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
-        <Button x:Name="RecordButton" Content="🔉" HorizontalAlignment="Left" Margin="379,510,0,0" VerticalAlignment="Top" Width="25" Height="27"
-                Click="RecordButton_Click"/>
-        <Button Content="☰" HorizontalAlignment="Left" Margin="409,510,0,0" VerticalAlignment="Top" Width="25" Height="27"
-                Click="MenuButton_Click"/>
-        <Button Content="⚙" HorizontalAlignment="Left" Margin="439,510,0,0" VerticalAlignment="Top" Width="25" Height="27"
-                Click="SettingsButton_Click"/>
-        <tb:TaskbarIcon 
+        <ScrollViewer Grid.Row="0">
+            <TextBox x:Name="ConsoleTextBox" TextWrapping="Wrap" Text="" IsReadOnly="True"/>
+        </ScrollViewer>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100*"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="2"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="2"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100*"></ColumnDefinition>
+                <ColumnDefinition Width="2"></ColumnDefinition>
+                <ColumnDefinition Width="25"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Grid.RowSpan="8" x:Name="InputTextBox" TextWrapping="Wrap" KeyUp="InputTextBox_KeyUp"/>
+            <Button Grid.Column="2" Grid.Row="1" x:Name="RecordButton" Content="🔉" Height="25" Click="RecordButton_Click"/>
+            <Button Grid.Column="2" Grid.Row="3" Content="☰" Height="25" Click="MenuButton_Click"/>
+            <Button Grid.Column="2" Grid.Row="5" Content="⚙" Height="25" Click="SettingsButton_Click"/>
+        </Grid>
+        <tb:TaskbarIcon Grid.Row="0"
             x:Name="TaskbarIcon" 
             IconSource="../Properties/Icons/icon.ico" 
             PopupActivation="RightClick" 

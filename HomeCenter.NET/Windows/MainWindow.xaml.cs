@@ -208,7 +208,13 @@ namespace HomeCenter.NET.Windows
                     {
                         break;
                     }
-
+                    if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                    {
+                        InputTextBox.Text += Environment.NewLine;
+                        InputTextBox.CaretIndex = InputTextBox.Text.Length - 1;
+                        break;
+                    }
+                    
                     Run(InputTextBox.Text);
                     InputTextBox.Clear();
                     break;
