@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Media;
 
 namespace HomeCenter.NET.Controls
 {
@@ -8,17 +7,25 @@ namespace HomeCenter.NET.Controls
     {
         #region Properties
 
-        public string ObjectName { get; set; }
-        public string ObjectDescription { get; set; }
+        public string ObjectName { get => NameLabel.Content as string; set => NameLabel.Content = value; }
 
-        private Color _color;
-        public Color Color
+        public string ObjectDescription
         {
-            get => _color;
+            get => IsEditable ? DescriptionTextBox.Text : DescriptionLabel.Content as string;
             set
             {
-                _color = value;
-                Background = new SolidColorBrush(value);
+                DescriptionLabel.Content = value;
+                DescriptionTextBox.Text = value;
+            }
+        }
+
+        public bool IsEditable
+        {
+            get => DescriptionTextBox.Visibility == Visibility.Visible;
+            set
+            {
+                DescriptionTextBox.Visibility = value ? Visibility.Visible : Visibility.Hidden;
+                DescriptionLabel.Visibility = !value ? Visibility.Visible : Visibility.Hidden;
             }
         }
 
@@ -34,12 +41,13 @@ namespace HomeCenter.NET.Controls
 
         #region Constructors
 
-        public CommandControl(string name, string description)
+        public CommandControl(string name, string description, bool editable = false)
         {
-            ObjectName = name ?? throw new ArgumentNullException(nameof(name));
-            ObjectDescription = description ?? throw new ArgumentNullException(nameof(description));
-
             InitializeComponent();
+
+            ObjectName = name;
+            ObjectDescription = description;
+            IsEditable = editable;
         }
 
         #endregion

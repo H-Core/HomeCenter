@@ -18,6 +18,14 @@ namespace HomeCenter.NET.Runners
         private List<IRunner> Runners { get; } = new List<IRunner>();
         public List<string> History { get; } = new List<string>();
 
+        private List<IRunner> RuntimeRunners => ModuleManager
+            .Instance
+            .GetPluginsOfSubtype<IRunner>()
+            .Select(i => i.Value)
+            .ToList();
+
+        private List<IRunner> AllRunners => RuntimeRunners.Concat(Runners).ToList();
+
         #endregion
 
         #region Events
@@ -49,10 +57,11 @@ namespace HomeCenter.NET.Runners
             Runners.Add(runner);
         }
 
+        public string[] GetSupportedCommands() => AllRunners.SelectMany(i => i.GetSupportedCommands()).ToArray();
+
         public IRunner GetRunnerFor(string key, string data)
         {
-            var runtimeRunners = ModuleManager.Instance.GetPluginsOfSubtype<IRunner>().Select(i => i.Value);
-            foreach (var runner in runtimeRunners.Concat(Runners))
+            foreach (var runner in AllRunners)
             {
                 if (runner.IsSupport(key, data))
                 {

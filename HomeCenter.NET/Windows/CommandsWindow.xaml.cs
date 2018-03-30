@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Windows;
-using H.NET.Core;
+using H.NET.Core.Utilities;
 using H.NET.Storages;
 using H.NET.Storages.Extensions;
 using HomeCenter.NET.Controls;
+using HomeCenter.NET.Runners;
 
 namespace HomeCenter.NET.Windows
 {
@@ -11,15 +12,15 @@ namespace HomeCenter.NET.Windows
     {
         #region Properties
 
-        public IStorage<Command> Storage { get; }
+        public GlobalRunner Runner { get; }
 
         #endregion
 
         #region Constructors
 
-        public CommandsWindow(IStorage<Command> storage)
+        public CommandsWindow(GlobalRunner runner)
         {
-            Storage = storage ?? throw new ArgumentNullException(nameof(storage));
+            Runner = runner ?? throw new ArgumentNullException(nameof(runner));
 
             InitializeComponent();
 
@@ -36,13 +37,13 @@ namespace HomeCenter.NET.Windows
             command.Keys.Add(new SingleKey(string.Empty));
             command.Lines.Add(new SingleCommand(string.Empty));
 
-            CommandWindow.ShowAndSaveIfNeeded(command, Storage);
+            CommandWindow.ShowAndSaveIfNeeded(command, Runner.Storage);
             Update();
         } 
 
         private void SaveAndClose(object sender, RoutedEventArgs e)
         {
-            Storage.Save();
+            Runner.Storage.Save();
 
             DialogResult = true;
             Close();
@@ -50,7 +51,7 @@ namespace HomeCenter.NET.Windows
 
         private void Close(object sender, RoutedEventArgs e)
         {
-            Storage.Load(); // Cancel changes
+            Runner.Storage.Load(); // Cancel changes
 
             DialogResult = false;
             Close();
@@ -62,22 +63,29 @@ namespace HomeCenter.NET.Windows
 
         private void Update()
         {
-            Panel.Children.Clear();
-            foreach (var pair in Storage.UniqueValues(entry => entry.Value.Data))
+            UpdateUserCommands();
+            UpdateAllCommands();
+        }
+
+        private void UpdateUserCommands()
+        {
+            UserPanel.Children.Clear();
+            foreach (var pair in Runner.Storage.UniqueValues(entry => entry.Value.Data))
             {
                 var command = pair.Value;
-                var control = new CommandControl(command.KeysString, command.Data) { Height = 25 };
+                var control = new CommandControl(command.KeysString, command.Data) {Height = 25};
                 control.Deleted += (sender, args) =>
                 {
                     foreach (var key in command.Keys)
                     {
-                        Storage.Remove(key.Text);
+                        Runner.Storage.Remove(key.Text);
                     }
+
                     Update();
                 };
                 control.Edited += (sender, args) =>
                 {
-                    CommandWindow.ShowAndSaveIfNeeded(command, Storage);
+                    CommandWindow.ShowAndSaveIfNeeded(command, Runner.Storage);
                     Update();
                 };
                 control.Run += (sender, args) =>
@@ -87,7 +95,22 @@ namespace HomeCenter.NET.Windows
                         MainWindow.GlobalRun(line.Text);
                     }
                 };
-                Panel.Children.Add(control);
+                UserPanel.Children.Add(control);
+            }
+        }
+
+        private void UpdateAllCommands()
+        {
+            AllPanel.Children.Clear();
+            foreach (var command in Runner.GetSupportedCommands())
+            {
+                var values = command.SplitOnlyFirst(' ');
+                var control = new CommandControl(values[0], values[1], true)
+                {
+                    Height = 25
+                };
+                control.Run += (sender, args) => MainWindow.GlobalRun($"{values[0]} {control.ObjectDescription}");
+                AllPanel.Children.Add(control);
             }
         }
 

@@ -10,9 +10,18 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="35" />
         </Grid.RowDefinitions>
-        <ScrollViewer Grid.Row="0">
-            <StackPanel x:Name="Panel"/>
-        </ScrollViewer>
+        <TabControl Grid.Row="0" TabStripPlacement="Left" Background="#FFE5E5E5">
+            <TabItem Header="User">
+                <ScrollViewer>
+                    <StackPanel x:Name="UserPanel"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="All">
+                <ScrollViewer>
+                    <StackPanel x:Name="AllPanel"/>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
         <Grid Grid.Row="1" Margin="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="80" />

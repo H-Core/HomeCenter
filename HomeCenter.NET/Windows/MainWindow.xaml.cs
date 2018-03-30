@@ -236,16 +236,16 @@ namespace HomeCenter.NET.Windows
 
         private void MenuButton_Click(object sender, EventArgs e)
         {
-            var window = new CommandsWindow(GlobalRunner.Storage);
+            var window = new CommandsWindow(GlobalRunner);
 
-            window.ShowDialog();
+            window.Show();
         }
 
         private void SettingsButton_Click(object sender, EventArgs e)
         {
             var window = new SettingsWindow();
 
-            window.ShowDialog();
+            window.Show();
 
             SetUpRuntimeModule();
         }
