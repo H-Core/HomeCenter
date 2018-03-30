@@ -50,7 +50,7 @@ namespace H.NET.Plugins
             TryClean();
 
             ActiveFolder = CreateActiveFolder();
-            DirectoryUtilities.CopyDirectory(AssembliesFolder, ActiveFolder);
+            DirectoryUtilities.Copy(AssembliesFolder, ActiveFolder, true);
 
             ActiveAssemblies = Directory
                 .EnumerateDirectories(ActiveFolder)

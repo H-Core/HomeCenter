@@ -67,17 +67,10 @@ namespace HomeCenter.NET.Windows
 
         private void Add(string path) => SafeActions.Run(() =>
         {
-            var assembly = ModuleManager.Instance.InstallAndGet(path);
-            var types = assembly.GetTypesOfInterface<IModule>();
-            foreach (var type in types)
-            {
-                if ((!(type.GetCustomAttribute(typeof(AllowMultipleInstanceAttribute)) is AllowMultipleInstanceAttribute attribute) ||
-                    attribute.AutoCreateInstance) &&
-                    ModuleManager.Instance.TypeIsAvailable(type))
-                {
-                    ModuleManager.Instance.AddInstance(type.Name, type);
-                }
-            }
+            ModuleManager.Instance.AddInstancesFromAssembly(path, typeof(IModule), 
+                type =>
+                !(type.GetCustomAttribute(typeof(AllowMultipleInstanceAttribute)) is AllowMultipleInstanceAttribute attribute) ||
+                 attribute.AutoCreateInstance);
 
             Update();
         });

@@ -8,8 +8,11 @@ namespace H.NET.Plugins.Extensions
 {
     public static class AssemblyExtensions
     {
+        public static Type[] GetTypesOfInterface(this Assembly assembly, Type type) =>
+            assembly.GetExportedTypes().Where(type.IsAssignableFrom).ToArray();
+
         public static Type[] GetTypesOfInterface<T>(this Assembly assembly) =>
-            assembly.GetExportedTypes().Where(typeof(T).IsAssignableFrom).ToArray();
+            assembly.GetTypesOfInterface(typeof(T));
 
         public static T[] GetObjectsOfInterface<T>(this Assembly assembly) =>
             assembly.GetTypesOfInterface<T>().Select(Activator.CreateInstance).Cast<T>().ToArray();
