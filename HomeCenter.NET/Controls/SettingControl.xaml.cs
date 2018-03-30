@@ -55,6 +55,7 @@ namespace HomeCenter.NET.Controls
                 case SettingType.Default:
                     break;
                 case SettingType.Path:
+                case SettingType.Folder:
                     BrowseButton.Visibility = Visibility.Visible;
                     break;
                 case SettingType.Enumerable:
@@ -74,7 +75,11 @@ namespace HomeCenter.NET.Controls
             UpdateColor();
         }
 
-        public void UpdateColor()
+        #endregion
+
+        #region Private methods
+
+        private void UpdateColor()
         {
             var isValid = Setting.IsValid();
             TextBox.Background = new SolidColorBrush(isValid ? Colors.LightGreen : Colors.Bisque);
@@ -88,7 +93,9 @@ namespace HomeCenter.NET.Controls
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
         {
             var text = Value as string;
-            var path = DialogUtilities.OpenFileDialog(text);
+            var path = Setting.SettingType == SettingType.Path
+                ? DialogUtilities.OpenFileDialog(text)
+                : DialogUtilities.OpenFolderDialog(text);
             if (string.IsNullOrWhiteSpace(path))
             {
                 return;

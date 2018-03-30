@@ -15,5 +15,16 @@ namespace HomeCenter.NET.Utilities
 
             return dialog.ShowDialog() == true ? dialog.FileName : null;
         }
+
+        public static string OpenFolderDialog(string path = null)
+        {
+            var dialog = new VistaFolderBrowserDialog();
+            if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
+            {
+                dialog.SelectedPath = path + Path.DirectorySeparatorChar;
+            }
+
+            return dialog.ShowDialog() == true ? dialog.SelectedPath : null;
+        }
     }
 }

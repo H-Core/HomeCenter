@@ -21,7 +21,7 @@ namespace H.NET.Runners.TorrentRunner
 
         public TorrentRunner()
         {
-            AddSetting(nameof(SaveTo), o => SaveTo = o, NoEmpty, string.Empty, SettingType.Path);
+            AddSetting(nameof(SaveTo), o => SaveTo = o, NoEmpty, string.Empty, SettingType.Folder);
             //AddSetting(nameof(UserId), o => UserId = o, UsedIdIsValid, 0);
 
             AddAction("torrent", TorrentCommand, "text");
