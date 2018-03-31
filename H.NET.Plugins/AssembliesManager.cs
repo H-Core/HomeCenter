@@ -134,46 +134,7 @@ namespace H.NET.Plugins
         private string CreateActiveFolder() => DirectoryUtilities.CombineAndCreateDirectory(BaseFolder, $"{ActiveAssembliesSubFolderPrefix}{new Random().Next()}");
         private string GetAssemblyFolder(Assembly assembly) => DirectoryUtilities.CombineAndCreateDirectory(AssembliesFolder, assembly.GetName().Name);
 
-        /*
-        public class ProxyDomain : MarshalByRefObject
-        {
-            public Assembly GetAssembly(string path)
-            {
-                try
-                {
-                    return Assembly.LoadFile(path);
-                }
-                catch (Exception exception)
-                {
-                    throw new InvalidOperationException(exception.Message, exception);
-                }
-            }
-        }
-        */
-
-        private static Assembly LoadAssembly(string path)
-        {
-            /*
-            var domain = AppDomain.CreateDomain("H.NET.Plugins.Domain", AppDomain.CurrentDomain.Evidence, new AppDomainSetup
-            {
-                ApplicationBase = Path.GetDirectoryName(path) ?? Environment.CurrentDirectory
-            });
-
-            domain.UnhandledException += (sender, args) =>
-                MessageBox.Show(((Exception) args.ExceptionObject).ToString());
-            */
-
-            //var type = typeof(Proxy);
-            //var value = (Proxy)domain.CreateInstanceAndUnwrap(
-            //    type.Assembly.FullName,
-            //    type.FullName);
-
-            //var assembly = value.GetAssembly(path);
-            //var plugin = Domain.CreateInstanceFromAndUnwrap(path, type.Name) as T;
-            
-
-            return Assembly.LoadFrom(path);
-        }
+        private static Assembly LoadAssembly(string path) => Assembly.LoadFrom(path);
 
         private void TryClean()
         {

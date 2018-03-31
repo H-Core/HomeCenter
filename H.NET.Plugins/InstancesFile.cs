@@ -8,7 +8,7 @@ namespace H.NET.Plugins
     public class InstancesFile
     {
         public string FilePath { get; }
-        public Dictionary<string, Instance> Items { get; }
+        public Dictionary<string, Instance> Items { get; } = new Dictionary<string, Instance>();
 
         public InstancesFile(string path)
         {

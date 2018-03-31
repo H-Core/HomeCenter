@@ -55,7 +55,7 @@ namespace H.NET.Plugins
         private Type GetTypeByFullName(string name) => AvailableTypes
             .FirstOrDefault(i => string.Equals(i.FullName, name, StringComparison.OrdinalIgnoreCase));
 
-        public Instances<T> Instances { get; set; }
+        public Instances<T> Instances { get; private set; }
 
         #endregion
 
@@ -69,6 +69,7 @@ namespace H.NET.Plugins
             SettingsFolder = DirectoryUtilities.CombineAndCreateDirectory(BaseFolder, InstancesSubFolder);
             TempFolder = DirectoryUtilities.CombineAndCreateDirectory(BaseFolder, TempSubFolder);
             InstancesFilePath = Path.Combine(SettingsFolder, InstancesFileName);
+            Instances = new Instances<T>(InstancesFilePath);
         }
 
         #endregion

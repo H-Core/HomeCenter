@@ -73,6 +73,7 @@ namespace HomeCenter.NET.Utilities
         public static void RegisterHandlers(TextDelegate outputAction, TextDelegate sayAction, TextDelegate commandAction) => SafeActions.Run(() =>
         {
             var instances = Instance.Instances.Objects.Values;
+
             foreach (var instance in instances)
             {
                 var module = instance.Value;
