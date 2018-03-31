@@ -18,10 +18,10 @@ namespace HomeCenter.NET.Runners
         private List<IRunner> Runners { get; } = new List<IRunner>();
         public List<string> History { get; } = new List<string>();
 
-        private List<IRunner> RuntimeRunners => ModuleManager
+        private static List<IRunner> RuntimeRunners => ModuleManager
             .Instance
-            .GetPluginsOfSubtype<IRunner>()
-            .Select(i => i.Value)
+            .GetEnabledPlugins<IRunner>()
+            .Select(i => i.Value.Value)
             .ToList();
 
         private List<IRunner> AllRunners => RuntimeRunners.Concat(Runners).ToList();

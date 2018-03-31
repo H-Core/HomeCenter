@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using H.NET.Core;
 using H.NET.Core.Attributes;
+using H.NET.Plugins;
+using HomeCenter.NET.Controls;
 using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Windows
@@ -29,6 +32,7 @@ namespace HomeCenter.NET.Windows
         {
             ModuleManager.Instance.Save();
 
+            Properties.Settings.Default.Recorder = RecorderComboBox.SelectedItem as string;
             Properties.Settings.Default.Save();
             Startup.Set(Options.FileName, StartupCheckBox.IsChecked ?? false);
 
@@ -77,6 +81,48 @@ namespace HomeCenter.NET.Windows
             UpdateAssemblies();
             UpdateAvailableTypes();
             UpdateModules();
+            UpdateRecorders();
+        }
+
+        private InstanceControl CreateInstanceControl<T>(string name, RuntimeObject<T> instance) where T : class, IModule
+        {
+            var module = instance.Value;
+            var control = new InstanceControl(name, module?.Name ?? instance.Exception?.Message ?? string.Empty)
+            {
+                Height = 25,
+                Color = module != null ? Colors.LightGreen : Colors.Bisque,
+                EnableEditing = module != null && module.Settings?.Count > 0,
+                EnableEnabling = instance.Exception == null,
+                ObjectIsEnabled = instance.IsEnabled
+            };
+            control.Deleted += (sender, args) =>
+            {
+                var result = MessageBox.Show(
+                    "Are you sure that you want to delete this instance of module?", "Warning",
+                    MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
+                if (result != MessageBoxResult.Yes)
+                {
+                    return;
+                }
+
+                ModuleManager.Instance.DeleteInstance(name);
+
+                Update();
+            };
+            control.Edited += (sender, args) =>
+            {
+                var window = new ModuleSettingsWindow(module?.Settings);
+                window.ShowDialog();
+                Update();
+            };
+            control.EnabledChanged += enabled =>
+            {
+                ModuleManager.Instance.SetInstanceIsEnabled(name, enabled);
+
+                Update();
+            };
+
+            return control;
         }
 
         private void UpdateModules() => SafeActions.Run(() =>
@@ -86,43 +132,7 @@ namespace HomeCenter.NET.Windows
             ModulesPanel.Children.Clear();
             foreach (var pair in instances)
             {
-                var name = pair.Key;
-                var instance = pair.Value;
-                var module = instance.Value;
-                var control = new Controls.InstanceControl(name, module?.Name ?? instance.Exception?.Message ?? string.Empty)
-                {
-                    Height = 25,
-                    Color = module != null ? Colors.LightGreen : Colors.Bisque,
-                    EnableEditing = module != null && module.Settings?.Count > 0,
-                    EnableEnabling = instance.Exception == null,
-                    ObjectIsEnabled = instance.IsEnabled
-                };
-                control.Deleted += (sender, args) =>
-                {
-                    var result = MessageBox.Show(
-                        "Are you sure that you want to delete this instance of module?", "Warning",
-                        MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No);
-                    if (result != MessageBoxResult.Yes)
-                    {
-                        return;
-                    }
-
-                    ModuleManager.Instance.DeleteInstance(name);
-
-                    Update();
-                };
-                control.Edited += (sender, args) =>
-                {
-                    var window = new ModuleSettingsWindow(module?.Settings);
-                    window.ShowDialog();
-                    Update();
-                };
-                control.EnabledChanged += enabled =>
-                {
-                    ModuleManager.Instance.SetInstanceIsEnabled(name, enabled);
-
-                    Update();
-                };
+                var control = CreateInstanceControl(pair.Key, pair.Value);
                 ModulesPanel.Children.Add(control);
             }
         });
@@ -134,7 +144,7 @@ namespace HomeCenter.NET.Windows
             AvailableTypesPanel.Children.Clear();
             foreach (var type in types)
             {
-                var control = new Controls.ObjectControl(type.Name)
+                var control = new ObjectControl(type.Name)
                 {
                     Height = 25,
                     Color = Colors.LightGreen,
@@ -163,7 +173,7 @@ namespace HomeCenter.NET.Windows
             AssembliesPanel.Children.Clear();
             foreach (var assembly in assemblies)
             {
-                var control = new Controls.ObjectControl(assembly.GetName().Name)
+                var control = new ObjectControl(assembly.GetName().Name)
                 {
                     Height = 25,
                     Color = Colors.LightGreen,
@@ -176,6 +186,27 @@ namespace HomeCenter.NET.Windows
                     Update();
                 };
                 AssembliesPanel.Children.Add(control);
+            }
+        });
+
+        private void UpdateRecorders() => SafeActions.Run(() =>
+        {
+            var name = Properties.Settings.Default.Recorder;
+            var availableRecorders = ModuleManager.Instance.GetEnabledPlugins<IRecorder>().Select(i => i.Key).ToList();
+            if (!string.IsNullOrWhiteSpace(name) && !availableRecorders.Contains(name))
+            {
+                availableRecorders.Add(name);
+
+            }
+            RecorderComboBox.ItemsSource = availableRecorders;
+            RecorderComboBox.SelectedItem = name;
+
+            var allRecorders = ModuleManager.Instance.GetPlugins<IRecorder>();
+            RecordersPanel.Children.Clear();
+            foreach (var pair in allRecorders)
+            {
+                var control = CreateInstanceControl(pair.Key, pair.Value);
+                RecordersPanel.Children.Add(control);
             }
         });
 

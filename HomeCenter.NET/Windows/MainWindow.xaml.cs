@@ -183,7 +183,7 @@ namespace HomeCenter.NET.Windows
         private static void Say(byte[] bytes) => bytes?.Play();
         private async void Say(string text)
         {
-            var synthesizer = ModuleManager.Instance.GetPluginsOfSubtype<ISynthesizer>().FirstOrDefault().Value;
+            var synthesizer = ModuleManager.Instance.GetEnabledPlugins<ISynthesizer>().FirstOrDefault().Value.Value;
             if (synthesizer == null)
             {
                 Print("Synthesizer is not found");
@@ -251,11 +251,11 @@ namespace HomeCenter.NET.Windows
 
         private void SetUpRuntimeModule()
         {
-            Manager.Recorder = ModuleManager.Instance.GetPluginsOfSubtype<IRecorder>().FirstOrDefault().Value;
+            Manager.Recorder = ModuleManager.Instance.GetPlugin<IRecorder>(Settings.Default.Recorder)?.Value;
 
-            var converters = ModuleManager.Instance.GetPluginsOfSubtype<IConverter>();
-            Manager.Converter = converters.FirstOrDefault().Value;
-            AlternativeConverter = converters.ElementAtOrDefault(1).Value;
+            var converters = ModuleManager.Instance.GetEnabledPlugins<IConverter>();
+            Manager.Converter = converters.FirstOrDefault().Value?.Value;
+            AlternativeConverter = converters.ElementAtOrDefault(1).Value?.Value;
         }
 
         private void Global_KeyUp(KeyboardHookEventArgs e)

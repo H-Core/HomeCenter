@@ -13,52 +13,59 @@
         </Grid.RowDefinitions>
         <TabControl Grid.Row="0" TabStripPlacement="Left" Background="#FFE5E5E5">
             <TabItem Header="General">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="#FFE5E5E5" Margin="5, 5, 5, 5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="5" />
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="25" />
                         <RowDefinition Height="25" />
                         <RowDefinition Height="25" />
                         <RowDefinition Height="25" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="1">
+                    <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5" />
                             <ColumnDefinition Width="100*" />
                             <ColumnDefinition Width="20" />
                         </Grid.ColumnDefinitions>
-                        <Label Content="Run the program when the computer starts:" Grid.Column="1"/>
-                        <CheckBox x:Name="StartupCheckBox" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <Label Content="Run the program when the computer starts:" Grid.Column="0"/>
+                        <CheckBox x:Name="StartupCheckBox" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100*" />
+                            <ColumnDefinition Width="20" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Starts minimized:" Grid.Column="0"/>
+                        <CheckBox Grid.Column="1" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=IsStartMinimized}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     </Grid>
                     <Grid Grid.Row="2">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5" />
-                            <ColumnDefinition Width="100*" />
-                            <ColumnDefinition Width="20" />
-                        </Grid.ColumnDefinitions>
-                        <Label Content="Starts minimized:" Grid.Column="1"/>
-                        <CheckBox Grid.Column="2" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=IsStartMinimized}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Grid>
-                    <Grid Grid.Row="3">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5" />
                             <ColumnDefinition Width="20*" />
                             <ColumnDefinition Width="80*" />
                         </Grid.ColumnDefinitions>
-                        <Label Content="Record Button:" Grid.Column="1"/>
-                        <TextBox Height="26" TextWrapping="Wrap" Text="{Binding Source={x:Static properties:Settings.Default},Path=RecordButton}" VerticalAlignment="Top" Grid.Column="2"/>
+                        <Label Grid.Column="0" Content="Record Button:"/>
+                        <TextBox Grid.Column="1" Height="26" TextWrapping="Wrap" Text="{Binding Source={x:Static properties:Settings.Default},Path=RecordButton}"/>
                     </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Recorders">
-                <Grid Background="#FFE5E5E5">
-                    <ScrollViewer Grid.Row="0">
-                        <StackPanel x:Name="RecordersPanel"/>
-                    </ScrollViewer>
+                <Grid Background="#FFE5E5E5" Margin="5, 5, 5, 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="100*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Using recorder:" Grid.Column="0"/>
+                        <ComboBox x:Name="RecorderComboBox" Grid.Column="1" IsEditable="True"/>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <ScrollViewer Grid.Row="0">
+                            <StackPanel x:Name="RecordersPanel"/>
+                        </ScrollViewer>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Converters">
@@ -72,6 +79,13 @@
                 <Grid Background="#FFE5E5E5">
                     <ScrollViewer Grid.Row="0">
                         <StackPanel x:Name="RunnersPanel"/>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Synthesizers">
+                <Grid Background="#FFE5E5E5">
+                    <ScrollViewer Grid.Row="0">
+                        <StackPanel x:Name="SynthesizersPanel"/>
                     </ScrollViewer>
                 </Grid>
             </TabItem>
@@ -100,7 +114,7 @@
                             </ScrollViewer>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Modules">
+                    <TabItem Header="All Modules">
                         <Grid>
                             <ScrollViewer>
                                 <StackPanel x:Name="ModulesPanel"/>

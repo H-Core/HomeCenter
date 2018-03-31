@@ -45,7 +45,6 @@ namespace HomeCenter.NET.Windows
         {
             Runner.Storage.Save();
 
-            DialogResult = true;
             Close();
         }
 
@@ -53,7 +52,6 @@ namespace HomeCenter.NET.Windows
         {
             Runner.Storage.Load(); // Cancel changes
 
-            DialogResult = false;
             Close();
         }
 

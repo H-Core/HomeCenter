@@ -94,5 +94,41 @@ namespace HomeCenter.NET.Properties {
                 this["IsStartMinimized"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Recorder {
+            get {
+                return ((string)(this["Recorder"]));
+            }
+            set {
+                this["Recorder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Converter {
+            get {
+                return ((string)(this["Converter"]));
+            }
+            set {
+                this["Converter"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Synthesizer {
+            get {
+                return ((string)(this["Synthesizer"]));
+            }
+            set {
+                this["Synthesizer"] = value;
+            }
+        }
     }
 }

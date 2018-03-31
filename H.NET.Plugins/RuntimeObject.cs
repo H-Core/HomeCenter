@@ -17,9 +17,13 @@ namespace H.NET.Plugins
         {
             get => _value;
             set {
-                Dispose();
+                if (_value != null)
+                {
+                    Dispose();
 
-                Exception = null;
+                    Exception = null;
+                }
+
                 _value = value;
             }
         }
@@ -28,11 +32,16 @@ namespace H.NET.Plugins
         {
             get => _exception;
             set {
-                Dispose();
+                if (value != null)
+                {
+                    Dispose();
+                }
 
                 _exception = value;
             }
         }
+
+        public Type Type { get; set; }
 
         public bool IsEnabled => Value != null;
 
@@ -51,6 +60,12 @@ namespace H.NET.Plugins
 
         public RuntimeObject(Exception exception)
         {
+            Exception = exception;
+        }
+
+        public RuntimeObject(T value, Exception exception)
+        {
+            Value = value;
             Exception = exception;
         }
 

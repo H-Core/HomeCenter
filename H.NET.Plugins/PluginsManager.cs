@@ -117,13 +117,19 @@ namespace H.NET.Plugins
 
         #endregion
 
-        public List<KeyValuePair<string, T1>> GetPluginsOfSubtype<T1>() where T1 : T
-        {
-            return Instances.Objects
-                .Where(i => i.Value.IsEnabled && i.Value.Value is T1)
-                .Select(i => new KeyValuePair<string, T1>(i.Key, (T1)i.Value.Value))
-                .ToList();
-        }
+        public List<KeyValuePair<string, RuntimeObject<T1>>> GetPlugins<T1>() where T1 : class, T => Instances
+            .Objects
+            .Where(i => i.Value.Exception == null && typeof(T1).IsAssignableFrom(i.Value.Type))
+            .Select(i => new KeyValuePair<string, RuntimeObject<T1>>(i.Key, new RuntimeObject<T1>(i.Value.Value as T1, i.Value.Exception)))
+            .ToList();
+
+        public List<KeyValuePair<string, RuntimeObject<T1>>> GetEnabledPlugins<T1>() where T1 : class, T =>
+            GetPlugins<T1>().Where(i => i.Value.IsEnabled).ToList();
+
+        public RuntimeObject<T1> GetPlugin<T1>(string name) where T1 : class, T => 
+            GetPlugins<T1>()
+            .FirstOrDefault(i => string.Equals(i.Key, name, StringComparison.OrdinalIgnoreCase))
+            .Value;
 
         private void AddInstance(string name, string typeName)
         {
@@ -172,12 +178,13 @@ namespace H.NET.Plugins
 
             var instanceObject = Instances.GetObject(name);
             var instanceInfo = Instances.GetInfo(name);
+            var typeName = instanceInfo.TypeName;
+            var type = GetTypeByFullName(typeName);
+            instanceObject.Type = type;
             if (value)
             {
                 try
                 {
-                    var typeName = instanceInfo.TypeName;
-                    var type = GetTypeByFullName(typeName);
                     if (type == null)
                     {
                         //Log($"Load Plugins: Type \"{typeName}\" is not found in current assemblies");
@@ -269,7 +276,7 @@ namespace H.NET.Plugins
 
         #region IDisposable
 
-        public virtual void Dispose()
+        public void Dispose()
         {
             Instances?.Dispose();
             Instances = null;
