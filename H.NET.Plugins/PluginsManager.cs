@@ -22,7 +22,6 @@ namespace H.NET.Plugins
         public string SettingsFolder { get; }
         public string TempFolder { get; }
         public string InstancesFilePath { get; }
-        public InstancesFile<T> InstancesFile { get; private set; }
 
         private string GetSettingsFilePath(string name) => Path.Combine(SettingsFolder, $"{name}{SettingsExtension}");
         private string GetTempDirectory() => DirectoryUtilities.CombineAndCreateDirectory(TempFolder, $"{new Random().Next()}");
@@ -56,7 +55,7 @@ namespace H.NET.Plugins
         private Type GetTypeByFullName(string name) => AvailableTypes
             .FirstOrDefault(i => string.Equals(i.FullName, name, StringComparison.OrdinalIgnoreCase));
 
-        public Dictionary<string, Instance<T>> Instances => InstancesFile.Items;
+        public Instances<T> Instances { get; set; }
 
         #endregion
 
@@ -102,7 +101,7 @@ namespace H.NET.Plugins
             {
                 base.Save();
 
-                foreach (var pair in Instances ?? new Dictionary<string, Instance<T>>())
+                foreach (var pair in Instances.Objects)
                 {
                     SavePluginSettings(pair.Key, pair.Value.Value);
                 }
@@ -119,15 +118,15 @@ namespace H.NET.Plugins
 
         public List<KeyValuePair<string, T1>> GetPluginsOfSubtype<T1>() where T1 : T
         {
-            return Instances
-                .Where(i => i.Value.Value is T1)
+            return Instances.Objects
+                .Where(i => i.Value.IsEnabled && i.Value.Value is T1)
                 .Select(i => new KeyValuePair<string, T1>(i.Key, (T1)i.Value.Value))
                 .ToList();
         }
 
         private void AddInstance(string name, string typeName)
         {
-            InstancesFile.Add(name, typeName);
+            Instances.Add(name, typeName);
 
             var path = GetSettingsFilePath(name);
             if (!File.Exists(path))
@@ -160,29 +159,29 @@ namespace H.NET.Plugins
         {
             SetInstanceIsEnabled(name, false);
 
-            InstancesFile.Delete(name);
+            Instances.Delete(name);
         } 
 
         public void SetInstanceIsEnabled(string name, bool value)
         {
-            name = name.ToLowerInvariant();
-            if (!InstancesFile.Contains(name))
+            if (!Instances.Contains(name))
             {
-                throw new InstancesFile<T>.InstanceNotFoundException(name);
+                throw new InstanceNotFoundException(name);
             }
 
-            var instance = InstancesFile.Get(name);
+            var instanceObject = Instances.GetObject(name);
+            var instanceInfo = Instances.GetInfo(name);
             if (value)
             {
                 try
                 {
-                    var typeName = instance.TypeName;
+                    var typeName = instanceInfo.TypeName;
                     var type = GetTypeByFullName(typeName);
                     if (type == null)
                     {
                         //Log($"Load Plugins: Type \"{typeName}\" is not found in current assemblies");
 
-                        instance.SetException(new Exception($"Type \"{typeName}\" is not found in current assemblies"));
+                        instanceObject.Exception = new Exception($"Type \"{typeName}\" is not found in current assemblies");
                         return;
                     }
 
@@ -190,19 +189,20 @@ namespace H.NET.Plugins
 
                     LoadPluginSettings(name, obj);
 
-                    instance.SetValue(obj);
+                    instanceObject.Value = obj;
                 }
                 catch (Exception exception)
                 {
-                    instance.SetException(exception);
+                    instanceObject.Exception = exception;
                 }
             }
             else
             {
-                instance.Dispose();
+                instanceObject.Dispose();
             }
 
-            InstancesFile.Save();
+            instanceInfo.IsEnabled = instanceObject.IsEnabled;
+            Instances.Save();
         }
 
         #endregion
@@ -245,9 +245,9 @@ namespace H.NET.Plugins
 
         private void LoadPlugins()
         {
-            InstancesFile = new InstancesFile<T>(InstancesFilePath);
+            Instances = new Instances<T>(InstancesFilePath);
             AvailableTypes = GetAvailableTypes();
-            foreach (var pair in InstancesFile.Items)
+            foreach (var pair in Instances.Informations)
             {
                 var instance = pair.Value;
                 var name = instance.Name;
@@ -270,8 +270,8 @@ namespace H.NET.Plugins
 
         public virtual void Dispose()
         {
-            InstancesFile?.Dispose();
-            InstancesFile = null;
+            Instances?.Dispose();
+            Instances = null;
         }
 
         #endregion

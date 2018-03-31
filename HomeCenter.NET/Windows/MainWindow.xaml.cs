@@ -246,8 +246,7 @@ namespace HomeCenter.NET.Windows
             var window = new SettingsWindow();
 
             window.Show();
-
-            SetUpRuntimeModule();
+            window.Closed += (o, args) => SetUpRuntimeModule();
         }
 
         private void SetUpRuntimeModule()

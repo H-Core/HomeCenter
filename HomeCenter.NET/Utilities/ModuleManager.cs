@@ -63,7 +63,7 @@ namespace HomeCenter.NET.Utilities
             foreach (var type in types)
             {
                 if (!(type.GetCustomAttribute(typeof(AllowMultipleInstanceAttribute)) is AllowMultipleInstanceAttribute) &&
-                    !Instance.Instances.ContainsKey(type.Name.ToLowerInvariant()))
+                    !Instance.Instances.Objects.ContainsKey(type.Name))
                 {
                     Instance.AddInstance(type.Name, type);
                 }
@@ -72,7 +72,7 @@ namespace HomeCenter.NET.Utilities
 
         public static void RegisterHandlers(TextDelegate outputAction, TextDelegate sayAction, TextDelegate commandAction) => SafeActions.Run(() =>
         {
-            var instances = Instance.Instances.Values;
+            var instances = Instance.Instances.Objects.Values;
             foreach (var instance in instances)
             {
                 var module = instance.Value;

@@ -32,13 +32,11 @@ namespace HomeCenter.NET.Windows
             Properties.Settings.Default.Save();
             Startup.Set(Options.FileName, StartupCheckBox.IsChecked ?? false);
 
-            DialogResult = true;
             Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
             Close();
         }
 
@@ -83,14 +81,15 @@ namespace HomeCenter.NET.Windows
 
         private void UpdateModules() => SafeActions.Run(() =>
         {
-            var instances = ModuleManager.Instance.Instances;
+            var instances = ModuleManager.Instance.Instances.Objects;
 
             ModulesPanel.Children.Clear();
             foreach (var pair in instances)
             {
+                var name = pair.Key;
                 var instance = pair.Value;
                 var module = instance.Value;
-                var control = new Controls.InstanceControl(instance.Name, module?.Name ?? instance.Exception?.Message ?? string.Empty)
+                var control = new Controls.InstanceControl(name, module?.Name ?? instance.Exception?.Message ?? string.Empty)
                 {
                     Height = 25,
                     Color = module != null ? Colors.LightGreen : Colors.Bisque,
@@ -108,7 +107,7 @@ namespace HomeCenter.NET.Windows
                         return;
                     }
 
-                    ModuleManager.Instance.DeleteInstance(instance.Name);
+                    ModuleManager.Instance.DeleteInstance(name);
 
                     Update();
                 };
@@ -120,7 +119,7 @@ namespace HomeCenter.NET.Windows
                 };
                 control.EnabledChanged += enabled =>
                 {
-                    ModuleManager.Instance.SetInstanceIsEnabled(instance.Name, enabled);
+                    ModuleManager.Instance.SetInstanceIsEnabled(name, enabled);
 
                     Update();
                 };

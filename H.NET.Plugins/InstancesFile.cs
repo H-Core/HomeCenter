@@ -5,10 +5,10 @@ using System.Linq;
 
 namespace H.NET.Plugins
 {
-    public class InstancesFile<T> : IDisposable where T : class
+    public class InstancesFile
     {
-        public string FilePath { get; set; }
-        public Dictionary<string, Instance<T>> Items { get; }
+        public string FilePath { get; }
+        public Dictionary<string, Instance> Items { get; }
 
         public InstancesFile(string path)
         {
@@ -21,7 +21,9 @@ namespace H.NET.Plugins
 
             if (File.Exists(path))
             {
-                Items = File.ReadAllLines(path).Select(Instance<T>.FromString).ToDictionary(i => i.Name.ToLowerInvariant(), i => i);
+                Items = File.ReadAllLines(path)
+                    .Select(Instance.FromString)
+                    .ToDictionary(i => i.Name, i => i);
             }
         }
 
@@ -30,14 +32,14 @@ namespace H.NET.Plugins
             File.WriteAllLines(FilePath, Items.Select(i => i.Value.ToString()));
         }
 
-        public bool Contains(string name) => Items.ContainsKey(name.ToLowerInvariant());
+        public bool Contains(string name) => Items.ContainsKey(name);
 
-        public Instance<T> Get(string name) => Items.TryGetValue(name.ToLowerInvariant(), out var result)
+        public Instance Get(string name) => Items.TryGetValue(name, out var result)
             ? result : throw new InstanceNotFoundException(name);
 
         public void Add(string name, string typeName, bool isEnabled = true)
         {
-            Items[name.ToLowerInvariant()] = new Instance<T>
+            Items[name] = new Instance
             {
                 Name = name,
                 TypeName = typeName,
@@ -53,7 +55,7 @@ namespace H.NET.Plugins
                 throw new InstanceNotFoundException(name);
             }
 
-            Items.Remove(name.ToLowerInvariant());
+            Items.Remove(name);
             Save();
         }
 
@@ -63,22 +65,5 @@ namespace H.NET.Plugins
             {
             }
         }
-
-        #region IDisposable
-
-        public void Dispose()
-        {
-            foreach (var plugin in Items
-                .Where(i => i.Value.Value is IDisposable)
-                .Select(i => i.Value.Value)
-                .Cast<IDisposable>())
-            {
-                plugin.Dispose();
-            }
-
-            Items.Clear();
-        }
-
-        #endregion
     }
 }
