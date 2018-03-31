@@ -124,6 +124,9 @@ namespace H.NET.Plugins
 
         #endregion
 
+        protected object CreateInstance(Type type) => Activator.CreateInstance(type);
+        protected T CreateInstance<T>(Type type) => (T)CreateInstance(type);
+
         #endregion
 
         #region Private methods

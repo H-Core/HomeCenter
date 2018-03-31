@@ -53,6 +53,9 @@ namespace H.NET.Plugins
         }
 
         public List<Type> AvailableTypes { get; private set; } = new List<Type>();
+        private Type GetTypeByFullName(string name) => AvailableTypes
+            .FirstOrDefault(i => string.Equals(i.FullName, name, StringComparison.OrdinalIgnoreCase));
+
         public Dictionary<string, Instance<T>> Instances => InstancesFile.Items;
 
         #endregion
@@ -82,9 +85,6 @@ namespace H.NET.Plugins
                 base.Load();
 
                 Dispose();
-
-                InstancesFile = new InstancesFile<T>(InstancesFilePath);
-                AvailableTypes = GetAvailableTypes();
 
                 LoadPlugins();
             }
@@ -163,10 +163,6 @@ namespace H.NET.Plugins
             InstancesFile.Delete(name);
         } 
 
-        public string GetTypeNameOfName(string name) => InstancesFile.Get(name).TypeName;
-
-        public Type GetTypeOfName(string name) => GetTypeByFullName(GetTypeNameOfName(name));
-
         public void SetInstanceIsEnabled(string name, bool value)
         {
             name = name.ToLowerInvariant();
@@ -180,16 +176,17 @@ namespace H.NET.Plugins
             {
                 try
                 {
-                    var type = GetTypeOfName(name);
+                    var typeName = instance.TypeName;
+                    var type = GetTypeByFullName(typeName);
                     if (type == null)
                     {
                         //Log($"Load Plugins: Type \"{typeName}\" is not found in current assemblies");
 
-                        instance.SetException(new Exception($"Type \"{GetTypeNameOfName(name)}\" is not found in current assemblies"));
+                        instance.SetException(new Exception($"Type \"{typeName}\" is not found in current assemblies"));
                         return;
                     }
 
-                    var obj = (T)Activator.CreateInstance(type);
+                    var obj = CreateInstance<T>(type);
 
                     LoadPluginSettings(name, obj);
 
@@ -244,13 +241,12 @@ namespace H.NET.Plugins
             .Where(TypeIsAvailable)
             .ToList();
 
-        public bool TypeIsAvailable(Type type) => type.GetConstructors().Any(c => c.IsPublic && c.GetParameters().Length == 0);
-
-        private Type GetTypeByFullName(string name) => AvailableTypes
-            .FirstOrDefault(i => string.Equals(i.FullName, name, StringComparison.OrdinalIgnoreCase));
+        private bool TypeIsAvailable(Type type) => type.GetConstructors().Any(c => c.IsPublic && c.GetParameters().Length == 0);
 
         private void LoadPlugins()
         {
+            InstancesFile = new InstancesFile<T>(InstancesFilePath);
+            AvailableTypes = GetAvailableTypes();
             foreach (var pair in InstancesFile.Items)
             {
                 var instance = pair.Value;
@@ -264,34 +260,7 @@ namespace H.NET.Plugins
                     continue;
                 }
 
-                var type = GetTypeByFullName(typeName);
-                if (type == null)
-                {
-                    //Log($"Load Plugins: Type \"{typeName}\" is not found in current assemblies");
-                    instance.SetException(new Exception($"Type \"{typeName}\" is not found in current assemblies"));
-                    continue;
-                }
-
-                try
-                {
-                    if (!instance.IsEnabled)
-                    {
-                        instance.Dispose();
-                        continue;
-                    }
-
-                    var obj = (T)Activator.CreateInstance(type);
-
-                    LoadPluginSettings(name, obj);
-
-                    instance.SetValue(obj);
-                }
-                catch (Exception exception)
-                {
-                    //Log($"Load Plugins: {exception}");
-
-                    instance.SetException(exception);
-                }
+                SetInstanceIsEnabled(name, instance.IsEnabled);
             }
         }
 
