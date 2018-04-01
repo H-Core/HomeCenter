@@ -61,13 +61,13 @@ namespace HomeCenter.NET.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192")]
-        public int RecordButton {
+        [global::System.Configuration.DefaultSettingValueAttribute("Oemtilde")]
+        public string RecordKey {
             get {
-                return ((int)(this["RecordButton"]));
+                return ((string)(this["RecordKey"]));
             }
             set {
-                this["RecordButton"] = value;
+                this["RecordKey"] = value;
             }
         }
         

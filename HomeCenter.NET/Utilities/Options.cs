@@ -13,6 +13,8 @@ namespace HomeCenter.NET.Utilities
         public const int IpcPortToHomeCenter = 19445;
         public const int IpcPortToDeskBand = 19446;
 
+        public static Keys RecordKey => Hook.FromString(Settings.Default.RecordKey);
+
         public static IRecorder Recorder => ModuleManager.Instance.GetPlugin<IRecorder>(Settings.Default.Recorder)?.Value;
         public static IConverter Converter => ModuleManager.Instance.GetPlugin<IConverter>(Settings.Default.Converter)?.Value;
         public static List<IConverter> AlternativeConverters => Settings.Default.UseAlternativeConverters

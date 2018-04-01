@@ -11,8 +11,8 @@
     <Setting Name="AutoStopInterval" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3000</Value>
     </Setting>
-    <Setting Name="RecordButton" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">192</Value>
+    <Setting Name="RecordKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Oemtilde</Value>
     </Setting>
     <Setting Name="CommandsData" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

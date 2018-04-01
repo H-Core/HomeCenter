@@ -258,17 +258,37 @@ namespace HomeCenter.NET.Windows
 
         private void Global_KeyUp(KeyboardHookEventArgs e)
         {
-            if ((int)e.Key == 192 || e.isAltPressed && e.isCtrlPressed)
+            if (e.Key == Options.RecordKey || e.isAltPressed && e.isCtrlPressed)
             {
                 Manager.Stop();
             }
         }
 
+        private Keys LastKey { get; set; } = Keys.None;
         private void Global_KeyDown(KeyboardHookEventArgs e)
         {
-            if ((int)e.Key == 192 || e.isAltPressed && e.isCtrlPressed)
+            if (e.Key == Options.RecordKey || e.isAltPressed && e.isCtrlPressed)
             {
                 Manager.Start();
+            }
+
+            if (LastKey == e.Key)
+            {
+                return;
+            }
+            LastKey = e.Key;
+
+            foreach (var pair in GlobalRunner.Storage.Where(i => i.Value.HotKey != null))
+            {
+                var command = pair.Value;
+                var hotKey = command.HotKey;
+                var key = Hook.FromString(hotKey);
+                if (key == Keys.None || key != e.Key)
+                {
+                    continue;
+                }
+
+                Run(command.Keys.FirstOrDefault()?.Text);
             }
         }
 
