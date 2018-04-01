@@ -18,13 +18,7 @@ namespace HomeCenter.NET.Runners
         private List<IRunner> Runners { get; } = new List<IRunner>();
         public List<string> History { get; } = new List<string>();
 
-        private static List<IRunner> RuntimeRunners => ModuleManager
-            .Instance
-            .GetEnabledPlugins<IRunner>()
-            .Select(i => i.Value.Value)
-            .ToList();
-
-        private List<IRunner> AllRunners => RuntimeRunners.Concat(Runners).ToList();
+        private List<IRunner> AllRunners => Options.Runners.Concat(Runners).ToList();
 
         #endregion
 

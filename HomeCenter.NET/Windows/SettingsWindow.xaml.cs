@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using H.NET.Core;
 using H.NET.Core.Attributes;
@@ -33,6 +36,8 @@ namespace HomeCenter.NET.Windows
             ModuleManager.Instance.Save();
 
             Properties.Settings.Default.Recorder = RecorderComboBox.SelectedItem as string;
+            Properties.Settings.Default.Converter = ConverterComboBox.SelectedItem as string;
+            Properties.Settings.Default.Synthesizer = SynthesizerComboBox.SelectedItem as string;
             Properties.Settings.Default.Save();
             Startup.Set(Options.FileName, StartupCheckBox.IsChecked ?? false);
 
@@ -82,9 +87,110 @@ namespace HomeCenter.NET.Windows
             UpdateAvailableTypes();
             UpdateModules();
             UpdateRecorders();
+            UpdateConverters();
+            UpdateSynthesizers();
+            UpdateRunners();
         }
 
-        private InstanceControl CreateInstanceControl<T>(string name, RuntimeObject<T> instance) where T : class, IModule
+        private void UpdateModules() => SafeActions.Run(() =>
+        {
+            var instances = ModuleManager.Instance.Instances.Objects;
+            var controls = instances.Select(pair => CreateInstanceControl(pair.Key, pair.Value, Update));
+
+            UpdatePanel(ModulesPanel, controls);
+        });
+
+        private void UpdateAvailableTypes() => SafeActions.Run(() =>
+        {
+            var types = ModuleManager.Instance.AvailableTypes;
+            var controls = types.Select(type =>
+            {
+                var control = new ObjectControl(type.Name)
+                {
+                    Height = 25,
+                    Color = Colors.LightGreen,
+                    EnableEditing = false,
+                    EnableAdding = type.GetCustomAttribute<AllowMultipleInstanceAttribute>() != null
+                };
+                control.Deleted += (sender, args) =>
+                {
+                    ModuleManager.Instance.Deinstall(type);
+                    Update();
+                };
+                control.Added += (sender, args) =>
+                {
+                    ModuleManager.Instance.AddInstance($"{type.Name}_{new Random().Next()}", type);
+
+                    Update();
+                };
+
+                return control;
+            });
+
+            UpdatePanel(AvailableTypesPanel, controls);
+        });
+
+        private void UpdateAssemblies() => SafeActions.Run(() =>
+        {
+            var assemblies = ModuleManager.Instance.ActiveAssemblies;
+            var controls = assemblies.Select(assembly =>
+            {
+                var control = new ObjectControl(assembly.GetName().Name)
+                {
+                    Height = 25,
+                    Color = Colors.LightGreen,
+                    EnableEditing = false,
+                    EnableAdding = false
+                };
+                control.Deleted += (sender, args) =>
+                {
+                    ModuleManager.Instance.Deinstall(assembly);
+                    Update();
+                };
+
+                return control;
+            });
+
+            UpdatePanel(AssembliesPanel, controls);
+        });
+
+        private void UpdateRecorders() => SafeActions.Run(() =>
+        {
+            UpdateComboBox<IRecorder>(RecorderComboBox, Properties.Settings.Default.Recorder);
+            UpdatePanel<IRecorder>(RecordersPanel, Update);
+        });
+
+        private void UpdateConverters() => SafeActions.Run(() =>
+        {
+            UpdateComboBox<IConverter>(ConverterComboBox, Properties.Settings.Default.Converter);
+            UpdatePanel<IConverter>(ConvertersPanel, Update);
+        });
+
+        private void UpdateSynthesizers() => SafeActions.Run(() =>
+        {
+            UpdateComboBox<ISynthesizer>(SynthesizerComboBox, Properties.Settings.Default.Synthesizer);
+            UpdatePanel<ISynthesizer>(SynthesizersPanel, Update);
+        });
+
+        private void UpdateRunners() => SafeActions.Run(() =>
+        {
+            UpdatePanel<IRunner>(RunnersPanel, Update);
+        });
+
+        #endregion
+
+        #region Private static methods
+
+        private static void UpdatePanel(Panel panel, IEnumerable<Control> controls)
+        {
+            panel.Children.Clear();
+            foreach (var control in controls)
+            {
+                panel.Children.Add(control);
+            }
+        }
+
+        private static InstanceControl CreateInstanceControl<T>(string name, RuntimeObject<T> instance, Action updateAction) where T : class, IModule
         {
             var module = instance.Value;
             var control = new InstanceControl(name, module?.Name ?? instance.Exception?.Message ?? string.Empty)
@@ -107,108 +213,45 @@ namespace HomeCenter.NET.Windows
 
                 ModuleManager.Instance.DeleteInstance(name);
 
-                Update();
+                updateAction?.Invoke();
             };
             control.Edited += (sender, args) =>
             {
                 var window = new ModuleSettingsWindow(module?.Settings);
                 window.ShowDialog();
-                Update();
+
+                updateAction?.Invoke();
             };
             control.EnabledChanged += enabled =>
             {
                 ModuleManager.Instance.SetInstanceIsEnabled(name, enabled);
 
-                Update();
+                updateAction?.Invoke();
             };
 
             return control;
         }
 
-        private void UpdateModules() => SafeActions.Run(() =>
+        private static void UpdatePanel<T>(StackPanel panel, Action updateAction) where T : class, IModule
         {
-            var instances = ModuleManager.Instance.Instances.Objects;
+            var plugins = ModuleManager.Instance.GetPlugins<T>();
+            var controls = plugins.Select(pair => CreateInstanceControl(pair.Key, pair.Value, updateAction));
 
-            ModulesPanel.Children.Clear();
-            foreach (var pair in instances)
-            {
-                var control = CreateInstanceControl(pair.Key, pair.Value);
-                ModulesPanel.Children.Add(control);
-            }
-        });
+            UpdatePanel(panel, controls);
+        }
 
-        private void UpdateAvailableTypes() => SafeActions.Run(() =>
+        private static void UpdateComboBox<T>(Selector selector, string value) where T : class, IModule
         {
-            var types = ModuleManager.Instance.AvailableTypes;
-
-            AvailableTypesPanel.Children.Clear();
-            foreach (var type in types)
+            var plugins = ModuleManager.Instance.GetEnabledPlugins<T>().Select(i => i.Key).ToList();
+            if (!string.IsNullOrWhiteSpace(value) && !plugins.Contains(value))
             {
-                var control = new ObjectControl(type.Name)
-                {
-                    Height = 25,
-                    Color = Colors.LightGreen,
-                    EnableEditing = false,
-                    EnableAdding = type.GetCustomAttribute<AllowMultipleInstanceAttribute>() != null
-                };
-                control.Deleted += (sender, args) =>
-                {
-                    ModuleManager.Instance.Deinstall(type);
-                    Update();
-                };
-                control.Added += (sender, args) =>
-                {
-                    ModuleManager.Instance.AddInstance($"{type.Name}_{new Random().Next()}", type);
-
-                    Update();
-                };
-                AvailableTypesPanel.Children.Add(control);
-            }
-        });
-
-        private void UpdateAssemblies() => SafeActions.Run(() =>
-        {
-            var assemblies = ModuleManager.Instance.ActiveAssemblies;
-
-            AssembliesPanel.Children.Clear();
-            foreach (var assembly in assemblies)
-            {
-                var control = new ObjectControl(assembly.GetName().Name)
-                {
-                    Height = 25,
-                    Color = Colors.LightGreen,
-                    EnableEditing = false,
-                    EnableAdding = false
-                };
-                control.Deleted += (sender, args) =>
-                {
-                    ModuleManager.Instance.Deinstall(assembly);
-                    Update();
-                };
-                AssembliesPanel.Children.Add(control);
-            }
-        });
-
-        private void UpdateRecorders() => SafeActions.Run(() =>
-        {
-            var name = Properties.Settings.Default.Recorder;
-            var availableRecorders = ModuleManager.Instance.GetEnabledPlugins<IRecorder>().Select(i => i.Key).ToList();
-            if (!string.IsNullOrWhiteSpace(name) && !availableRecorders.Contains(name))
-            {
-                availableRecorders.Add(name);
+                plugins.Add(value);
 
             }
-            RecorderComboBox.ItemsSource = availableRecorders;
-            RecorderComboBox.SelectedItem = name;
 
-            var allRecorders = ModuleManager.Instance.GetPlugins<IRecorder>();
-            RecordersPanel.Children.Clear();
-            foreach (var pair in allRecorders)
-            {
-                var control = CreateInstanceControl(pair.Key, pair.Value);
-                RecordersPanel.Children.Add(control);
-            }
-        });
+            selector.ItemsSource = plugins;
+            selector.SelectedItem = value;
+        }
 
         #endregion
     }

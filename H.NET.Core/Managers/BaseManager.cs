@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using H.NET.Core.Recorders;
 
 namespace H.NET.Core.Managers
@@ -25,6 +28,7 @@ namespace H.NET.Core.Managers
         }
 
         public IConverter Converter { get; set; }
+        public List<IConverter> AlternativeConverters { get; set; } = new List<IConverter>();
 
         public string Text { get; private set; }
 
@@ -67,7 +71,42 @@ namespace H.NET.Core.Managers
 
             try
             {
-                ProcessText(await Converter.Convert(bytes));
+                var text = await Converter.Convert(bytes);
+                if (!AlternativeConverters.Any())
+                {
+                    Log("No alternative converters");
+                    ProcessText(text);
+                    return;
+                }
+
+                var alternativeTexts = AlternativeConverters.Select(async i => await i.Convert(bytes)).ToList();
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    Log("Text is not empty. No alternative converters is uses");
+                    ProcessText(text);
+                    return;
+                }
+
+                Log("Loop");
+                while (alternativeTexts.Any())
+                {
+                    Log("WhenAny");
+                    var alternativeTextTask = await Task.WhenAny(alternativeTexts);
+                    var alternativeText = await alternativeTextTask;
+                    if (string.IsNullOrWhiteSpace(alternativeText))
+                    {
+                        Log("string.IsNullOrWhiteSpace");
+                        alternativeTexts.Remove(alternativeTextTask);
+                        continue;
+                    }
+
+                    Log("ProcessText");
+                    ProcessText(text);
+                    return;
+                }
+
+                Log("ProcessOriginalText");
+                ProcessText(text);
             }
             catch (Exception exception)
             {

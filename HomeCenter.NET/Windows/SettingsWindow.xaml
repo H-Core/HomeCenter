@@ -69,23 +69,62 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Converters">
-                <Grid Background="#FFE5E5E5">
-                    <ScrollViewer Grid.Row="0">
-                        <StackPanel x:Name="ConvertersPanel"/>
-                    </ScrollViewer>
+                <Grid Background="#FFE5E5E5" Margin="5, 5, 5, 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="100*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Using converter:" Grid.Column="0"/>
+                        <ComboBox x:Name="ConverterComboBox" Grid.Column="1" IsEditable="True"/>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100*" />
+                            <ColumnDefinition Width="25" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Use alternative converters if default converter answer is empty:"/>
+                        <CheckBox Grid.Column="1" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=UseAlternativeConverters}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                    <Grid Grid.Row="3">
+                        <ScrollViewer Grid.Row="0">
+                            <StackPanel x:Name="ConvertersPanel"/>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Synthesizers">
+                <Grid Background="#FFE5E5E5" Margin="5, 5, 5, 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="100*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Using synthesizer:" Grid.Column="0"/>
+                        <ComboBox x:Name="SynthesizerComboBox" Grid.Column="1" IsEditable="True"/>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <ScrollViewer Grid.Row="0">
+                            <StackPanel x:Name="SynthesizersPanel"/>
+                        </ScrollViewer>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Runners">
                 <Grid Background="#FFE5E5E5">
                     <ScrollViewer Grid.Row="0">
                         <StackPanel x:Name="RunnersPanel"/>
-                    </ScrollViewer>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Synthesizers">
-                <Grid Background="#FFE5E5E5">
-                    <ScrollViewer Grid.Row="0">
-                        <StackPanel x:Name="SynthesizersPanel"/>
                     </ScrollViewer>
                 </Grid>
             </TabItem>

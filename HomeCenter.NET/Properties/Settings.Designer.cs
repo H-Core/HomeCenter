@@ -130,5 +130,17 @@ namespace HomeCenter.NET.Properties {
                 this["Synthesizer"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseAlternativeConverters {
+            get {
+                return ((bool)(this["UseAlternativeConverters"]));
+            }
+            set {
+                this["UseAlternativeConverters"] = value;
+            }
+        }
     }
 }

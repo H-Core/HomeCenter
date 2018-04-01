@@ -21,10 +21,9 @@ namespace HomeCenter.NET.Windows
         #region Properties
 
         private BaseManager Manager { get; set; } = new BaseManager();
+        private ISynthesizer Synthesizer { get; set; }
 
         private Server Server { get; } = new Server(Options.IpcPortToHomeCenter);
-
-        private IConverter AlternativeConverter { get; set; }
 
         private Hook Hook { get; } = new Hook("Global Action Hook");
         private GlobalRunner GlobalRunner { get; set; } = new GlobalRunner(new CommandsStorage(Options.CompanyName));
@@ -64,6 +63,7 @@ namespace HomeCenter.NET.Windows
 
             #region Global Runner
 
+            /*
             byte[] alternativeConverterLastData = null;
             GlobalRunner.NotHandledText += async _ =>
             {
@@ -81,7 +81,7 @@ namespace HomeCenter.NET.Windows
 
                 var text = await AlternativeConverter.Convert(Manager.Data);
                 Run(text);
-            };
+            };*/
 
             GlobalRunner.NewOutput += Print;
             GlobalRunner.NewSpeech += Say;
@@ -183,14 +183,13 @@ namespace HomeCenter.NET.Windows
         private static void Say(byte[] bytes) => bytes?.Play();
         private async void Say(string text)
         {
-            var synthesizer = ModuleManager.Instance.GetEnabledPlugins<ISynthesizer>().FirstOrDefault().Value.Value;
-            if (synthesizer == null)
+            if (Synthesizer == null)
             {
                 Print("Synthesizer is not found");
                 return;
             }
 
-            Say(await synthesizer.Convert(text));
+            Say(await Synthesizer.Convert(text));
         } 
 
         private async void Run(string message) => await GlobalRunner.Run(message);
@@ -251,11 +250,10 @@ namespace HomeCenter.NET.Windows
 
         private void SetUpRuntimeModule()
         {
-            Manager.Recorder = ModuleManager.Instance.GetPlugin<IRecorder>(Settings.Default.Recorder)?.Value;
-
-            var converters = ModuleManager.Instance.GetEnabledPlugins<IConverter>();
-            Manager.Converter = converters.FirstOrDefault().Value?.Value;
-            AlternativeConverter = converters.ElementAtOrDefault(1).Value?.Value;
+            Manager.Recorder = Options.Recorder;
+            Manager.Converter = Options.Converter;
+            Manager.AlternativeConverters = Options.AlternativeConverters;
+            Synthesizer = Options.Synthesizer;
         }
 
         private void Global_KeyUp(KeyboardHookEventArgs e)
