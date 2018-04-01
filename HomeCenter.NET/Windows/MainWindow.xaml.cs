@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -35,6 +36,8 @@ namespace HomeCenter.NET.Windows
 
         private static Action<string> GlobalRunAction { get; set; }
         public static void GlobalRun(string text) => GlobalRunAction?.Invoke(text);
+
+        private readonly Dictionary<(Keys, bool, bool, bool), Command> _hookDictionary = new Dictionary<(Keys, bool, bool, bool), Command>();
 
         #endregion
 
@@ -240,6 +243,7 @@ namespace HomeCenter.NET.Windows
             var window = new CommandsWindow(GlobalRunner);
 
             window.Show();
+            window.Closed += (o, args) => SetUpRuntimeModule();
         }
 
         private void SettingsButton_Click(object sender, EventArgs e)
@@ -256,6 +260,27 @@ namespace HomeCenter.NET.Windows
             Manager.Converter = Options.Converter;
             Manager.AlternativeConverters = Options.AlternativeConverters;
             Synthesizer = Options.Synthesizer;
+
+            _hookDictionary.Clear();
+            foreach (var pair in GlobalRunner.Storage.UniqueValues(i => i.Value).Where(i => i.Value.HotKey != null))
+            {
+                var command = pair.Value;
+                var hotKey = command.HotKey;
+                var values = hotKey.Contains("+") ? hotKey.Split('+') : new[] { hotKey };
+
+                var ctrl = values.Contains("CTRL", StringComparer.OrdinalIgnoreCase);
+                var alt = values.Contains("ALT", StringComparer.OrdinalIgnoreCase);
+                var shift = values.Contains("SHIFT", StringComparer.OrdinalIgnoreCase);
+                var mainKey = values.FirstOrDefault(i => !new[] { "CTRL", "ALT", "SHIFT" }.Contains(i, StringComparer.OrdinalIgnoreCase));
+
+                var key = Hook.FromString(mainKey);
+                if (key == Keys.None)
+                {
+                    continue;
+                }
+
+                _hookDictionary[(key, ctrl, alt, shift)] = command;
+            }
         }
 
         private void Global_KeyUp(object sender, KeyboardHookEventArgs e)
@@ -273,23 +298,8 @@ namespace HomeCenter.NET.Windows
                 Manager.Start();
             }
 
-            foreach (var pair in GlobalRunner.Storage.UniqueValues(i => i.Value).Where(i => i.Value.HotKey != null))
+            if (_hookDictionary.TryGetValue((e.Key, e.IsCtrlPressed, e.IsAltPressed, e.IsShiftPressed), out var command))
             {
-                var command = pair.Value;
-                var hotKey = command.HotKey;
-                var values = hotKey.Contains("+") ? hotKey.Split('+') : new[] { hotKey };
-
-                var ctrl = values.Contains("CTRL", StringComparer.OrdinalIgnoreCase);
-                var alt = values.Contains("ALT", StringComparer.OrdinalIgnoreCase);
-                var shift = values.Contains("SHIFT", StringComparer.OrdinalIgnoreCase);
-                var mainKey = values.FirstOrDefault(i => !new[] {"CTRL", "ALT", "SHIFT"}.Contains(i, StringComparer.OrdinalIgnoreCase));
-
-                var key = Hook.FromString(mainKey);
-                if (key == Keys.None || key != e.Key || e.IsAltPressed != alt || e.IsCtrlPressed != ctrl || e.IsShiftPressed != shift)
-                {
-                    continue;
-                }
-
                 Run(command.Keys.FirstOrDefault()?.Text);
             }
         }
