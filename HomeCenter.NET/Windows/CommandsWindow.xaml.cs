@@ -71,7 +71,7 @@ namespace HomeCenter.NET.Windows
             foreach (var pair in Runner.Storage.UniqueValues(entry => entry.Value.Data))
             {
                 var command = pair.Value;
-                var control = new CommandControl(command.KeysString, command.Data) {Height = 25};
+                var control = new CommandControl(command.KeysString, command.Data, command.HotKey) {Height = 25};
                 control.Deleted += (sender, args) =>
                 {
                     foreach (var key in command.Keys)
@@ -103,7 +103,7 @@ namespace HomeCenter.NET.Windows
             foreach (var command in Runner.GetSupportedCommands())
             {
                 var values = command.SplitOnlyFirst(' ');
-                var control = new CommandControl(values[0], values[1], true)
+                var control = new CommandControl(values[0], values[1], editable: true)
                 {
                     Height = 25
                 };

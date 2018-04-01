@@ -34,6 +34,22 @@
                     <Button Grid.Row="0" Content="+" Margin="0,0,20,0" Width="25" Height="25" HorizontalAlignment="Right" VerticalAlignment="Bottom" Click="AddDataButton_Click"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="HotKey">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="HotKey:"/>
+                        <TextBox Grid.Column="1" Text="{Binding Command.HotKey}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
         </TabControl>
         <Grid Grid.Row="1" Margin="5">
             <Grid.ColumnDefinitions>

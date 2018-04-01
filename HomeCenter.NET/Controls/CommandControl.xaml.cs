@@ -41,13 +41,16 @@ namespace HomeCenter.NET.Controls
 
         #region Constructors
 
-        public CommandControl(string name, string description, bool editable = false)
+        public CommandControl(string name, string description, string hotKey = null, bool editable = false)
         {
             InitializeComponent();
 
             ObjectName = name;
             ObjectDescription = description;
             IsEditable = editable;
+
+            HotKeyLabel.Visibility = hotKey == null ? Visibility.Collapsed : Visibility.Visible;
+            HotKeyLabel.Content = hotKey ?? string.Empty;
         }
 
         #endregion
