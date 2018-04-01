@@ -160,7 +160,14 @@ namespace HomeCenter.NET.Runners
                 Print($"Run action for key: \"{key}\": \"{data}\"");
             }
 
-            new CommandsHistory(Options.CompanyName).Add(key);
+            try
+            {
+                new CommandsHistory(Options.CompanyName).Add(key);
+            }
+            catch (Exception)
+            {
+                //ignored
+            }
 
             return information;
         }

@@ -74,7 +74,7 @@ namespace H.NET.Core.Managers
                 var text = await Converter.Convert(bytes);
                 if (!AlternativeConverters.Any())
                 {
-                    Log("No alternative converters");
+                    //Log("No alternative converters");
                     ProcessText(text);
                     return;
                 }
@@ -82,30 +82,30 @@ namespace H.NET.Core.Managers
                 var alternativeTexts = AlternativeConverters.Select(async i => await i.Convert(bytes)).ToList();
                 if (!string.IsNullOrWhiteSpace(text))
                 {
-                    Log("Text is not empty. No alternative converters is uses");
+                    //Log("Text is not empty. No alternative converters is uses");
                     ProcessText(text);
                     return;
                 }
 
-                Log("Loop");
+                //Log("Loop");
                 while (alternativeTexts.Any())
                 {
-                    Log("WhenAny");
+                    //Log("WhenAny");
                     var alternativeTextTask = await Task.WhenAny(alternativeTexts);
                     var alternativeText = await alternativeTextTask;
                     if (string.IsNullOrWhiteSpace(alternativeText))
                     {
-                        Log("string.IsNullOrWhiteSpace");
+                        //Log("string.IsNullOrWhiteSpace");
                         alternativeTexts.Remove(alternativeTextTask);
                         continue;
                     }
 
-                    Log("ProcessText");
+                    //Log("ProcessText");
                     ProcessText(text);
                     return;
                 }
 
-                Log("ProcessOriginalText");
+                //Log("ProcessOriginalText");
                 ProcessText(text);
             }
             catch (Exception exception)

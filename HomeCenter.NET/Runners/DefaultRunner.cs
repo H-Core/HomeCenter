@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Windows;
 using WindowsInput;
 using WindowsInput.Native;
 using H.NET.Core.Runners;
@@ -20,6 +19,7 @@ namespace HomeCenter.NET.Runners
         public static Action ShowSettingsAction { get; set; }
         public static Action ShowCommandsAction { get; set; }
         public static Action StartRecordAction { get; set; }
+        public static Action<string> ClipboardAction { get; set; }
 
         #endregion
 
@@ -112,9 +112,10 @@ namespace HomeCenter.NET.Runners
                 return;
             }
 
-            Clipboard.SetText(command);
+            command = command.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", Environment.NewLine);
+            ClipboardAction?.Invoke(command);
         }
-
+        
         private static VirtualKeyCode ToVirtualKey(string key)
         {
             string text;

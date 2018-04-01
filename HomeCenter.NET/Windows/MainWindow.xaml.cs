@@ -9,6 +9,7 @@ using H.NET.Core.Notifiers;
 using H.NET.Core.Recorders;
 using H.NET.Plugins;
 using H.NET.Storages;
+using H.NET.Storages.Extensions;
 using H.NET.Utilities;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Runners;
@@ -149,6 +150,7 @@ namespace HomeCenter.NET.Windows
             DefaultRunner.ShowSettingsAction = () => Dispatcher.Invoke(() => SettingsButton_Click(this, EventArgs.Empty));
             DefaultRunner.ShowCommandsAction = () => Dispatcher.Invoke(() => MenuButton_Click(this, EventArgs.Empty));
             DefaultRunner.StartRecordAction = () => Dispatcher.Invoke(() => RecordButton_Click(this, EventArgs.Empty));
+            DefaultRunner.ClipboardAction = command => Dispatcher.Invoke(() => Clipboard.SetText(command));
 
             #endregion
         }
@@ -256,34 +258,34 @@ namespace HomeCenter.NET.Windows
             Synthesizer = Options.Synthesizer;
         }
 
-        private void Global_KeyUp(KeyboardHookEventArgs e)
+        private void Global_KeyUp(object sender, KeyboardHookEventArgs e)
         {
-            if (e.Key == Options.RecordKey || e.isAltPressed && e.isCtrlPressed)
+            if (e.Key == Options.RecordKey || e.IsAltPressed && e.IsCtrlPressed)
             {
                 Manager.Stop();
             }
         }
 
-        private Keys LastKey { get; set; } = Keys.None;
-        private void Global_KeyDown(KeyboardHookEventArgs e)
+        private void Global_KeyDown(object sender, KeyboardHookEventArgs e)
         {
-            if (e.Key == Options.RecordKey || e.isAltPressed && e.isCtrlPressed)
+            if (e.Key == Options.RecordKey || e.IsAltPressed && e.IsCtrlPressed)
             {
                 Manager.Start();
             }
 
-            if (LastKey == e.Key)
-            {
-                return;
-            }
-            LastKey = e.Key;
-
-            foreach (var pair in GlobalRunner.Storage.Where(i => i.Value.HotKey != null))
+            foreach (var pair in GlobalRunner.Storage.UniqueValues(i => i.Value).Where(i => i.Value.HotKey != null))
             {
                 var command = pair.Value;
                 var hotKey = command.HotKey;
-                var key = Hook.FromString(hotKey);
-                if (key == Keys.None || key != e.Key)
+                var values = hotKey.Contains("+") ? hotKey.Split('+') : new[] { hotKey };
+
+                var ctrl = values.Contains("CTRL", StringComparer.OrdinalIgnoreCase);
+                var alt = values.Contains("ALT", StringComparer.OrdinalIgnoreCase);
+                var shift = values.Contains("SHIFT", StringComparer.OrdinalIgnoreCase);
+                var mainKey = values.FirstOrDefault(i => !new[] {"CTRL", "ALT", "SHIFT"}.Contains(i, StringComparer.OrdinalIgnoreCase));
+
+                var key = Hook.FromString(mainKey);
+                if (key == Keys.None || key != e.Key || e.IsAltPressed != alt || e.IsCtrlPressed != ctrl || e.IsShiftPressed != shift)
                 {
                     continue;
                 }
