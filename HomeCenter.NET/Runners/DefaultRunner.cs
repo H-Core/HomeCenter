@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using WindowsInput;
 using WindowsInput.Native;
 using H.NET.Core.Runners;
@@ -34,8 +35,10 @@ namespace HomeCenter.NET.Runners
             AddAction("paste", Paste, "text");
             AddAction("clipboard", ClipboardCommand, "text");
             AddAction("keyboard", KeyboardCommand, "CONTROL+V");
-            AddAction("sleep", SleepCommand, "integer");
+            AddAsyncAction("sleep", async command => await Task.Delay(ToInt(command)), "integer");
+            AddAction("sync-sleep", command => Thread.Sleep(ToInt(command)), "integer");
             AddAction("show", ShowWindowCommand, "process_name");
+            AddAction("explorer", ExplorerCommand, "path");
 
             AddInternalAction("redirect", RunCommand, "other_command_key");
             AddInternalAction("show-settings", command => ShowSettingsAction?.Invoke());
@@ -51,6 +54,13 @@ namespace HomeCenter.NET.Runners
         #endregion
 
         #region Private methods
+
+        private static void ExplorerCommand(string command)
+        {
+            command = command.Replace("\\\\", "\\").Replace("//", "\\").Replace("/", "\\");
+
+            RunProcess($"explorer \"{command}\"");
+        }
 
         private static async void DeskBandCommand(string command)
         {
@@ -100,13 +110,8 @@ namespace HomeCenter.NET.Runners
             SetFocus(ptr);
         }
 
-        private static void SleepCommand(string command)
-        {
-            var timeout = int.TryParse(command, out var result) ? result : 1000;
-
-            // TODO: to sync await
-            Thread.Sleep(timeout);
-        }
+        private static int ToInt(string text, int defaultValue = 1000) =>
+            int.TryParse(text, out var result) ? result : defaultValue;
 
         private static void ClipboardCommand(string command)
         {
