@@ -48,7 +48,11 @@ namespace H.NET.Core.Runners
             }
         }
 
-        public string[] GetSupportedCommands() => HandlerDictionary.Select(i => $"{i.Key} {i.Value.Description}").ToArray();
+        public string[] GetSupportedCommands() => 
+            HandlerDictionary.Select(i => $"{i.Key} {i.Value.Description}").ToArray();
+
+        public string[] GetVariables() =>
+            Variables.Select(i => $"{i.Key} {i.Value?.Invoke()}").ToArray();
 
         public virtual bool IsSupport(string key, string data)
         {

@@ -63,6 +63,7 @@ namespace HomeCenter.NET.Windows
         {
             UpdateUserCommands();
             UpdateAllCommands();
+            UpdateVariables();
         }
 
         private void UpdateUserCommands()
@@ -109,6 +110,20 @@ namespace HomeCenter.NET.Windows
                 };
                 control.Run += (sender, args) => MainWindow.GlobalRun($"{values[0]} {control.ObjectDescription}");
                 AllPanel.Children.Add(control);
+            }
+        }
+
+        private void UpdateVariables()
+        {
+            VariablesPanel.Children.Clear();
+            foreach (var command in Runner.GetVariables())
+            {
+                var values = command.SplitOnlyFirst(' ');
+                var control = new CommandControl(values[0], values[1])
+                {
+                    Height = 25
+                };
+                VariablesPanel.Children.Add(control);
             }
         }
 
