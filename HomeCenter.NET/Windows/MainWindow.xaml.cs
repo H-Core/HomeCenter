@@ -154,6 +154,7 @@ namespace HomeCenter.NET.Windows
             DefaultRunner.ShowCommandsAction = () => Dispatcher.Invoke(() => MenuButton_Click(this, EventArgs.Empty));
             DefaultRunner.StartRecordAction = () => Dispatcher.Invoke(() => RecordButton_Click(this, EventArgs.Empty));
             DefaultRunner.ClipboardAction = command => Dispatcher.Invoke(() => Clipboard.SetText(command));
+            DefaultRunner.ClipboardFunc = () => Dispatcher.Invoke(Clipboard.GetText);
 
             #endregion
         }

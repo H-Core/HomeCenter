@@ -11,6 +11,8 @@ namespace H.NET.Core.Runners
         public string Description { get; set; }
         public Action<string> Action { get; set; }
 
+        public string RunText { get; set; }
+
         #endregion
 
         #region Constructors

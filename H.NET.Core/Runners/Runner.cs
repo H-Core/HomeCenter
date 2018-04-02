@@ -10,6 +10,7 @@ namespace H.NET.Core.Runners
         #region Properties
         
         private InvariantStringDictionary<RunInformation> HandlerDictionary { get; } = new InvariantStringDictionary<RunInformation>();
+        private InvariantStringDictionary<Func<string>> Variables { get; } = new InvariantStringDictionary<Func<string>>();
 
         #endregion
 
@@ -68,8 +69,30 @@ namespace H.NET.Core.Runners
         protected virtual RunInformation RunInternal(string key, string data)
         {
             var values = data.SplitOnlyFirstIgnoreQuote(' ');
-
             var information = GetHandler(values[0]);
+            var command = values[1];
+
+            foreach (var variable in Variables)
+            {
+                if (!command.Contains(variable.Key))
+                {
+                    continue;
+                }
+
+                var func = variable.Value;
+
+                try
+                {
+                    var value = func?.Invoke();
+
+                    command = command.Replace(variable.Key, value);
+                }
+                catch (Exception exception)
+                {
+                    information.Exception = exception;
+                }
+            }
+
             var action = information.Action;
             if (action == null)
             {
@@ -78,7 +101,9 @@ namespace H.NET.Core.Runners
 
             try
             {
-                action?.Invoke(values[1]);
+                action?.Invoke(command);
+
+                information.RunText = $"{values[0]} {command}";
 
                 return information;
             }
@@ -87,6 +112,9 @@ namespace H.NET.Core.Runners
                 return information.WithException(exception);
             }
         }
+
+        protected void AddVariable(string key, Func<string> action) =>
+            Variables[key] = action;
 
         protected void AddAction(string key, Action<string> action, string description = null, bool isInternal = false) =>
             AddAction(key, new RunInformation

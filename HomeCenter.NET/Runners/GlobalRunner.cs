@@ -157,7 +157,7 @@ namespace HomeCenter.NET.Runners
             var information = await Task.Run(() => runner.Run(key, data));
             if (information?.IsInternal == false)
             {
-                Print($"Run action for key: \"{key}\": \"{data}\"");
+                Print($"Run action for key: \"{key}\": \"{information.RunText}\"");
             }
 
             try

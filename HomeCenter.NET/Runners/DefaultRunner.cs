@@ -20,6 +20,7 @@ namespace HomeCenter.NET.Runners
         public static Action ShowCommandsAction { get; set; }
         public static Action StartRecordAction { get; set; }
         public static Action<string> ClipboardAction { get; set; }
+        public static Func<string> ClipboardFunc { get; set; }
 
         #endregion
 
@@ -43,6 +44,8 @@ namespace HomeCenter.NET.Runners
             AddInternalAction("deskband", DeskBandCommand);
             AddInternalAction("enable-module", command => ModuleManager.Instance.SetInstanceIsEnabled(command, true), "name");
             AddInternalAction("disable-module", command => ModuleManager.Instance.SetInstanceIsEnabled(command, false), "name");
+
+            AddVariable("$clipboard$", () => ClipboardFunc?.Invoke());
         }
 
         #endregion
