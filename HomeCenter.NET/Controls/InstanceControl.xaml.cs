@@ -18,8 +18,8 @@ namespace HomeCenter.NET.Controls
             set
             {
                 _objectIsEnabled = value;
-                EnableButtton.Content = value ? "On" : "Off";
-                EnableButtton.Background = new SolidColorBrush(value ? Colors.LightGreen : Colors.Bisque);
+                EnableButton.Content = value ? "On" : "Off";
+                EnableButton.Background = new SolidColorBrush(value ? Colors.LightGreen : Colors.Bisque);
             }
         }
 
@@ -40,19 +40,24 @@ namespace HomeCenter.NET.Controls
         }
 
         public bool EnableEnabling {
-            get => EnableButtton.Visibility == Visibility.Visible;
-            set => EnableButtton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            get => EnableButton.Visibility == Visibility.Visible;
+            set => EnableButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public bool EnableRenaming {
+            get => RenameButton.Visibility == Visibility.Visible;
+            set => RenameButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public bool EnableEditing
         {
-            get => EditButtton.Visibility == Visibility.Visible;
-            set => EditButtton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            get => EditButton.Visibility == Visibility.Visible;
+            set => EditButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public bool EnableDeleting {
-            get => DeleteButtton.Visibility == Visibility.Visible;
-            set => DeleteButtton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            get => DeleteButton.Visibility == Visibility.Visible;
+            set => DeleteButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
         }
 
         #endregion
@@ -62,6 +67,7 @@ namespace HomeCenter.NET.Controls
         public delegate void EnabledChangedDelegate(bool isEnabled);
         public event EnabledChangedDelegate EnabledChanged;
 
+        public event EventHandler Renamed;
         public event EventHandler Edited;
         public event EventHandler Deleted;
 
@@ -95,6 +101,9 @@ namespace HomeCenter.NET.Controls
 
         private void EditButton_Click(object sender, RoutedEventArgs e) =>
             Edited?.Invoke(this, EventArgs.Empty);
+
+        private void RenameButton_Click(object sender, RoutedEventArgs e) =>
+            Renamed?.Invoke(this, EventArgs.Empty);
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e) =>
             Deleted?.Invoke(this, EventArgs.Empty);

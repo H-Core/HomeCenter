@@ -136,6 +136,9 @@
     <Compile Include="Windows\ModuleSettingsWindow.xaml.cs">
       <DependentUpon>ModuleSettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\RenameWindow.xaml.cs">
+      <DependentUpon>RenameWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -151,6 +154,10 @@
     <Page Include="Windows\ModuleSettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\RenameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\SettingsWindow.xaml">
       <SubType>Designer</SubType>

@@ -131,9 +131,9 @@ namespace H.NET.Plugins
             .FirstOrDefault(i => string.Equals(i.Key, name, StringComparison.OrdinalIgnoreCase))
             .Value;
 
-        private void AddInstance(string name, string typeName)
+        private void AddInstance(string name, string typeName, bool isEnabled)
         {
-            Instances.Add(name, typeName);
+            Instances.Add(name, typeName, isEnabled);
 
             var path = GetSettingsFilePath(name);
             if (!File.Exists(path))
@@ -141,10 +141,37 @@ namespace H.NET.Plugins
                 File.WriteAllText(path, string.Empty);
             }
 
-            SetInstanceIsEnabled(name, true);
+            SetInstanceIsEnabled(name, isEnabled);
         }
 
-        public void AddInstance(string name, Type type) => AddInstance(name, type.FullName);
+        public void RenameInstance(string name, string newName)
+        {
+            if (!Instances.Contains(name))
+            {
+                throw new InstanceNotFoundException(name);
+            }
+            if (Instances.Contains(newName))
+            {
+                throw new Exception($"Instance name \"{newName}\" already used");
+            }
+
+            var path = GetSettingsFilePath(name);
+            var newPath = GetSettingsFilePath(newName);
+            if (!File.Exists(newPath))
+            {
+                File.Copy(path, newPath);
+                File.Delete(path);
+            }
+
+            var instanceInfo = Instances.GetInfo(name);
+            var isEnabledTemp = instanceInfo.IsEnabled;
+
+            SetInstanceIsEnabled(name, false);
+            DeleteInstance(name);
+            AddInstance(newName, instanceInfo.TypeName, isEnabledTemp);
+        }
+
+        public void AddInstance(string name, Type type, bool isEnabled) => AddInstance(name, type.FullName, isEnabled);
 
         public void AddInstancesFromAssembly(string path, Type interfaceType, Predicate<Type> filter = null)
         {
@@ -157,13 +184,18 @@ namespace H.NET.Plugins
                 if (TypeIsAvailable(type) &&
                     filter?.Invoke(type) != false)
                 {
-                    AddInstance(type.Name, type);
+                    AddInstance(type.Name, type, false);
                 }
             }
         }
 
         public void DeleteInstance(string name)
         {
+            if (!Instances.Contains(name))
+            {
+                throw new InstanceNotFoundException(name);
+            }
+
             SetInstanceIsEnabled(name, false);
 
             Instances.Delete(name);

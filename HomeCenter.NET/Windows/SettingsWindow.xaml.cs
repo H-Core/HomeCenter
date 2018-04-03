@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using H.NET.Core;
-using H.NET.Core.Attributes;
+using H.NET.Core.Extensions;
 using H.NET.Plugins;
 using HomeCenter.NET.Controls;
 using HomeCenter.NET.Utilities;
@@ -73,10 +72,7 @@ namespace HomeCenter.NET.Windows
 
         private void Add(string path) => SafeActions.Run(() =>
         {
-            ModuleManager.Instance.AddInstancesFromAssembly(path, typeof(IModule), 
-                type =>
-                !(type.GetCustomAttribute(typeof(AllowMultipleInstanceAttribute)) is AllowMultipleInstanceAttribute attribute) ||
-                 attribute.AutoCreateInstance);
+            ModuleManager.Instance.AddInstancesFromAssembly(path, typeof(IModule), type => type.AutoCreateInstance());
 
             Update();
         });
@@ -111,7 +107,7 @@ namespace HomeCenter.NET.Windows
                     Height = 25,
                     Color = Colors.LightGreen,
                     EnableEditing = false,
-                    EnableAdding = type.GetCustomAttribute<AllowMultipleInstanceAttribute>() != null
+                    EnableAdding = type.AllowMultipleInstance()
                 };
                 control.Deleted += (sender, args) =>
                 {
@@ -120,7 +116,7 @@ namespace HomeCenter.NET.Windows
                 };
                 control.Added += (sender, args) =>
                 {
-                    ModuleManager.Instance.AddInstance($"{type.Name}_{new Random().Next()}", type);
+                    ModuleManager.Instance.AddInstance($"{type.Name}_{new Random().Next()}", type, false);
 
                     Update();
                 };
@@ -205,7 +201,8 @@ namespace HomeCenter.NET.Windows
                 Color = module != null ? Colors.LightGreen : Colors.Bisque,
                 EnableEditing = module != null && module.Settings?.Count > 0,
                 EnableEnabling = instance.Exception == null,
-                ObjectIsEnabled = instance.IsEnabled
+                ObjectIsEnabled = instance.IsEnabled,
+                EnableRenaming = instance.Type?.AllowMultipleInstance() ?? false
             };
             control.Deleted += (sender, args) =>
             {
@@ -218,6 +215,21 @@ namespace HomeCenter.NET.Windows
                 }
 
                 ModuleManager.Instance.DeleteInstance(name);
+
+                updateAction?.Invoke();
+            };
+            control.Renamed += (sender, args) =>
+            {
+                var oldName = control.ObjectName;
+                var newName = RenameWindow.Rename(oldName);
+                if (string.IsNullOrWhiteSpace(newName) ||
+                    string.Equals(oldName, newName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
+
+                ModuleManager.Instance.RenameInstance(oldName, newName);
+                control.ObjectName = newName;
 
                 updateAction?.Invoke();
             };

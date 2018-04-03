@@ -39,7 +39,7 @@ namespace H.NET.Plugins
         public RuntimeObject<T> GetObject(string name) => Objects.TryGetValue(name, out var result)
             ? result : throw new InstanceNotFoundException(name);
 
-        public void Add(string name, string typeName, bool isEnabled = true)
+        public void Add(string name, string typeName, bool isEnabled)
         {
             File.Add(name, typeName, isEnabled);
             AddObject(name);

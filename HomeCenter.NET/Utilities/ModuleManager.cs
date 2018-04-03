@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using H.NET.Core;
 using H.NET.Core.Attributes;
+using H.NET.Core.Extensions;
 using H.NET.Plugins;
 using Newtonsoft.Json;
 
@@ -62,10 +63,10 @@ namespace HomeCenter.NET.Utilities
             var types = Instance.AvailableTypes;
             foreach (var type in types)
             {
-                if (!(type.GetCustomAttribute(typeof(AllowMultipleInstanceAttribute)) is AllowMultipleInstanceAttribute) &&
+                if (!type.AllowMultipleInstance() &&
                     !Instance.Instances.Objects.ContainsKey(type.Name))
                 {
-                    Instance.AddInstance(type.Name, type);
+                    Instance.AddInstance(type.Name, type, true);
                 }
             }
         });
