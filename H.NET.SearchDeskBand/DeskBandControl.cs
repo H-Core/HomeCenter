@@ -24,7 +24,7 @@ namespace H.NET.SearchDeskBand
             InitializeComponent();
 
             AddAction("start", message => RecordButton.BackColor = Color.RoyalBlue);
-            AddAction("stop", message => RecordButton.BackColor = DefaultBackColor);
+            AddAction("stop", message => RecordButton.BackColor = Color.White);
 
             Window.VisibleChanged += (sender, args) => Label.Visible = !Window.Visible;
 
