@@ -90,6 +90,7 @@ namespace HomeCenter.NET.Windows
             UpdateConverters();
             UpdateSynthesizers();
             UpdateRunners();
+            UpdateNotifiers();
         }
 
         private void UpdateModules() => SafeActions.Run(() =>
@@ -175,6 +176,11 @@ namespace HomeCenter.NET.Windows
         private void UpdateRunners() => SafeActions.Run(() =>
         {
             UpdatePanel<IRunner>(RunnersPanel, Update);
+        });
+
+        private void UpdateNotifiers() => SafeActions.Run(() =>
+        {
+            UpdatePanel<INotifier>(NotifiersPanel, Update);
         });
 
         #endregion
