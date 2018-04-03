@@ -8,9 +8,9 @@ namespace H.NET.Core.Runners
     public abstract class Runner : Module, IRunner
     {
         #region Properties
-        
+
         private InvariantStringDictionary<RunInformation> HandlerDictionary { get; } = new InvariantStringDictionary<RunInformation>();
-        private InvariantStringDictionary<Func<string>> Variables { get; } = new InvariantStringDictionary<Func<string>>();
+        private InvariantStringDictionary<Func<object>> Variables { get; } = new InvariantStringDictionary<Func<object>>();
 
         #endregion
 
@@ -48,7 +48,7 @@ namespace H.NET.Core.Runners
             }
         }
 
-        public string[] GetSupportedCommands() => 
+        public string[] GetSupportedCommands() =>
             HandlerDictionary.Select(i => $"{i.Key} {i.Value.Description}").ToArray();
 
         public string[] GetVariables() =>
@@ -70,31 +70,43 @@ namespace H.NET.Core.Runners
 
         #region Protected methods
 
+        private string FindVariablesAndReplace(string command)
+        {
+            if (string.IsNullOrWhiteSpace(command))
+            {
+                return command;
+            }
+
+            foreach (var variable in Variables)
+            {
+                var variableName = variable.Key;
+                if (string.IsNullOrWhiteSpace(variableName) || !command.Contains(variableName))
+                {
+                    continue;
+                }
+
+                var func = variable.Value;
+                var value = func?.Invoke();
+
+                command = command.Replace(variable.Key, value?.ToString() ?? string.Empty);
+            }
+
+            return command;
+        }
+
         protected virtual RunInformation RunInternal(string key, string data)
         {
             var values = data.SplitOnlyFirstIgnoreQuote(' ');
             var information = GetHandler(values[0]);
             var command = values[1];
 
-            foreach (var variable in Variables)
+            try
             {
-                if (!command.Contains(variable.Key))
-                {
-                    continue;
-                }
-
-                var func = variable.Value;
-
-                try
-                {
-                    var value = func?.Invoke();
-
-                    command = command.Replace(variable.Key, value);
-                }
-                catch (Exception exception)
-                {
-                    information.Exception = exception;
-                }
+                command = FindVariablesAndReplace(command);
+            }
+            catch (Exception exception)
+            {
+                information.Exception = exception;
             }
 
             var action = information.Action;
@@ -140,7 +152,7 @@ namespace H.NET.Core.Runners
         protected void AddAction(string key, RunInformation information) =>
             HandlerDictionary[key] = information;
 
-        protected RunInformation GetHandler(string key) => 
+        protected RunInformation GetHandler(string key) =>
             HandlerDictionary.TryGetValue(key, out var handler) ? handler : new RunInformation();
 
         #endregion

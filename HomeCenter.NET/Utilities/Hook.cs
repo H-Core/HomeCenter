@@ -122,7 +122,8 @@ namespace HomeCenter.NET.Utilities
             Trace.WriteLine($"Starting hook '{Name}'...", $"Hook.StartHook [{Thread.CurrentThread.Name}]");
 
             _hookproc = HookCallback;
-            _hhook = SetWindowsHookEx(HookType.WhKeyboardLl, _hookproc, GetModuleHandle(Process.GetCurrentProcess().MainModule.ModuleName), 0);
+            var handle = GetModuleHandle(Process.GetCurrentProcess().MainModule.ModuleName);
+            _hhook = SetWindowsHookEx(HookType.WhKeyboardLl, _hookproc, handle, 0);
             if (_hhook == null || _hhook == IntPtr.Zero)
             {
                 Win32Exception lastError = new Win32Exception(Marshal.GetLastWin32Error());
@@ -140,7 +141,7 @@ namespace HomeCenter.NET.Utilities
 
         private void SendEvent(int code, IntPtr wParam, ref Kbdllhookstruct lParam)
         {
-            if (IsPaused || code < 0)
+            if (IsPaused || code < 0) 
             {
                 return;
             }

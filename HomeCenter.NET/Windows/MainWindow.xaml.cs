@@ -299,6 +299,7 @@ namespace HomeCenter.NET.Windows
                 Manager.Start();
             }
 
+            //Print($"{e.Key:G}");
             if (_hookDictionary.TryGetValue((e.Key, e.IsCtrlPressed, e.IsAltPressed, e.IsShiftPressed), out var command))
             {
                 Run(command.Keys.FirstOrDefault()?.Text);
