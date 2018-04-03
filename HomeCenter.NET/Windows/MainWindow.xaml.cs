@@ -27,7 +27,7 @@ namespace HomeCenter.NET.Windows
 
         private Server Server { get; } = new Server(Options.IpcPortToHomeCenter);
 
-        private Hook Hook { get; } = new Hook("Global Action Hook");
+        private Hook Hook { get; set; }
         private GlobalRunner GlobalRunner { get; set; } = new GlobalRunner(new CommandsStorage(Options.CompanyName));
 
         private bool CanClose { get; set; }
@@ -58,34 +58,7 @@ namespace HomeCenter.NET.Windows
 
             #endregion
 
-            #region Hook
-
-            Hook.KeyUpEvent += Global_KeyUp;
-            Hook.KeyDownEvent += Global_KeyDown;
-
-            #endregion
-
             #region Global Runner
-
-            /*
-            byte[] alternativeConverterLastData = null;
-            GlobalRunner.NotHandledText += async _ =>
-            {
-                if (AlternativeConverter == null || 
-                    alternativeConverterLastData == Manager.Data)
-                {
-                    return;
-                }
-
-                alternativeConverterLastData = Manager.Data;
-                if (Manager.Data == null)
-                {
-                    return;
-                }
-
-                var text = await AlternativeConverter.Convert(Manager.Data);
-                Run(text);
-            };*/
 
             GlobalRunner.NewOutput += Print;
             GlobalRunner.NewSpeech += Say;
@@ -122,31 +95,6 @@ namespace HomeCenter.NET.Windows
             #endregion
 
             Server.NewMessage += Run;
-
-            #region Modules
-
-            AssembliesManager.LogAction = Print;
-            Module.LogAction = Print;
-            Notifier.RunAction = Run;
-            GlobalRunAction = Run;
-
-            Print("Loading modules...");
-            try
-            {
-                ModuleManager.Instance.Load();
-                ModuleManager.AddUniqueInstancesIfNeed();
-                ModuleManager.RegisterHandlers(Print, Say, Run);
-
-                SetUpRuntimeModule();
-
-                Print("Loaded");
-            }
-            catch (Exception exception)
-            {
-                Print(exception.ToString());
-            }
-
-            #endregion
 
             #region Default Runner
 
@@ -203,6 +151,43 @@ namespace HomeCenter.NET.Windows
         #endregion
 
         #region Event handlers
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            #region Hook
+
+            Hook = new Hook("Global Action Hook");
+            Hook.KeyUp += Global_KeyUp;
+            Hook.KeyDown += Global_KeyDown;
+            Hook.MouseDown += Global_MouseDown;
+
+            #endregion
+
+            #region Modules
+
+            AssembliesManager.LogAction = Print;
+            Module.LogAction = Print;
+            Notifier.RunAction = Run;
+            GlobalRunAction = Run;
+
+            Print("Loading modules...");
+            try
+            {
+                ModuleManager.Instance.Load();
+                ModuleManager.AddUniqueInstancesIfNeed();
+                ModuleManager.RegisterHandlers(Print, Say, Run);
+
+                SetUpRuntimeModule();
+
+                Print("Loaded");
+            }
+            catch (Exception exception)
+            {
+                Print(exception.ToString());
+            }
+
+            #endregion
+        }
 
         private void InputTextBox_KeyUp(object sender, KeyEventArgs e)
         {
@@ -304,6 +289,11 @@ namespace HomeCenter.NET.Windows
             {
                 Run(command.Keys.FirstOrDefault()?.Text);
             }
+        }
+
+        private void Global_MouseDown(object sender, MouseEventExtArgs e)
+        {
+            //Print($"{e.SpecialButton}");
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)

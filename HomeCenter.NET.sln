@@ -63,6 +63,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Notifiers.MaskScreens
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Runners.TorrentRunner", "H.NET.Runners.TorrentRunner\H.NET.Runners.TorrentRunner.csproj", "{3B631441-A561-4CD5-A61E-6FD02694A00F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Utilities.Hook", "H.NET.Utilities.Hook\H.NET.Utilities.Hook.csproj", "{440051B2-288D-4B81-AF01-DAB1BD928F52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -145,6 +147,10 @@ Global
 		{3B631441-A561-4CD5-A61E-6FD02694A00F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B631441-A561-4CD5-A61E-6FD02694A00F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B631441-A561-4CD5-A61E-6FD02694A00F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{440051B2-288D-4B81-AF01-DAB1BD928F52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{440051B2-288D-4B81-AF01-DAB1BD928F52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{440051B2-288D-4B81-AF01-DAB1BD928F52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{440051B2-288D-4B81-AF01-DAB1BD928F52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

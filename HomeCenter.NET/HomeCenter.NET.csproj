@@ -142,7 +142,6 @@
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\Hook.cs" />
     <Compile Include="Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -210,6 +209,10 @@
     <ProjectReference Include="..\H.NET.Storages.CommandsStorage\H.NET.Storages.CommandsStorage.csproj">
       <Project>{9c0197ec-b353-4cdd-addc-e23876c7b72f}</Project>
       <Name>H.NET.Storages.CommandsStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\H.NET.Utilities.Hook\H.NET.Utilities.Hook.csproj">
+      <Project>{440051b2-288d-4b81-af01-dab1bd928f52}</Project>
+      <Name>H.NET.Utilities.Hook</Name>
     </ProjectReference>
     <ProjectReference Include="..\H.NET.Utilities.IPC\H.NET.Utilities.IPC.csproj">
       <Project>{a2cb840c-0158-4227-bd1e-6b03b098d5e6}</Project>

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using H.NET.Core;
+using H.NET.Utilities;
 using HomeCenter.NET.Properties;
 
 namespace HomeCenter.NET.Utilities
