@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 namespace H.NET.Utilities
 {
@@ -37,8 +36,7 @@ namespace H.NET.Utilities
                 return;
             }
 
-            var lParam = (Win32.KeyboardHookStruct)Marshal.PtrToStructure(lParamPtr, typeof(Win32.KeyboardHookStruct));
-
+            var lParam = ToStructure<Win32.KeyboardHookStruct>(lParamPtr);
             if (OneUpEvent)
             {
                 if (LastState != null && LastState.Item1 == lParam.VirtualKeyCode && LastState.Item2 == lParam.Flags)

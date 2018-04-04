@@ -83,9 +83,15 @@ namespace H.NET.Utilities
 
         #endregion
 
-        #region Private methods
+        #region Protected methods
 
         protected abstract void InternalCallback(int nCode, int wParam, IntPtr lParam);
+
+        protected T ToStructure<T>(IntPtr ptr) where T : struct => (T)Marshal.PtrToStructure(ptr, typeof(T));
+
+        #endregion
+
+        #region Private methods
 
         private int Callback(int nCode, int wParam, IntPtr lParam)
         {

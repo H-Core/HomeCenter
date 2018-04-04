@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 
 namespace H.NET.Utilities
 {
@@ -26,15 +25,14 @@ namespace H.NET.Utilities
 
         #region Protected methods
 
-        protected override void InternalCallback(int nCode, int wParam, IntPtr lParam)
+        protected override void InternalCallback(int nCode, int wParam, IntPtr lParamPtr)
         {
             if (nCode < 0)
             {
                 return;
             }
 
-            //Marshall the data from callback.
-            var mouseHookStruct = (Win32.MouseLowLevelHookStruct)Marshal.PtrToStructure(lParam, typeof(Win32.MouseLowLevelHookStruct));
+            var lParam = ToStructure<Win32.MouseLowLevelHookStruct>(lParamPtr);
 
             //detect button clicked
             MouseButtons button = MouseButtons.None;
@@ -94,7 +92,7 @@ namespace H.NET.Utilities
                     //If the message is WM_MOUSEWHEEL, the high-order word of MouseData member is the wheel delta. 
                     //One wheel click is defined as WHEEL_DELTA, which is 120. 
                     //(value >> 16) & 0xffff; retrieves the high-order word from the given 32-bit value
-                    mouseDelta = (short)((mouseHookStruct.MouseData >> 16) & 0xffff);
+                    mouseDelta = (short)((lParam.MouseData >> 16) & 0xffff);
 
                     //TODO: X BUTTONS (I havent them so was unable to test)
                     //If the message is WM_XBUTTONDOWN, WM_XBUTTONUP, WM_XBUTTONDBLCLK, WM_NCXBUTTONDOWN, WM_NCXBUTTONUP, 
@@ -115,8 +113,8 @@ namespace H.NET.Utilities
             var e = new MouseEventExtArgs(
                                                button,
                                                clickCount,
-                                               mouseHookStruct.Point.X,
-                                               mouseHookStruct.Point.Y,
+                                               lParam.Point.X,
+                                               lParam.Point.Y,
                                                mouseDelta);
 
             //Mouse up
@@ -128,8 +126,8 @@ namespace H.NET.Utilities
             //Mouse down
             if (mouseDown)
             {
-                e.SpecialButton = mouseHookStruct.MouseData > 0 ?
-                    (int)Math.Log(mouseHookStruct.MouseData, 2) : 0;
+                e.SpecialButton = lParam.MouseData > 0 ?
+                    (int)Math.Log(lParam.MouseData, 2) : 0;
                 MouseDown?.Invoke(null, e);
             }
 
