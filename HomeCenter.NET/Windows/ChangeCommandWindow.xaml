@@ -46,7 +46,7 @@
                             <ColumnDefinition Width="50*" />
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="HotKey:"/>
-                        <TextBox Grid.Column="1" Text="{Binding Command.HotKey}"/>
+                        <Button Grid.Column="1" x:Name="HotKeyButton" Click="HotKeyButton_Click" />
                     </Grid>
                 </Grid>
             </TabItem>

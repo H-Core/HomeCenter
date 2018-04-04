@@ -30,6 +30,13 @@ namespace HomeCenter.NET.Utilities
             return new KeysCombination(key, ctrl, shift, alt);
         }
 
+        public static KeysCombination FromSpecialData(int data)
+        {
+            var number = data - 16;
+
+            return new KeysCombination(number == 0 ? Keys.XButton2 : Keys.XButton1);
+        }
+
         #endregion
 
         #region Properties
@@ -45,7 +52,7 @@ namespace HomeCenter.NET.Utilities
 
         #region Constructors
 
-        public KeysCombination(Keys key, bool ctrl, bool shift, bool alt)
+        public KeysCombination(Keys key, bool ctrl = false, bool shift = false, bool alt = false)
         {
             Key = key;
             IsCtrl = ctrl;

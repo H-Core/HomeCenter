@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -27,8 +28,8 @@ namespace HomeCenter.NET.Windows
 
         private Server Server { get; } = new Server(Options.IpcPortToHomeCenter);
 
-        private LowLevelMouseHook MouseHook { get; set; } = new LowLevelMouseHook();
-        private LowLevelKeyboardHook KeyboardHook { get; set; } = new LowLevelKeyboardHook();
+        private static LowLevelMouseHook MouseHook { get; set; } = new LowLevelMouseHook();
+        private static LowLevelKeyboardHook KeyboardHook { get; set; } = new LowLevelKeyboardHook();
 
         private GlobalRunner GlobalRunner { get; set; } = new GlobalRunner(new CommandsStorage(Options.CompanyName));
 
@@ -288,6 +289,17 @@ namespace HomeCenter.NET.Windows
             }
         }
 
+        private bool FindCombinationAndRun(KeysCombination combination)
+        {
+            if (!Combinations.TryGetValue(combination, out var command))
+            {
+                return false;
+            }
+
+            Run(command.Keys.FirstOrDefault()?.Text);
+            return true;
+        }
+
         private void Global_KeyDown(object sender, KeyboardHookEventArgs e)
         {
             if (e.Key == Options.RecordKey || e.IsAltPressed && e.IsCtrlPressed)
@@ -297,15 +309,24 @@ namespace HomeCenter.NET.Windows
 
             //Print($"{e.Key:G}");
             var combination = new KeysCombination(e.Key, e.IsCtrlPressed, e.IsShiftPressed, e.IsAltPressed);
-            if (Combinations.TryGetValue(combination, out var command))
+            if (FindCombinationAndRun(combination))
             {
-                Run(command.Keys.FirstOrDefault()?.Text);
                 e.Handled = true;
             }
         }
 
         private void Global_MouseDown(object sender, MouseEventExtArgs e)
         {
+            if (e.SpecialButton == 0)
+            {
+                return;
+            }
+
+            var combination = KeysCombination.FromSpecialData(e.SpecialButton);
+            if (FindCombinationAndRun(combination))
+            {
+                e.Handled = true;
+            }
             //Print($"{e.SpecialButton}");
         }
 
@@ -338,6 +359,61 @@ namespace HomeCenter.NET.Windows
                 Visibility = Visibility.Hidden;
                 e.Cancel = true;
             }
+        }
+
+        #endregion
+
+        #region Static methods
+
+        public static async Task<KeysCombination> CatchKey()
+        {
+            if (KeyboardHook == null || MouseHook == null)
+            {
+                return null;
+            }
+
+            // Starts if not started
+            KeyboardHook.Start();
+            MouseHook.Start();
+
+            KeysCombination combination = null;
+            var isCancel = false;
+
+            void OnKeyboardHookOnKeyDown(object sender, KeyboardHookEventArgs args)
+            {
+                args.Handled = true;
+                if (args.Key == Keys.Escape)
+                {
+                    isCancel = true;
+                    return;
+                }
+
+                combination = new KeysCombination(args.Key, args.IsCtrlPressed, args.IsShiftPressed, args.IsAltPressed);
+            }
+
+            void OnMouseHookOnMouseDown(object sender, MouseEventExtArgs args)
+            {
+                if (args.SpecialButton == 0)
+                {
+                    return;
+                }
+
+                args.Handled = true;
+                combination = KeysCombination.FromSpecialData(args.SpecialButton);
+            }
+
+            KeyboardHook.KeyDown += OnKeyboardHookOnKeyDown;
+            MouseHook.MouseDown += OnMouseHookOnMouseDown;
+
+            while (!isCancel && (combination == null || combination.IsEmpty))
+            {
+                await Task.Delay(1);
+            }
+
+            KeyboardHook.KeyDown -= OnKeyboardHookOnKeyDown;
+            MouseHook.MouseDown -= OnMouseHookOnMouseDown;
+
+            return isCancel ? null : combination;
         }
 
         #endregion

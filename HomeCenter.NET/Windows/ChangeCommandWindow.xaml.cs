@@ -100,6 +100,18 @@ namespace HomeCenter.NET.Windows
             Update();
         }
 
+        private async void HotKeyButton_Click(object sender, RoutedEventArgs e)
+        {
+            HotKeyButton.IsEnabled = false;
+
+            var combination = await MainWindow.CatchKey();
+            Command.HotKey = combination?.ToString() ?? string.Empty;
+
+            HotKeyButton.IsEnabled = true;
+
+            Update();
+        }
+
         #endregion
 
         #region Private methods
@@ -112,6 +124,8 @@ namespace HomeCenter.NET.Windows
 
         private void Update()
         {
+            HotKeyButton.Content = Command.HotKey;
+
             KeysPanel.Children.Clear();
             foreach (var key in Command.Keys)
             {
