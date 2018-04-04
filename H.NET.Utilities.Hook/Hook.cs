@@ -13,8 +13,9 @@ namespace H.NET.Utilities
         #region Properties
 
         public string Name { get; }
-        public int HookId { get; }
+        public bool IsStarted { get; private set; }
 
+        private int HookId { get; }
         private IntPtr HookHandle { get; set; }
         private Win32.HookProc _hookAction;
 
@@ -26,30 +27,63 @@ namespace H.NET.Utilities
 
         #endregion
 
+        #region Constructors
+
         protected Hook(string name, int hookId)
         {
             Name = name;
             HookId = hookId;
         }
 
-        private static void CheckHandle(IntPtr handle)
-        {
-            if (handle == null || handle == IntPtr.Zero)
-            {
-                throw new Win32Exception(Marshal.GetLastWin32Error());
-            }
-        }
+        #endregion
 
+        #region Public methods
+
+        /// <summary>
+        /// Start hook process
+        /// </summary>
+        /// <exception cref="Win32Exception">If SetWindowsHookEx return error code</exception>
         public void Start()
         {
+            if (IsStarted)
+            {
+                return;
+            }
+
             Trace.WriteLine($"Starting hook '{Name}'...", $"Hook.StartHook [{Thread.CurrentThread.Name}]");
 
             _hookAction = Callback;
             var moduleHandle = Win32.GetModuleHandle(Process.GetCurrentProcess().MainModule.ModuleName);
 
             HookHandle = Win32.SetWindowsHookEx(HookId, _hookAction, moduleHandle, 0);
-            CheckHandle(HookHandle);
+            if (HookHandle == null || HookHandle == IntPtr.Zero)
+            {
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+
+            IsStarted = true;
         }
+
+        /// <summary>
+        /// Stop hook process
+        /// </summary>
+        public void Stop()
+        {
+            if (!IsStarted)
+            {
+                return;
+            }
+
+            Trace.WriteLine($"Stopping hook '{Name}'...", $"Hook.StartHook [{Thread.CurrentThread.Name}]");
+
+            Win32.UnhookWindowsHookEx(HookHandle);
+
+            IsStarted = false;
+        }
+
+        #endregion
+
+        #region Private methods
 
         protected abstract void InternalCallback(int nCode, int wParam, IntPtr lParam);
 
@@ -73,14 +107,15 @@ namespace H.NET.Utilities
             return result;
         }
 
+        #endregion
+
         #region IDisposable
 
-        public void Dispose()
-        {
-            Trace.WriteLine($"Stopping hook '{Name}'...", $"Hook.StartHook [{Thread.CurrentThread.Name}]");
-
-            Win32.UnhookWindowsHookEx(HookHandle);
-        }
+        /// <inheritdoc />
+        /// <summary>
+        /// Dispose internal system hook resources
+        /// </summary>
+        public void Dispose() => Stop();
 
         #endregion
     }

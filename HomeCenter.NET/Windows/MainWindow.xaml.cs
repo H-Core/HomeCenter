@@ -27,8 +27,9 @@ namespace HomeCenter.NET.Windows
 
         private Server Server { get; } = new Server(Options.IpcPortToHomeCenter);
 
-        private LowLevelMouseHook MouseHook { get; } = new LowLevelMouseHook();
-        private LowLevelKeyboardHook KeyboardHook { get; } = new LowLevelKeyboardHook();
+        private LowLevelMouseHook MouseHook { get; set; } = new LowLevelMouseHook();
+        private LowLevelKeyboardHook KeyboardHook { get; set; } = new LowLevelKeyboardHook();
+
         private GlobalRunner GlobalRunner { get; set; } = new GlobalRunner(new CommandsStorage(Options.CompanyName));
 
         private bool CanClose { get; set; }
@@ -127,6 +128,12 @@ namespace HomeCenter.NET.Windows
 
             GlobalRunner?.Dispose();
             GlobalRunner = null;
+
+            KeyboardHook?.Dispose();
+            KeyboardHook = null;
+
+            MouseHook?.Dispose();
+            MouseHook = null;
         }
 
         #endregion
@@ -157,13 +164,20 @@ namespace HomeCenter.NET.Windows
         {
             #region Hook
 
-            KeyboardHook.Start();
-            MouseHook.Start();
+            try
+            {
+                KeyboardHook.Start();
+                MouseHook.Start();
 
-            KeyboardHook.KeyUp += Global_KeyUp;
-            KeyboardHook.KeyDown += Global_KeyDown;
+                KeyboardHook.KeyUp += Global_KeyUp;
+                KeyboardHook.KeyDown += Global_KeyDown;
 
-            MouseHook.MouseDown += Global_MouseDown;
+                MouseHook.MouseDown += Global_MouseDown;
+            }
+            catch (Exception exception)
+            {
+                Print(exception.ToString());
+            }
 
             #endregion
 
