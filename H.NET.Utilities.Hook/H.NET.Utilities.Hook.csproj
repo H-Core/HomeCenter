@@ -34,8 +34,17 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LowLevelMouseHook.cs" />
+    <Compile Include="LowLevelKeyboardHook.cs" />
     <Compile Include="Hook.cs" />
+    <Compile Include="KeyboardHookEventArgs.cs" />
+    <Compile Include="Keys.cs" />
+    <Compile Include="MouseButtons.cs" />
+    <Compile Include="MouseEventArgs.cs" />
+    <Compile Include="MouseEventExtArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Win32.cs" />
+    <Compile Include="Winuser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -27,7 +27,8 @@ namespace HomeCenter.NET.Windows
 
         private Server Server { get; } = new Server(Options.IpcPortToHomeCenter);
 
-        private Hook Hook { get; set; }
+        private LowLevelMouseHook MouseHook { get; } = new LowLevelMouseHook();
+        private LowLevelKeyboardHook KeyboardHook { get; } = new LowLevelKeyboardHook();
         private GlobalRunner GlobalRunner { get; set; } = new GlobalRunner(new CommandsStorage(Options.CompanyName));
 
         private bool CanClose { get; set; }
@@ -156,10 +157,13 @@ namespace HomeCenter.NET.Windows
         {
             #region Hook
 
-            Hook = new Hook("Global Action Hook");
-            Hook.KeyUp += Global_KeyUp;
-            Hook.KeyDown += Global_KeyDown;
-            Hook.MouseDown += Global_MouseDown;
+            KeyboardHook.Start();
+            MouseHook.Start();
+
+            KeyboardHook.KeyUp += Global_KeyUp;
+            KeyboardHook.KeyDown += Global_KeyDown;
+
+            MouseHook.MouseDown += Global_MouseDown;
 
             #endregion
 
