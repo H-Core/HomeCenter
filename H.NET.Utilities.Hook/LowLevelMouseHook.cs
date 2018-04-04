@@ -18,7 +18,7 @@ namespace H.NET.Utilities
 
         #region Constructors
 
-        public LowLevelMouseHook() : base("Low Level Keyboard Hook", Winuser.WH_KEYBOARD_LL)
+        public LowLevelMouseHook() : base("Low Level Mouse Hook", Winuser.WH_MOUSE_LL)
         {
         }
 

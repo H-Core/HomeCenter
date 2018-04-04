@@ -22,7 +22,7 @@ namespace H.NET.Utilities
 
         #region Constructors
 
-        public LowLevelKeyboardHook() : base("Low Level Keyboard Hook", Winuser.WH_MOUSE_LL)
+        public LowLevelKeyboardHook() : base("Low Level Keyboard Hook", Winuser.WH_KEYBOARD_LL)
         {
         }
 
