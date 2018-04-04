@@ -39,7 +39,7 @@ namespace HomeCenter.NET.Windows
         private static Action<string> GlobalRunAction { get; set; }
         public static void GlobalRun(string text) => GlobalRunAction?.Invoke(text);
 
-        private readonly Dictionary<(Keys, bool, bool, bool), Command> _hookDictionary = new Dictionary<(Keys, bool, bool, bool), Command>();
+        private Dictionary<KeysCombination, Command> Combinations { get; } = new Dictionary<KeysCombination, Command>();
 
         #endregion
 
@@ -265,25 +265,18 @@ namespace HomeCenter.NET.Windows
             Manager.AlternativeConverters = Options.AlternativeConverters;
             Synthesizer = Options.Synthesizer;
 
-            _hookDictionary.Clear();
+            Combinations.Clear();
             foreach (var pair in GlobalRunner.Storage.UniqueValues(i => i.Value).Where(i => i.Value.HotKey != null))
             {
                 var command = pair.Value;
                 var hotKey = command.HotKey;
-                var values = hotKey.Contains("+") ? hotKey.Split('+') : new[] { hotKey };
-
-                var ctrl = values.Contains("CTRL", StringComparer.OrdinalIgnoreCase);
-                var alt = values.Contains("ALT", StringComparer.OrdinalIgnoreCase);
-                var shift = values.Contains("SHIFT", StringComparer.OrdinalIgnoreCase);
-                var mainKey = values.FirstOrDefault(i => !new[] { "CTRL", "ALT", "SHIFT" }.Contains(i, StringComparer.OrdinalIgnoreCase));
-
-                var key = Hook.FromString(mainKey);
-                if (key == Keys.None)
+                var combination = KeysCombination.FromString(hotKey);
+                if (combination.IsEmpty)
                 {
                     continue;
                 }
 
-                _hookDictionary[(key, ctrl, alt, shift)] = command;
+                Combinations[combination] = command;
             }
         }
 
@@ -303,7 +296,8 @@ namespace HomeCenter.NET.Windows
             }
 
             //Print($"{e.Key:G}");
-            if (_hookDictionary.TryGetValue((e.Key, e.IsCtrlPressed, e.IsAltPressed, e.IsShiftPressed), out var command))
+            var combination = new KeysCombination(e.Key, e.IsCtrlPressed, e.IsShiftPressed, e.IsAltPressed);
+            if (Combinations.TryGetValue(combination, out var command))
             {
                 Run(command.Keys.FirstOrDefault()?.Text);
             }

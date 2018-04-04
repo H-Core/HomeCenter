@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="Runners\GlobalRunner.cs" />
     <Compile Include="Utilities\DialogUtilities.cs" />
+    <Compile Include="Utilities\KeysCombination.cs" />
     <Compile Include="Utilities\MediaUtilities.cs" />
     <Compile Include="Utilities\ModuleManager.cs" />
     <Compile Include="Utilities\Options.cs" />
