@@ -25,11 +25,11 @@ namespace H.NET.Utilities
 
         #region Protected methods
 
-        protected override void InternalCallback(int nCode, int wParam, IntPtr lParamPtr)
+        protected override int InternalCallback(int nCode, int wParam, IntPtr lParamPtr)
         {
             if (nCode < 0)
             {
-                return;
+                return 0;
             }
 
             var lParam = ToStructure<Win32.MouseLowLevelHookStruct>(lParamPtr);
@@ -171,6 +171,8 @@ namespace H.NET.Utilities
                 }
             }
             */
+
+            return e.Handled ? -1 : 0;
         }
 
         #endregion

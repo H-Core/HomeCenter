@@ -12,6 +12,7 @@ namespace H.NET.Utilities
         #endregion
 
         public Keys Key { get; }
+        public bool Handled { get; set; }
 
         public bool IsAltPressed => IsLAltPressed || IsRAltPressed;
         public bool IsLAltPressed { get; }

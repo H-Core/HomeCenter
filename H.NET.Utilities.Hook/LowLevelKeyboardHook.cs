@@ -29,11 +29,11 @@ namespace H.NET.Utilities
 
         #region Protected methods
 
-        protected override void InternalCallback(int code, int wParam, IntPtr lParamPtr)
+        protected override int InternalCallback(int code, int wParam, IntPtr lParamPtr)
         {
             if (code < 0)
             {
-                return;
+                return 0;
             }
 
             var lParam = ToStructure<Win32.KeyboardHookStruct>(lParamPtr);
@@ -41,20 +41,23 @@ namespace H.NET.Utilities
             {
                 if (LastState != null && LastState.Item1 == lParam.VirtualKeyCode && LastState.Item2 == lParam.Flags)
                 {
-                    return;
+                    return 0;
                 }
                 LastState = new Tuple<int, int>(lParam.VirtualKeyCode, lParam.Flags);
             }
 
             var isKeyDown = lParam.Flags >> 7 == 0;
+            var e = new KeyboardHookEventArgs(lParam);
             if (isKeyDown)
             {
-                KeyDown?.Invoke(this, new KeyboardHookEventArgs(lParam));
+                KeyDown?.Invoke(this, e);
             }
             else
             {
-                KeyUp?.Invoke(this, new KeyboardHookEventArgs(lParam));
+                KeyUp?.Invoke(this, e);
             }
+
+            return e.Handled ? -1 : 0;
         }
 
         #endregion

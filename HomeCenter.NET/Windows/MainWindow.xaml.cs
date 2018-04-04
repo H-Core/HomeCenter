@@ -300,6 +300,7 @@ namespace HomeCenter.NET.Windows
             if (Combinations.TryGetValue(combination, out var command))
             {
                 Run(command.Keys.FirstOrDefault()?.Text);
+                e.Handled = true;
             }
         }
 

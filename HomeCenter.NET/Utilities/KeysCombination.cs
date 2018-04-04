@@ -10,6 +10,14 @@ namespace HomeCenter.NET.Utilities
 
         public static KeysCombination FromString(string text)
         {
+            /*
+            const string mousePrefix = "SPECIALMOUSEBUTTON";
+            if (text.StartsWith(mousePrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                var number = text.Replace(mousePrefix, string.Empty);
+                return new KeysCombination(Keys.XButton1, false, false, false);
+            }*/
+
             var values = text.Contains("+") ? text.Split('+') : new[] { text };
 
             var ctrl = values.Contains("CTRL", StringComparer.OrdinalIgnoreCase);

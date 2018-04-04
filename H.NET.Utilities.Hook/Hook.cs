@@ -85,9 +85,9 @@ namespace H.NET.Utilities
 
         #region Protected methods
 
-        protected abstract void InternalCallback(int nCode, int wParam, IntPtr lParam);
+        protected abstract int InternalCallback(int nCode, int wParam, IntPtr lParam);
 
-        protected T ToStructure<T>(IntPtr ptr) where T : struct => (T)Marshal.PtrToStructure(ptr, typeof(T));
+        protected static T ToStructure<T>(IntPtr ptr) where T : struct => (T)Marshal.PtrToStructure(ptr, typeof(T));
 
         #endregion
 
@@ -95,22 +95,18 @@ namespace H.NET.Utilities
 
         private int Callback(int nCode, int wParam, IntPtr lParam)
         {
-            int result;
+            var result = 0;
 
             try
             {
-                InternalCallback(nCode, wParam, lParam);
+                result = InternalCallback(nCode, wParam, lParam);
             }
             catch (Exception exception)
             {
                 UnhandledException?.Invoke(this, new UnhandledExceptionEventArgs(exception, false));
             }
-            finally
-            {
-                result = Win32.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
-            }
 
-            return result;
+            return result < 0 ? result : Win32.CallNextHookEx(IntPtr.Zero, nCode, wParam, lParam);
         }
 
         #endregion
