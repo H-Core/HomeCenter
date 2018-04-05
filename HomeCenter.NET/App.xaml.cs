@@ -4,11 +4,19 @@ namespace HomeCenter.NET
 {
     public partial class App
     {
-        private void App_Startup(object sender, StartupEventArgs e)
-        {
-            var window = new Windows.MainWindow();
+        private Windows.MainWindow Window { get; set; }
 
-            window.Load();
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            Window = new Windows.MainWindow();
+
+            Window.Load();
+        }
+
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            Window?.Dispose();
+            Window = null;
         }
     }
 }
