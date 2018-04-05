@@ -142,5 +142,29 @@ namespace HomeCenter.NET.Properties {
                 this["UseAlternativeConverters"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool EnableMouseHook {
+            get {
+                return ((bool)(this["EnableMouseHook"]));
+            }
+            set {
+                this["EnableMouseHook"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public string EnableKeyboardHook {
+            get {
+                return ((string)(this["EnableKeyboardHook"]));
+            }
+            set {
+                this["EnableKeyboardHook"] = value;
+            }
+        }
     }
 }
