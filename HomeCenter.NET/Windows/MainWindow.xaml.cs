@@ -42,6 +42,9 @@ namespace HomeCenter.NET.Windows
 
         private Dictionary<KeysCombination, Command> Combinations { get; } = new Dictionary<KeysCombination, Command>();
 
+        private SettingsWindow SettingsWindow { get; set; }
+        private CommandsWindow CommandsWindow { get; set; }
+
         #endregion
 
         #region Constructors
@@ -101,8 +104,8 @@ namespace HomeCenter.NET.Windows
 
             #region Default Runner
 
-            DefaultRunner.ShowSettingsAction = () => Dispatcher.Invoke(() => SettingsButton_Click(this, EventArgs.Empty));
-            DefaultRunner.ShowCommandsAction = () => Dispatcher.Invoke(() => MenuButton_Click(this, EventArgs.Empty));
+            DefaultRunner.ShowSettingsAction = () => Dispatcher.Invoke(ShowSettings);
+            DefaultRunner.ShowCommandsAction = () => Dispatcher.Invoke(ShowCommands);
             DefaultRunner.StartRecordAction = () => Dispatcher.Invoke(() => RecordButton_Click(this, EventArgs.Empty));
             DefaultRunner.ClipboardAction = command => Dispatcher.Invoke(() => Clipboard.SetText(command));
             DefaultRunner.ClipboardFunc = () => Dispatcher.Invoke(Clipboard.GetText);
@@ -156,6 +159,64 @@ namespace HomeCenter.NET.Windows
         } 
 
         private async void Run(string message) => await GlobalRunner.Run(message);
+
+        private void SetUpRuntimeModule()
+        {
+            Manager.Recorder = Options.Recorder;
+            Manager.Converter = Options.Converter;
+            Manager.AlternativeConverters = Options.AlternativeConverters;
+            Synthesizer = Options.Synthesizer;
+
+            Combinations.Clear();
+            foreach (var pair in GlobalRunner.Storage.UniqueValues(i => i.Value).Where(i => i.Value.HotKey != null))
+            {
+                var command = pair.Value;
+                var hotKey = command.HotKey;
+                var combination = KeysCombination.FromString(hotKey);
+                if (combination.IsEmpty)
+                {
+                    continue;
+                }
+
+                Combinations[combination] = command;
+            }
+        }
+
+        private void ShowCommands()
+        {
+            if (CommandsWindow != null && CommandsWindow.IsLoaded)
+            {
+                CommandsWindow.Show();
+                return;
+            }
+
+            CommandsWindow = new CommandsWindow(GlobalRunner);
+            CommandsWindow.Closed += (o, args) =>
+            {
+                SetUpRuntimeModule();
+                CommandsWindow = null;
+            };
+
+            CommandsWindow.Show();
+        }
+
+        private void ShowSettings()
+        {
+            if (SettingsWindow != null && SettingsWindow.IsLoaded)
+            {
+                SettingsWindow.Show();
+                return;
+            }
+
+            SettingsWindow = new SettingsWindow();
+            SettingsWindow.Closed += (o, args) =>
+            {
+                SetUpRuntimeModule();
+                SettingsWindow = null;
+            };
+
+            SettingsWindow.Show();
+        }
 
         #endregion
 
@@ -243,43 +304,8 @@ namespace HomeCenter.NET.Windows
             Manager.ChangeWithTimeout(3000);
         }
 
-        private void MenuButton_Click(object sender, EventArgs e)
-        {
-            var window = new CommandsWindow(GlobalRunner);
-
-            window.Show();
-            window.Closed += (o, args) => SetUpRuntimeModule();
-        }
-
-        private void SettingsButton_Click(object sender, EventArgs e)
-        {
-            var window = new SettingsWindow();
-
-            window.Show();
-            window.Closed += (o, args) => SetUpRuntimeModule();
-        }
-
-        private void SetUpRuntimeModule()
-        {
-            Manager.Recorder = Options.Recorder;
-            Manager.Converter = Options.Converter;
-            Manager.AlternativeConverters = Options.AlternativeConverters;
-            Synthesizer = Options.Synthesizer;
-
-            Combinations.Clear();
-            foreach (var pair in GlobalRunner.Storage.UniqueValues(i => i.Value).Where(i => i.Value.HotKey != null))
-            {
-                var command = pair.Value;
-                var hotKey = command.HotKey;
-                var combination = KeysCombination.FromString(hotKey);
-                if (combination.IsEmpty)
-                {
-                    continue;
-                }
-
-                Combinations[combination] = command;
-            }
-        }
+        private void MenuButton_Click(object sender, EventArgs e) => ShowCommands();
+        private void SettingsButton_Click(object sender, EventArgs e) => ShowSettings();
 
         private void Global_KeyUp(object sender, KeyboardHookEventArgs e)
         {
