@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:properties="clr-namespace:HomeCenter.NET.Properties"
+        xmlns:c="clr-namespace:HomeCenter.NET.Controls"
         mc:Ignorable="d"
         Title="Settings" Height="300" Width="600" WindowStartupLocation="CenterScreen">
     <Grid Background="#FFE5E5E5">
@@ -18,31 +19,23 @@
                         <RowDefinition Height="25" />
                         <RowDefinition Height="25" />
                         <RowDefinition Height="25" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="25" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100*" />
-                            <ColumnDefinition Width="20" />
-                        </Grid.ColumnDefinitions>
-                        <Label Content="Run the program when the computer starts:" Grid.Column="0"/>
-                        <CheckBox x:Name="StartupCheckBox" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Grid>
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100*" />
-                            <ColumnDefinition Width="20" />
-                        </Grid.ColumnDefinitions>
-                        <Label Content="Starts minimized:" Grid.Column="0"/>
-                        <CheckBox Grid.Column="1" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=IsStartMinimized}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Grid>
-                    <Grid Grid.Row="2">
+                    <c:BoolSettingControl Grid.Row="0" Text="Run the program when the computer starts:" x:Name="StartupControl"/>
+                    <c:BoolSettingControl Grid.Row="1" Text="Starts minimized:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=IsStartMinimized}"/>
+                    <c:BoolSettingControl Grid.Row="2" Text="Enable Keyboard Hook:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnableKeyboardHook}"/>
+                    <c:BoolSettingControl Grid.Row="3" Text="Enable Mouse Hook:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnableMouseHook}"/>
+                    
+                    <Grid Grid.Row="4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="20*" />
                             <ColumnDefinition Width="80*" />
                         </Grid.ColumnDefinitions>
                         <Label Grid.Column="0" Content="Record Button:"/>
-                        <TextBox Grid.Column="1" Height="26" TextWrapping="Wrap" Text="{Binding Source={x:Static properties:Settings.Default},Path=RecordButton}"/>
+                        <TextBox Grid.Column="1" Height="26" TextWrapping="Wrap" Text="{Binding Source={x:Static properties:Settings.Default},Path=RecordKey}"/>
                     </Grid>
                 </Grid>
             </TabItem>
@@ -84,14 +77,8 @@
                         <Label Content="Using converter:" Grid.Column="0"/>
                         <ComboBox x:Name="ConverterComboBox" Grid.Column="1" IsEditable="True"/>
                     </Grid>
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100*" />
-                            <ColumnDefinition Width="25" />
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Use alternative converters if default converter answer is empty:"/>
-                        <CheckBox Grid.Column="1" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=UseAlternativeConverters}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Grid>
+                    <c:BoolSettingControl Grid.Row="1" Text="Use alternative converters if default converter answer is empty:"
+                                          IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=UseAlternativeConverters}" />
                     <Grid Grid.Row="3">
                         <ScrollViewer Grid.Row="0">
                             <StackPanel x:Name="ConvertersPanel"/>

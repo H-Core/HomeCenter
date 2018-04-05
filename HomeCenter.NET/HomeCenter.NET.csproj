@@ -72,6 +72,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\ShowHideCommand.cs" />
+    <Compile Include="Controls\BoolSettingControl.xaml.cs">
+      <DependentUpon>BoolSettingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CommandControl.xaml.cs">
       <DependentUpon>CommandControl.xaml</DependentUpon>
     </Compile>
@@ -95,6 +98,10 @@
     <Compile Include="Utilities\Options.cs" />
     <Compile Include="Utilities\SafeActions.cs" />
     <Compile Include="Utilities\Startup.cs" />
+    <Page Include="Controls\BoolSettingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\CommandControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

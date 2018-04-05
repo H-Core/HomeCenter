@@ -21,7 +21,7 @@ namespace HomeCenter.NET.Windows
         {
             InitializeComponent();
 
-            StartupCheckBox.IsChecked = Startup.IsStartup(Options.FileName);
+            StartupControl.IsChecked = Startup.IsStartup(Options.FileName);
 
             Update();
         }
@@ -38,7 +38,7 @@ namespace HomeCenter.NET.Windows
             Properties.Settings.Default.Converter = ConverterComboBox.SelectedItem as string;
             Properties.Settings.Default.Synthesizer = SynthesizerComboBox.SelectedItem as string;
             Properties.Settings.Default.Save();
-            Startup.Set(Options.FileName, StartupCheckBox.IsChecked ?? false);
+            Startup.Set(Options.FileName, StartupControl.IsChecked ?? false);
 
             Close();
         }
