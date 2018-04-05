@@ -161,7 +161,7 @@ namespace HomeCenter.NET.Windows
 
         #region Event handlers
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        public async void Load()
         {
             #region Hook
 
@@ -192,7 +192,7 @@ namespace HomeCenter.NET.Windows
             Print("Loading modules...");
             try
             {
-                ModuleManager.Instance.Load();
+                await Task.Run(() => ModuleManager.Instance.Load());
                 ModuleManager.AddUniqueInstancesIfNeed();
                 ModuleManager.RegisterHandlers(Print, Say, Run);
 
