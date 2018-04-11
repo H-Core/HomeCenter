@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -9,6 +11,7 @@ namespace H.NET.SearchDeskBand
 {
     public partial class DeskBandWindow : Form
     {
+        public const string ApplicationName = "HomeCenter.NET";
         public new const string CompanyName = "HomeCenter.NET";
 
         public DeskBandWindow()
@@ -57,6 +60,15 @@ namespace H.NET.SearchDeskBand
         {
             try
             {
+                if (!Process.GetProcessesByName(ApplicationName).Any())
+                {
+                    var path = Startup.GetFilePath($"{ApplicationName}.exe");
+                    if (File.Exists(path))
+                    {
+                        Process.Start(path);
+                    }
+                }
+
                 await IpcClient.Write(message, Options.IpcPortToHomeCenter);
             }
             catch (Exception exception)

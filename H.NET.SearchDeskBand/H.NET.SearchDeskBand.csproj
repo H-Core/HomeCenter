@@ -90,6 +90,10 @@
       <Project>{a2cb840c-0158-4227-bd1e-6b03b098d5e6}</Project>
       <Name>H.NET.Utilities.IPC</Name>
     </ProjectReference>
+    <ProjectReference Include="..\H.NET.Utilities.Startup\H.NET.Utilities.Startup.csproj">
+      <Project>{96dd6f93-c347-40f7-8df5-47c66af46de5}</Project>
+      <Name>H.NET.Utilities.Startup</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
