@@ -15,7 +15,7 @@ namespace HomeCenter.NET.Windows
 {
     public partial class SettingsWindow
     {
-        #region Properties
+        #region Constructors
 
         public SettingsWindow()
         {
@@ -32,13 +32,7 @@ namespace HomeCenter.NET.Windows
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            ModuleManager.Instance.Save();
-
-            Properties.Settings.Default.Recorder = RecorderComboBox.SelectedItem as string;
-            Properties.Settings.Default.Converter = ConverterComboBox.SelectedItem as string;
-            Properties.Settings.Default.Synthesizer = SynthesizerComboBox.SelectedItem as string;
-            Properties.Settings.Default.Save();
-            Startup.Set(Options.FileName, StartupControl.IsChecked ?? false);
+            Save();
 
             Close();
         }
@@ -69,6 +63,17 @@ namespace HomeCenter.NET.Windows
         #endregion
 
         #region Private methods
+
+        private void Save()
+        {
+            ModuleManager.Instance.Save();
+
+            Properties.Settings.Default.Recorder = RecorderComboBox.SelectedItem as string;
+            Properties.Settings.Default.Converter = ConverterComboBox.SelectedItem as string;
+            Properties.Settings.Default.Synthesizer = SynthesizerComboBox.SelectedItem as string;
+            Properties.Settings.Default.Save();
+            Startup.Set(Options.FileName, StartupControl.IsChecked ?? false);
+        }
 
         private void Add(string path) => SafeActions.Run(() =>
         {
