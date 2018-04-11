@@ -2,19 +2,19 @@
 
 namespace HomeCenter.NET.Controls
 {
-    public partial class BoolSettingControl
+    public partial class KeySettingControl
     {
         #region Static Dependency Properties
 
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register(
-                nameof(Text), typeof(string), typeof(BoolSettingControl),
+                nameof(Text), typeof(string), typeof(KeySettingControl),
                 new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
-        public static readonly DependencyProperty IsCheckedProperty =
+        public static readonly DependencyProperty KeyProperty =
             DependencyProperty.Register(
-                nameof(IsChecked), typeof(bool?), typeof(BoolSettingControl),
-                new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+                nameof(Key), typeof(string), typeof(KeySettingControl),
+                new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         #endregion
 
@@ -25,16 +25,16 @@ namespace HomeCenter.NET.Controls
             set => SetValue(TextProperty, value);
         }
 
-        public bool? IsChecked {
-            get => GetValue(IsCheckedProperty) as bool?;
-            set => SetValue(IsCheckedProperty, value);
+        public string Key {
+            get => GetValue(KeyProperty).ToString();
+            set => SetValue(KeyProperty, value);
         }
 
         #endregion
 
         #region Constructors
 
-        public BoolSettingControl()
+        public KeySettingControl()
         {
             InitializeComponent();
         }

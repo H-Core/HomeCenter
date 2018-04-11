@@ -72,6 +72,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\ShowHideCommand.cs" />
+    <Compile Include="Controls\KeySettingControl.xaml.cs">
+      <DependentUpon>KeySettingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\BoolSettingControl.xaml.cs">
       <DependentUpon>BoolSettingControl.xaml</DependentUpon>
     </Compile>
@@ -101,6 +104,10 @@
     <Compile Include="Utilities\Options.cs" />
     <Compile Include="Utilities\SafeActions.cs" />
     <Compile Include="Utilities\Startup.cs" />
+    <Page Include="Controls\KeySettingControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\BoolSettingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

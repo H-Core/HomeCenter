@@ -28,15 +28,7 @@
                     <c:BoolSettingControl Grid.Row="1" Text="Starts minimized:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=IsStartMinimized}"/>
                     <c:BoolSettingControl Grid.Row="2" Text="Enable Keyboard Hook:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnableKeyboardHook}"/>
                     <c:BoolSettingControl Grid.Row="3" Text="Enable Mouse Hook:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnableMouseHook}"/>
-                    
-                    <Grid Grid.Row="4">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20*" />
-                            <ColumnDefinition Width="80*" />
-                        </Grid.ColumnDefinitions>
-                        <Label Grid.Column="0" Content="Record Button:"/>
-                        <TextBox Grid.Column="1" Height="26" TextWrapping="Wrap" Text="{Binding Source={x:Static properties:Settings.Default},Path=RecordKey}"/>
-                    </Grid>
+                    <c:KeySettingControl Grid.Row="4" Text="Record Button:" Key="{Binding Source={x:Static properties:Settings.Default},Path=RecordKey}"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Recorders">
@@ -48,7 +40,7 @@
                     </Grid.RowDefinitions>
                     <c:EnumSettingControl Grid.Row="0" x:Name="RecorderControl" Text="Using recorder:"/>
                     <Grid Grid.Row="2">
-                        <ScrollViewer Grid.Row="0">
+                        <ScrollViewer>
                             <StackPanel x:Name="RecordersPanel"/>
                         </ScrollViewer>
                     </Grid>
@@ -66,7 +58,7 @@
                     <c:BoolSettingControl Grid.Row="1" Text="Use alternative converters if default converter answer is empty:"
                                           IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=UseAlternativeConverters}" />
                     <Grid Grid.Row="3">
-                        <ScrollViewer Grid.Row="0">
+                        <ScrollViewer>
                             <StackPanel x:Name="ConvertersPanel"/>
                         </ScrollViewer>
                     </Grid>
@@ -81,25 +73,21 @@
                     </Grid.RowDefinitions>
                     <c:EnumSettingControl Grid.Row="0" x:Name="SynthesizerControl" Text="Using synthesizer:"/>
                     <Grid Grid.Row="2">
-                        <ScrollViewer Grid.Row="0">
+                        <ScrollViewer>
                             <StackPanel x:Name="SynthesizersPanel"/>
                         </ScrollViewer>
                     </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Runners">
-                <Grid Background="#FFE5E5E5">
-                    <ScrollViewer Grid.Row="0">
-                        <StackPanel x:Name="RunnersPanel"/>
-                    </ScrollViewer>
-                </Grid>
+                <ScrollViewer>
+                    <StackPanel x:Name="RunnersPanel"/>
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="Notifiers">
-                <Grid Background="#FFE5E5E5">
-                    <ScrollViewer Grid.Row="0">
-                        <StackPanel x:Name="NotifiersPanel"/>
-                    </ScrollViewer>
-                </Grid>
+                <ScrollViewer>
+                    <StackPanel x:Name="NotifiersPanel"/>
+                </ScrollViewer>
             </TabItem>
             <TabItem Header="Plugins">
                 <TabControl TabStripPlacement="Left" Background="#FFE5E5E5">
@@ -120,18 +108,14 @@
                         </Grid>
                     </TabItem>
                     <TabItem Header="Available Types">
-                        <Grid>
-                            <ScrollViewer>
-                                <StackPanel x:Name="AvailableTypesPanel"/>
-                            </ScrollViewer>
-                        </Grid>
+                        <ScrollViewer>
+                            <StackPanel x:Name="AvailableTypesPanel"/>
+                        </ScrollViewer>
                     </TabItem>
                     <TabItem Header="All Modules">
-                        <Grid>
-                            <ScrollViewer>
-                                <StackPanel x:Name="ModulesPanel"/>
-                            </ScrollViewer>
-                        </Grid>
+                        <ScrollViewer>
+                            <StackPanel x:Name="ModulesPanel"/>
+                        </ScrollViewer>
                     </TabItem>
                 </TabControl>
             </TabItem>
