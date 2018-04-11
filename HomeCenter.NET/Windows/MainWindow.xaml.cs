@@ -162,6 +162,9 @@ namespace HomeCenter.NET.Windows
 
         private void SetUpRuntimeModule()
         {
+            KeyboardHook.SetEnabled(Settings.Default.EnableKeyboardHook);
+            MouseHook.SetEnabled(Settings.Default.EnableMouseHook);
+
             Manager.Recorder = Options.Recorder;
             Manager.Converter = Options.Converter;
             Manager.AlternativeConverters = Options.AlternativeConverters;
@@ -228,9 +231,6 @@ namespace HomeCenter.NET.Windows
 
             try
             {
-                KeyboardHook.Start();
-                MouseHook.Start();
-
                 KeyboardHook.KeyUp += Global_KeyUp;
                 KeyboardHook.KeyDown += Global_KeyDown;
 
@@ -398,6 +398,9 @@ namespace HomeCenter.NET.Windows
                 return null;
             }
 
+            var keyboardHookState = KeyboardHook.IsStarted;
+            var mouseHookState = MouseHook.IsStarted;
+
             // Starts if not started
             KeyboardHook.Start();
             MouseHook.Start();
@@ -438,6 +441,9 @@ namespace HomeCenter.NET.Windows
 
             KeyboardHook.KeyDown -= OnKeyboardHookOnKeyDown;
             MouseHook.MouseDown -= OnMouseHookOnMouseDown;
+
+            KeyboardHook.SetEnabled(keyboardHookState);
+            MouseHook.SetEnabled(mouseHookState);
 
             return isCancel ? null : combination;
         }

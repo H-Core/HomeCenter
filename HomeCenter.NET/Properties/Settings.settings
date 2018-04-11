@@ -35,7 +35,7 @@
     <Setting Name="EnableMouseHook" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="EnableKeyboardHook" Type="System.String" Scope="User">
+    <Setting Name="EnableKeyboardHook" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>

@@ -81,6 +81,23 @@ namespace H.NET.Utilities
             IsStarted = false;
         }
 
+        /// <summary>
+        /// Start(if <paramref name="value"/> is <see langword="true"/>) or 
+        /// Stop(if <paramref name="value"/> is <see langword="false"/>) hook process
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetEnabled(bool value)
+        {
+            if (value)
+            {
+                Start();
+            }
+            else
+            {
+                Stop();
+            }
+        }
+
         #endregion
 
         #region Protected methods

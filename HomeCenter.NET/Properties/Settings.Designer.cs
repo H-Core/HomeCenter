@@ -158,9 +158,9 @@ namespace HomeCenter.NET.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public string EnableKeyboardHook {
+        public bool EnableKeyboardHook {
             get {
-                return ((string)(this["EnableKeyboardHook"]));
+                return ((bool)(this["EnableKeyboardHook"]));
             }
             set {
                 this["EnableKeyboardHook"] = value;
