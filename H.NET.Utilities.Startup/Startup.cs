@@ -2,7 +2,7 @@
 using System.IO;
 using Microsoft.Win32;
 
-namespace HomeCenter.NET.Utilities
+namespace H.NET.Utilities
 {
     public static class Startup
     {

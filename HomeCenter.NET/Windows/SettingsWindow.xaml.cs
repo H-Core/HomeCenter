@@ -8,6 +8,7 @@ using System.Windows.Media;
 using H.NET.Core;
 using H.NET.Core.Extensions;
 using H.NET.Plugins;
+using H.NET.Utilities;
 using HomeCenter.NET.Controls;
 using HomeCenter.NET.Utilities;
 
