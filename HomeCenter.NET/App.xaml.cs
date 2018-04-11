@@ -14,6 +14,7 @@ namespace HomeCenter.NET
             // If current process is not first
             if (Process.GetProcessesByName(Options.ApplicationName).Length > 1)
             {
+                Current.Shutdown();
                 return;
             }
 
