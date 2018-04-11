@@ -44,16 +44,15 @@ namespace H.NET.Utilities
                     return null;
                 }
 
-                return value;
+                return ToFilePath(value);
             }
         }
 
-        public static bool IsStartup(string fileName)
+        public static bool IsStartup(string path)
         {
-            var path = GetFilePath(fileName);
-            var valueFileName = ToFileName(path);
+            var valuePath = GetFilePath(path);
 
-            return Compare(fileName, valueFileName);
+            return Compare(valuePath, path);
         }
 
         #region Private methods
@@ -76,7 +75,7 @@ namespace H.NET.Utilities
 
         private static string ToValue(string fileName, string arguments) => $"\"{fileName}\" {arguments}".Trim();
 
-        private static string ToFileName(string value)
+        private static string ToFilePath(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
             {
