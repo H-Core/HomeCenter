@@ -75,6 +75,9 @@
     <Compile Include="Controls\BoolSettingControl.xaml.cs">
       <DependentUpon>BoolSettingControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\EnumSettingControl.xaml.cs">
+      <DependentUpon>EnumSettingControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\CommandControl.xaml.cs">
       <DependentUpon>CommandControl.xaml</DependentUpon>
     </Compile>
@@ -99,6 +102,10 @@
     <Compile Include="Utilities\SafeActions.cs" />
     <Compile Include="Utilities\Startup.cs" />
     <Page Include="Controls\BoolSettingControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\EnumSettingControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

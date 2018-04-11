@@ -68,9 +68,9 @@ namespace HomeCenter.NET.Windows
         {
             ModuleManager.Instance.Save();
 
-            Properties.Settings.Default.Recorder = RecorderComboBox.SelectedItem as string;
-            Properties.Settings.Default.Converter = ConverterComboBox.SelectedItem as string;
-            Properties.Settings.Default.Synthesizer = SynthesizerComboBox.SelectedItem as string;
+            Properties.Settings.Default.Recorder = RecorderControl.ComboBox.SelectedItem as string;
+            Properties.Settings.Default.Converter = ConverterControl.ComboBox.SelectedItem as string;
+            Properties.Settings.Default.Synthesizer = SynthesizerControl.ComboBox.SelectedItem as string;
             Properties.Settings.Default.Save();
             Startup.Set(Options.FileName, StartupControl.IsChecked ?? false);
         }
@@ -158,19 +158,19 @@ namespace HomeCenter.NET.Windows
 
         private void UpdateRecorders() => SafeActions.Run(() =>
         {
-            UpdateComboBox<IRecorder>(RecorderComboBox, Properties.Settings.Default.Recorder);
+            UpdateComboBox<IRecorder>(RecorderControl.ComboBox, Properties.Settings.Default.Recorder);
             UpdatePanel<IRecorder>(RecordersPanel, Update);
         });
 
         private void UpdateConverters() => SafeActions.Run(() =>
         {
-            UpdateComboBox<IConverter>(ConverterComboBox, Properties.Settings.Default.Converter);
+            UpdateComboBox<IConverter>(ConverterControl.ComboBox, Properties.Settings.Default.Converter);
             UpdatePanel<IConverter>(ConvertersPanel, Update);
         });
 
         private void UpdateSynthesizers() => SafeActions.Run(() =>
         {
-            UpdateComboBox<ISynthesizer>(SynthesizerComboBox, Properties.Settings.Default.Synthesizer);
+            UpdateComboBox<ISynthesizer>(SynthesizerControl.ComboBox, Properties.Settings.Default.Synthesizer);
             UpdatePanel<ISynthesizer>(SynthesizersPanel, Update);
         });
 
