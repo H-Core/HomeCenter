@@ -26,7 +26,7 @@ namespace HomeCenter.NET.Windows
         private BaseManager Manager { get; set; } = new BaseManager();
         private ISynthesizer Synthesizer { get; set; }
 
-        private Server Server { get; } = new Server(Options.IpcPortToHomeCenter);
+        private IpcServer IpcServer { get; } = new IpcServer(Options.IpcPortToHomeCenter);
 
         private static LowLevelMouseHook MouseHook { get; set; } = new LowLevelMouseHook();
         private static LowLevelKeyboardHook KeyboardHook { get; set; } = new LowLevelKeyboardHook();
@@ -100,7 +100,7 @@ namespace HomeCenter.NET.Windows
 
             #endregion
 
-            Server.NewMessage += Run;
+            IpcServer.NewMessage += Run;
 
             #region Default Runner
 

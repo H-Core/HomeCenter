@@ -12,7 +12,7 @@ namespace H.NET.SearchDeskBand
         #region Properties
 
         private DeskBandWindow Window { get; } = new DeskBandWindow();
-        private Server Server { get; } = new Server(Options.IpcPortToDeskBand);
+        private IpcServer IpcServer { get; } = new IpcServer(Options.IpcPortToDeskBand);
         private Dictionary<string, Action<string>> ActionDictionary { get; } = new Dictionary<string, Action<string>>();
 
         #endregion
@@ -28,7 +28,7 @@ namespace H.NET.SearchDeskBand
 
             Window.VisibleChanged += (sender, args) => Label.Visible = !Window.Visible;
 
-            Server.NewMessage += OnNewMessage;
+            IpcServer.NewMessage += OnNewMessage;
         }
 
         #endregion

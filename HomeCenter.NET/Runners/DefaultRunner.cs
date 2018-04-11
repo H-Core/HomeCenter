@@ -66,7 +66,7 @@ namespace HomeCenter.NET.Runners
         {
             try
             {
-                await Client.Write(command, Options.IpcPortToDeskBand);
+                await IpcClient.Write(command, Options.IpcPortToDeskBand);
             }
             catch (Exception exception)
             {

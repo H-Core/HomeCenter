@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace H.NET.Utilities
 {
-    public class Client
+    public class IpcClient
     {
         #region Static methods
 
-        public static async Task Write(string message, int port) => await new Client(port).Write(message);
+        public static async Task Write(string message, int port) => await new IpcClient(port).Write(message);
 
         #endregion
 
@@ -21,7 +21,7 @@ namespace H.NET.Utilities
 
         #region Constructors
 
-        public Client(int port)
+        public IpcClient(int port)
         {
             Port = port;
         }

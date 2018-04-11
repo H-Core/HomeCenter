@@ -5,7 +5,7 @@ using System.Net.Sockets;
 
 namespace H.NET.Utilities
 {
-    public class Server
+    public class IpcServer
     {
         #region Properties
 
@@ -16,7 +16,7 @@ namespace H.NET.Utilities
 
         #region Constructors
 
-        public Server(int port)
+        public IpcServer(int port)
         {
             Port = port;
             Listener = new TcpListener(new IPEndPoint(IPAddress.Any, Port));
