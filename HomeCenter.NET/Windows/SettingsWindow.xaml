@@ -14,22 +14,13 @@
         </Grid.RowDefinitions>
         <TabControl Grid.Row="0" TabStripPlacement="Left" Background="#FFE5E5E5">
             <TabItem Header="General">
-                <Grid Background="#FFE5E5E5" Margin="5, 5, 5, 5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <c:BoolSettingControl Grid.Row="0" Text="Run the program when the computer starts:" x:Name="StartupControl"/>
-                    <c:BoolSettingControl Grid.Row="1" Text="Starts minimized:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=IsStartMinimized}"/>
-                    <c:BoolSettingControl Grid.Row="2" Text="Enable Keyboard Hook:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnableKeyboardHook}"/>
-                    <c:BoolSettingControl Grid.Row="3" Text="Enable Mouse Hook:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnableMouseHook}"/>
-                    <c:KeySettingControl Grid.Row="4" Text="Record Button:" Key="{Binding Source={x:Static properties:Settings.Default},Path=RecordKey}"/>
-                </Grid>
+                <StackPanel Background="#FFE5E5E5" Margin="5, 5, 5, 5">
+                    <c:BoolSettingControl Text="Run the program when the computer starts:" x:Name="StartupControl"/>
+                    <c:BoolSettingControl Text="Starts minimized:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=IsStartMinimized}"/>
+                    <c:BoolSettingControl Text="Enable Keyboard Hook:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnableKeyboardHook}"/>
+                    <c:BoolSettingControl Text="Enable Mouse Hook:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnableMouseHook}"/>
+                    <c:KeySettingControl Text="Record Button:" Key="{Binding Source={x:Static properties:Settings.Default},Path=RecordKey}"/>
+                </StackPanel>
             </TabItem>
             <TabItem Header="Recorders">
                 <Grid Background="#FFE5E5E5" Margin="5, 5, 5, 5">
