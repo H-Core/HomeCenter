@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using HomeCenter.NET.Properties;
 using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET
@@ -12,9 +13,20 @@ namespace HomeCenter.NET
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            var isKillAll = e.Args.Contains("/killall");
+            if (isKillAll)
+            {
+                Process.GetProcessesByName(Options.ApplicationName)
+                    .Where(i => i .Id != Process.GetCurrentProcess().Id)
+                    .AsParallel()
+                    .ForAll(i => i.Kill());
+            }
+
+            var isRestart = e.Args.Contains("/restart");
+
             // If current process is not first
             if (Process.GetProcessesByName(Options.ApplicationName).Length > 1 &&
-                !e.Args.Contains("/restart"))
+                !isRestart && !isKillAll)
             {
                 Current.Shutdown();
                 return;
@@ -24,6 +36,11 @@ namespace HomeCenter.NET
             Current.DispatcherUnhandledException += (o, args) => OnException(args.Exception);
 
             Window = new Windows.MainWindow();
+
+            if (isRestart || !Settings.Default.IsStartMinimized)
+            {
+                Window.Show();
+            }
 
             Window.Load();
         }

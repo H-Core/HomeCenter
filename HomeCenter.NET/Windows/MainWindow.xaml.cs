@@ -56,11 +56,6 @@ namespace HomeCenter.NET.Windows
 
             InitializeComponent();
 
-            if (Settings.Default.IsStartMinimized)
-            {
-                Visibility = Visibility.Hidden;
-            }
-
             InputTextBox.Focus();
 
             #endregion
