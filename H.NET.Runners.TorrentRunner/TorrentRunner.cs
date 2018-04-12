@@ -22,6 +22,7 @@ namespace H.NET.Runners.TorrentRunner
         private string QBitTorrentPath { get; set; }
         private string GoogleSearchApiKey { get; set; }
         private string GoogleCx { get; set; }
+        private string GooglePattern { get; set; }
         private int Delay { get; set; }
         private double MinSizeGb { get; set; }
         private double MaxSizeGb { get; set; }
@@ -42,6 +43,7 @@ namespace H.NET.Runners.TorrentRunner
             AddSetting(nameof(Delay), o => Delay = o, null, 10000);
             AddSetting(nameof(GoogleSearchApiKey), o => GoogleSearchApiKey = o, NoEmpty, string.Empty);
             AddSetting(nameof(GoogleCx), o => GoogleCx = o, NoEmpty, string.Empty);
+            AddSetting(nameof(GooglePattern), o => GooglePattern = o, NoEmpty, "download torrent *");
             AddSetting(nameof(MinSizeGb), o => MinSizeGb = o, null, 1.0);
             AddSetting(nameof(MaxSizeGb), o => MaxSizeGb = o, null, 4.0);
             AddSetting(nameof(Extension), o => Extension = o, NoEmpty, ".mkv");
@@ -67,21 +69,23 @@ namespace H.NET.Runners.TorrentRunner
 
         #region Private methods
 
-        private List<string> GetTorrentsFromUrl(string url)
+        private static List<string> GetTorrentsFromUrl(string url)
         {
             try
             {
                 var web = new HtmlWeb();
                 var document = web.Load(url);
 
-                var uri = new Uri(url);
-                var baseUrl = $"{uri.Scheme}://{uri.Host}";
-
-                return document.DocumentNode
+                var torrents = document.DocumentNode
                     .SelectNodes("//a[@href]")
                     .Select(i => i.Attributes["href"].Value)
                     .Where(i => i.EndsWith(".torrent"))
-                    .Select(i => i.Contains("www") ? i : $"{baseUrl}{i}")
+                    .ToList();
+
+                var uri = new Uri(url);
+                var baseUrl = $"{uri.Scheme}://{uri.Host}";
+                return torrents
+                    .Select(i => i.Contains("http") ? i : $"{baseUrl}{i}")
                     .ToList();
             }
             catch (Exception)
@@ -135,27 +139,41 @@ namespace H.NET.Runners.TorrentRunner
             return null;
         }
 
+        private List<string> GoogleCommand(string query)
+        {
+            using (var service = new CustomsearchService(
+                new BaseClientService.Initializer
+                {
+                    ApiKey = GoogleSearchApiKey
+                }))
+            {
+                var requests = service.Cse.List(query);
+                requests.Cx = GoogleCx;
+                requests.Num = MaxResults;
+
+                var results = requests.Execute().Items;
+                if (results == null)
+                {
+                    return new List<string>();
+                }
+
+                return results.Select(i => i.Link).ToList();
+            }
+        }
+
         private void TorrentCommand(string text)
         {
-            Say("Ищу");
+            Say($"Ищу торрент {text}");
 
-            var customSearchService = new CustomsearchService(new BaseClientService.Initializer
-            {
-                ApiKey = GoogleSearchApiKey
-            });
-
-            var requests = customSearchService.Cse.List($"торрент {text}");
-            requests.Cx = GoogleCx;
-            requests.Num = MaxResults;
-
-            var results = requests.Execute().Items;
-            if (results == null)
+            var query = GooglePattern.Replace("*", text);
+            var urls = GoogleCommand(query);
+            if (!urls.Any())
             {
                 Say("Поиск в гугле не дал результатов");
                 return;
             }
 
-            var path = FindGoodTorrent(results.Select(i => i.Link));
+            var path = FindGoodTorrent(urls);
             if (path == null)
             {
                 Say("Не найден подходящий торрент");
