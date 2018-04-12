@@ -46,7 +46,7 @@ namespace H.NET.Runners.TorrentRunner
             AddSetting(nameof(GooglePattern), o => GooglePattern = o, NoEmpty, "download torrent *");
             AddSetting(nameof(MinSizeGb), o => MinSizeGb = o, null, 1.0);
             AddSetting(nameof(MaxSizeGb), o => MaxSizeGb = o, null, 4.0);
-            AddSetting(nameof(Extension), o => Extension = o, NoEmpty, ".mkv");
+            AddSetting(nameof(Extension), o => Extension = o, null, string.Empty);
             AddSetting(nameof(MaxResults), o => MaxResults = o, null, 30);
 
             AddAction("torrent", TorrentCommand, "text");
@@ -69,7 +69,7 @@ namespace H.NET.Runners.TorrentRunner
 
         #region Private methods
 
-        private static List<string> GetTorrentsFromUrl(string url)
+        private static string[] GetTorrentsFromUrl(string url)
         {
             try
             {
@@ -86,57 +86,71 @@ namespace H.NET.Runners.TorrentRunner
                 var baseUrl = $"{uri.Scheme}://{uri.Host}";
                 return torrents
                     .Select(i => i.Contains("http") ? i : $"{baseUrl}{i}")
-                    .ToList();
+                    .ToArray();
             }
             catch (Exception)
             {
-                return new List<string>();
+                //Log(exception.ToString());
+                return new string[0];
             }
         }
 
-        private string IsGoodTorrent(string url)
+        private bool IsGoodTorrent(string torrentPath)
         {
-            using (var client = new WebClient())
+            try
             {
-                var temp = Path.GetTempFileName();
-
-                client.DownloadFile(url, temp);
-                var torrent = Torrent.Load(temp);
+                var torrent = Torrent.Load(torrentPath);
                 var sizeGb = torrent.Size / 1000.0 / 1000.0 / 1000.0;
                 var path = torrent.Files.FirstOrDefault()?.Path;
+
                 var extension = Path.GetExtension(path);
                 if (sizeGb > MinSizeGb &&
                     sizeGb < MaxSizeGb &&
-                    string.Equals(extension, Extension, StringComparison.OrdinalIgnoreCase))
+                    (string.IsNullOrWhiteSpace(Extension) ||
+                     string.Equals(extension, Extension, StringComparison.OrdinalIgnoreCase)))
                 {
                     Print($"Size: {sizeGb:F2} Gb");
                     Print($"Path: {path}");
                     Print($"Extension: {extension}");
 
-                    return temp;
+                    return true;
                 }
 
-                File.Delete(temp);
-                return null;
+                //File.Delete(torrentPath);
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
 
-        private string FindGoodTorrent(IEnumerable<string> urls)
+        private static async Task<string[]> DownloadFiles(ICollection<string> urls)
         {
-            foreach (var url in urls ?? new List<string>())
+            return await Task.WhenAll(urls.Zip(Enumerable.Range(0, urls.Count), async (url, i) =>
             {
-                var torrents = GetTorrentsFromUrl(url);
-                foreach (var torrent in torrents)
-                {
-                    var path = IsGoodTorrent(torrent);
-                    if (path != null)
-                    {
-                        return path;
-                    }
-                }
-            }
+                var temp = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "TorrentRunnerFiles")).FullName;
+                var path = Path.Combine(temp, $"file_{i}");
 
-            return null;
+                using (var client = new WebClient())
+                {
+                    await client.DownloadFileTaskAsync(url, path);
+                }
+
+                return path;
+            }));
+        }
+
+        private static async Task<string[]> GetTorrents(string url)
+        {
+            return await Task.Run(() => GetTorrentsFromUrl(url));
+        }
+
+        private static async Task<string[]> GetTorrents(IEnumerable<string> urls)
+        {
+            var array = await Task.WhenAll(urls.Select(async i => await GetTorrents(i)));
+
+            return array.SelectMany(i => i).ToArray();
         }
 
         private List<string> GoogleCommand(string query)
@@ -161,19 +175,27 @@ namespace H.NET.Runners.TorrentRunner
             }
         }
 
-        private void TorrentCommand(string text)
+        private async void TorrentCommand(string text)
         {
             Say($"Ищу торрент {text}");
 
             var query = GooglePattern.Replace("*", text);
+            Log($"Google Query: {query}");
             var urls = GoogleCommand(query);
+            Log($"Google Urls: {Environment.NewLine}{string.Join(Environment.NewLine, urls)}");
             if (!urls.Any())
             {
                 Say("Поиск в гугле не дал результатов");
                 return;
             }
 
-            var path = FindGoodTorrent(urls);
+            var torrents = await GetTorrents(urls);
+            Log($"Torrents({torrents.Length}): {Environment.NewLine}{string.Join(Environment.NewLine, torrents)}");
+
+            var files = await DownloadFiles(torrents);
+            Log($"Files({torrents.Length}): {Environment.NewLine}{string.Join(Environment.NewLine, files)}");
+
+            var path = files.Where(IsGoodTorrent).OrderByDescending(i => Torrent.Load(i).AnnounceUrls.Count).FirstOrDefault();
             if (path == null)
             {
                 Say("Не найден подходящий торрент");
@@ -194,7 +216,7 @@ namespace H.NET.Runners.TorrentRunner
 
             try
             {
-                Process.Start(QBitTorrentPath, $"--sequential --skip-dialog=true --save-path=\"{DownloadsFolder}\" {torrentPath}");
+                Process.Start(QBitTorrentPath, $"--sequential --first-and-last --skip-dialog=true --save-path=\"{DownloadsFolder}\" {torrentPath}");
                 Say($@"Загружаю. До запуска {Delay / 1000} секунд");
             }
             catch (Exception e)
