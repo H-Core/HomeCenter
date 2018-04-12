@@ -75,7 +75,7 @@ namespace H.NET.Core
                 Value = defaultValue,
                 DefaultValue = defaultValue,
                 SettingType = type,
-                CheckFunc = o => CanConvert<T>(o) && checkFunc?.Invoke(ConvertTo<T>(o)) == true,
+                CheckFunc = o => CanConvert<T>(o) && checkFunc?.Invoke(ConvertTo<T>(o)) != false,
                 SetAction = o => setAction?.Invoke(ConvertTo<T>(o))
             };
         }
