@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -376,6 +377,13 @@ namespace HomeCenter.NET.Windows
             {
                 e.Handled = true;
             }
+
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.R))
+            {
+                e.Handled = true;
+
+                Restart();
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -390,6 +398,12 @@ namespace HomeCenter.NET.Windows
         #endregion
 
         #region Static methods
+
+        private static void Restart()
+        {
+            Process.Start($"\"{Options.FilePath}\"", "/restart");
+            Application.Current.Shutdown();
+        }
 
         public static async Task<KeysCombination> CatchKey()
         {

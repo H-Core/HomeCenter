@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using HomeCenter.NET.Utilities;
 
@@ -12,7 +13,8 @@ namespace HomeCenter.NET
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             // If current process is not first
-            if (Process.GetProcessesByName(Options.ApplicationName).Length > 1)
+            if (Process.GetProcessesByName(Options.ApplicationName).Length > 1 &&
+                !e.Args.Contains("/restart"))
             {
                 Current.Shutdown();
                 return;

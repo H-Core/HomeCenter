@@ -22,7 +22,7 @@ namespace HomeCenter.NET.Windows
         {
             InitializeComponent();
 
-            StartupControl.IsChecked = Startup.IsStartup(Options.FileName);
+            StartupControl.IsChecked = Startup.IsStartup(Options.FilePath);
 
             Update();
         }
@@ -73,7 +73,7 @@ namespace HomeCenter.NET.Windows
             Properties.Settings.Default.Converter = ConverterControl.ComboBox.SelectedItem as string;
             Properties.Settings.Default.Synthesizer = SynthesizerControl.ComboBox.SelectedItem as string;
             Properties.Settings.Default.Save();
-            Startup.Set(Options.FileName, StartupControl.IsChecked ?? false);
+            Startup.Set(Options.FilePath, StartupControl.IsChecked ?? false);
         }
 
         private void Add(string path) => SafeActions.Run(() =>
