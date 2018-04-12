@@ -208,7 +208,8 @@ namespace HomeCenter.NET.Windows
                 EnableEditing = module != null && module.Settings?.Count > 0,
                 EnableEnabling = instance.Exception == null,
                 ObjectIsEnabled = instance.IsEnabled,
-                EnableRenaming = instance.Type?.AllowMultipleInstance() ?? false
+                EnableRenaming = instance.Type?.AllowMultipleInstance() ?? false,
+                EnableDeleting = instance.Type?.AllowMultipleInstance() ?? false
             };
             control.Deleted += (sender, args) =>
             {
