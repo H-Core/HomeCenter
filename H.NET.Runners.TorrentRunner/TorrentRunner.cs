@@ -7,8 +7,6 @@ using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Google.Apis.Customsearch.v1;
-using Google.Apis.Services;
 using H.NET.Core.Runners;
 using H.NET.Core.Settings;
 using HtmlAgilityPack;
@@ -22,14 +20,11 @@ namespace H.NET.Runners.TorrentRunner
 
         private string SaveTo { get; set; }
         private string QBitTorrentPath { get; set; }
-        private string GoogleSearchApiKey { get; set; }
-        private string GoogleCx { get; set; }
         private string GooglePattern { get; set; }
         private int MaxDelaySeconds { get; set; }
         private double MinSizeGb { get; set; }
         private double MaxSizeGb { get; set; }
         private string Extension { get; set; }
-        private int MaxResults { get; set; }
         private double StartSizeMb { get; set; }
 
         private string TorrentsFolder => Path.Combine(SaveTo, "Torrents");
@@ -44,13 +39,10 @@ namespace H.NET.Runners.TorrentRunner
             AddSetting(nameof(SaveTo), o => SaveTo = o, NoEmpty, string.Empty, SettingType.Folder);
             AddSetting(nameof(QBitTorrentPath), o => QBitTorrentPath = o, FileExists, string.Empty, SettingType.Path);
             AddSetting(nameof(MaxDelaySeconds), o => MaxDelaySeconds = o, null, 60);
-            AddSetting(nameof(GoogleSearchApiKey), o => GoogleSearchApiKey = o, NoEmpty, string.Empty);
-            AddSetting(nameof(GoogleCx), o => GoogleCx = o, NoEmpty, string.Empty);
             AddSetting(nameof(GooglePattern), o => GooglePattern = o, NoEmpty, "download torrent *");
             AddSetting(nameof(MinSizeGb), o => MinSizeGb = o, null, 1.0);
             AddSetting(nameof(MaxSizeGb), o => MaxSizeGb = o, null, 4.0);
             AddSetting(nameof(Extension), o => Extension = o, null, string.Empty);
-            AddSetting(nameof(MaxResults), o => MaxResults = o, null, 30);
             AddSetting(nameof(StartSizeMb), o => StartSizeMb = o, null, 20.0);
 
             AddAction("torrent", TorrentCommand, "text");
@@ -161,35 +153,13 @@ namespace H.NET.Runners.TorrentRunner
             return bestTorrent?.TorrentPath;
         }
 
-        private List<string> GoogleCommand(string query)
-        {
-            using (var service = new CustomsearchService(
-                new BaseClientService.Initializer
-                {
-                    ApiKey = GoogleSearchApiKey
-                }))
-            {
-                var requests = service.Cse.List(query);
-                requests.Cx = GoogleCx;
-                requests.Num = MaxResults;
-
-                var results = requests.Execute().Items;
-                if (results == null)
-                {
-                    return new List<string>();
-                }
-
-                return results.Select(i => i.Link).ToList();
-            }
-        }
-
         private async void TorrentCommand(string text)
         {
             Say($"Ищу торрент {text}");
 
             var query = GooglePattern.Replace("*", text);
             Log($"Google Query: {query}");
-            var urls = GoogleCommand(query);
+            var urls = GoogleSearch.Go(query);
             Log($"Google Urls: {Environment.NewLine}{string.Join(Environment.NewLine, urls)}");
             if (!urls.Any())
             {
@@ -198,10 +168,10 @@ namespace H.NET.Runners.TorrentRunner
             }
 
             var torrents = await GetTorrents(urls);
-            Log($"Torrents({torrents.Length}): {Environment.NewLine}{string.Join(Environment.NewLine, torrents)}");
+            Log($"Torrents({torrents.Length})");
 
             var files = await DownloadFiles(torrents);
-            Log($"Files({torrents.Length}): {Environment.NewLine}{string.Join(Environment.NewLine, files)}");
+            Log($"Files({torrents.Length})");
 
             var path = FindBestTorrent(files);
             if (path == null)
