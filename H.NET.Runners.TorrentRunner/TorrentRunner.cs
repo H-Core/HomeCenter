@@ -99,34 +99,23 @@ namespace H.NET.Runners.TorrentRunner
             }
         }
 
-        private bool IsGoodTorrent(string torrentPath)
+        private bool IsGoodFile(TorrentFile file)
         {
-            try
+            var sizeGb = file.Length / 1000.0 / 1000.0 / 1000.0;
+            var extension = Path.GetExtension(file.Path);
+            if (sizeGb > MinSizeGb &&
+                sizeGb < MaxSizeGb &&
+                (string.IsNullOrWhiteSpace(Extension) ||
+                 string.Equals(extension, Extension, StringComparison.OrdinalIgnoreCase)))
             {
-                var torrent = Torrent.Load(torrentPath);
-                var sizeGb = torrent.Size / 1000.0 / 1000.0 / 1000.0;
-                var path = torrent.Files.FirstOrDefault()?.Path;
+                //Print($"Size: {sizeGb:F2} Gb");
+                //Print($"Path: {path}");
+                //Print($"Extension: {extension}");
 
-                var extension = Path.GetExtension(path);
-                if (sizeGb > MinSizeGb &&
-                    sizeGb < MaxSizeGb &&
-                    (string.IsNullOrWhiteSpace(Extension) ||
-                     string.Equals(extension, Extension, StringComparison.OrdinalIgnoreCase)))
-                {
-                    //Print($"Size: {sizeGb:F2} Gb");
-                    //Print($"Path: {path}");
-                    //Print($"Extension: {extension}");
-
-                    return true;
-                }
-
-                //File.Delete(torrentPath);
-                return false;
+                return true;
             }
-            catch (Exception)
-            {
-                return false;
-            }
+
+            return false;
         }
 
         private static async Task<string[]> DownloadFiles(ICollection<string> urls)
@@ -150,11 +139,26 @@ namespace H.NET.Runners.TorrentRunner
             return await Task.Run(() => GetTorrentsFromUrl(url));
         }
 
-        private static async Task<string[]> GetTorrents(IEnumerable<string> urls)
+        private static async Task<string[]> GetTorrents(ICollection<string> urls)
         {
             var array = await Task.WhenAll(urls.Select(async i => await GetTorrents(i)));
 
             return array.SelectMany(i => i).ToArray();
+        }
+
+        private string FindBestTorrent(ICollection<string> files)
+        {
+            var torrents = files
+                .Select(i => Torrent.TryLoad(i, out var torrent) ? torrent : null)
+                .Where(i => i != null);
+
+            var goodTorrents = torrents
+                .Where(torrent => torrent.Files.Any(IsGoodFile))
+                .OrderByDescending(i => i.AnnounceUrls.Count);
+
+            var bestTorrent = goodTorrents.FirstOrDefault();
+
+            return bestTorrent?.TorrentPath;
         }
 
         private List<string> GoogleCommand(string query)
@@ -199,7 +203,7 @@ namespace H.NET.Runners.TorrentRunner
             var files = await DownloadFiles(torrents);
             Log($"Files({torrents.Length}): {Environment.NewLine}{string.Join(Environment.NewLine, files)}");
 
-            var path = files.Where(IsGoodTorrent).OrderByDescending(i => Torrent.Load(i).AnnounceUrls.Count).FirstOrDefault();
+            var path = FindBestTorrent(files);
             if (path == null)
             {
                 Say("Не найден подходящий торрент");
@@ -238,7 +242,7 @@ namespace H.NET.Runners.TorrentRunner
                 var size = GetFileSizeOnDisk(path);
                 Print($"Size: {size}");
                 Print($"Need Size: {StartSizeMb * 1000000}");
-                if (size < uint.MaxValue - 1 && 
+                if (size < uint.MaxValue - 1 &&
                     size > StartSizeMb * 1000000)
                 {
                     break;
@@ -261,7 +265,7 @@ namespace H.NET.Runners.TorrentRunner
             {
                 throw new Win32Exception();
             }
-            
+
             var clusterSize = sectorsPerCluster * bytesPerSector;
             var lowSize = GetCompressedFileSizeW(file, out var highSize);
             var size = (long)highSize << 32 | lowSize;
@@ -302,7 +306,7 @@ namespace H.NET.Runners.TorrentRunner
         private string GetFilePath(string torrentPath)
         {
             var torrent = Torrent.Load(torrentPath);
-            var subPath = torrent.Files.FirstOrDefault()?.FullPath;
+            var subPath = torrent.Files.FirstOrDefault(IsGoodFile)?.FullPath;
             var path = Path.Combine(DownloadsFolder, subPath ?? string.Empty);
 
             return path;
