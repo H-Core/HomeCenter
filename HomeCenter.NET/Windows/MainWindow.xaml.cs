@@ -303,6 +303,7 @@ namespace HomeCenter.NET.Windows
         private void MenuButton_Click(object sender, EventArgs e) => ShowCommands();
         private void SettingsButton_Click(object sender, EventArgs e) => ShowSettings();
 
+        // TODO: Fix multi key up
         private void Global_KeyUp(object sender, KeyboardHookEventArgs e)
         {
             if (e.Key == Options.RecordKey || e.IsAltPressed && e.IsCtrlPressed)

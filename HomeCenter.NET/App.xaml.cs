@@ -33,7 +33,11 @@ namespace HomeCenter.NET
             }
 
             AppDomain.CurrentDomain.UnhandledException += (o, args) => OnException(args.ExceptionObject);
-            Current.DispatcherUnhandledException += (o, args) => OnException(args.Exception);
+            Current.DispatcherUnhandledException += (o, args) =>
+            {
+                args.Handled = true;
+                OnException(args.Exception);
+            };
 
             Window = new Windows.MainWindow();
 

@@ -119,9 +119,16 @@ namespace H.NET.Runners.TorrentRunner
                 var temp = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "TorrentRunnerFiles")).FullName;
                 var path = Path.Combine(temp, $"file_{i}");
 
-                using (var client = new WebClient())
+                try
                 {
-                    await client.DownloadFileTaskAsync(url, path);
+                    using (var client = new WebClient())
+                    {
+                        await client.DownloadFileTaskAsync(url, path);
+                    }
+                }
+                catch (Exception)
+                {
+                    // ignored
                 }
 
                 return path;
