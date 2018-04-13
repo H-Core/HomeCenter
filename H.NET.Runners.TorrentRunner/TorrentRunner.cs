@@ -26,6 +26,7 @@ namespace H.NET.Runners.TorrentRunner
         private double MaxSizeGb { get; set; }
         private string Extension { get; set; }
         private double StartSizeMb { get; set; }
+        private int MaxSearchResults { get; set; }
 
         private string TorrentsFolder => Path.Combine(SaveTo, "Torrents");
         private string DownloadsFolder => Path.Combine(SaveTo, "Downloads");
@@ -44,6 +45,7 @@ namespace H.NET.Runners.TorrentRunner
             AddSetting(nameof(MaxSizeGb), o => MaxSizeGb = o, null, 4.0);
             AddSetting(nameof(Extension), o => Extension = o, null, string.Empty);
             AddSetting(nameof(StartSizeMb), o => StartSizeMb = o, null, 20.0);
+            AddSetting(nameof(MaxSearchResults), o => MaxSearchResults = o, null, 3);
 
             AddAction("torrent", TorrentCommand, "text");
 
@@ -142,11 +144,21 @@ namespace H.NET.Runners.TorrentRunner
         {
             var torrents = files
                 .Select(i => Torrent.TryLoad(i, out var torrent) ? torrent : null)
-                .Where(i => i != null);
+                .Where(i => i != null)
+                .ToArray();
 
             var goodTorrents = torrents
-                .Where(torrent => torrent.Files.Any(IsGoodFile))
-                .OrderByDescending(i => i.AnnounceUrls.Count);
+                .Where(torrent => torrent.Files.Length == 1 && torrent.Files.Any(IsGoodFile))
+                .OrderByDescending(i => i.AnnounceUrls.Count)
+                .ToArray();
+
+            if (!goodTorrents.Any())
+            {
+                goodTorrents = torrents
+                    .Where(torrent => torrent.Files.Any(IsGoodFile))
+                    .OrderByDescending(i => i.AnnounceUrls.Count)
+                    .ToArray();
+            }
 
             var bestTorrent = goodTorrents.FirstOrDefault();
 
@@ -159,7 +171,7 @@ namespace H.NET.Runners.TorrentRunner
 
             var query = GooglePattern.Replace("*", text);
             Log($"Google Query: {query}");
-            var urls = GoogleSearch.Go(query);
+            var urls = GoogleSearch.Go(query).Take(MaxSearchResults).ToList();
             Log($"Google Urls: {Environment.NewLine}{string.Join(Environment.NewLine, urls)}");
             if (!urls.Any())
             {
@@ -194,8 +206,11 @@ namespace H.NET.Runners.TorrentRunner
 
             try
             {
-                Process.Start(QBitTorrentPath, $"--sequential --first-and-last --skip-dialog=true --save-path=\"{DownloadsFolder}\" {torrentPath}");
-                Say($@"Загружаю. Запущу, когда загрузиться базовая часть");
+                var temp = Path.GetTempFileName();
+                File.Copy(torrentPath, temp, true);
+
+                Process.Start(QBitTorrentPath, $"--sequential --first-and-last --skip-dialog=true --save-path=\"{DownloadsFolder}\" {temp}");
+                Say(@"Загружаю. Запущу, когда загрузиться базовая часть");
             }
             catch (Exception e)
             {
@@ -210,10 +225,17 @@ namespace H.NET.Runners.TorrentRunner
                 await Task.Delay(1000);
 
                 var size = GetFileSizeOnDisk(path);
-                Print($"Size: {size}");
-                Print($"Need Size: {StartSizeMb * 1000000}");
+                var needSize = StartSizeMb * 1000000;
+                var percents = 100.0 * size / needSize;
+
+                // Every 5 seconds
+                if (seconds % 5 == 0)
+                {
+                    Print($"Progress: {size}/{needSize}({percents:F2}%)");
+                }
+
                 if (size < uint.MaxValue - 1 &&
-                    size > StartSizeMb * 1000000)
+                    size > needSize)
                 {
                     break;
                 }
