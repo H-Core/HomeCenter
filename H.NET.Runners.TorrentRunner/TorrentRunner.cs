@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Google.Apis.Customsearch.v1;
 using Google.Apis.Services;
@@ -23,11 +25,12 @@ namespace H.NET.Runners.TorrentRunner
         private string GoogleSearchApiKey { get; set; }
         private string GoogleCx { get; set; }
         private string GooglePattern { get; set; }
-        private int Delay { get; set; }
+        private int MaxDelaySeconds { get; set; }
         private double MinSizeGb { get; set; }
         private double MaxSizeGb { get; set; }
         private string Extension { get; set; }
         private int MaxResults { get; set; }
+        private double StartSizeMb { get; set; }
 
         private string TorrentsFolder => Path.Combine(SaveTo, "Torrents");
         private string DownloadsFolder => Path.Combine(SaveTo, "Downloads");
@@ -40,7 +43,7 @@ namespace H.NET.Runners.TorrentRunner
         {
             AddSetting(nameof(SaveTo), o => SaveTo = o, NoEmpty, string.Empty, SettingType.Folder);
             AddSetting(nameof(QBitTorrentPath), o => QBitTorrentPath = o, FileExists, string.Empty, SettingType.Path);
-            AddSetting(nameof(Delay), o => Delay = o, null, 10000);
+            AddSetting(nameof(MaxDelaySeconds), o => MaxDelaySeconds = o, null, 60);
             AddSetting(nameof(GoogleSearchApiKey), o => GoogleSearchApiKey = o, NoEmpty, string.Empty);
             AddSetting(nameof(GoogleCx), o => GoogleCx = o, NoEmpty, string.Empty);
             AddSetting(nameof(GooglePattern), o => GooglePattern = o, NoEmpty, "download torrent *");
@@ -48,6 +51,7 @@ namespace H.NET.Runners.TorrentRunner
             AddSetting(nameof(MaxSizeGb), o => MaxSizeGb = o, null, 4.0);
             AddSetting(nameof(Extension), o => Extension = o, null, string.Empty);
             AddSetting(nameof(MaxResults), o => MaxResults = o, null, 30);
+            AddSetting(nameof(StartSizeMb), o => StartSizeMb = o, null, 20.0);
 
             AddAction("torrent", TorrentCommand, "text");
 
@@ -109,9 +113,9 @@ namespace H.NET.Runners.TorrentRunner
                     (string.IsNullOrWhiteSpace(Extension) ||
                      string.Equals(extension, Extension, StringComparison.OrdinalIgnoreCase)))
                 {
-                    Print($"Size: {sizeGb:F2} Gb");
-                    Print($"Path: {path}");
-                    Print($"Extension: {extension}");
+                    //Print($"Size: {sizeGb:F2} Gb");
+                    //Print($"Path: {path}");
+                    //Print($"Extension: {extension}");
 
                     return true;
                 }
@@ -217,7 +221,7 @@ namespace H.NET.Runners.TorrentRunner
             try
             {
                 Process.Start(QBitTorrentPath, $"--sequential --first-and-last --skip-dialog=true --save-path=\"{DownloadsFolder}\" {torrentPath}");
-                Say($@"Загружаю. До запуска {Delay / 1000} секунд");
+                Say($@"Загружаю. Запущу, когда загрузиться базовая часть");
             }
             catch (Exception e)
             {
@@ -226,11 +230,53 @@ namespace H.NET.Runners.TorrentRunner
                 return;
             }
 
-            await Task.Delay(Delay);
+            var seconds = 0;
+            while (seconds < MaxDelaySeconds)
+            {
+                await Task.Delay(1000);
+
+                var size = GetFileSizeOnDisk(path);
+                Print($"Size: {size}");
+                Print($"Need Size: {StartSizeMb * 1000000}");
+                if (size < uint.MaxValue - 1 && 
+                    size > StartSizeMb * 1000000)
+                {
+                    break;
+                }
+
+                ++seconds;
+            }
 
             RunCommand(path);
 
         }
+
+        private static long GetFileSizeOnDisk(string file)
+        {
+            var info = new FileInfo(file);
+            var label = info.Directory?.Root.FullName;
+
+            var result = GetDiskFreeSpaceW(label, out var sectorsPerCluster, out var bytesPerSector, out _, out _);
+            if (result == 0)
+            {
+                throw new Win32Exception();
+            }
+            
+            var clusterSize = sectorsPerCluster * bytesPerSector;
+            var lowSize = GetCompressedFileSizeW(file, out var highSize);
+            var size = (long)highSize << 32 | lowSize;
+
+            return ((size + clusterSize - 1) / clusterSize) * clusterSize;
+        }
+
+        [DllImport("kernel32.dll")]
+        private static extern uint GetCompressedFileSizeW([In, MarshalAs(UnmanagedType.LPWStr)] string lpFileName,
+            [Out, MarshalAs(UnmanagedType.U4)] out uint lpFileSizeHigh);
+
+        [DllImport("kernel32.dll", SetLastError = true, PreserveSig = true)]
+        private static extern int GetDiskFreeSpaceW([In, MarshalAs(UnmanagedType.LPWStr)] string lpRootPathName,
+            out uint lpSectorsPerCluster, out uint lpBytesPerSector, out uint lpNumberOfFreeClusters,
+            out uint lpTotalNumberOfClusters);
 
         private bool RunCommand(string path, bool sayError = true, bool saySuccess = true)
         {
