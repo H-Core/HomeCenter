@@ -134,7 +134,7 @@ namespace HomeCenter.NET.Runners
 
             var (newKey, newCommand) = GetCommand(keyOrData);
             var realActionData = newKey ?? newCommand.Lines.FirstOrDefault()?.Text;
-            Print($"Run action for key: \"{realActionData}\":");
+            Print($"Run action for key: \"{realActionData}\"");
             foreach (var line in newCommand.Lines)
             {
                 var information = await RunSingleLine(newKey, line.Text);
