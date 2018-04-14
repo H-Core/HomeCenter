@@ -114,7 +114,7 @@ namespace HomeCenter.NET.Runners
                         }
                     }
 
-                    return (pair.Key, command);
+                    return (key, command);
                 }
             }
 
@@ -133,6 +133,8 @@ namespace HomeCenter.NET.Runners
             History.Add(keyOrData);
 
             var (newKey, newCommand) = GetCommand(keyOrData);
+            var realActionData = newKey ?? newCommand.Lines.FirstOrDefault()?.Text;
+            Print($"Run action for key: \"{realActionData}\":");
             foreach (var line in newCommand.Lines)
             {
                 var information = await RunSingleLine(newKey, line.Text);
@@ -141,6 +143,15 @@ namespace HomeCenter.NET.Runners
                     Print($"{information.Exception}");
                     return;
                 }
+            }
+
+            try
+            {
+                new CommandsHistory(Options.CompanyName).Add(realActionData);
+            }
+            catch (Exception)
+            {
+                //ignored
             }
         }
 
@@ -155,22 +166,7 @@ namespace HomeCenter.NET.Runners
                 return new RunInformation(new Exception($"Runner for command \"{data}\" is not found"));
             }
 
-            var information = await Task.Run(() => runner.Run(key, data));
-            if (information?.IsInternal == false)
-            {
-                Print($"Run action for key: \"{key}\": \"{information.RunText}\"");
-            }
-
-            try
-            {
-                new CommandsHistory(Options.CompanyName).Add(key);
-            }
-            catch (Exception)
-            {
-                //ignored
-            }
-
-            return information;
+            return await Task.Run(() => runner.Run(key, data));
         }
 
 
