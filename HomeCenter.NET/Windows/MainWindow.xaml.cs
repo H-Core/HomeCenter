@@ -78,7 +78,7 @@ namespace HomeCenter.NET.Windows
 
                 if (!DeskBandRecordStarted)
                 {
-                    Run("deskband start");
+                    HiddenRun("deskband start");
                     DeskBandRecordStarted = true;
                 }
             });
@@ -89,7 +89,7 @@ namespace HomeCenter.NET.Windows
 
                 if (DeskBandRecordStarted)
                 {
-                    Run("deskband stop");
+                    HiddenRun("deskband stop");
                     DeskBandRecordStarted = false;
                 }
             });
@@ -155,6 +155,7 @@ namespace HomeCenter.NET.Windows
         } 
 
         private async void Run(string message) => await GlobalRunner.Run(message);
+        private async void HiddenRun(string message) => await GlobalRunner.Run(message, false);
 
         private void SetUpRuntimeModule()
         {

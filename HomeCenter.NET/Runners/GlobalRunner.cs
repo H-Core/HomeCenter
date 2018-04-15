@@ -121,7 +121,7 @@ namespace HomeCenter.NET.Runners
             return (null, new Command(null, key));
         }
 
-        public async Task Run(string keyOrData)
+        public async Task Run(string keyOrData, bool show = true)
         {
             if (string.IsNullOrWhiteSpace(keyOrData))
             {
@@ -134,7 +134,10 @@ namespace HomeCenter.NET.Runners
 
             var (newKey, newCommand) = GetCommand(keyOrData);
             var realActionData = newKey ?? newCommand.Lines.FirstOrDefault()?.Text;
-            Print($"Run action for key: \"{realActionData}\"");
+            if (show)
+            {
+                Print($"Run action for key: \"{realActionData}\"");
+            }
             foreach (var line in newCommand.Lines)
             {
                 var information = await RunSingleLine(newKey, line.Text);
@@ -145,13 +148,16 @@ namespace HomeCenter.NET.Runners
                 }
             }
 
-            try
+            if (show)
             {
-                new CommandsHistory(Options.CompanyName).Add(realActionData);
-            }
-            catch (Exception)
-            {
-                //ignored
+                try
+                {
+                    new CommandsHistory(Options.CompanyName).Add(realActionData);
+                }
+                catch (Exception)
+                {
+                    //ignored
+                }
             }
         }
 
