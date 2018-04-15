@@ -54,16 +54,18 @@ namespace H.NET.Core.Runners
         public string[] GetVariables() =>
             Variables.Select(i => $"{i.Key} {i.Value?.Invoke()}").ToArray();
 
-        public virtual bool IsSupport(string key, string data)
+        public virtual bool IsSupport(string key, string data) => GetInformation(key, data) != null;
+        public bool IsInternal(string key, string data) => GetInformation(key, data)?.IsInternal ?? false;
+
+        public RunInformation GetInformation(string key, string data)
         {
             if (string.IsNullOrWhiteSpace(data))
             {
-                return false;
+                return null;
             }
 
             var values = data.SplitOnlyFirst(' ');
-
-            return HandlerDictionary.ContainsKey(values[0]);
+            return HandlerDictionary.TryGetValue(values[0], out var information) ? information : null;
         }
 
         #endregion
