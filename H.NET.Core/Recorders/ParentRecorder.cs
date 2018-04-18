@@ -23,6 +23,11 @@
 
         public override void Start()
         {
+            if (IsStarted)
+            {
+                return;
+            }
+
             if (Recorder == null)
             {
                 Log("Recorder is not found");
@@ -35,6 +40,11 @@
 
         public override void Stop()
         {
+            if (!IsStarted)
+            {
+                return;
+            }
+
             if (Recorder == null)
             {
                 Log("Recorder is not found");

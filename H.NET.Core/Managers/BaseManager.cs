@@ -116,12 +116,22 @@ namespace H.NET.Core.Managers
 
         public override void Start()
         {
+            if (IsStarted)
+            {
+                return;
+            }
+
             Text = null;
             base.Start();
         }
 
         public override void Stop()
         {
+            if (!IsStarted)
+            {
+                return;
+            }
+
             if (Recorder == null)
             {
                 Log("Recorder is not found");

@@ -28,6 +28,11 @@ namespace H.NET.Core.Recorders
 
         public virtual void Start()
         {
+            if (IsStarted)
+            {
+                return;
+            }
+
             IsStarted = true;
             Data = null;
             OnStarted(CreateArgs());
@@ -35,6 +40,11 @@ namespace H.NET.Core.Recorders
 
         public virtual void Stop()
         {
+            if (!IsStarted)
+            {
+                return;
+            }
+
             IsStarted = false;
             OnStopped(CreateArgs());
         }

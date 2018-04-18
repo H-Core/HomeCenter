@@ -36,8 +36,6 @@ namespace HomeCenter.NET.Windows
 
         private bool CanClose { get; set; }
 
-        private bool DeskBandRecordStarted { get; set; }
-
         private static Action<string> GlobalRunAction { get; set; }
         public static void GlobalRun(string text) => GlobalRunAction?.Invoke(text);
 
@@ -76,22 +74,14 @@ namespace HomeCenter.NET.Windows
                 RecordButton.Content = "🔊";
                 RecordButton.Background = Brushes.LightSkyBlue;
 
-                if (!DeskBandRecordStarted)
-                {
-                    HiddenRun("deskband start");
-                    DeskBandRecordStarted = true;
-                }
+                HiddenRun("deskband start");
             });
             Manager.Stopped += (sender, args) => Dispatcher.Invoke(() =>
             {
                 RecordButton.Content = "🔉";
                 RecordButton.Background = Brushes.LightGray;
 
-                if (DeskBandRecordStarted)
-                {
-                    HiddenRun("deskband stop");
-                    DeskBandRecordStarted = false;
-                }
+                HiddenRun("deskband stop");
             });
 
             #endregion
@@ -307,7 +297,8 @@ namespace HomeCenter.NET.Windows
         // TODO: Fix multi key up
         private void Global_KeyUp(object sender, KeyboardHookEventArgs e)
         {
-            if (e.Key == Options.RecordKey || e.IsAltPressed && e.IsCtrlPressed)
+            if (e.Key == Options.RecordKey ||
+                e.IsAltPressed && e.IsCtrlPressed)
             {
                 Manager.Stop();
             }
@@ -326,7 +317,8 @@ namespace HomeCenter.NET.Windows
 
         private void Global_KeyDown(object sender, KeyboardHookEventArgs e)
         {
-            if (e.Key == Options.RecordKey || e.IsAltPressed && e.IsCtrlPressed)
+            if (e.Key == Options.RecordKey ||
+                e.IsAltPressed && e.IsCtrlPressed)
             {
                 Manager.Start();
             }
