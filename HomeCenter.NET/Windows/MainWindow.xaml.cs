@@ -130,7 +130,12 @@ namespace HomeCenter.NET.Windows
 
         #region Private methods
 
-        private void Print(string text) => Dispatcher.Invoke(() => ConsoleTextBox.Text += $"{DateTime.Now:T}: {text}{Environment.NewLine}");
+        private void Print(string text) => Dispatcher.Invoke(() =>
+        {
+            ConsoleTextBox.Text += $"{DateTime.Now:T}: {text}{Environment.NewLine}";
+
+            PopUpWindow.Show(text, 3000);
+        });
 
         private static void Say(byte[] bytes) => bytes?.Play();
         private async void Say(string text)
