@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -32,13 +33,16 @@ namespace HomeCenter.NET.Runners
             AddAction("run", RunProcess, "program.exe arguments");
             AddAction("say", Say, "text");
             AddAction("print", Print, "text");
-            AddAction("paste", Paste, "text");
+            AddAsyncAction("copy", CopyCommand, "text");
+            AddAction("paste", PasteCommand, "text");
             AddAction("clipboard", ClipboardCommand, "text");
             AddAction("keyboard", KeyboardCommand, "CONTROL+V");
-            AddAsyncAction("sleep", async command => await Task.Delay(ToInt(command)), "integer");
+            AddAsyncAction("sleep", SleepCommand, "integer");
             AddAction("sync-sleep", command => Thread.Sleep(ToInt(command)), "integer");
             AddAction("show", ShowWindowCommand, "process_name");
             AddAction("explorer", ExplorerCommand, "path");
+            AddAction("translate", TranslateCommand);
+            AddAction("magic-button", command => MagicButtonCommand());
 
             AddInternalAction("redirect", RunCommand, "other_command_key");
             AddInternalAction("show-settings", command => ShowSettingsAction?.Invoke());
@@ -55,11 +59,56 @@ namespace HomeCenter.NET.Runners
 
         #region Private methods
 
-        private static void ExplorerCommand(string command)
+        private static async Task SleepCommand(string command)
         {
-            command = command.Replace("\\\\", "\\").Replace("//", "\\").Replace("/", "\\");
+            if (string.IsNullOrWhiteSpace(command))
+            {
+                return;
+            }
 
-            RunProcess($"explorer \"{command}\"");
+            var delay = ToInt(command);
+            await Task.Delay(delay);
+        }
+
+        private static string NormalizePath(string path) =>
+            path.Replace("\\\\", "\\").Replace("//", "\\").Replace("/", "\\");
+
+        private static string NormalizeUrl(string url) => url.Replace(" ", "%20");
+
+        private async Task<string> CopyAndGetClipboard()
+        {
+            await CopyCommand(string.Empty);
+
+            return ClipboardFunc?.Invoke();
+        }
+
+        private async void TranslateCommand(string command)
+        {
+            var text = await CopyAndGetClipboard();
+
+            RunCommand($"run https://translate.google.ru/?hl=ru#en/ru/{NormalizeUrl(text)}");
+        }
+
+        private static void ExplorerCommand(string command) => RunProcess($"explorer \"{NormalizePath(command)}\"");
+
+        private async void MagicButtonCommand()
+        {
+            var text = await CopyAndGetClipboard();
+
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                ExplorerCommand(string.Empty);
+                return;
+            }
+
+            var normalizedPath = NormalizePath(text);
+            if (Directory.Exists(normalizedPath) || File.Exists(normalizedPath))
+            {
+                ExplorerCommand(text);
+                return;
+            }
+
+            TranslateCommand(text);
         }
 
         private static async void DeskBandCommand(string command)
@@ -165,7 +214,14 @@ namespace HomeCenter.NET.Runners
             new InputSimulator().Keyboard.ModifiedKeyStroke(otherKeys, mainKey);
         }
 
-        private static void Paste(string command)
+        private static async Task CopyCommand(string command)
+        {
+            KeyboardCommand("Control+C");
+
+            await SleepCommand("5");
+        }
+
+        private static void PasteCommand(string command)
         {
             if (string.IsNullOrWhiteSpace(command))
             {
