@@ -1,4 +1,5 @@
 ﻿using System.Timers;
+using System.Windows;
 
 namespace HomeCenter.NET.Windows
 {
@@ -22,8 +23,9 @@ namespace HomeCenter.NET.Windows
 
         #region Properties
 
-        private string Message {
-            set => TextBlock.Text = value;
+        private string Message
+        {
+            set => TextControl.Content = value;
         }
 
         private int Timeout { get; set; } = int.MaxValue;
@@ -38,10 +40,9 @@ namespace HomeCenter.NET.Windows
         {
             InitializeComponent();
 
-            Left = System.Windows.SystemParameters.WorkArea.Width - Width;
-            Top = System.Windows.SystemParameters.WorkArea.Height - Height;
+            MaxWidth = SystemParameters.WorkArea.Width / 4;
+            MaxHeight = SystemParameters.WorkArea.Height / 2;
 
-            Timer.Start();
             Timer.Elapsed += (sender, args) =>
             {
                 Timeout -= 100;
@@ -59,5 +60,18 @@ namespace HomeCenter.NET.Windows
         }
 
         #endregion
+
+        #region Event Handlers
+
+        private void Window_Loaded(object sender, RoutedEventArgs e) => Timer.Start();
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Left = SystemParameters.WorkArea.Width - ActualWidth;
+            Top = SystemParameters.WorkArea.Height - ActualHeight;
+        }
+
+        #endregion
+
     }
 }
