@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>H.NET.Runners</RootNamespace>
-    <AssemblyName>H.NET.Runners.CodeRunner</AssemblyName>
+    <AssemblyName>H.NET.Runners.CSharpRunner</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
