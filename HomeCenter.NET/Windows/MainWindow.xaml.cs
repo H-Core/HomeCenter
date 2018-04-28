@@ -134,7 +134,10 @@ namespace HomeCenter.NET.Windows
         {
             ConsoleTextBox.Text += $"{DateTime.Now:T}: {text}{Environment.NewLine}";
 
-            PopUpWindow.Show(text, 3000);
+            if (Settings.Default.EnablePopUpMessages)
+            {
+                PopUpWindow.Show(text, 3000);
+            }
         });
 
         private static void Say(byte[] bytes) => bytes?.Play();

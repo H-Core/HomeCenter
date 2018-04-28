@@ -166,5 +166,17 @@ namespace HomeCenter.NET.Properties {
                 this["EnableKeyboardHook"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool EnablePopUpMessages {
+            get {
+                return ((bool)(this["EnablePopUpMessages"]));
+            }
+            set {
+                this["EnablePopUpMessages"] = value;
+            }
+        }
     }
 }
