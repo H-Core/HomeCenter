@@ -32,8 +32,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DeskBandControl));
             this.Label = new System.Windows.Forms.Label();
             this.menuButton = new System.Windows.Forms.Button();
-            this.RecordButton = new System.Windows.Forms.Button();
             this.imageList = new System.Windows.Forms.ImageList(this.components);
+            this.RecordButton = new System.Windows.Forms.Button();
+            this.uiButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Label
@@ -43,7 +44,7 @@
             this.Label.ForeColor = System.Drawing.Color.RoyalBlue;
             this.Label.Location = new System.Drawing.Point(6, 6);
             this.Label.Name = "Label";
-            this.Label.Size = new System.Drawing.Size(248, 26);
+            this.Label.Size = new System.Drawing.Size(276, 26);
             this.Label.TabIndex = 0;
             this.Label.Text = "Enter Command Here";
             this.Label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -65,6 +66,14 @@
             this.menuButton.UseVisualStyleBackColor = true;
             this.menuButton.Click += new System.EventHandler(this.MenuButton_Click);
             // 
+            // imageList
+            // 
+            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
+            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList.Images.SetKeyName(0, "record.png");
+            this.imageList.Images.SetKeyName(1, "menu.png");
+            this.imageList.Images.SetKeyName(2, "ui.png");
+            // 
             // RecordButton
             // 
             this.RecordButton.BackColor = System.Drawing.Color.White;
@@ -82,12 +91,21 @@
             this.RecordButton.UseVisualStyleBackColor = false;
             this.RecordButton.Click += new System.EventHandler(this.RecordButton_Click);
             // 
-            // imageList
+            // uiButton
             // 
-            this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
-            this.imageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList.Images.SetKeyName(0, "record.png");
-            this.imageList.Images.SetKeyName(1, "menu.png");
+            this.uiButton.Cursor = System.Windows.Forms.Cursors.Default;
+            this.uiButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.uiButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PowderBlue;
+            this.uiButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.uiButton.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.uiButton.ImageIndex = 2;
+            this.uiButton.ImageList = this.imageList;
+            this.uiButton.Location = new System.Drawing.Point(260, 3);
+            this.uiButton.Name = "uiButton";
+            this.uiButton.Size = new System.Drawing.Size(25, 32);
+            this.uiButton.TabIndex = 3;
+            this.uiButton.UseVisualStyleBackColor = true;
+            this.uiButton.Click += new System.EventHandler(this.UiButton_Click);
             // 
             // DeskBandControl
             // 
@@ -95,15 +113,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.uiButton);
             this.Controls.Add(this.RecordButton);
             this.Controls.Add(this.menuButton);
             this.Controls.Add(this.Label);
             this.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.MaximumSize = new System.Drawing.Size(262, 40);
-            this.MinimumSize = new System.Drawing.Size(262, 40);
+            this.MaximumSize = new System.Drawing.Size(290, 40);
+            this.MinimumSize = new System.Drawing.Size(290, 40);
             this.Name = "DeskBandControl";
             this.Padding = new System.Windows.Forms.Padding(6);
-            this.Size = new System.Drawing.Size(260, 38);
+            this.Size = new System.Drawing.Size(288, 38);
             this.Click += new System.EventHandler(this.OnClick);
             this.ResumeLayout(false);
 
@@ -115,5 +134,6 @@
         private System.Windows.Forms.Button menuButton;
         private System.Windows.Forms.Button RecordButton;
         private System.Windows.Forms.ImageList imageList;
+        private System.Windows.Forms.Button uiButton;
     }
 }

@@ -66,6 +66,11 @@ namespace H.NET.SearchDeskBand
             DeskBandWindow.SendCommand("start-record");
         }
 
+        private void UiButton_Click(object sender, EventArgs e)
+        {
+            DeskBandWindow.SendCommand("show-ui");
+        }
+
         #endregion
 
         #region IDisposable
