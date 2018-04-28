@@ -8,13 +8,13 @@ using HomeCenter.NET.Controls;
 
 namespace HomeCenter.NET.Windows
 {
-    public partial class CommandWindow
+    public partial class ChangeCommandWindow
     {
         #region Static methods
 
         public static (bool isSaved, Command newCommand) Show(Command command)
         {
-            var window = new CommandWindow(command);
+            var window = new ChangeCommandWindow(command);
             var result = window.ShowDialog() == true;
 
             return (result, window.Command);
@@ -51,19 +51,19 @@ namespace HomeCenter.NET.Windows
 
         #region Constructors
 
-        public CommandWindow(Command command)
+        public ChangeCommandWindow(Command command)
         {
             Command = command?.Clone() as Command ?? throw new ArgumentNullException(nameof(command));
 
             InitializeComponent();
-
-            Update();
         }
 
         #endregion
 
         #region Event handlers
-        
+
+        private void Window_Loaded(object sender, RoutedEventArgs e) => Update();
+
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             Save();

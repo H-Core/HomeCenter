@@ -50,13 +50,7 @@ namespace HomeCenter.NET.Windows
 
         public MainWindow()
         {
-            #region UI
-
             InitializeComponent();
-
-            InputTextBox.Focus();
-
-            #endregion
 
             #region Global Runner
 
@@ -220,6 +214,11 @@ namespace HomeCenter.NET.Windows
         #endregion
 
         #region Event handlers
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            InputTextBox.Focus();
+        }
 
         public async void Load()
         {

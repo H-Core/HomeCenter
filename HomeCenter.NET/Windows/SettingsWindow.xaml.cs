@@ -18,18 +18,18 @@ namespace HomeCenter.NET.Windows
     {
         #region Constructors
 
-        public SettingsWindow()
-        {
-            InitializeComponent();
-
-            StartupControl.IsChecked = Startup.IsStartup(Options.FilePath);
-
-            Update();
-        }
+        public SettingsWindow() => InitializeComponent();
 
         #endregion
 
         #region Event handlers
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            StartupControl.IsChecked = Startup.IsStartup(Options.FilePath);
+
+            Update();
+        }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {

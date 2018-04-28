@@ -23,13 +23,13 @@ namespace HomeCenter.NET.Windows
             Runner = runner ?? throw new ArgumentNullException(nameof(runner));
 
             InitializeComponent();
-
-            Update();
         }
 
         #endregion
 
         #region Event handlers
+
+        private void Window_Loaded(object sender, RoutedEventArgs e) => Update();
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
@@ -37,7 +37,7 @@ namespace HomeCenter.NET.Windows
             command.Keys.Add(new SingleKey(string.Empty));
             command.Lines.Add(new SingleCommand(string.Empty));
 
-            CommandWindow.ShowAndSaveIfNeeded(command, Runner.Storage);
+            ChangeCommandWindow.ShowAndSaveIfNeeded(command, Runner.Storage);
             Update();
         } 
 
@@ -84,7 +84,7 @@ namespace HomeCenter.NET.Windows
                 };
                 control.Edited += (sender, args) =>
                 {
-                    CommandWindow.ShowAndSaveIfNeeded(command, Runner.Storage);
+                    ChangeCommandWindow.ShowAndSaveIfNeeded(command, Runner.Storage);
                     Update();
                 };
                 control.Run += (sender, args) =>

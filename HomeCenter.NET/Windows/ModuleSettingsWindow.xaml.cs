@@ -19,13 +19,13 @@ namespace HomeCenter.NET.Windows
             Storage = storage ?? throw new ArgumentNullException(nameof(storage));
 
             InitializeComponent();
-
-            Update();
         }
 
         #endregion
 
         #region Event handlers
+
+        private void Window_Loaded(object sender, RoutedEventArgs e) => Update();
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
@@ -69,6 +69,5 @@ namespace HomeCenter.NET.Windows
         }
 
         #endregion
-
     }
 }

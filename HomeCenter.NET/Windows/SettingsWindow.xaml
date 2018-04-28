@@ -6,7 +6,7 @@
         xmlns:properties="clr-namespace:HomeCenter.NET.Properties"
         xmlns:c="clr-namespace:HomeCenter.NET.Controls"
         mc:Ignorable="d"
-        Title="Settings" Height="300" Width="600" WindowStartupLocation="CenterScreen">
+        Title="Settings" Height="300" Width="600" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Grid Background="#FFE5E5E5">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
