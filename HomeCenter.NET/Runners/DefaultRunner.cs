@@ -44,7 +44,7 @@ namespace HomeCenter.NET.Runners
             AddAction("translate", TranslateCommand);
             AddAction("magic-button", command => MagicButtonCommand());
 
-            AddInternalAction("redirect", RunCommand, "other_command_key");
+            AddInternalAction("redirect", Run, "other_command_key");
             AddInternalAction("show-settings", command => ShowSettingsAction?.Invoke());
             AddInternalAction("show-commands", command => ShowCommandsAction?.Invoke());
             AddInternalAction("start-record", command => StartRecordAction?.Invoke());
@@ -86,7 +86,7 @@ namespace HomeCenter.NET.Runners
         {
             var text = await CopyAndGetClipboard();
 
-            RunCommand($"run https://translate.google.ru/?hl=ru#en/ru/{NormalizeUrl(text)}");
+            Run($"run https://translate.google.ru/?hl=ru#en/ru/{NormalizeUrl(text)}");
         }
 
         private static void ExplorerCommand(string command) => RunProcess($"explorer \"{NormalizePath(command)}\"");

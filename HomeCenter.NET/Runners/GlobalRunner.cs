@@ -46,7 +46,7 @@ namespace HomeCenter.NET.Runners
         {
             runner.NewSpeech += Say;
             runner.NewOutput += Print;
-            runner.NewCommand += RunCommand;
+            runner.NewCommand += Run;
 
             Runners.Add(runner);
         }

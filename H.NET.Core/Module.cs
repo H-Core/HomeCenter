@@ -27,7 +27,7 @@ namespace H.NET.Core
         protected void Print(string text) => NewOutput?.Invoke(text);
 
         public event TextDelegate NewCommand;
-        protected void RunCommand(string text) => NewCommand?.Invoke(text);
+        protected void Run(string text) => NewCommand?.Invoke(text);
 
         #endregion
 
