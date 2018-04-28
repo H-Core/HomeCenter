@@ -67,7 +67,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Utilities.Hook", "H.N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Utilities.Startup", "H.NET.Utilities.Startup\H.NET.Utilities.Startup.csproj", "{96DD6F93-C347-40F7-8DF5-47C66AF46DE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Runners.CodeRunner", "H.NET.Runners.CodeRunner\H.NET.Runners.CodeRunner.csproj", "{BAF0CA91-5602-4EA6-9293-164C1E5DA704}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Runners.CSharpRunner", "H.NET.Runners.CSharpRunner\H.NET.Runners.CSharpRunner.csproj", "{BAF0CA91-5602-4EA6-9293-164C1E5DA704}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
