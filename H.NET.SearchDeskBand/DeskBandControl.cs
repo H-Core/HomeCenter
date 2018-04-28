@@ -56,20 +56,10 @@ namespace H.NET.SearchDeskBand
             Window.Left -= 1; // border
         }
 
-        private void MenuButton_Click(object sender, EventArgs e)
-        {
-            DeskBandWindow.SendCommand("show-commands");
-        }
-
-        private void RecordButton_Click(object sender, EventArgs e)
-        {
-            DeskBandWindow.SendCommand("start-record");
-        }
-
-        private void UiButton_Click(object sender, EventArgs e)
-        {
-            DeskBandWindow.SendCommand("show-ui");
-        }
+        private void RecordButton_Click(object sender, EventArgs e) => Run("start-record");
+        private void UiButton_Click(object sender, EventArgs e) => Run("show-ui");
+        private void MenuButton_Click(object sender, EventArgs e) => Run("show-commands");
+        private void SettingsButton_Click(object sender, EventArgs e) => Run("show-settings");
 
         #endregion
 
@@ -85,7 +75,9 @@ namespace H.NET.SearchDeskBand
 
         #region Private methods
 
-        public void AddAction(string key, Action<string> action)
+        private static void Run(string command) => DeskBandWindow.SendCommand(command);
+
+        private void AddAction(string key, Action<string> action)
         {
             ActionDictionary[key.ToLowerInvariant()] = action;
         }

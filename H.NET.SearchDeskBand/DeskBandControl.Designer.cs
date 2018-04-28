@@ -35,6 +35,7 @@
             this.imageList = new System.Windows.Forms.ImageList(this.components);
             this.RecordButton = new System.Windows.Forms.Button();
             this.uiButton = new System.Windows.Forms.Button();
+            this.settingsButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // Label
@@ -44,7 +45,7 @@
             this.Label.ForeColor = System.Drawing.Color.RoyalBlue;
             this.Label.Location = new System.Drawing.Point(6, 6);
             this.Label.Name = "Label";
-            this.Label.Size = new System.Drawing.Size(276, 26);
+            this.Label.Size = new System.Drawing.Size(304, 26);
             this.Label.TabIndex = 0;
             this.Label.Text = "Enter Command Here";
             this.Label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -73,6 +74,7 @@
             this.imageList.Images.SetKeyName(0, "record.png");
             this.imageList.Images.SetKeyName(1, "menu.png");
             this.imageList.Images.SetKeyName(2, "ui.png");
+            this.imageList.Images.SetKeyName(3, "settings.png");
             // 
             // RecordButton
             // 
@@ -100,12 +102,28 @@
             this.uiButton.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.uiButton.ImageIndex = 2;
             this.uiButton.ImageList = this.imageList;
-            this.uiButton.Location = new System.Drawing.Point(260, 3);
+            this.uiButton.Location = new System.Drawing.Point(288, 3);
             this.uiButton.Name = "uiButton";
             this.uiButton.Size = new System.Drawing.Size(25, 32);
             this.uiButton.TabIndex = 3;
             this.uiButton.UseVisualStyleBackColor = true;
             this.uiButton.Click += new System.EventHandler(this.UiButton_Click);
+            // 
+            // settingsButton
+            // 
+            this.settingsButton.Cursor = System.Windows.Forms.Cursors.Default;
+            this.settingsButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.RoyalBlue;
+            this.settingsButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.PowderBlue;
+            this.settingsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.settingsButton.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.settingsButton.ImageIndex = 3;
+            this.settingsButton.ImageList = this.imageList;
+            this.settingsButton.Location = new System.Drawing.Point(260, 3);
+            this.settingsButton.Name = "settingsButton";
+            this.settingsButton.Size = new System.Drawing.Size(25, 32);
+            this.settingsButton.TabIndex = 4;
+            this.settingsButton.UseVisualStyleBackColor = true;
+            this.settingsButton.Click += new System.EventHandler(this.SettingsButton_Click);
             // 
             // DeskBandControl
             // 
@@ -113,16 +131,17 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.settingsButton);
             this.Controls.Add(this.uiButton);
             this.Controls.Add(this.RecordButton);
             this.Controls.Add(this.menuButton);
             this.Controls.Add(this.Label);
             this.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.MaximumSize = new System.Drawing.Size(290, 40);
-            this.MinimumSize = new System.Drawing.Size(290, 40);
+            this.MaximumSize = new System.Drawing.Size(318, 40);
+            this.MinimumSize = new System.Drawing.Size(318, 40);
             this.Name = "DeskBandControl";
             this.Padding = new System.Windows.Forms.Padding(6);
-            this.Size = new System.Drawing.Size(288, 38);
+            this.Size = new System.Drawing.Size(316, 38);
             this.Click += new System.EventHandler(this.OnClick);
             this.ResumeLayout(false);
 
@@ -135,5 +154,6 @@
         private System.Windows.Forms.Button RecordButton;
         private System.Windows.Forms.ImageList imageList;
         private System.Windows.Forms.Button uiButton;
+        private System.Windows.Forms.Button settingsButton;
     }
 }
