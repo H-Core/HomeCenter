@@ -184,7 +184,7 @@ namespace H.NET.Plugins
                 if (TypeIsAvailable(type) &&
                     filter?.Invoke(type) != false)
                 {
-                    AddInstance(type.Name, type, false);
+                    AddInstance(type.Name, type, true);
                 }
             }
         }
