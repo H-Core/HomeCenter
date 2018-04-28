@@ -201,6 +201,7 @@ namespace HomeCenter.NET.Windows
         private static InstanceControl CreateInstanceControl<T>(string name, RuntimeObject<T> instance, Action updateAction) where T : class, IModule
         {
             var module = instance.Value;
+            var deletingAllowed = instance.Exception != null || (instance.Type?.AllowMultipleInstance() ?? false);
             var control = new InstanceControl(name, module?.Name ?? instance.Exception?.Message ?? string.Empty)
             {
                 Height = 25,
@@ -209,7 +210,7 @@ namespace HomeCenter.NET.Windows
                 EnableEnabling = instance.Exception == null,
                 ObjectIsEnabled = instance.IsEnabled,
                 EnableRenaming = instance.Type?.AllowMultipleInstance() ?? false,
-                EnableDeleting = instance.Type?.AllowMultipleInstance() ?? false
+                EnableDeleting = deletingAllowed
             };
             control.Deleted += (sender, args) =>
             {
