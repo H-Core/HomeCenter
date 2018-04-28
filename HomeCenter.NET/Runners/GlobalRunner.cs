@@ -70,6 +70,8 @@ namespace HomeCenter.NET.Runners
             return null;
         }
 
+        private bool IsInternal(string key, string data) => AllRunners.Any(i => i.IsInternal(key, data));
+
         #endregion
 
         #region Protected methods
@@ -134,7 +136,8 @@ namespace HomeCenter.NET.Runners
 
             var (newKey, newCommand) = GetCommand(keyOrData);
             var realActionData = newKey ?? newCommand.Lines.FirstOrDefault()?.Text;
-            if (show)
+            var isInternal = newCommand.Lines.All(i => IsInternal(newKey, i.Text));
+            if (show && !isInternal)
             {
                 Print($"Run action for key: \"{realActionData}\"");
             }
@@ -148,7 +151,7 @@ namespace HomeCenter.NET.Runners
                 }
             }
 
-            if (show)
+            if (show && !isInternal)
             {
                 try
                 {
