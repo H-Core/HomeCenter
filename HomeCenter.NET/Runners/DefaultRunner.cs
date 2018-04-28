@@ -18,6 +18,7 @@ namespace HomeCenter.NET.Runners
     {
         #region Properties
 
+        public static Action ShowUiAction { get; set; }
         public static Action ShowSettingsAction { get; set; }
         public static Action ShowCommandsAction { get; set; }
         public static Action StartRecordAction { get; set; }
@@ -45,6 +46,7 @@ namespace HomeCenter.NET.Runners
             AddAction("magic-button", command => MagicButtonCommand());
 
             AddInternalAction("redirect", Run, "other_command_key");
+            AddInternalAction("show-ui", command => ShowUiAction?.Invoke());
             AddInternalAction("show-settings", command => ShowSettingsAction?.Invoke());
             AddInternalAction("show-commands", command => ShowCommandsAction?.Invoke());
             AddInternalAction("start-record", command => StartRecordAction?.Invoke());

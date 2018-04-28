@@ -90,6 +90,7 @@ namespace HomeCenter.NET.Windows
 
             #region Default Runner
 
+            DefaultRunner.ShowUiAction = () => Dispatcher.Invoke(Show);
             DefaultRunner.ShowSettingsAction = () => Dispatcher.Invoke(ShowSettings);
             DefaultRunner.ShowCommandsAction = () => Dispatcher.Invoke(ShowCommands);
             DefaultRunner.StartRecordAction = () => Dispatcher.Invoke(() => RecordButton_Click(this, EventArgs.Empty));
