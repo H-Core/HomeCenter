@@ -20,16 +20,16 @@ namespace H.NET.Runners
 
         private void CSharpCommand(string text)
         {
-            var action = CSScript.LoadDelegate<Action<Action<string>>>($@"
+            var action = CSScript.LoadDelegate<Action<Action<string>, Action<string>, Action<string>>>($@"
 using System;
 using System.IO;
 
-void Action(Action<string> Say)
+void Main(Action<string> Say, Action<string> Print, Action<string> Run)
 {{
 {text}
 }}");
 
-            action(Say);
+            action(Say, Print, Run);
         }
 
         #endregion
