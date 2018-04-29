@@ -30,12 +30,10 @@ namespace HomeCenter.NET.Runners
 
         #region Constructors
 
-        public GlobalRunner(IStorage<Command> storage = null, IRunner defaultRunner = null)
+        public GlobalRunner(IStorage<Command> storage = null)
         {
             Storage = storage ?? new InvariantDictionaryStorage<Command>();
             Storage.Load();
-
-            AddRunner(defaultRunner ?? new DefaultRunner());
         }
 
         #endregion
@@ -52,7 +50,7 @@ namespace HomeCenter.NET.Runners
         }
 
         public string[] GetSupportedCommands() => AllRunners.SelectMany(i => i.GetSupportedCommands()).ToArray();
-        public string[] GetVariables() => AllRunners.SelectMany(i => i.GetVariables()).ToArray();
+        public string[] GetSupportedVariables() => AllRunners.SelectMany(i => i.GetSupportedVariables()).ToArray();
 
         public IRunner GetRunnerFor(string key, string data)
         {
@@ -69,6 +67,9 @@ namespace HomeCenter.NET.Runners
 
             return null;
         }
+
+        public object GetVariableValue(string key) => 
+            AllRunners.FirstOrDefault(i => i.GetSupportedVariables().Contains(key))?.GetVariableValue(key);
 
         private bool IsInternal(string key, string data) => AllRunners.Any(i => i.IsInternal(key, data));
 
@@ -128,7 +129,6 @@ namespace HomeCenter.NET.Runners
             if (string.IsNullOrWhiteSpace(keyOrData))
             {
                 Print("Bad or empty request");
-                NotHandledText?.Invoke(keyOrData);
                 return;
             }
 
