@@ -8,7 +8,7 @@ namespace H.NET.Core.Notifiers
     {
         #region Properties
 
-        public string Command { get; set; }
+        private string Command { get; set; }
 
         #endregion
 
@@ -21,7 +21,7 @@ namespace H.NET.Core.Notifiers
 
         #region Constructors
 
-        public Notifier()
+        protected Notifier()
         {
             AddSetting(nameof(Command), o => Command = o, o => true, string.Empty);
 
@@ -45,13 +45,6 @@ namespace H.NET.Core.Notifiers
                 }
             };
         }
-
-        #endregion
-
-        #region Static methods
-
-        public static Action<string> RunAction { get; set; }
-        public static void Run(string command) => RunAction?.Invoke(command);
 
         #endregion
 
