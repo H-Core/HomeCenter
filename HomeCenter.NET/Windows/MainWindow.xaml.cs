@@ -8,8 +8,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using H.NET.Core;
 using H.NET.Core.Managers;
-using H.NET.Core.Notifiers;
 using H.NET.Core.Recorders;
+using H.NET.Core.Runners;
 using H.NET.Plugins;
 using H.NET.Storages;
 using H.NET.Storages.Extensions;
@@ -81,17 +81,6 @@ namespace HomeCenter.NET.Windows
             #endregion
 
             IpcServer.NewMessage += Run;
-
-            #region Default Runner
-
-            DefaultRunner.ShowUiAction = () => Dispatcher.Invoke(Show);
-            DefaultRunner.ShowSettingsAction = () => Dispatcher.Invoke(ShowSettings);
-            DefaultRunner.ShowCommandsAction = () => Dispatcher.Invoke(ShowCommands);
-            DefaultRunner.StartRecordAction = () => Dispatcher.Invoke(() => RecordButton_Click(this, EventArgs.Empty));
-            DefaultRunner.ClipboardAction = command => Dispatcher.Invoke(() => Clipboard.SetText(command));
-            DefaultRunner.ClipboardFunc = () => Dispatcher.Invoke(Clipboard.GetText);
-
-            #endregion
         }
 
         #endregion
@@ -145,7 +134,7 @@ namespace HomeCenter.NET.Windows
             }
 
             Say(await Synthesizer.Convert(text));
-        } 
+        }
 
         private async void Run(string message) => await GlobalRunner.Run(message);
         private async void HiddenRun(string message) => await GlobalRunner.Run(message, false);
@@ -222,6 +211,27 @@ namespace HomeCenter.NET.Windows
 
         public async void Load()
         {
+            #region Runners
+
+            GlobalRunner.AddRunner(new DefaultRunner());
+            GlobalRunner.AddRunner(new KeyboardRunner());
+            GlobalRunner.AddRunner(new WindowsRunner());
+            GlobalRunner.AddRunner(new ClipboardRunner
+            {
+                ClipboardAction = command => Dispatcher.Invoke(() => Clipboard.SetText(command)),
+                ClipboardFunc = () => Dispatcher.Invoke(Clipboard.GetText)
+            });
+            GlobalRunner.AddRunner(new UiRunner
+            {
+                ShowUiAction = () => Dispatcher.Invoke(Show),
+                ShowSettingsAction = () => Dispatcher.Invoke(ShowSettings),
+                ShowCommandsAction = () => Dispatcher.Invoke(ShowCommands),
+                StartRecordAction = () => Dispatcher.Invoke(() => RecordButton_Click(this, EventArgs.Empty))
+            });
+            GlobalRunner.AddRunner(new MyRunner());
+
+            #endregion
+
             #region Hook
 
             try
@@ -242,7 +252,7 @@ namespace HomeCenter.NET.Windows
 
             AssembliesManager.LogAction = Print;
             Module.LogAction = Print;
-            Notifier.RunAction = Run;
+            Runner.GetVariableValueGlobalFunc = GlobalRunner.GetVariableValue;
             GlobalRunAction = Run;
 
             Print("Loading modules...");
@@ -279,7 +289,7 @@ namespace HomeCenter.NET.Windows
                         InputTextBox.CaretIndex = InputTextBox.Text.Length - 1;
                         break;
                     }
-                    
+
                     Run(InputTextBox.Text);
                     InputTextBox.Clear();
                     break;

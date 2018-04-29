@@ -116,10 +116,10 @@ namespace HomeCenter.NET.Windows
         private void UpdateVariables()
         {
             VariablesPanel.Children.Clear();
-            foreach (var command in Runner.GetVariables())
+            foreach (var name in Runner.GetSupportedVariables())
             {
-                var values = command.SplitOnlyFirst(' ');
-                var control = new CommandControl(values[0], values[1])
+                var value = Runner.GetVariableValue(name);
+                var control = new CommandControl(name, value?.ToString() ?? string.Empty)
                 {
                     Height = 25
                 };

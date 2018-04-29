@@ -14,6 +14,13 @@ namespace H.NET.Core.Runners
 
         #endregion
 
+        #region Static methods
+
+        public static Func<string, object> GetVariableValueGlobalFunc { get; set; }
+        public static object GetVariableValueGlobal(string key) => GetVariableValueGlobalFunc?.Invoke(key);
+
+        #endregion
+
         #region Events
 
         public event EventHandler<RunnerEventArgs> BeforeRun;
@@ -51,8 +58,7 @@ namespace H.NET.Core.Runners
         public string[] GetSupportedCommands() =>
             HandlerDictionary.Select(i => $"{i.Key} {i.Value.Description}").ToArray();
 
-        public string[] GetVariables() =>
-            Variables.Select(i => $"{i.Key} {i.Value?.Invoke()}").ToArray();
+        public string[] GetSupportedVariables() => Variables.Keys.ToArray();
 
         public virtual bool IsSupport(string key, string data) => GetInformation(key, data) != null;
         public bool IsInternal(string key, string data) => GetInformation(key, data)?.IsInternal ?? false;
@@ -131,8 +137,8 @@ namespace H.NET.Core.Runners
             }
         }
 
-        protected void AddVariable(string key, Func<string> action) =>
-            Variables[key] = action;
+        protected void AddVariable(string key, Func<string> action) => Variables[key] = action;
+        public object GetVariableValue(string key) => Variables.TryGetValue(key, out var func) ? func?.Invoke() : null;
 
         protected void AddAction(string key, Action<string> action, string description = null, bool isInternal = false) =>
             AddAction(key, new RunInformation

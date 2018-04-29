@@ -14,6 +14,8 @@ namespace H.NET.Core
         event EventHandler<RunnerEventArgs> AfterRun;
 
         string[] GetSupportedCommands();
-        string[] GetVariables();
+        string[] GetSupportedVariables();
+
+        object GetVariableValue(string name);
     }
 }
