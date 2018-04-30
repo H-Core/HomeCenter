@@ -99,7 +99,6 @@
     <Compile Include="Runners\ClipboardRunner.cs" />
     <Compile Include="Runners\WindowsRunner.cs" />
     <Compile Include="Runners\KeyboardRunner.cs" />
-    <Compile Include="Runners\MyRunner.cs" />
     <Compile Include="Runners\UiRunner.cs" />
     <Compile Include="Runners\GlobalRunner.cs" />
     <Compile Include="Utilities\DialogUtilities.cs" />

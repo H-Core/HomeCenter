@@ -228,7 +228,6 @@ namespace HomeCenter.NET.Windows
                 ShowCommandsAction = () => Dispatcher.Invoke(ShowCommands),
                 StartRecordAction = () => Dispatcher.Invoke(() => RecordButton_Click(this, EventArgs.Empty))
             });
-            GlobalRunner.AddRunner(new MyRunner());
 
             #endregion
 
@@ -260,7 +259,7 @@ namespace HomeCenter.NET.Windows
             {
                 await Task.Run(() => ModuleManager.Instance.Load());
                 ModuleManager.AddUniqueInstancesIfNeed();
-                ModuleManager.RegisterHandlers(Print, Say, Run);
+                ModuleManager.RegisterHandlers(Print, Say, HiddenRun);
 
                 SetUpRuntimeModule();
 
