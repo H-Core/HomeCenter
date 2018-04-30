@@ -101,13 +101,14 @@ namespace HomeCenter.NET.Windows
         private void UpdateAllCommands()
         {
             AllPanel.Children.Clear();
-            foreach (var command in Runner.GetSupportedCommands())
+            foreach (var (runner, command) in Runner.GetSupportedCommands())
             {
                 var values = command.SplitOnlyFirst(' ');
-                var control = new CommandControl(values[0], values[1], editable: true)
+                var control = new CommandControl($"{runner.GetType().Name}: {values[0]}", values[1], editable: true)
                 {
                     Height = 25
                 };
+                control.NameLabel.Width *= 2;
                 control.Run += (sender, args) => MainWindow.GlobalRun($"{values[0]} {control.ObjectDescription}");
                 AllPanel.Children.Add(control);
             }

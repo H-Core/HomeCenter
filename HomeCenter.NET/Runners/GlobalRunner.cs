@@ -49,7 +49,11 @@ namespace HomeCenter.NET.Runners
             Runners.Add(runner);
         }
 
-        public string[] GetSupportedCommands() => AllRunners.SelectMany(i => i.GetSupportedCommands()).ToArray();
+        public (IRunner, string)[] GetSupportedCommands() => AllRunners
+            .Select(runner => (runner: runner, commands: runner.GetSupportedCommands()))
+            .SelectMany(i => i.commands, (i, command) => (i.runner, command))
+            .ToArray();
+
         public string[] GetSupportedVariables() => AllRunners.SelectMany(i => i.GetSupportedVariables()).ToArray();
 
         public IRunner GetRunnerFor(string key, string data)
