@@ -118,10 +118,13 @@ namespace HomeCenter.NET.Windows
             VariablesPanel.Children.Clear();
             foreach (var name in Runner.GetSupportedVariables())
             {
-                var value = Runner.GetVariableValue(name);
-                var control = new CommandControl(name, value?.ToString() ?? string.Empty)
+                var control = new CommandControl(name, "Please press R to calculate")
                 {
                     Height = 25
+                };
+                control.Run += (sender, args) =>
+                {
+                    control.ObjectDescription = Runner.GetVariableValue(name)?.ToString() ?? string.Empty;
                 };
                 VariablesPanel.Children.Add(control);
             }
