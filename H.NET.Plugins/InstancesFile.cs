@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace H.NET.Plugins
 {
     public class InstancesFile
     {
-        public string FilePath { get; }
+        private string FilePath { get; }
         public Dictionary<string, Instance> Items { get; } = new Dictionary<string, Instance>();
 
         public InstancesFile(string path)
@@ -19,17 +20,23 @@ namespace H.NET.Plugins
 
             FilePath = path;
 
-            if (File.Exists(path))
+            if (!File.Exists(path))
             {
-                Items = File.ReadAllLines(path)
-                    .Select(Instance.FromString)
-                    .ToDictionary(i => i.Name, i => i);
+                return;
             }
+
+            var text = File.ReadAllText(path);
+            var list = JsonConvert.DeserializeObject<List<Instance>>(text);
+
+            Items = list.ToDictionary(i => i.Name, i => i);
         }
 
         public void Save()
         {
-            File.WriteAllLines(FilePath, Items.Select(i => i.Value.ToString()));
+            var list = Items.Select(i => i.Value).ToList();
+            var text = JsonConvert.SerializeObject(list, Formatting.Indented);
+
+            File.WriteAllText(FilePath, text);
         }
 
         public bool Contains(string name) => Items.ContainsKey(name);
@@ -59,7 +66,7 @@ namespace H.NET.Plugins
             Save();
         }
 
-        public class InstanceNotFoundException : KeyNotFoundException
+        private class InstanceNotFoundException : KeyNotFoundException
         {
             public InstanceNotFoundException(string name) : base($"Instance {name} is not found in the instances file")
             {

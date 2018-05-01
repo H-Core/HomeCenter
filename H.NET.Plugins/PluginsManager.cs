@@ -13,8 +13,8 @@ namespace H.NET.Plugins
 
         public const string InstancesSubFolder = "Instances";
         public const string TempSubFolder = "Temp";
-        public const string SettingsExtension = ".txt";
-        public const string InstancesFileName = "instances.txt";
+        public const string SettingsExtension = ".json";
+        public const string InstancesFileName = "Instances.json";
 
         public Action<T, string> LoadAction { get; }
         public Func<T, string> SaveFunc { get; }
