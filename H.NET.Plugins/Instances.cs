@@ -7,7 +7,7 @@ namespace H.NET.Plugins
     {
         #region Properties
 
-        private InstancesFile File { get; }
+        private ItemsFile<Instance> File { get; }
         public Dictionary<string, Instance> Informations => File.Items;
         public Dictionary<string, RuntimeObject<T>> Objects { get; } = new Dictionary<string, RuntimeObject<T>>();
 
@@ -17,7 +17,7 @@ namespace H.NET.Plugins
 
         public Instances(string path)
         {
-            File = new InstancesFile(path);
+            File = new ItemsFile<Instance>(path, i => i.Name);
             foreach (var information in Informations)
             {
                 AddObject(information.Key);
@@ -41,7 +41,13 @@ namespace H.NET.Plugins
 
         public void Add(string name, string typeName, bool isEnabled)
         {
-            File.Add(name, typeName, isEnabled);
+            File.Add(new Instance
+            {
+                Name = name,
+                TypeName = typeName,
+                IsEnabled = isEnabled
+            });
+
             AddObject(name);
         }
 

@@ -6,19 +6,26 @@ using Newtonsoft.Json;
 
 namespace H.NET.Plugins
 {
-    public class InstancesFile
+    public class ItemsFile<T>
     {
         private string FilePath { get; }
-        public Dictionary<string, Instance> Items { get; } = new Dictionary<string, Instance>();
+        public Dictionary<string, T> Items { get; private set; } = new Dictionary<string, T>();
+        private Func<T, string> KeySelector { get; }
 
-        public InstancesFile(string path)
+        public ItemsFile(string path, Func<T, string> keySelector)
+        {
+            FilePath = path ?? throw new ArgumentNullException(nameof(path));
+            KeySelector = keySelector ?? throw new ArgumentNullException(nameof(keySelector));
+
+            Load(path);
+        }
+
+        private void Load(string path)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
                 throw new ArgumentException("Path is empty", nameof(path));
             }
-
-            FilePath = path;
 
             if (!File.Exists(path))
             {
@@ -26,9 +33,9 @@ namespace H.NET.Plugins
             }
 
             var text = File.ReadAllText(path);
-            var list = JsonConvert.DeserializeObject<List<Instance>>(text);
+            var list = JsonConvert.DeserializeObject<List<T>>(text);
 
-            Items = list.ToDictionary(i => i.Name, i => i);
+            Items = list.ToDictionary(KeySelector, i => i);
         }
 
         public void Save()
@@ -41,17 +48,14 @@ namespace H.NET.Plugins
 
         public bool Contains(string name) => Items.ContainsKey(name);
 
-        public Instance Get(string name) => Items.TryGetValue(name, out var result)
+        public T Get(string name) => Items.TryGetValue(name, out var result)
             ? result : throw new InstanceNotFoundException(name);
 
-        public void Add(string name, string typeName, bool isEnabled = true)
+        public void Add(T item)
         {
-            Items[name] = new Instance
-            {
-                Name = name,
-                TypeName = typeName,
-                IsEnabled = isEnabled
-            };
+            var key = KeySelector(item);
+            Items[key] = item;
+
             Save();
         }
 
