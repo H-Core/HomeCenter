@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using H.NET.Core;
 using H.NET.Storages;
 using HomeCenter.NET.Controls;
+using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Windows
 {
@@ -62,11 +63,17 @@ namespace HomeCenter.NET.Windows
 
         #region Event handlers
 
-        private void Window_Loaded(object sender, RoutedEventArgs e) => Update();
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            UpdateKeys();
+            UpdateData();
+            UpdateHotKey();
+        }
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Save();
+            SaveKeys();
+            SaveData();
 
             DialogResult = true;
             Close();
@@ -76,9 +83,9 @@ namespace HomeCenter.NET.Windows
 
         private void AddKeyButton_Click(object sender, RoutedEventArgs e)
         {
-            Save();
+            SaveKeys();
             Command.Keys.Add(new SingleKey(string.Empty));
-            Update();
+            UpdateKeys();
 
             /* TODO: Focus last element
             var control = DataPanel.Children.OfType<TextControl>().LastOrDefault();
@@ -95,9 +102,9 @@ namespace HomeCenter.NET.Windows
 
         private void AddDataButton_Click(object sender, RoutedEventArgs e)
         {
-            Save();
+            SaveData();
             Command.Lines.Add(new SingleCommand(string.Empty));
-            Update();
+            UpdateData();
         }
 
         private async void HotKeyButton_Click(object sender, RoutedEventArgs e)
@@ -109,25 +116,28 @@ namespace HomeCenter.NET.Windows
 
             HotKeyButton.IsEnabled = true;
 
-            Update();
+            UpdateHotKey();
         }
 
         #endregion
 
         #region Private methods
 
-        private void Save()
+        #region Keys
+
+        private void SaveKeys(int ignoredLine = -1)
         {
-            Command.Lines = DataPanel.Children.OfType<TextControl>().Select(c => new SingleCommand(c.Text)).ToList();
-            Command.Keys = KeysPanel.Children.OfType<TextControl>().Select(c => new SingleKey(c.Text)).ToList();
+            Command.Keys = KeysPanel
+                .Children
+                .OfType<TextControl>()
+                .Where((c, i) => i != ignoredLine)
+                .Select(c => new SingleKey(c.Text))
+                .ToList();
         }
 
-        private void Update()
+        private void UpdateKeys()
         {
-            HotKeyButton.Content = Command.HotKey;
-
-            KeysPanel.Children.Clear();
-            foreach (var key in Command.Keys)
+            var controls = Command.Keys.Select((key, i) =>
             {
                 var control = new TextControl(key.Text)
                 {
@@ -135,33 +145,67 @@ namespace HomeCenter.NET.Windows
                 };
                 control.Deleted += (sender, args) =>
                 {
+                    SaveKeys(ignoredLine: i);
                     Command.Keys.Remove(key);
-                    Update();
-                };
-                KeysPanel.Children.Add(control);
-            }
-            var addKeyButton = new Button {Content = "Add New"};
-            addKeyButton.Click += AddKeyButton_Click;
-            KeysPanel.Children.Add(addKeyButton);
 
-            DataPanel.Children.Clear();
-            foreach (var line in Command.Lines)
+                    UpdateKeys();
+                };
+
+                return (Control)control;
+            }).ToList();
+            controls.AddButton("Add New", AddKeyButton_Click);
+
+            KeysPanel.Update(controls);
+        }
+
+        #endregion
+
+        #region Data
+
+        private void SaveData(int ignoredLine = -1)
+        {
+            Command.Lines = DataPanel
+                .Children
+                .OfType<CommandControl>()
+                .Where((c, i) => i != ignoredLine)
+                .Select(c => new SingleCommand(c.ObjectDescription))
+                .ToList();
+        }
+
+        private void UpdateData()
+        {
+            var controls = Command.Lines.Select((line, i) =>
             {
-                var control = new TextControl(line.Text)
+                var control = new CommandControl(null, line.Text, editable: true, run: true, delete: true)
                 {
                     MinHeight = 25
                 };
                 control.Deleted += (sender, args) =>
                 {
+                    SaveData(ignoredLine: i);
+
                     Command.Lines.Remove(line);
-                    Update();
+                    UpdateData();
                 };
-                DataPanel.Children.Add(control);
-            }
-            var addDataButton = new Button { Content = "Add New" };
-            addDataButton.Click += AddDataButton_Click;
-            DataPanel.Children.Add(addDataButton);
+                control.Run += (sender, args) => MainWindow.GlobalRun(line.Text);
+
+                return (Control)control;
+            }).ToList();
+            controls.AddButton("Add New", AddDataButton_Click);
+
+            DataPanel.Update(controls);
         }
+
+        #endregion
+
+        #region Hot Key
+
+        private void UpdateHotKey()
+        {
+            HotKeyButton.Content = Command.HotKey;
+        }
+
+        #endregion
 
         #endregion
     }

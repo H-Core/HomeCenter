@@ -29,6 +29,27 @@ namespace HomeCenter.NET.Controls
             }
         }
 
+        public bool NameLabelEnabled {
+            get => NameLabel.Visibility == Visibility.Visible;
+            set => NameLabel.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public bool RunButtonEnabled {
+            get => RunButton.Visibility == Visibility.Visible;
+            set => RunButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public bool EditButtonEnabled
+        {
+            get => EditButton.Visibility == Visibility.Visible;
+            set => EditButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public bool DeleteButtonEnabled {
+            get => DeleteButton.Visibility == Visibility.Visible;
+            set => DeleteButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         #endregion
 
         #region Events
@@ -41,13 +62,20 @@ namespace HomeCenter.NET.Controls
 
         #region Constructors
 
-        public CommandControl(string name, string description, string hotKey = null, bool editable = false)
+        public CommandControl(string name, string description, string hotKey = null, bool editable = false, 
+            bool run = false, bool edit = false, bool delete = false)
         {
             InitializeComponent();
 
             ObjectName = name;
             ObjectDescription = description;
+
             IsEditable = editable;
+
+            NameLabelEnabled = name != null;
+            RunButtonEnabled = run;
+            EditButtonEnabled = edit;
+            DeleteButtonEnabled = delete;
 
             HotKeyLabel.Visibility = hotKey == null ? Visibility.Collapsed : Visibility.Visible;
             HotKeyLabel.Content = hotKey ?? string.Empty;

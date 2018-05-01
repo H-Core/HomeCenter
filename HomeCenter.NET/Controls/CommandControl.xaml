@@ -19,8 +19,8 @@
         <TextBox Grid.Column="1" x:Name="DescriptionTextBox"/>
         <Label Grid.Column="1" x:Name="DescriptionLabel"/>
         <Label Grid.Column="2" x:Name="HotKeyLabel" Width="100"/>
-        <Button Grid.Column="3" x:Name="EunButtton" Width="25" Content="R" Click="RunButton_Click"/>
-        <Button Grid.Column="4" x:Name="EditButtton" Width="25" Content="⚙" Click="EditButton_Click"/>
-        <Button Grid.Column="5" x:Name="DeleteButtton" Content="✖" Width="25" Click="DeleteButton_Click"/>
+        <Button Grid.Column="3" x:Name="RunButton" Width="25" Content="R" Click="RunButton_Click"/>
+        <Button Grid.Column="4" x:Name="EditButton" Width="25" Content="⚙" Click="EditButton_Click"/>
+        <Button Grid.Column="5" x:Name="DeleteButton" Content="✖" Width="25" Click="DeleteButton_Click"/>
     </Grid>
 </UserControl>

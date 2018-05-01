@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -100,7 +99,7 @@ namespace HomeCenter.NET.Windows
             var instances = ModuleManager.Instance.Instances.Objects;
             var controls = instances.Select(pair => CreateInstanceControl(pair.Key, pair.Value, Update));
 
-            UpdatePanel(ModulesPanel, controls);
+            ModulesPanel.Update(controls);
         });
 
         private void UpdateAvailableTypes() => SafeActions.Run(() =>
@@ -130,7 +129,7 @@ namespace HomeCenter.NET.Windows
                 return control;
             });
 
-            UpdatePanel(AvailableTypesPanel, controls);
+            AvailableTypesPanel.Update(controls);
         });
 
         private void UpdateAssemblies() => SafeActions.Run(() =>
@@ -154,7 +153,7 @@ namespace HomeCenter.NET.Windows
                 return control;
             });
 
-            UpdatePanel(AssembliesPanel, controls);
+            AssembliesPanel.Update(controls);
         });
 
         private void UpdateRecorders() => SafeActions.Run(() =>
@@ -188,15 +187,6 @@ namespace HomeCenter.NET.Windows
         #endregion
 
         #region Private static methods
-
-        private static void UpdatePanel(Panel panel, IEnumerable<Control> controls)
-        {
-            panel.Children.Clear();
-            foreach (var control in controls)
-            {
-                panel.Children.Add(control);
-            }
-        }
 
         private static InstanceControl CreateInstanceControl<T>(string name, RuntimeObject<T> instance, Action updateAction) where T : class, IModule
         {
@@ -263,7 +253,7 @@ namespace HomeCenter.NET.Windows
             var plugins = ModuleManager.Instance.GetPlugins<T>();
             var controls = plugins.Select(pair => CreateInstanceControl(pair.Key, pair.Value, updateAction));
 
-            UpdatePanel(panel, controls);
+            panel.Update(controls);
         }
 
         private static void UpdateComboBox<T>(Selector selector, string value) where T : class, IModule
