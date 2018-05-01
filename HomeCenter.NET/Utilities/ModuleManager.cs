@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using H.NET.Core;
-using H.NET.Core.Attributes;
 using H.NET.Core.Extensions;
 using H.NET.Plugins;
-using Newtonsoft.Json;
 
 namespace HomeCenter.NET.Utilities
 {
@@ -14,42 +10,14 @@ namespace HomeCenter.NET.Utilities
     {
         #region Properties
 
-        public class Item
-        {
-            public string Key { get; }
-            public object Value { get; }
-
-            public Item(string key, object value)
-            {
-                Key = key;
-                Value = value;
-            }
-        }
-
         public static PluginsManager<IModule> Instance { get; } = new PluginsManager<IModule>(Options.CompanyName,
-            (module, text) =>
+            (module, list) =>
             {
-                var list = JsonConvert.DeserializeObject<List<Item>>(text);
-                if (list == null)
-                {
-                    return;
-                }
-
                 foreach (var pair in list)
                 {
                     module.Settings.CopyFrom(pair.Key, pair.Value);
                 }
-            }, module =>
-            {
-                if (module == null)
-                {
-                    return null;
-                }
-
-                var list = module.Settings.Select(pair => new Item(pair.Key, pair.Value.Value)).ToList();
-
-                return JsonConvert.SerializeObject(list, Formatting.Indented);
-            });
+            }, module => module.Settings.Select(pair => new SettingItem(pair.Key, pair.Value.Value)));
 
         #endregion
 

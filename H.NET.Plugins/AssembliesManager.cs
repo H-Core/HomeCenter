@@ -82,6 +82,8 @@ namespace H.NET.Plugins
             {
                 var directory = Path.GetFileName(Path.GetDirectoryName(path));
                 var name = Path.GetFileName(path) ?? throw new Exception("Invalid file name");
+
+                // TODO: only for Emgu.CV.World. Or add special checkbox
                 if (string.Equals(directory, "x86", StringComparison.OrdinalIgnoreCase) ||
                     string.Equals(directory, "x64", StringComparison.OrdinalIgnoreCase))
                 {

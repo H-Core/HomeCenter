@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using H.NET.Plugins.Extensions;
 using H.NET.Plugins.Utilities;
+using Newtonsoft.Json;
 
 namespace H.NET.Plugins
 {
@@ -16,8 +17,8 @@ namespace H.NET.Plugins
         public const string SettingsExtension = ".json";
         public const string InstancesFileName = "Instances.json";
 
-        public Action<T, string> LoadAction { get; }
-        public Func<T, string> SaveFunc { get; }
+        public Action<T, IEnumerable<SettingItem>> LoadAction { get; }
+        public Func<T, IEnumerable<SettingItem>> SaveFunc { get; }
 
         public string SettingsFolder { get; }
         public string TempFolder { get; }
@@ -61,7 +62,7 @@ namespace H.NET.Plugins
 
         #region Constructors
 
-        public PluginsManager(string companyName, Action<T, string> loadAction, Func<T, string> saveFunc) : base(companyName)
+        public PluginsManager(string companyName, Action<T, IEnumerable<SettingItem>> loadAction, Func<T, IEnumerable<SettingItem>> saveFunc) : base(companyName)
         {
             LoadAction = loadAction;
             SaveFunc = saveFunc;
@@ -260,18 +261,31 @@ namespace H.NET.Plugins
             }
 
             var text = File.ReadAllText(path);
-            LoadAction?.Invoke(plugin, text);
-        }
-
-        private void SavePluginSettings(string name, T plugin)
-        {
-            var text = SaveFunc?.Invoke(plugin);
-            if (text == null)
+            var list = JsonConvert.DeserializeObject<List<SettingItem>>(text);
+            if (list == null || plugin == null)
             {
                 return;
             }
 
-            File.WriteAllText(GetSettingsFilePath(name), text);
+            LoadAction?.Invoke(plugin, list);
+        }
+
+        private void SavePluginSettings(string name, T plugin)
+        {
+            if (plugin == null)
+            {
+                return;
+            }
+
+            var list = SaveFunc?.Invoke(plugin);
+            if (list == null)
+            {
+                return;
+            }
+
+            var text = JsonConvert.SerializeObject(list, Formatting.Indented);
+            var path = GetSettingsFilePath(name);
+            File.WriteAllText(path, text);
         }
 
         #endregion
