@@ -61,7 +61,7 @@ namespace HomeCenter.NET.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Oemtilde")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string RecordKey {
             get {
                 return ((string)(this["RecordKey"]));

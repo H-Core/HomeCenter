@@ -12,7 +12,7 @@
       <Value Profile="(Default)">3000</Value>
     </Setting>
     <Setting Name="RecordKey" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Oemtilde</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="CommandsData" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
