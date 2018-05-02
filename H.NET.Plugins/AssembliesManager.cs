@@ -155,7 +155,7 @@ namespace H.NET.Plugins
         
         #region Update
 
-        public void Update(string name)
+        public bool UpdatingIsNeed(string name)
         {
             var settings = AssembliesSettingsFile.Get(name);
             var path = settings.OriginalPath;
@@ -163,15 +163,28 @@ namespace H.NET.Plugins
             if (string.IsNullOrWhiteSpace(path) ||
                 !File.Exists(path))
             {
-                return;
+                return false;
             }
 
             var time = settings.ModifiedTime;
             var checkTime = File.GetLastWriteTimeUtc(path);
             if (time == checkTime)
             {
+                return false;
+            }
+
+            return true;
+        }
+
+        public void Update(string name)
+        {
+            if (!UpdatingIsNeed(name))
+            {
                 return;
             }
+
+            var settings = AssembliesSettingsFile.Get(name);
+            var path = settings.OriginalPath;
 
             Uninstall(name);
             Install(path);
