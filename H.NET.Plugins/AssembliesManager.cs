@@ -181,7 +181,7 @@ namespace H.NET.Plugins
             });
 
             // Clear temp folders
-            Directory.EnumerateDirectories(TempFolder).AsParallel().ForAll(path =>
+            Directory.EnumerateDirectories(TempFolder, "*", SearchOption.AllDirectories).AsParallel().ForAll(path =>
             {
                 try
                 {
