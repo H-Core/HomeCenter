@@ -11,7 +11,7 @@ namespace HomeCenter.NET
     {
         private Windows.MainWindow Window { get; set; }
 
-        private void Application_Startup(object sender, StartupEventArgs e)
+        private async void Application_Startup(object sender, StartupEventArgs e)
         {
             var isKillAll = e.Args.Contains("/killall");
             if (isKillAll)
@@ -46,7 +46,19 @@ namespace HomeCenter.NET
                 Window.Show();
             }
 
-            Window.Load();
+            await Window.Load();
+
+            if (e.Args.Contains("/run"))
+            {
+                var commandIndex = e.Args.ToList().IndexOf("/run") + 1;
+                var text = e.Args[commandIndex].Trim('"');
+                var commands = text.Split(';');
+
+                foreach (var command in commands)
+                {
+                    NET.Windows.MainWindow.GlobalRun(command);
+                }
+            }
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)

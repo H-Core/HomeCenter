@@ -209,7 +209,7 @@ namespace HomeCenter.NET.Windows
             InputTextBox.Focus();
         }
 
-        public async void Load()
+        public async Task Load()
         {
             #region Runners
 
@@ -223,6 +223,7 @@ namespace HomeCenter.NET.Windows
             });
             GlobalRunner.AddRunner(new UiRunner
             {
+                RestartAction = command => Dispatcher.Invoke(() => Restart(command)),
                 ShowUiAction = () => Dispatcher.Invoke(Show),
                 ShowSettingsAction = () => Dispatcher.Invoke(ShowSettings),
                 ShowCommandsAction = () => Dispatcher.Invoke(ShowCommands),
@@ -405,9 +406,14 @@ namespace HomeCenter.NET.Windows
 
         #region Static methods
 
-        private static void Restart()
+        private static void Restart() => Restart(new List<string>());
+        private static void Restart(string command) => Restart(new[] {command});
+
+        private static void Restart(ICollection<string> commands)
         {
-            Process.Start($"\"{Options.FilePath}\"", "/restart");
+            var run = commands.Any() ? $"/run \"{string.Join(";", commands)}\"" : string.Empty;
+
+            Process.Start($"\"{Options.FilePath}\"", $"/restart {run}");
             Application.Current.Shutdown();
         }
 
