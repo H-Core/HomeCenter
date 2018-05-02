@@ -178,5 +178,17 @@ namespace HomeCenter.NET.Properties {
                 this["EnablePopUpMessages"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoUpdateAssemblies {
+            get {
+                return ((bool)(this["AutoUpdateAssemblies"]));
+            }
+            set {
+                this["AutoUpdateAssemblies"] = value;
+            }
+        }
     }
 }

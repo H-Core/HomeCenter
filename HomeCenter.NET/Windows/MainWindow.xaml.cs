@@ -406,13 +406,14 @@ namespace HomeCenter.NET.Windows
 
         #region Static methods
 
-        private static void Restart() => Restart(new List<string>());
-        private static void Restart(string command) => Restart(new[] {command});
+        private void Restart() => Restart(new List<string>());
+        private void Restart(string command) => Restart(new[] {command});
 
-        private static void Restart(ICollection<string> commands)
+        private void Restart(ICollection<string> commands)
         {
             var run = commands.Any() ? $"/run \"{string.Join(";", commands)}\"" : string.Empty;
 
+            IpcServer.Stop();
             Process.Start($"\"{Options.FilePath}\"", $"/restart {run}");
             Application.Current.Shutdown();
         }

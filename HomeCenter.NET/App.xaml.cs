@@ -48,6 +48,10 @@ namespace HomeCenter.NET
 
             await Window.Load();
 
+            if (Settings.Default.AutoUpdateAssemblies)
+            {
+                Run("update-assemblies");
+            }
             if (e.Args.Contains("/run"))
             {
                 var commandIndex = e.Args.ToList().IndexOf("/run") + 1;
@@ -56,7 +60,7 @@ namespace HomeCenter.NET
 
                 foreach (var command in commands)
                 {
-                    NET.Windows.MainWindow.GlobalRun(command);
+                    Run(command);
                 }
             }
         }
@@ -66,6 +70,8 @@ namespace HomeCenter.NET
             Window?.Dispose();
             Window = null;
         }
+
+        private static void Run(string command) => NET.Windows.MainWindow.GlobalRun(command);
 
         private static void OnException(object exceptionObject)
         {

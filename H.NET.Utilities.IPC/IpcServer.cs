@@ -9,6 +9,7 @@ namespace H.NET.Utilities
     {
         #region Properties
 
+        public bool IsEnabled { get; private set; }
         public int Port { get; }
         private TcpListener Listener { get; }
 
@@ -22,6 +23,8 @@ namespace H.NET.Utilities
             Listener = new TcpListener(new IPEndPoint(IPAddress.Any, Port));
             Listener.Start();
             Listener.BeginAcceptTcpClient(OnClientAccepted, Listener);
+
+            IsEnabled = true;
         }
 
         #endregion
@@ -33,9 +36,20 @@ namespace H.NET.Utilities
 
         #endregion
 
+        public void Stop()
+        {
+            IsEnabled = false;
+            Listener.Stop();
+        }
+
         private void OnClientAccepted(IAsyncResult result)
         {
             if (!(result.AsyncState is TcpListener listener))
+            {
+                return;
+            }
+
+            if (!IsEnabled)
             {
                 return;
             }

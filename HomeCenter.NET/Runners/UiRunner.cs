@@ -50,6 +50,7 @@ namespace HomeCenter.NET.Runners
             });
             AddInternalAction("update-assemblies", command =>
             {
+                Print("Checking updates...");
                 var names = GetCanBeUpdatedAssemblies();
                 if (!names.Any())
                 {
