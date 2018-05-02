@@ -27,6 +27,10 @@ namespace HomeCenter.NET.Runners
             AddInternalAction("deskband", DeskBandCommand);
             AddInternalAction("enable-module", command => ModuleManager.Instance.SetInstanceIsEnabled(command, true), "name");
             AddInternalAction("disable-module", command => ModuleManager.Instance.SetInstanceIsEnabled(command, false), "name");
+
+            AddInternalAction("install-assembly", command => ModuleManager.Instance.Install(command), "path");
+            AddInternalAction("uninstall-assembly", command => ModuleManager.Instance.Uninstall(command), "name");
+            AddInternalAction("update-assembly", command => ModuleManager.Instance.Update(command), "name");
         }
 
         #endregion

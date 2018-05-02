@@ -135,22 +135,48 @@ namespace H.NET.Plugins
             return assembly;
         }
 
-        public void Uninstall(Assembly assembly)
+        public void Uninstall(string name)
         {
             TryClean();
 
-            var toFolder = GetAssemblyFolder(assembly);
+            var toFolder = GetAssemblyFolder(name);
             Directory.Delete(toFolder, true);
 
-            var name = Path.GetFileNameWithoutExtension(assembly.Location);
             AssembliesSettingsFile.Delete(name);
 
             Load();
         }
 
+        public void Uninstall(Assembly assembly) => Uninstall(assembly.GetName().Name);
         public void Uninstall(Type type) => Uninstall(type.Assembly);
         public void Uninstall(object obj) => Uninstall(obj.GetType());
 
+        #endregion
+        
+        #region Update
+
+        public void Update(string name)
+        {
+            var settings = AssembliesSettingsFile.Get(name);
+            var path = settings.OriginalPath;
+
+            if (string.IsNullOrWhiteSpace(path) ||
+                !File.Exists(path))
+            {
+                return;
+            }
+
+            var time = settings.ModifiedTime;
+            var checkTime = File.GetLastWriteTimeUtc(path);
+            if (time == checkTime)
+            {
+                return;
+            }
+
+            Uninstall(name);
+            Install(path);
+        }
+        
         #endregion
 
         protected static object CreateInstance(Type type) => Activator.CreateInstance(type);
@@ -161,7 +187,8 @@ namespace H.NET.Plugins
         #region Private methods
         
         private string CreateActiveFolder() => DirectoryUtilities.CombineAndCreateDirectory(BaseFolder, $"{ActiveAssembliesSubFolderPrefix}{new Random().Next()}");
-        private string GetAssemblyFolder(Assembly assembly) => DirectoryUtilities.CombineAndCreateDirectory(AssembliesFolder, assembly.GetName().Name);
+        private string GetAssemblyFolder(string name) => DirectoryUtilities.CombineAndCreateDirectory(AssembliesFolder, name);
+        private string GetAssemblyFolder(Assembly assembly) => GetAssemblyFolder(assembly.GetName().Name);
 
         private static Assembly LoadAssembly(string path) => Assembly.LoadFrom(path);
 
