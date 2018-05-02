@@ -7,8 +7,8 @@ namespace H.NET.Plugins
     {
         #region Properties
 
-        private ItemsFile<Instance> File { get; }
-        public Dictionary<string, Instance> Informations => File.Items;
+        private SettingsFile<InstanceSettings> File { get; }
+        public Dictionary<string, InstanceSettings> Settings => File.Items;
         public Dictionary<string, RuntimeObject<T>> Objects { get; } = new Dictionary<string, RuntimeObject<T>>();
 
         #endregion
@@ -17,16 +17,21 @@ namespace H.NET.Plugins
 
         public Instances(string path)
         {
-            File = new ItemsFile<Instance>(path, i => i.Name);
-            foreach (var information in Informations)
+            File = new SettingsFile<InstanceSettings>(path, i => i.Name);
+            foreach (var setting in Settings)
             {
-                AddObject(information.Key);
+                AddObject(setting.Key);
             }
         }
 
         #endregion
 
         #region Public methods
+
+        //public void Load()
+        //{
+        //    File.Load();
+        //}
 
         public void Save()
         {
@@ -35,13 +40,13 @@ namespace H.NET.Plugins
 
         public bool Contains(string name) => File.Contains(name) && Objects.ContainsKey(name);
 
-        public Instance GetInfo(string name) => File.Get(name);
+        public InstanceSettings GetSettings(string name) => File.Get(name);
         public RuntimeObject<T> GetObject(string name) => Objects.TryGetValue(name, out var result)
             ? result : throw new InstanceNotFoundException(name);
 
         public void Add(string name, string typeName, bool isEnabled)
         {
-            File.Add(new Instance
+            File.Add(new InstanceSettings
             {
                 Name = name,
                 TypeName = typeName,

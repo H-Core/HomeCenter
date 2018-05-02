@@ -1,6 +1,6 @@
 ﻿namespace H.NET.Plugins
 {
-    public class Instance
+    public class InstanceSettings
     {
         #region Properties
 

@@ -6,33 +6,32 @@ using Newtonsoft.Json;
 
 namespace H.NET.Plugins
 {
-    public class ItemsFile<T>
+    public class SettingsFile<T>
     {
         private string FilePath { get; }
         public Dictionary<string, T> Items { get; private set; } = new Dictionary<string, T>();
         private Func<T, string> KeySelector { get; }
 
-        public ItemsFile(string path, Func<T, string> keySelector)
+        public SettingsFile(string path, Func<T, string> keySelector)
         {
             FilePath = path ?? throw new ArgumentNullException(nameof(path));
+            if (string.IsNullOrWhiteSpace(FilePath))
+            {
+                throw new ArgumentException("Path is empty", nameof(FilePath));
+            }
             KeySelector = keySelector ?? throw new ArgumentNullException(nameof(keySelector));
 
-            Load(path);
+            Load();
         }
 
-        private void Load(string path)
+        public void Load()
         {
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                throw new ArgumentException("Path is empty", nameof(path));
-            }
-
-            if (!File.Exists(path))
+            if (!File.Exists(FilePath))
             {
                 return;
             }
 
-            var text = File.ReadAllText(path);
+            var text = File.ReadAllText(FilePath);
             var list = JsonConvert.DeserializeObject<List<T>>(text);
 
             Items = list.ToDictionary(KeySelector, i => i);

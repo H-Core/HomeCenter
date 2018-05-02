@@ -164,12 +164,12 @@ namespace H.NET.Plugins
                 File.Delete(path);
             }
 
-            var instanceInfo = Instances.GetInfo(name);
-            var isEnabledTemp = instanceInfo.IsEnabled;
+            var instanceSettings = Instances.GetSettings(name);
+            var isEnabledTemp = instanceSettings.IsEnabled;
 
             SetInstanceIsEnabled(name, false);
             DeleteInstance(name);
-            AddInstance(newName, instanceInfo.TypeName, isEnabledTemp);
+            AddInstance(newName, instanceSettings.TypeName, isEnabledTemp);
         }
 
         public void AddInstance(string name, Type type, bool isEnabled) => AddInstance(name, type.FullName, isEnabled);
@@ -210,8 +210,8 @@ namespace H.NET.Plugins
             }
 
             var instanceObject = Instances.GetObject(name);
-            var instanceInfo = Instances.GetInfo(name);
-            var typeName = instanceInfo.TypeName;
+            var instanceSettings = Instances.GetSettings(name);
+            var typeName = instanceSettings.TypeName;
             var type = GetTypeByFullName(typeName);
             instanceObject.Type = type;
             if (value)
@@ -242,7 +242,7 @@ namespace H.NET.Plugins
                 instanceObject.Dispose();
             }
 
-            instanceInfo.IsEnabled = instanceObject.IsEnabled;
+            instanceSettings.IsEnabled = instanceObject.IsEnabled;
             Instances.Save();
         }
 
@@ -300,8 +300,10 @@ namespace H.NET.Plugins
         private void LoadPlugins()
         {
             Instances = new Instances<T>(InstancesFilePath);
+            //Instances.Load();
+
             AvailableTypes = GetAvailableTypes();
-            foreach (var pair in Instances.Informations)
+            foreach (var pair in Instances.Settings)
             {
                 var instance = pair.Value;
                 var name = instance.Name;
