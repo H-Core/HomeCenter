@@ -20,6 +20,7 @@
                     <c:BoolSettingControl Text="Enable Keyboard Hook:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnableKeyboardHook}"/>
                     <c:BoolSettingControl Text="Enable Mouse Hook:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnableMouseHook}"/>
                     <c:BoolSettingControl Text="Enable PopUp Messages:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnablePopUpMessages}"/>
+                    <c:BoolSettingControl Text="Auto-update assemblies:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=AutoUpdateAssemblies}"/>
                     <c:KeySettingControl Text="Record Button:" Key="{Binding Source={x:Static properties:Settings.Default},Path=RecordKey}"/>
                 </StackPanel>
             </TabItem>
