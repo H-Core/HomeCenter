@@ -116,7 +116,7 @@ namespace HomeCenter.NET.Windows
                 };
                 control.Deleted += (sender, args) =>
                 {
-                    ModuleManager.Instance.Deinstall(type);
+                    ModuleManager.Instance.Uninstall(type);
                     Update();
                 };
                 control.Added += (sender, args) =>
@@ -146,7 +146,7 @@ namespace HomeCenter.NET.Windows
                 };
                 control.Deleted += (sender, args) =>
                 {
-                    ModuleManager.Instance.Deinstall(assembly);
+                    ModuleManager.Instance.Uninstall(assembly);
                     Update();
                 };
 

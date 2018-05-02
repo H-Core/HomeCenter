@@ -30,8 +30,11 @@ namespace H.NET.Plugins.Extensions
                             !Path.GetFileName(i).StartsWith("mscorlib") &&
                             !Path.GetFileName(i).StartsWith("netstandard"))
                 .ToArray();
+
             list.AddRange(references);
-            list.AddRange(references.Select(Assembly.LoadFrom).SelectMany(GetDllPaths));
+            list.AddRange(references
+                .Select(Assembly.LoadFrom)
+                .SelectMany(GetDllPaths));
 
             // Emgu.CV and other wrapper fix
             list.AddRange(GetFilesIfExists(Path.Combine(folder, "x86")));

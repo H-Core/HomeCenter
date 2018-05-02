@@ -27,5 +27,17 @@ namespace H.NET.Plugins.Utilities
 
         public static string CombineAndCreateDirectory(params string[] arguments) =>
             Directory.CreateDirectory(Path.Combine(arguments)).FullName;
+
+        public static string GetFileCopyFromTempWithOtherFiles(string path, string tempDirectory = null)
+        {
+            var filename = Path.GetFileName(path);
+            var folder = Path.GetDirectoryName(path);
+            var temp = tempDirectory ?? Path.GetTempPath();
+
+            Copy(folder, temp, true);
+
+            return Path.Combine(temp, filename);
+        }
+
     }
 }

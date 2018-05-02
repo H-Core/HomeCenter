@@ -6,20 +6,20 @@ using Newtonsoft.Json;
 
 namespace H.NET.Plugins
 {
-    public class SettingsFile<T>
+    public class SettingsFile<T> where T : new()
     {
         private string FilePath { get; }
-        public Dictionary<string, T> Items { get; private set; } = new Dictionary<string, T>();
-        private Func<T, string> KeySelector { get; }
+        public Dictionary<string, T> Items { get; set; } = new Dictionary<string, T>();
+        private Func<T, string> NameSelector { get; }
 
-        public SettingsFile(string path, Func<T, string> keySelector)
+        public SettingsFile(string path, Func<T, string> nameSelector)
         {
             FilePath = path ?? throw new ArgumentNullException(nameof(path));
             if (string.IsNullOrWhiteSpace(FilePath))
             {
                 throw new ArgumentException("Path is empty", nameof(FilePath));
             }
-            KeySelector = keySelector ?? throw new ArgumentNullException(nameof(keySelector));
+            NameSelector = nameSelector ?? throw new ArgumentNullException(nameof(nameSelector));
         }
 
         public void Load()
@@ -32,7 +32,9 @@ namespace H.NET.Plugins
             var text = File.ReadAllText(FilePath);
             var list = JsonConvert.DeserializeObject<List<T>>(text);
 
-            Items = list.ToDictionary(KeySelector, i => i);
+            Items = list
+                //.Where(i => !string.IsNullOrWhiteSpace(NameSelector(i)))
+                .ToDictionary(NameSelector, i => i);
         }
 
         public void Save()
@@ -48,12 +50,28 @@ namespace H.NET.Plugins
         public T Get(string name) => Items.TryGetValue(name, out var result)
             ? result : throw new InstanceNotFoundException(name);
 
-        public void Add(T item)
+        public T GetOrAdd(string name)
         {
-            var key = KeySelector(item);
-            Items[key] = item;
+            if (!Contains(name))
+            {
+                Add(name, new T());
+            }
+
+            return Get(name);
+        }
+
+        public void Add(string name, T item)
+        {
+            Items[name] = item;
 
             Save();
+        }
+
+        public void Add(T name)
+        {
+            var key = NameSelector(name);
+
+            Add(key, name);
         }
 
         public void Delete(string name)

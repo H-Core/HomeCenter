@@ -13,7 +13,6 @@ namespace H.NET.Plugins
         #region Properties
 
         public const string InstancesSubFolder = "Instances";
-        public const string TempSubFolder = "Temp";
         public const string SettingsExtension = ".json";
         public const string InstancesFileName = "Instances.json";
 
@@ -21,37 +20,10 @@ namespace H.NET.Plugins
         public Func<T, IEnumerable<SettingItem>> SaveFunc { get; }
 
         public string SettingsFolder { get; }
-        public string TempFolder { get; }
         public string InstancesFilePath { get; }
 
         private string GetSettingsFilePath(string name) => Path.Combine(SettingsFolder, $"{name}{SettingsExtension}");
-        private string GetTempDirectory() => DirectoryUtilities.CombineAndCreateDirectory(TempFolder, $"{new Random().Next()}");
-
-        private string GetFileCopyFromTempWithOtherFiles(string path)
-        {
-            var filename = Path.GetFileName(path);
-            var folder = Path.GetDirectoryName(path);
-            var temp = GetTempDirectory();
-            DirectoryUtilities.Copy(folder, temp);
-
-            return Path.Combine(temp, filename);
-        }
-
-        private void TryClean()
-        {
-            Directory.EnumerateFiles(TempFolder, "*.*", SearchOption.AllDirectories).AsParallel().ForAll(path =>
-            {
-                try
-                {
-                    File.Delete(path);
-                }
-                catch (Exception)
-                {
-                    //ignored
-                }
-            });
-        }
-
+        
         public List<Type> AvailableTypes { get; private set; } = new List<Type>();
         private Type GetTypeByFullName(string name) => AvailableTypes
             .FirstOrDefault(i => string.Equals(i.FullName, name, StringComparison.OrdinalIgnoreCase));
@@ -68,7 +40,6 @@ namespace H.NET.Plugins
             SaveFunc = saveFunc;
 
             SettingsFolder = DirectoryUtilities.CombineAndCreateDirectory(BaseFolder, InstancesSubFolder);
-            TempFolder = DirectoryUtilities.CombineAndCreateDirectory(BaseFolder, TempSubFolder);
             InstancesFilePath = Path.Combine(SettingsFolder, InstancesFileName);
             Instances = new Instances<T>(InstancesFilePath);
         }
@@ -176,9 +147,7 @@ namespace H.NET.Plugins
 
         public void AddInstancesFromAssembly(string path, Type interfaceType, Predicate<Type> filter = null)
         {
-            path = GetFileCopyFromTempWithOtherFiles(path);
-
-            var assembly = InstallAndGet(path);
+            var assembly = Install(path);
             var types = assembly.GetTypesOfInterface(interfaceType);
             foreach (var type in types)
             {
