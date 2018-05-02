@@ -314,7 +314,7 @@ namespace HomeCenter.NET.Windows
         // TODO: Fix multi key up
         private void Global_KeyUp(object sender, KeyboardHookEventArgs e)
         {
-            if (e.Key == Options.RecordKey ||
+            if (e.Key != Keys.None && e.Key == Options.RecordKey ||
                 e.IsAltPressed && e.IsCtrlPressed)
             {
                 Manager.Stop();
@@ -334,7 +334,7 @@ namespace HomeCenter.NET.Windows
 
         private void Global_KeyDown(object sender, KeyboardHookEventArgs e)
         {
-            if (e.Key == Options.RecordKey ||
+            if (e.Key != Keys.None && e.Key == Options.RecordKey ||
                 e.IsAltPressed && e.IsCtrlPressed)
             {
                 Manager.Start();
