@@ -300,7 +300,6 @@ namespace H.NET.Plugins
         private void LoadPlugins()
         {
             Instances = new Instances<T>(InstancesFilePath);
-            //Instances.Load();
 
             AvailableTypes = GetAvailableTypes();
             foreach (var pair in Instances.Settings)

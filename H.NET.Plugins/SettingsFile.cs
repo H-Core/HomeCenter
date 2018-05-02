@@ -20,8 +20,6 @@ namespace H.NET.Plugins
                 throw new ArgumentException("Path is empty", nameof(FilePath));
             }
             KeySelector = keySelector ?? throw new ArgumentNullException(nameof(keySelector));
-
-            Load();
         }
 
         public void Load()
