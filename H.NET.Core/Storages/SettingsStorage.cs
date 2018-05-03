@@ -17,6 +17,8 @@ namespace H.NET.Core.Storages
             {
                 base[key] = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(key));
+
+                value.Set();
             }
         }
 
@@ -28,6 +30,7 @@ namespace H.NET.Core.Storages
             }
 
             thisSetting.Value = value;
+            thisSetting.Set();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(key));
         }
 

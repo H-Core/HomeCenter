@@ -142,7 +142,7 @@ namespace H.NET.Core.Runners
 
         protected async Task<string> WaitNextCommand(int timeout)
         {
-            var recordTimeout = (int)(0.7 * timeout);
+            var recordTimeout = (int)(0.6 * timeout);
             Run($"start-record {recordTimeout}");
 
             IsWaitCommand = true;

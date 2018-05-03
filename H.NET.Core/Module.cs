@@ -37,32 +37,19 @@ namespace H.NET.Core
         {
             Name = GetType().FullName;
 
-            Settings.PropertyChanged += OnPropertyChanged;
+            Settings.PropertyChanged += (sender, args) =>
+            {
+                var key = args.PropertyName;
+                if (!Settings.ContainsKey(key))
+                {
+                    Log($"Settings is not exists: {key}");
+                }
+            };
         }
 
         #endregion
 
         #region Private/protected methods
-
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs args)
-        {
-            var key = args.PropertyName;
-            if (!Settings.ContainsKey(key))
-            {
-                Log($"Settings is not exists: {key}");
-                return;
-            }
-
-            var setting = Settings[key];
-
-            //if (!setting.IsValid())
-            //{
-            //    Log($"Warning: {setting.Key}: {setting.Value} is not valid");
-            //    //return;
-            //}
-
-            setting.Set();
-        }
 
         #region Settings
 
