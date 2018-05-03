@@ -62,7 +62,16 @@ namespace HomeCenter.NET.Windows
 
             #region Manager
 
-            Manager.NewText += Run;
+            Manager.NewText += text =>
+            {
+                if (Runner.IsWaitCommand)
+                {
+                    Runner.StopWaitCommand(text);
+                    return;
+                }
+
+                Run(text);
+            };
             Manager.Started += (sender, args) => Dispatcher.Invoke(() =>
             {
                 RecordButton.Content = "🔊";
@@ -227,7 +236,7 @@ namespace HomeCenter.NET.Windows
                 ShowUiAction = () => Dispatcher.Invoke(Show),
                 ShowSettingsAction = () => Dispatcher.Invoke(ShowSettings),
                 ShowCommandsAction = () => Dispatcher.Invoke(ShowCommands),
-                StartRecordAction = () => Dispatcher.Invoke(() => RecordButton_Click(this, EventArgs.Empty))
+                StartRecordAction = timeout => Dispatcher.Invoke(() => StartRecord(timeout))
             });
 
             #endregion
@@ -304,10 +313,7 @@ namespace HomeCenter.NET.Windows
             }
         }
 
-        private void RecordButton_Click(object sender, EventArgs e)
-        {
-            Manager.ChangeWithTimeout(3000);
-        }
+        private void RecordButton_Click(object sender, EventArgs e) => StartRecord(3000);
 
         private void MenuButton_Click(object sender, EventArgs e) => ShowCommands();
         private void SettingsButton_Click(object sender, EventArgs e) => ShowSettings();
@@ -416,6 +422,11 @@ namespace HomeCenter.NET.Windows
             IpcServer.Stop();
             Process.Start($"\"{Options.FilePath}\"", $"/restart {run}");
             Application.Current.Shutdown();
+        }
+
+        private void StartRecord(int timeout)
+        {
+            Manager.ChangeWithTimeout(timeout);
         }
 
         public static async Task<KeysCombination> CatchKey()

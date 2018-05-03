@@ -137,6 +137,38 @@ namespace H.NET.Core.Runners
             }
         }
 
+        public static bool IsWaitCommand { get; set; }
+        public static string WaitCommand { get; set; }
+
+        protected async Task<string> WaitNextCommand(int timeout)
+        {
+            var recordTimeout = (int)(0.8 * timeout);
+            Run($"start-record {recordTimeout}");
+
+            IsWaitCommand = true;
+
+            var time = 0;
+            while (IsWaitCommand && time < timeout)
+            {
+                await Task.Delay(10);
+                time += 10;
+            }
+
+            if (IsWaitCommand)
+            {
+                WaitCommand = null;
+            }
+            IsWaitCommand = false;
+
+            return WaitCommand;
+        }
+
+        public static void StopWaitCommand(string command)
+        {
+            WaitCommand = command;
+            IsWaitCommand = false;
+        }
+
         protected void AddVariable(string key, Func<string> action) => Variables[key] = action;
         public object GetVariableValue(string key) => Variables.TryGetValue(key, out var func) ? func?.Invoke() : null;
 
