@@ -220,24 +220,31 @@ namespace HomeCenter.NET.Windows
 
         public async Task Load()
         {
-            #region Runners
+            #region Static Runners
 
-            GlobalRunner.AddRunner(new DefaultRunner());
-            GlobalRunner.AddRunner(new KeyboardRunner());
-            GlobalRunner.AddRunner(new WindowsRunner());
-            GlobalRunner.AddRunner(new ClipboardRunner
+            var staticRunners = new List<IRunner>
             {
-                ClipboardAction = command => Dispatcher.Invoke(() => Clipboard.SetText(command)),
-                ClipboardFunc = () => Dispatcher.Invoke(Clipboard.GetText)
-            });
-            GlobalRunner.AddRunner(new UiRunner
+                new DefaultRunner(),
+                new KeyboardRunner(),
+                new WindowsRunner(),
+                new ClipboardRunner
+                {
+                    ClipboardAction = command => Dispatcher.Invoke(() => Clipboard.SetText(command)),
+                    ClipboardFunc = () => Dispatcher.Invoke(Clipboard.GetText)
+                },
+                new UiRunner
+                {
+                    RestartAction = command => Dispatcher.Invoke(() => Restart(command)),
+                    ShowUiAction = () => Dispatcher.Invoke(Show),
+                    ShowSettingsAction = () => Dispatcher.Invoke(ShowSettings),
+                    ShowCommandsAction = () => Dispatcher.Invoke(ShowCommands),
+                    StartRecordAction = timeout => Dispatcher.Invoke(() => StartRecord(timeout))
+                }
+            };
+            foreach (var runner in staticRunners)
             {
-                RestartAction = command => Dispatcher.Invoke(() => Restart(command)),
-                ShowUiAction = () => Dispatcher.Invoke(Show),
-                ShowSettingsAction = () => Dispatcher.Invoke(ShowSettings),
-                ShowCommandsAction = () => Dispatcher.Invoke(ShowCommands),
-                StartRecordAction = timeout => Dispatcher.Invoke(() => StartRecord(timeout))
-            });
+                ModuleManager.Instance.AddStaticInstance(runner.Name, runner);
+            }
 
             #endregion
 

@@ -18,6 +18,14 @@ namespace H.NET.Plugins
         public Instances(string path)
         {
             File = new SettingsFile<InstanceSettings>(path, i => i.Name);
+        }
+
+        #endregion
+
+        #region Public methods
+
+        public void Load()
+        {
             File.Load();
 
             foreach (var setting in Settings)
@@ -25,10 +33,6 @@ namespace H.NET.Plugins
                 AddObject(setting.Key);
             }
         }
-
-        #endregion
-
-        #region Public methods
 
         public void Save()
         {

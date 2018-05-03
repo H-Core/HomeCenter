@@ -56,8 +56,9 @@ namespace H.NET.Plugins
             {
                 base.Load();
 
-                Dispose();
+                //Dispose();
 
+                Instances.Load();
                 LoadPlugins();
             }
             catch (Exception exception)
@@ -139,8 +140,6 @@ namespace H.NET.Plugins
             {
                 instanceObject.Exception = exception;
             }
-
-            Instances.Save();
         }
 
         public void RenameInstance(string name, string newName)
@@ -295,8 +294,6 @@ namespace H.NET.Plugins
 
         private void LoadPlugins()
         {
-            Instances = new Instances<T>(InstancesFilePath);
-
             AvailableTypes = GetAvailableTypes();
             foreach (var pair in Instances.Settings)
             {

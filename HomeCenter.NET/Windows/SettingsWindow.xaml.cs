@@ -205,10 +205,10 @@ namespace HomeCenter.NET.Windows
                 Height = 25,
                 Color = module != null ? Colors.LightGreen : Colors.Bisque,
                 EnableEditing = module != null && module.Settings?.Count > 0,
-                EnableEnabling = instance.Exception == null,
+                EnableEnabling = !instance.IsStatic && instance.Exception == null,
                 ObjectIsEnabled = instance.IsEnabled,
-                EnableRenaming = instance.Type?.AllowMultipleInstance() ?? false,
-                EnableDeleting = deletingAllowed
+                EnableRenaming = !instance.IsStatic && (instance.Type?.AllowMultipleInstance() ?? false),
+                EnableDeleting = !instance.IsStatic && deletingAllowed
             };
             control.Deleted += (sender, args) =>
             {

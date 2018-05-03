@@ -15,10 +15,9 @@ namespace HomeCenter.NET.Runners
         #region Properties
 
         public IStorage<Command> Storage { get; }
-        private List<IRunner> Runners { get; } = new List<IRunner>();
         public List<string> History { get; } = new List<string>();
 
-        private List<IRunner> AllRunners => Options.Runners.Concat(Runners).ToList();
+        private static List<IRunner> Runners => Options.Runners;
 
         #endregion
 
@@ -40,25 +39,16 @@ namespace HomeCenter.NET.Runners
 
         #region Public methods
 
-        public void AddRunner(IRunner runner)
-        {
-            runner.NewSpeech += Say;
-            runner.NewOutput += Print;
-            runner.NewCommand += Run;
-
-            Runners.Add(runner);
-        }
-
-        public (IRunner, string)[] GetSupportedCommands() => AllRunners
+        public (IRunner, string)[] GetSupportedCommands() => Runners
             .Select(runner => (runner: runner, commands: runner.GetSupportedCommands()))
             .SelectMany(i => i.commands, (i, command) => (i.runner, command))
             .ToArray();
 
-        public string[] GetSupportedVariables() => AllRunners.SelectMany(i => i.GetSupportedVariables()).ToArray();
+        public string[] GetSupportedVariables() => Runners.SelectMany(i => i.GetSupportedVariables()).ToArray();
 
         public IRunner GetRunnerFor(string key, string data)
         {
-            foreach (var runner in AllRunners)
+            foreach (var runner in Runners)
             {
                 if (runner.IsSupport(key, data))
                 {
@@ -72,10 +62,10 @@ namespace HomeCenter.NET.Runners
             return null;
         }
 
-        public object GetVariableValue(string key) => 
-            AllRunners.FirstOrDefault(i => i.GetSupportedVariables().Contains(key))?.GetVariableValue(key);
+        public object GetVariableValue(string key) =>
+            Runners.FirstOrDefault(i => i.GetSupportedVariables().Contains(key))?.GetVariableValue(key);
 
-        private bool IsInternal(string key, string data) => AllRunners.Any(i => i.IsInternal(key, data));
+        private bool IsInternal(string key, string data) => Runners.Any(i => i.IsInternal(key, data));
 
         #endregion
 
@@ -182,19 +172,6 @@ namespace HomeCenter.NET.Runners
             return await Task.Run(() => runner.Run(key, data));
         }
 
-
-        #endregion
-
-        #region IDisposable
-
-        public override void Dispose()
-        {
-            foreach (var runner in Runners)
-            {
-                runner.Dispose();
-            }
-            Runners.Clear();
-        }
 
         #endregion
     }
