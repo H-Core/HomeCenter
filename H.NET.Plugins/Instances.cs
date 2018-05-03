@@ -87,7 +87,7 @@ namespace H.NET.Plugins
 
         #region Private methods
 
-        private void AddObject(string name)
+        public void AddObject(string name)
         {
             if (Objects.ContainsKey(name))
             {

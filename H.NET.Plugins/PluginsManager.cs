@@ -23,7 +23,7 @@ namespace H.NET.Plugins
         public string InstancesFilePath { get; }
 
         private string GetSettingsFilePath(string name) => Path.Combine(SettingsFolder, $"{name}{SettingsExtension}");
-        
+
         public List<Type> AvailableTypes { get; private set; } = new List<Type>();
         private Type GetTypeByFullName(string name) => AvailableTypes
             .FirstOrDefault(i => string.Equals(i.FullName, name, StringComparison.OrdinalIgnoreCase));
@@ -98,22 +98,49 @@ namespace H.NET.Plugins
         public List<KeyValuePair<string, RuntimeObject<T1>>> GetEnabledPlugins<T1>() where T1 : class, T =>
             GetPlugins<T1>().Where(i => i.Value.IsEnabled).ToList();
 
-        public RuntimeObject<T1> GetPlugin<T1>(string name) where T1 : class, T => 
+        public RuntimeObject<T1> GetPlugin<T1>(string name) where T1 : class, T =>
             GetPlugins<T1>()
             .FirstOrDefault(i => string.Equals(i.Key, name, StringComparison.OrdinalIgnoreCase))
             .Value;
 
-        private void AddInstance(string name, string typeName, bool isEnabled)
+        private void CreateSettingsFile(string name)
         {
-            Instances.Add(name, typeName, isEnabled);
-
             var path = GetSettingsFilePath(name);
             if (!File.Exists(path))
             {
                 File.WriteAllText(path, string.Empty);
             }
+        }
+
+        private void AddInstance(string name, string typeName, bool isEnabled)
+        {
+            Instances.Add(name, typeName, isEnabled);
+            CreateSettingsFile(name);
 
             SetInstanceIsEnabled(name, isEnabled);
+        }
+
+        public void AddStaticInstance(string name, T obj)
+        {
+            CreateSettingsFile(name);
+
+            Instances.AddObject(name);
+            var instanceObject = Instances.GetObject(name);
+            instanceObject.Type = obj.GetType();
+            instanceObject.IsStatic = true;
+
+            try
+            {
+                LoadPluginSettings(name, obj);
+
+                instanceObject.Value = obj;
+            }
+            catch (Exception exception)
+            {
+                instanceObject.Exception = exception;
+            }
+
+            Instances.Save();
         }
 
         public void RenameInstance(string name, string newName)
@@ -169,7 +196,7 @@ namespace H.NET.Plugins
             SetInstanceIsEnabled(name, false);
 
             Instances.Delete(name);
-        } 
+        }
 
         public void SetInstanceIsEnabled(string name, bool value)
         {

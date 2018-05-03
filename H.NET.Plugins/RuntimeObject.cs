@@ -42,6 +42,7 @@ namespace H.NET.Plugins
         }
 
         public Type Type { get; set; }
+        public bool IsStatic { get; set; }
 
         public bool IsEnabled => Value != null;
 
