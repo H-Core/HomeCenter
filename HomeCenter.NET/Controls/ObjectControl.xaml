@@ -13,11 +13,13 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Label x:Name="NameLabel" Content="{Binding Path=ObjectName}" Width="100" Grid.Column="0"/>
         <Label Content="{Binding Path=ObjectDescription}" Grid.Column="1"/>
-        <Button x:Name="AddButtton" Width="25" Content="+" Grid.Column="2" Click="AddButton_Click"/>
-        <Button x:Name="EditButtton" Width="25" Content="⚙" Grid.Column="3" Click="EditButton_Click"/>
-        <Button x:Name="DeleteButtton" Content="✖" Width="25" Grid.Column="4" Click="DeleteButton_Click"/>
+        <Button x:Name="UpdateButton" Width="25" Content="U" Grid.Column="2" Click="UpdateButton_Click"/>
+        <Button x:Name="AddButton" Width="25" Content="+" Grid.Column="3" Click="AddButton_Click"/>
+        <Button x:Name="EditButton" Width="25" Content="⚙" Grid.Column="4" Click="EditButton_Click"/>
+        <Button x:Name="DeleteButton" Content="✖" Width="25" Grid.Column="5" Click="DeleteButton_Click"/>
     </Grid>
 </UserControl>

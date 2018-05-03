@@ -260,7 +260,7 @@ namespace H.NET.Plugins
         #endregion
 
         private List<Type> GetAvailableTypes() => ActiveAssemblies
-            .SelectMany(i => i.GetTypesOfInterface<T>())
+            .SelectMany(i => i.Value.GetTypesOfInterface<T>())
             .Where(TypeIsAvailable)
             .ToList();
 

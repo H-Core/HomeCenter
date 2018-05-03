@@ -27,26 +27,32 @@ namespace HomeCenter.NET.Controls
             set => NameLabel.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
         }
 
+        public bool EnableUpdating {
+            get => UpdateButton.Visibility == Visibility.Visible;
+            set => UpdateButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+        }
+
         public bool EnableAdding {
-            get => AddButtton.Visibility == Visibility.Visible;
-            set => AddButtton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            get => AddButton.Visibility == Visibility.Visible;
+            set => AddButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public bool EnableEditing
         {
-            get => EditButtton.Visibility == Visibility.Visible;
-            set => EditButtton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            get => EditButton.Visibility == Visibility.Visible;
+            set => EditButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public bool EnableDeleting {
-            get => DeleteButtton.Visibility == Visibility.Visible;
-            set => DeleteButtton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
+            get => DeleteButton.Visibility == Visibility.Visible;
+            set => DeleteButton.Visibility = value ? Visibility.Visible : Visibility.Collapsed;
         }
 
         #endregion
 
         #region Events
 
+        public event EventHandler Updated;
         public event EventHandler Added;
         public event EventHandler Edited;
         public event EventHandler Deleted;
@@ -71,6 +77,9 @@ namespace HomeCenter.NET.Controls
         #endregion
 
         #region Event handlers
+
+        private void UpdateButton_Click(object sender, RoutedEventArgs e) =>
+            Updated?.Invoke(this, EventArgs.Empty);
 
         private void AddButton_Click(object sender, RoutedEventArgs e) =>
             Added?.Invoke(this, EventArgs.Empty);

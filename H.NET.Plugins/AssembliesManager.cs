@@ -29,7 +29,7 @@ namespace H.NET.Plugins
         public SettingsFile<AssemblySettings> AssembliesSettingsFile { get; }
         public Dictionary<string, AssemblySettings> AssembliesSettings => AssembliesSettingsFile.Items;
 
-        public List<Assembly> ActiveAssemblies { get; private set; } = new List<Assembly>();
+        public Dictionary<string, Assembly> ActiveAssemblies { get; private set; } = new Dictionary<string, Assembly>();
 
         private string GetTempDirectory() => DirectoryUtilities.CombineAndCreateDirectory(TempFolder, $"{new Random().Next()}");
 
@@ -72,7 +72,7 @@ namespace H.NET.Plugins
                 .Where(i => !string.IsNullOrWhiteSpace(i))
                 .Where(File.Exists)
                 .Select(LoadAssembly)
-                .ToList();
+                .ToDictionary(i => i.GetSimpleName(), i => i);
         }
 
         public virtual void Save()
@@ -147,7 +147,7 @@ namespace H.NET.Plugins
             Load();
         }
 
-        public void Uninstall(Assembly assembly) => Uninstall(assembly.GetName().Name);
+        public void Uninstall(Assembly assembly) => Uninstall(assembly.GetSimpleName());
         public void Uninstall(Type type) => Uninstall(type.Assembly);
         public void Uninstall(object obj) => Uninstall(obj.GetType());
 
@@ -201,7 +201,7 @@ namespace H.NET.Plugins
         
         private string CreateActiveFolder() => DirectoryUtilities.CombineAndCreateDirectory(BaseFolder, $"{ActiveAssembliesSubFolderPrefix}{new Random().Next()}");
         private string GetAssemblyFolder(string name) => DirectoryUtilities.CombineAndCreateDirectory(AssembliesFolder, name);
-        private string GetAssemblyFolder(Assembly assembly) => GetAssemblyFolder(assembly.GetName().Name);
+        private string GetAssemblyFolder(Assembly assembly) => GetAssemblyFolder(assembly.GetSimpleName());
 
         private static Assembly LoadAssembly(string path) => Assembly.LoadFrom(path);
 

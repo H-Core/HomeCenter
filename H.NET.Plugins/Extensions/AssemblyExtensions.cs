@@ -19,6 +19,8 @@ namespace H.NET.Plugins.Extensions
 
         public static string GetFolder(this Assembly assembly) => Path.GetDirectoryName(assembly.Location) ?? ".";
 
+        public static string GetSimpleName(this Assembly assembly) => assembly.GetName().Name;
+
         public static string[] GetDllPaths(this Assembly assembly)
         {
             var list = new List<string> { assembly.Location };

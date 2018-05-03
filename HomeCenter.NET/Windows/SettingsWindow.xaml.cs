@@ -112,7 +112,8 @@ namespace HomeCenter.NET.Windows
                     Height = 25,
                     Color = Colors.LightGreen,
                     EnableEditing = false,
-                    EnableAdding = type.AllowMultipleInstance()
+                    EnableAdding = type.AllowMultipleInstance(),
+                    EnableUpdating = false
                 };
                 control.Deleted += (sender, args) =>
                 {
@@ -135,18 +136,25 @@ namespace HomeCenter.NET.Windows
         private void UpdateAssemblies() => SafeActions.Run(() =>
         {
             var assemblies = ModuleManager.Instance.ActiveAssemblies;
-            var controls = assemblies.Select(assembly =>
+            var controls = assemblies.Select(pair =>
             {
-                var control = new ObjectControl(assembly.GetName().Name)
+                var name = pair.Key;
+                var control = new ObjectControl(name)
                 {
                     Height = 25,
                     Color = Colors.LightGreen,
                     EnableEditing = false,
-                    EnableAdding = false
+                    EnableAdding = false,
+                    EnableUpdating = ModuleManager.Instance.UpdatingIsNeed(name)
                 };
                 control.Deleted += (sender, args) =>
                 {
-                    ModuleManager.Instance.Uninstall(assembly);
+                    ModuleManager.Instance.Uninstall(name);
+                    Update();
+                };
+                control.Updated += (sender, args) =>
+                {
+                    ModuleManager.Instance.Update(name);
                     Update();
                 };
 
