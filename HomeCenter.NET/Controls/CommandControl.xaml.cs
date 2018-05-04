@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media;
 
 namespace HomeCenter.NET.Controls
 {
@@ -16,6 +17,15 @@ namespace HomeCenter.NET.Controls
             {
                 DescriptionLabel.Content = value;
                 DescriptionTextBox.Text = value;
+            }
+        }
+
+        private Color _color;
+        public Color Color {
+            get => _color;
+            set {
+                _color = value;
+                Background = new SolidColorBrush(value);
             }
         }
 
