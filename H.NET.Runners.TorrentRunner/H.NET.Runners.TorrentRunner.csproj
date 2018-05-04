@@ -50,6 +50,7 @@
     <Compile Include="GoogleSearch.cs" />
     <Compile Include="main.cs" />
     <Compile Include="TestManualConnection.cs" />
+    <Compile Include="TextUtilities.cs" />
     <Compile Include="Top10Listener.cs" />
     <Compile Include="TorrentRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
