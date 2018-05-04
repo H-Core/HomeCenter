@@ -47,7 +47,7 @@ namespace H.NET.Runners.TorrentRunner
             AddSetting(nameof(StartSizeMb), o => StartSizeMb = o, null, 20.0);
             AddSetting(nameof(MaxSearchResults), o => MaxSearchResults = o, null, 3);
 
-            AddAction("torrent", TorrentCommand, "text");
+            AddAsyncAction("torrent", TorrentCommand, "text");
 
             Settings.PropertyChanged += (sender, args) =>
             {
@@ -172,7 +172,7 @@ namespace H.NET.Runners.TorrentRunner
             return bestTorrent?.TorrentPath;
         }
 
-        private async void TorrentCommand(string text)
+        private async Task TorrentCommand(string text)
         {
             Say($"Ищу торрент {text}");
 
@@ -200,10 +200,10 @@ namespace H.NET.Runners.TorrentRunner
             }
 
             Say("Нашла!");
-            QTorrentCommand(path);
+            await QTorrentCommand(path);
         }
 
-        private async void QTorrentCommand(string torrentPath)
+        private async Task QTorrentCommand(string torrentPath)
         {
             var path = GetFilePath(torrentPath);
             if (RunCommand(path, false))
