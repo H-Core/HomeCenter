@@ -13,6 +13,7 @@ namespace HomeCenter.NET.Runners
         private const int DefaultRecordTimeout = 10000;
 
         public Action<string> RestartAction { private get; set; }
+        public Action<string> UpdateRestartAction { private get; set; }
         public Action ShowUiAction { private get; set; }
         public Action ShowSettingsAction { private get; set; }
         public Action ShowCommandsAction { private get; set; }
@@ -25,6 +26,7 @@ namespace HomeCenter.NET.Runners
         public UiRunner()
         {
             AddInternalAction("restart", command => RestartAction?.Invoke(command));
+            AddInternalAction("update-restart", command => UpdateRestartAction?.Invoke(command));
             AddInternalAction("show-ui", command => ShowUiAction?.Invoke());
             AddInternalAction("show-settings", command => ShowSettingsAction?.Invoke());
             AddInternalAction("show-commands", command => ShowCommandsAction?.Invoke());
@@ -62,7 +64,7 @@ namespace HomeCenter.NET.Runners
 
                 var arguments = string.Join(";", 
                     names.Select(name => $"install-assembly {ModuleManager.Instance.AssembliesSettingsFile.Get(name).OriginalPath}"));
-                arguments += ";print All modules have been updated";
+                arguments += ";update-restart print All modules have been updated";
 
                 foreach (var name in names)
                 {
@@ -77,7 +79,7 @@ namespace HomeCenter.NET.Runners
                     }
                 }
 
-                Run($"restart {arguments}");
+                Run($"update-restart {arguments}");
             });
         }
 

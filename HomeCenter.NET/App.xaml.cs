@@ -47,9 +47,10 @@ namespace HomeCenter.NET
                 Window.Show();
             }
 
-            await Window.Load();
+            var isUpdating = e.Args.Contains("/updating");
+            await Window.Load(isUpdating);
 
-            if (Settings.Default.AutoUpdateAssemblies)
+            if (!isUpdating && Settings.Default.AutoUpdateAssemblies)
             {
                 Run("update-assemblies");
             }

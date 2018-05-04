@@ -20,7 +20,7 @@ namespace HomeCenter.NET.Runners
         public DefaultRunner(Action<string> printAction, Func<string, Task> sayFunc)
         {
             AddAsyncAction("say", sayFunc, "text");
-            AddAction("print", printAction, "text");
+            AddInternalAction("print", printAction, "text");
             AddInternalAction("run", Run, "other_command_key");
 
             AddAsyncAction("sleep", SleepCommand, "integer");

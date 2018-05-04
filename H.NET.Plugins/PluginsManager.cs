@@ -59,7 +59,9 @@ namespace H.NET.Plugins
                 //Dispose();
 
                 Instances.Load();
-                LoadPlugins();
+
+                AvailableTypes = GetAvailableTypes();
+                EnableInstances();
             }
             catch (Exception exception)
             {
@@ -292,9 +294,8 @@ namespace H.NET.Plugins
 
         private bool TypeIsAvailable(Type type) => type.GetConstructors().Any(c => c.IsPublic && c.GetParameters().Length == 0);
 
-        private void LoadPlugins()
+        public void EnableInstances()
         {
-            AvailableTypes = GetAvailableTypes();
             foreach (var pair in Instances.Settings)
             {
                 var instance = pair.Value;

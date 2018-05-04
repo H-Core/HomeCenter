@@ -44,7 +44,7 @@ namespace HomeCenter.NET.Windows
 
         private void ReloadPluginsButton_Click(object sender, RoutedEventArgs e)
         {
-            ModuleManager.Instance.Load();
+            //ModuleManager.Instance.Load();
 
             Update();
         }

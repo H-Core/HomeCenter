@@ -216,7 +216,7 @@ namespace HomeCenter.NET.Windows
             InputTextBox.Focus();
         }
 
-        public async Task Load()
+        public async Task Load(bool isUpdating = false)
         {
             #region Static Runners
 
@@ -233,6 +233,7 @@ namespace HomeCenter.NET.Windows
                 new UiRunner
                 {
                     RestartAction = command => Dispatcher.Invoke(() => Restart(command)),
+                    UpdateRestartAction = command => Dispatcher.Invoke(() => UpdateRestart(command)),
                     ShowUiAction = () => Dispatcher.Invoke(Show),
                     ShowSettingsAction = () => Dispatcher.Invoke(ShowSettings),
                     ShowCommandsAction = () => Dispatcher.Invoke(ShowCommands),
@@ -242,22 +243,6 @@ namespace HomeCenter.NET.Windows
             foreach (var runner in staticRunners)
             {
                 ModuleManager.Instance.AddStaticInstance(runner.Name, runner);
-            }
-
-            #endregion
-
-            #region Hook
-
-            try
-            {
-                KeyboardHook.KeyUp += Global_KeyUp;
-                KeyboardHook.KeyDown += Global_KeyDown;
-
-                MouseHook.MouseDown += Global_MouseDown;
-            }
-            catch (Exception exception)
-            {
-                Print(exception.ToString());
             }
 
             #endregion
@@ -272,13 +257,33 @@ namespace HomeCenter.NET.Windows
             Print("Loading modules...");
             try
             {
-                await Task.Run(() => ModuleManager.Instance.Load());
+                await Task.Run(() =>
+                {
+                    ModuleManager.Instance.Load();
+                    ModuleManager.Instance.EnableInstances();
+                });
                 ModuleManager.AddUniqueInstancesIfNeed();
                 ModuleManager.RegisterHandlers(HiddenRun, HiddenRunAsync);
 
                 SetUpRuntimeModule();
 
                 Print("Loaded");
+            }
+            catch (Exception exception)
+            {
+                Print(exception.ToString());
+            }
+
+            #endregion
+
+            #region Hook
+
+            try
+            {
+                KeyboardHook.KeyUp += Global_KeyUp;
+                KeyboardHook.KeyDown += Global_KeyDown;
+
+                MouseHook.MouseDown += Global_MouseDown;
             }
             catch (Exception exception)
             {
@@ -417,15 +422,17 @@ namespace HomeCenter.NET.Windows
 
         #region Static methods
 
-        private void Restart() => Restart(new List<string>());
-        private void Restart(string command) => Restart(new[] {command});
+        private void UpdateRestart(string command) => Restart(command, "/updating");
 
-        private void Restart(ICollection<string> commands)
+        private void Restart() => Restart(new List<string>());
+        private void Restart(string command, string additionalArguments = null) => Restart(new[] {command}, additionalArguments);
+
+        private void Restart(ICollection<string> commands, string additionalArguments = null)
         {
             var run = commands.Any() ? $"/run \"{string.Join(";", commands)}\"" : string.Empty;
 
             IpcServer.Stop();
-            Process.Start($"\"{Options.FilePath}\"", $"/restart {run}");
+            Process.Start($"\"{Options.FilePath}\"", $"/restart {run} {additionalArguments}");
             Application.Current.Shutdown();
         }
 
