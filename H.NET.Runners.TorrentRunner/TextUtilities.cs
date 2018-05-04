@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace H.NET.Runners.TorrentRunner
+namespace H.NET.Runners
 {
     public static class TextUtilities
     {

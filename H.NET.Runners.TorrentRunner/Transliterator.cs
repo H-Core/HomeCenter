@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 
-namespace H.NET.Runners.TorrentRunner
+namespace H.NET.Runners
 {
     public static class Transliterator
     {

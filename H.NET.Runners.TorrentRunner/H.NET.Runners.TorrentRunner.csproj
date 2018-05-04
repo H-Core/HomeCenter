@@ -7,7 +7,7 @@
     <ProjectGuid>{3B631441-A561-4CD5-A61E-6FD02694A00F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>H.NET.Runners.TorrentRunner</RootNamespace>
+    <RootNamespace>H.NET.Runners</RootNamespace>
     <AssemblyName>H.NET.Runners.TorrentRunner</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

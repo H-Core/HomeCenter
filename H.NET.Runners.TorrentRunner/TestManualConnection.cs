@@ -1,18 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using MonoTorrent.Client;
-using System.Net.Sockets;
 using System.Net;
-using MonoTorrent.Common;
+using System.Net.Sockets;
 using MonoTorrent.BEncoding;
-using MonoTorrent.Client.Encryption;
+using MonoTorrent.Client;
 using MonoTorrent.Client.Connections;
+using MonoTorrent.Client.Encryption;
 using MonoTorrent.Client.PieceWriters;
 using MonoTorrent.Client.Tracker;
-using System.Threading;
+using MonoTorrent.Common;
 
-namespace SampleClient
+namespace H.NET.Runners
 {
     public class CustomTracker : Tracker
     {

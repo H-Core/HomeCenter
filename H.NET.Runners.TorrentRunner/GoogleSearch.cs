@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using HtmlAgilityPack;
 
-namespace H.NET.Runners.TorrentRunner
+namespace H.NET.Runners
 {
     public static class GoogleSearch
     {

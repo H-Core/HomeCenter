@@ -12,7 +12,7 @@ using H.NET.Core.Settings;
 using HtmlAgilityPack;
 using MonoTorrent.Common;
 
-namespace H.NET.Runners.TorrentRunner
+namespace H.NET.Runners
 {
     public class TorrentRunner : Runner
     {
