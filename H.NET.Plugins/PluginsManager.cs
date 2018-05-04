@@ -265,7 +265,7 @@ namespace H.NET.Plugins
             LoadAction?.Invoke(plugin, list);
         }
 
-        private void SavePluginSettings(string name, T plugin)
+        public void SavePluginSettings(string name, T plugin)
         {
             if (plugin == null)
             {

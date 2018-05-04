@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using H.NET.Core;
 using H.NET.Core.Extensions;
 using H.NET.Plugins;
@@ -15,7 +16,7 @@ namespace HomeCenter.NET.Utilities
             {
                 foreach (var pair in list)
                 {
-                    module.Settings.CopyFrom(pair.Key, pair.Value);
+                    module.Settings.Set(pair.Key, pair.Value);
                 }
             }, module => module.Settings.Select(pair => new SettingItem(pair.Key, pair.Value.Value)));
 
@@ -39,7 +40,7 @@ namespace HomeCenter.NET.Utilities
             }
         });
 
-        public static void RegisterHandlers(TextDelegate outputAction, TextDelegate sayAction, TextDelegate commandAction) => SafeActions.Run(() =>
+        public static void RegisterHandlers(TextDelegate commandAction, Func<string, Task> asyncCommandFunc) => SafeActions.Run(() =>
         {
             var instances = Instance.Instances.Objects.Values;
 
@@ -51,9 +52,21 @@ namespace HomeCenter.NET.Utilities
                     continue;
                 }
 
-                module.NewOutput += outputAction;
-                module.NewSpeech += sayAction;
                 module.NewCommand += commandAction;
+                module.NewCommandAsync += async (sender, args) =>
+                {
+                    if (asyncCommandFunc == null || args == null)
+                    {
+                        return;
+                    }
+
+                    using (args.GetDeferral())
+                    {
+                        await asyncCommandFunc(args.Text);
+                    }
+                };
+
+                module.SettingsSaved += o => Instance.SavePluginSettings(o.Name, o);
             }
         });
     }

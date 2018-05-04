@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -50,7 +51,7 @@ namespace HomeCenter.NET.Runners
 
         public IStorage<Command> Storage { get; }
         public List<string> History { get; } = new List<string>();
-        public List<Process> Processes { get; } = new List<Process>();
+        public BlockingCollection<Process> Processes { get; } = new BlockingCollection<Process>();
 
         private static List<IRunner> Runners => Options.Runners;
 
@@ -217,7 +218,7 @@ namespace HomeCenter.NET.Runners
             {
                 NotHandledText?.Invoke(key);
 
-                return new Process(key ?? data, new Exception($"Runner for command \"{data}\" is not found"));
+                return new Process(data ?? key, new Exception($"Runner for command \"{data}\" is not found"));
             }
 
             Thread thread = null;
@@ -233,7 +234,7 @@ namespace HomeCenter.NET.Runners
                 await Task.Delay(1);
             }
 
-            var process = new Process(key ?? data, task, thread);
+            var process = new Process(data ?? key, task, thread);
             Processes.Add(process);
 
             try

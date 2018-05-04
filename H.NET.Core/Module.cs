@@ -1,8 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using H.NET.Core.Settings;
 using H.NET.Core.Storages;
+using H.NET.Core.Utilities;
 
 namespace H.NET.Core
 {
@@ -20,14 +21,19 @@ namespace H.NET.Core
 
         #region Events
 
-        public event TextDelegate NewSpeech;
-        protected void Say(string text) => NewSpeech?.Invoke(text);
-
-        public event TextDelegate NewOutput;
-        protected void Print(string text) => NewOutput?.Invoke(text);
-
         public event TextDelegate NewCommand;
         protected void Run(string text) => NewCommand?.Invoke(text);
+
+        protected void Say(string text) => Run($"say {text}");
+        protected void Print(string text) => Run($"print {text}");
+
+        public event EventHandler<TextDeferredEventArgs> NewCommandAsync;
+        protected async Task RunAsync(string text) => await NewCommandAsync.InvokeAsync(this, TextDeferredEventArgs.Create(text));
+
+        protected async Task SayAsync(string text) => await RunAsync($"say {text}");
+
+        public event ModuleDelegate SettingsSaved;
+        protected void SaveSettings() => SettingsSaved?.Invoke(this);
 
         #endregion
 

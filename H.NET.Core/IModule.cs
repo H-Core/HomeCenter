@@ -1,4 +1,5 @@
 ﻿using System;
+using H.NET.Core.Utilities;
 
 namespace H.NET.Core
 {
@@ -10,10 +11,11 @@ namespace H.NET.Core
         ISettingsStorage Settings { get; }
         bool IsValid();
 
-        event TextDelegate NewSpeech;
-        event TextDelegate NewOutput;
         event TextDelegate NewCommand;
+        event EventHandler<TextDeferredEventArgs> NewCommandAsync;
+        event ModuleDelegate SettingsSaved;
     }
 
     public delegate void TextDelegate(string text);
+    public delegate void ModuleDelegate(IModule module);
 }

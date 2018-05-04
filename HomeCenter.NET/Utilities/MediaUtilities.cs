@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Media;
+using System.Threading.Tasks;
 
 namespace HomeCenter.NET.Utilities
 {
@@ -13,8 +14,10 @@ namespace HomeCenter.NET.Utilities
             using (var stream = new MemoryStream(bytes))
             using (var player = new SoundPlayer(stream))
             {
-                player.Play();
+                player.PlaySync();
             }
         }
+
+        public static async Task PlayAsync(this byte[] bytes) => await Task.Run(() => bytes?.Play());
     }
 }

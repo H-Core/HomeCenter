@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using H.NET.Core.Runners;
@@ -9,31 +10,32 @@ namespace HomeCenter.NET.Runners
     public class DefaultRunner : Runner
     {
         #region Properties
-        
+
         private string UserName { get; set; }
         
         #endregion
 
         #region Constructors
 
-        public DefaultRunner()
+        public DefaultRunner(Action<string> printAction, Func<string, Task> sayFunc)
         {
-            AddAction("say", Say, "text");
-            AddAction("print", Print, "text");
+            AddAsyncAction("say", sayFunc, "text");
+            AddAction("print", printAction, "text");
             AddInternalAction("run", Run, "other_command_key");
 
             AddAsyncAction("sleep", SleepCommand, "integer");
             AddAction("sync-sleep", command => Thread.Sleep(int.TryParse(command, out var result) ? result : 1000), "integer");
 
             AddAction("start", StartCommand, "program.exe arguments");
+            AddAsyncAction("start-async", StartCommandAsync, "program.exe arguments");
 
             AddAction("say-my-name", async command =>
             {
                 if (string.IsNullOrWhiteSpace(UserName))
                 {
-                    Say("Я еще не знаю вашего имени. Скажите ваше имя");
+                    await SayAsync("Я еще не знаю вашего имени. Скажите ваше имя");
 
-                    var name = await WaitNextCommand(10000);
+                    var name = await WaitNextCommand(8000);
                     if (string.IsNullOrWhiteSpace(name))
                     {
                         return;
@@ -42,10 +44,11 @@ namespace HomeCenter.NET.Runners
                     // First char to upper case
                     name = name[0].ToString().ToUpper() + name.Substring(1);
 
-                    Settings.CopyFrom("username", name);
+                    Settings.Set("username", name);
+                    SaveSettings();
                 }
 
-                Say($"Ваше имя {UserName}");
+                Say($"Привет {UserName}");
             });
             AddSetting("username", o => UserName = o, NoEmpty, string.Empty);
 
@@ -62,17 +65,33 @@ namespace HomeCenter.NET.Runners
             await Task.Delay(delay);
         }
 
-        private static void StartCommand(string command)
+        private static Process StartCommandInternal(string command)
         {
             if (string.IsNullOrWhiteSpace(command))
             {
-                return;
+                return null;
             }
 
             var values = command.SplitOnlyFirstIgnoreQuote(' ');
 
             var path = values[0].Trim('\"', '\\').Replace("\\\"", "\"").Replace("\\\\", "\\").Replace("\\", "/");
-            Process.Start(path, values[1]);
+            return Process.Start(path, values[1]);
+        }
+
+        private static void StartCommand(string command) => StartCommandInternal(command);
+
+        private static async Task StartCommandAsync(string command)
+        {
+            var process = StartCommandInternal(command);
+            try
+            {
+                await Task.Delay(1000000);
+                await Task.Run(() => process.WaitForExit());
+            }
+            finally
+            {
+                process.Close();
+            }
         }
 
         #endregion

@@ -55,8 +55,6 @@ namespace HomeCenter.NET.Windows
             #region Global Runner
 
             GlobalRunner.NewOutput += Print;
-            GlobalRunner.NewSpeech += Say;
-            GlobalRunner.NewCommand += Manager.ProcessText;
 
             #endregion
 
@@ -109,9 +107,6 @@ namespace HomeCenter.NET.Windows
             Manager?.Dispose();
             Manager = null;
 
-            GlobalRunner?.Dispose();
-            GlobalRunner = null;
-
             KeyboardHook?.Dispose();
             KeyboardHook = null;
 
@@ -133,8 +128,7 @@ namespace HomeCenter.NET.Windows
             }
         });
 
-        private static void Say(byte[] bytes) => bytes?.Play();
-        private async void Say(string text)
+        private async Task Say(string text)
         {
             if (Synthesizer == null)
             {
@@ -142,8 +136,12 @@ namespace HomeCenter.NET.Windows
                 return;
             }
 
-            Say(await Synthesizer.Convert(text));
+            var bytes = await Synthesizer.Convert(text);
+
+            await bytes.PlayAsync();
         }
+
+        private async Task HiddenRunAsync(string message) => await GlobalRunner.Run(message, false);
 
         private async void Run(string message) => await GlobalRunner.Run(message);
         private async void HiddenRun(string message) => await GlobalRunner.Run(message, false);
@@ -224,7 +222,7 @@ namespace HomeCenter.NET.Windows
 
             var staticRunners = new List<IRunner>
             {
-                new DefaultRunner(),
+                new DefaultRunner(Print, Say),
                 new KeyboardRunner(),
                 new WindowsRunner(),
                 new ClipboardRunner
@@ -276,7 +274,7 @@ namespace HomeCenter.NET.Windows
             {
                 await Task.Run(() => ModuleManager.Instance.Load());
                 ModuleManager.AddUniqueInstancesIfNeed();
-                ModuleManager.RegisterHandlers(Print, Say, HiddenRun);
+                ModuleManager.RegisterHandlers(HiddenRun, HiddenRunAsync);
 
                 SetUpRuntimeModule();
 

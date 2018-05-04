@@ -22,7 +22,7 @@ namespace H.NET.Core.Storages
             }
         }
 
-        public void CopyFrom(string key, object value)
+        public void Set(string key, object value)
         {
             if (!TryGetValue(key, out var thisSetting))
             {
