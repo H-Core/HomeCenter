@@ -206,7 +206,7 @@ namespace H.NET.Runners
         private async Task QTorrentCommand(string torrentPath)
         {
             var path = GetFilePath(torrentPath);
-            if (RunCommand(path, false))
+            if (RunCommand(path))
             {
                 return;
             }
@@ -226,32 +226,39 @@ namespace H.NET.Runners
                 return;
             }
 
+            await WaitDownloadCommand(path, StartSizeMb, MaxDelaySeconds);
+
+            if (!RunCommand(path))
+            {
+                Say(@"Файл не найден или еще не загружен");
+            }
+        }
+
+        private async Task WaitDownloadCommand(string path, double requiredSizeMb, int maxDelaySeconds)
+        {
             var seconds = 0;
-            while (seconds < MaxDelaySeconds)
+            while (seconds < maxDelaySeconds)
             {
                 await Task.Delay(1000);
 
                 var size = GetFileSizeOnDisk(path);
-                var needSize = StartSizeMb * 1000000;
-                var percents = 100.0 * size / needSize;
+                var requiredSize = requiredSizeMb * 1000000;
+                var percents = 100.0 * size / requiredSize;
 
                 // Every 5 seconds
                 if (seconds % 5 == 0)
                 {
-                    Print($"Progress: {size}/{needSize}({percents:F2}%)");
+                    Print($"Progress: {size}/{requiredSize}({percents:F2}%)");
                 }
 
                 if (size < uint.MaxValue - 1 &&
-                    size > needSize)
+                    size > requiredSize)
                 {
                     break;
                 }
 
                 ++seconds;
             }
-
-            RunCommand(path);
-
         }
 
         private static long GetFileSizeOnDisk(string file)
@@ -281,23 +288,15 @@ namespace H.NET.Runners
             out uint lpSectorsPerCluster, out uint lpBytesPerSector, out uint lpNumberOfFreeClusters,
             out uint lpTotalNumberOfClusters);
 
-        private bool RunCommand(string path, bool sayError = true, bool saySuccess = true)
+        private bool RunCommand(string path)
         {
             if (!File.Exists(path))
             {
-                if (sayError)
-                {
-                    Say(@"Файл не найден или еще не загружен");
-                }
-
                 return false;
             }
 
             Process.Start(path);
-            if (saySuccess)
-            {
-                Say(@"Запускаю");
-            }
+            Say(@"Запускаю");
 
             return true;
         }

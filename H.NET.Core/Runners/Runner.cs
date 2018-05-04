@@ -187,10 +187,10 @@ namespace H.NET.Core.Runners
         protected void AddInternalAsyncAction(string key, Func<string, Task> func, string description = null) =>
             AddAsyncAction(key, func, description, true);
 
-        protected void AddAction(string key, RunInformation information) =>
+        private void AddAction(string key, RunInformation information) =>
             HandlerDictionary[key] = information;
 
-        protected RunInformation GetHandler(string key) =>
+        private RunInformation GetHandler(string key) =>
             HandlerDictionary.TryGetValue(key, out var handler) ? handler : new RunInformation();
 
         #endregion
