@@ -182,7 +182,7 @@ namespace H.NET.Runners.TorrentRunner
             Log($"Google Urls: {Environment.NewLine}{string.Join(Environment.NewLine, urls)}");
             if (!urls.Any())
             {
-                Say("Поиск в гугле не дал результатов");
+                await SayAsync("Поиск в гугле не дал результатов");
                 return;
             }
 
@@ -195,7 +195,7 @@ namespace H.NET.Runners.TorrentRunner
             var path = FindBestTorrent(files);
             if (path == null)
             {
-                Say("Не найден подходящий торрент");
+                await SayAsync("Не найден подходящий торрент");
                 return;
             }
 
