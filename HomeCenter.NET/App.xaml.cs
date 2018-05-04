@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Utilities;
@@ -78,6 +79,12 @@ namespace HomeCenter.NET
             if (!(exceptionObject is Exception exception))
             {
                 exception = new NotSupportedException($"Unhandled exception doesn't derive from System.Exception: {exceptionObject}");
+            }
+
+            // Ignore ThreadAbortException
+            if (exception is ThreadAbortException)
+            {
+                return;
             }
 
             SafeActions.ShowException(exception);

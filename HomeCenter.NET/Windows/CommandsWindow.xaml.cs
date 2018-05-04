@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 using H.NET.Core.Utilities;
 using H.NET.Storages;
 using H.NET.Storages.Extensions;
 using HomeCenter.NET.Controls;
 using HomeCenter.NET.Runners;
+using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Windows
 {
@@ -23,6 +26,9 @@ namespace HomeCenter.NET.Windows
             Runner = runner ?? throw new ArgumentNullException(nameof(runner));
 
             InitializeComponent();
+
+            Runner.BeforeRun += (o, e) => Dispatcher.Invoke(UpdateProcesses);
+            Runner.AfterRun += (o, e) => Dispatcher.Invoke(UpdateProcesses);
         }
 
         #endregion
@@ -30,21 +36,13 @@ namespace HomeCenter.NET.Windows
         #region Event handlers
 
         private void Window_Loaded(object sender, RoutedEventArgs e) => Update();
-
-        private void Add_Click(object sender, RoutedEventArgs e)
-        {
-            var command = new Command();
-            command.Keys.Add(new SingleKey(string.Empty));
-            command.Lines.Add(new SingleCommand(string.Empty));
-
-            ChangeCommandWindow.ShowAndSaveIfNeeded(command, Runner.Storage);
-            Update();
-        } 
+        private void Add_Click(object sender, RoutedEventArgs e) => Add();
 
         private void SaveAndClose(object sender, RoutedEventArgs e)
         {
             Runner.Storage.Save();
 
+            DialogResult = true;
             Close();
         }
 
@@ -52,6 +50,7 @@ namespace HomeCenter.NET.Windows
         {
             Runner.Storage.Load(); // Cancel changes
 
+            DialogResult = false;
             Close();
         }
 
@@ -59,20 +58,35 @@ namespace HomeCenter.NET.Windows
 
         #region Private methods
 
+        private void Add() => SafeActions.Run(() =>
+        {
+            var command = new Command();
+            command.Keys.Add(new SingleKey(string.Empty));
+            command.Lines.Add(new SingleCommand(string.Empty));
+
+            ChangeCommandWindow.ShowAndSaveIfNeeded(command, Runner.Storage);
+
+            UpdateUserCommands();
+        });
+
         private void Update()
         {
             UpdateUserCommands();
             UpdateAllCommands();
             UpdateVariables();
+            UpdateProcesses();
         }
 
-        private void UpdateUserCommands()
+        private void UpdateUserCommands() => SafeActions.Run(() =>
         {
-            UserPanel.Children.Clear();
-            foreach (var pair in Runner.Storage.UniqueValues(entry => entry.Value.Data))
+            var controls = Runner.Storage.UniqueValues(entry => entry.Value.Data).Select(pair =>
             {
                 var command = pair.Value;
-                var control = new CommandControl(command.KeysString, command.Data, command.HotKey, run: true, edit: true, delete: true) {Height = 25};
+                var control = new CommandControl(command.KeysString, command.Data, command.HotKey, 
+                    run: true, edit: true, delete: true)
+                {
+                    Height = 25
+                };
                 control.Deleted += (sender, args) =>
                 {
                     foreach (var key in command.Keys)
@@ -80,12 +94,12 @@ namespace HomeCenter.NET.Windows
                         Runner.Storage.Remove(key.Text);
                     }
 
-                    Update();
+                    UpdateUserCommands();
                 };
                 control.Edited += (sender, args) =>
                 {
                     ChangeCommandWindow.ShowAndSaveIfNeeded(command, Runner.Storage);
-                    Update();
+                    UpdateUserCommands();
                 };
                 control.Run += (sender, args) =>
                 {
@@ -94,33 +108,38 @@ namespace HomeCenter.NET.Windows
                         MainWindow.GlobalRun(line.Text);
                     }
                 };
-                UserPanel.Children.Add(control);
-            }
-        }
 
-        private void UpdateAllCommands()
+                return control;
+            });
+
+            UserPanel.Update(controls);
+        });
+
+        private void UpdateAllCommands() => SafeActions.Run(() =>
         {
-            AllPanel.Children.Clear();
-            foreach (var (runner, command) in Runner.GetSupportedCommands())
+            var controls = Runner.GetSupportedCommands().Select(tuple =>
             {
-                var values = command.SplitOnlyFirst(' ');
-                var control = new CommandControl($"{runner.GetType().Name}: {values[0]}", values[1], 
+                var values = tuple.command.SplitOnlyFirst(' ');
+                var control = new CommandControl($"{tuple.runner.GetType().Name}: {values[0]}", values[1],
                     editable: true, run: true, edit: true, delete: true)
                 {
                     Height = 25
                 };
                 control.NameLabel.Width *= 2;
                 control.Run += (sender, args) => MainWindow.GlobalRun($"{values[0]} {control.ObjectDescription}");
-                AllPanel.Children.Add(control);
-            }
-        }
 
-        private void UpdateVariables()
+                return control;
+            });
+
+            AllPanel.Update(controls);
+        });
+
+        private void UpdateVariables() => SafeActions.Run(() =>
         {
-            VariablesPanel.Children.Clear();
-            foreach (var name in Runner.GetSupportedVariables())
+            var controls = Runner.GetSupportedVariables().Select(name =>
             {
-                var control = new CommandControl(name, "Please press R to calculate", run: true, edit: true, delete: true)
+                var control = new CommandControl(name, "Please press R to calculate",
+                        run: true, edit: true, delete: true)
                 {
                     Height = 25
                 };
@@ -128,9 +147,31 @@ namespace HomeCenter.NET.Windows
                 {
                     control.ObjectDescription = Runner.GetVariableValue(name)?.ToString() ?? string.Empty;
                 };
-                VariablesPanel.Children.Add(control);
-            }
-        }
+
+                return control;
+            });
+
+            VariablesPanel.Update(controls);
+        });
+
+        private void UpdateProcesses() => SafeActions.Run(() =>
+        {
+            var controls = Runner.Processes.Select(process =>
+            {
+                var control = new CommandControl(null, process.Name ?? string.Empty,
+                    run: true, edit: false, delete: !process.IsCompleted)
+                {
+                    Height = 25,
+                    Color = process.IsCanceled ? Colors.Gold : process.IsCompleted ? Colors.LightGreen : Colors.Lavender
+                };
+                control.Run += (sender, args) => MainWindow.GlobalRun(process.Name);
+                control.Deleted += (sender, args) => process.Cancel();
+
+                return control;
+            }).ToArray();
+
+            ProcessesPanel.Update(controls.Reverse());
+        });
 
         #endregion
     }

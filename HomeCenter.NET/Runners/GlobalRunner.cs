@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using H.NET.Core;
 using H.NET.Core.Runners;
@@ -10,12 +11,46 @@ using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Runners
 {
-    public class GlobalRunner : Module
+    public class GlobalRunner
     {
+        public class Process
+        {
+            public bool IsCompleted { get; set; }
+            public bool IsCanceled { get; set; }
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public Thread Thread { get; set; }
+            public Task Task { get; set; }
+            public RunInformation Information { get; set; }
+
+            public Process(string name, Task task, Thread thread)
+            {
+                Name = name;
+                Task = task;
+                Id = task.Id;
+                Thread = thread;
+            }
+
+            public Process(string name, Exception exception)
+            {
+                Name = name;
+                Information = new RunInformation(exception);
+            }
+
+            public void Cancel()
+            {
+                IsCanceled = true;
+                IsCompleted = true;
+
+                Thread.Abort();
+            }
+        }
+
         #region Properties
 
         public IStorage<Command> Storage { get; }
         public List<string> History { get; } = new List<string>();
+        public List<Process> Processes { get; } = new List<Process>();
 
         private static List<IRunner> Runners => Options.Runners;
 
@@ -24,6 +59,12 @@ namespace HomeCenter.NET.Runners
         #region Events
 
         public event TextDelegate NotHandledText;
+
+        public event TextDelegate NewOutput;
+        private void Print(string text) => NewOutput?.Invoke(text);
+
+        public event EventHandler BeforeRun;
+        public event EventHandler AfterRun;
 
         #endregion
 
@@ -39,7 +80,7 @@ namespace HomeCenter.NET.Runners
 
         #region Public methods
 
-        public (IRunner, string)[] GetSupportedCommands() => Runners
+        public (IRunner runner, string command)[] GetSupportedCommands() => Runners
             .Select(runner => (runner: runner, commands: runner.GetSupportedCommands()))
             .SelectMany(i => i.commands, (i, command) => (i.runner, command))
             .ToArray();
@@ -126,7 +167,10 @@ namespace HomeCenter.NET.Runners
                 return;
             }
 
-            History.Add(keyOrData);
+            if (show)
+            {
+                History.Add(keyOrData);
+            }
 
             var (newKey, newCommand) = GetCommand(keyOrData);
             var realActionData = newKey ?? newCommand.Lines.FirstOrDefault()?.Text;
@@ -137,10 +181,17 @@ namespace HomeCenter.NET.Runners
             }
             foreach (var line in newCommand.Lines)
             {
-                var information = await RunSingleLine(newKey, line.Text);
-                if (information.Exception != null)
+                var process = await RunSingleLine(newKey, line.Text);
+                var exception = process.Information?.Exception;
+                if (exception != null)
                 {
-                    Print($"{information.Exception}");
+                    if (exception is ThreadAbortException)
+                    {
+                        Print($"Command \"{line}\" canceled");
+                        return;
+                    }
+
+                    Print($"{exception}");
                     return;
                 }
             }
@@ -158,7 +209,7 @@ namespace HomeCenter.NET.Runners
             }
         }
 
-        private async Task<RunInformation> RunSingleLine(string key, string data)
+        private async Task<Process> RunSingleLine(string key, string data)
         {
             var runner = GetRunnerFor(key, data);
             var isHandled = runner != null;
@@ -166,10 +217,43 @@ namespace HomeCenter.NET.Runners
             {
                 NotHandledText?.Invoke(key);
 
-                return new RunInformation(new Exception($"Runner for command \"{data}\" is not found"));
+                return new Process(key ?? data, new Exception($"Runner for command \"{data}\" is not found"));
             }
 
-            return await Task.Run(() => runner.Run(key, data));
+            Thread thread = null;
+            var task = Task.Run(() =>
+            {
+                thread = Thread.CurrentThread;
+
+                return runner.Run(key, data);
+            });
+
+            while (thread == null)
+            {
+                await Task.Delay(1);
+            }
+
+            var process = new Process(key ?? data, task, thread);
+            Processes.Add(process);
+
+            try
+            {
+                BeforeRun?.Invoke(this, EventArgs.Empty);
+
+                process.Information = await task;
+            }
+            catch (Exception exception)
+            {
+                process.Information = new RunInformation(exception);
+            }
+            finally
+            {
+                process.IsCompleted = true;
+
+                AfterRun?.Invoke(this, EventArgs.Empty);
+            }
+
+            return process;
         }
 
 

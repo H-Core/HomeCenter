@@ -26,6 +26,11 @@
                     <StackPanel x:Name="VariablesPanel"/>
                 </ScrollViewer>
             </TabItem>
+            <TabItem Header="Processes">
+                <ScrollViewer>
+                    <StackPanel x:Name="ProcessesPanel"/>
+                </ScrollViewer>
+            </TabItem>
         </TabControl>
         <Grid Grid.Row="1" Margin="5">
             <Grid.ColumnDefinitions>

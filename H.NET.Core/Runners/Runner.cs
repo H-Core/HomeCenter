@@ -49,8 +49,6 @@ namespace H.NET.Core.Runners
             }
             catch (Exception exception)
             {
-                Print($"Exception while running command: \"{data}\": {exception}");
-
                 return new RunInformation(exception);
             }
         }
