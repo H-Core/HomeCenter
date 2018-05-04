@@ -53,6 +53,7 @@
     <Compile Include="Top10Listener.cs" />
     <Compile Include="TorrentRunner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Transliterator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\H.NET.Core\H.NET.Core.csproj">
