@@ -89,7 +89,15 @@ namespace H.NET.Core
             };
         }
 
+        protected static bool IsNull(string key) => key == null;
         protected static bool NoEmpty(string key) => !string.IsNullOrEmpty(key);
+
+        protected static bool IsNull(int key) => key == 0;
+        protected static bool Positive(int key) => key > 0;
+        protected static bool Negative(int key) => key < 0;
+        protected static bool NotNegative(int key) => key >= 0;
+        protected static bool NotPositive(int key) => key <= 0;
+
 
         #endregion
 
