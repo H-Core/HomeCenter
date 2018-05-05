@@ -17,6 +17,7 @@ namespace HomeCenter.NET.Runners
         public Action ShowUiAction { private get; set; }
         public Action ShowSettingsAction { private get; set; }
         public Action ShowCommandsAction { private get; set; }
+        public Action<string> ShowModuleSettingsAction { private get; set; }
         public Action<int> StartRecordAction { private get; set; }
 
         #endregion
@@ -30,6 +31,7 @@ namespace HomeCenter.NET.Runners
             AddInternalAction("show-ui", command => ShowUiAction?.Invoke());
             AddInternalAction("show-settings", command => ShowSettingsAction?.Invoke());
             AddInternalAction("show-commands", command => ShowCommandsAction?.Invoke());
+            AddInternalAction("show-module-settings", command => ShowModuleSettingsAction?.Invoke(command), "name");
             AddInternalAction("start-record", command => StartRecordAction?.Invoke(int.TryParse(command, out var result) ? result : DefaultRecordTimeout));
             AddInternalAction("deskband", DeskBandCommand);
             AddInternalAction("enable-module", command => ModuleManager.Instance.SetInstanceIsEnabled(command, true), "name");

@@ -207,6 +207,26 @@ namespace HomeCenter.NET.Windows
             SettingsWindow.Show();
         }
 
+        private void ShowModuleSettings(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Print("ShowModuleSettings: Module name is empty");
+                return;
+            }
+
+            var module = ModuleManager.Instance.GetPlugin<IModule>(name)?.Value;
+            if (module == null)
+            {
+                Print($"ShowModuleSettings: Module {name} is not found");
+                return;
+            }
+
+            var window = new ModuleSettingsWindow(module);
+            window.Show();
+
+        }
+
         #endregion
 
         #region Event handlers
@@ -237,12 +257,13 @@ namespace HomeCenter.NET.Windows
                     ShowUiAction = () => Dispatcher.Invoke(Show),
                     ShowSettingsAction = () => Dispatcher.Invoke(ShowSettings),
                     ShowCommandsAction = () => Dispatcher.Invoke(ShowCommands),
+                    ShowModuleSettingsAction = name => Dispatcher.Invoke(() => ShowModuleSettings(name)),
                     StartRecordAction = timeout => Dispatcher.Invoke(() => StartRecord(timeout))
                 }
             };
             foreach (var runner in staticRunners)
             {
-                ModuleManager.Instance.AddStaticInstance(runner.Name, runner);
+                ModuleManager.Instance.AddStaticInstance(runner.ShortName, runner);
             }
 
             #endregion

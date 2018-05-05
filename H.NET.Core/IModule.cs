@@ -6,6 +6,7 @@ namespace H.NET.Core
     public interface IModule : IDisposable
     {
         string Name { get; }
+        string ShortName { get; }
         string Description { get; }
 
         ISettingsStorage Settings { get; }
@@ -14,6 +15,8 @@ namespace H.NET.Core
         event TextDelegate NewCommand;
         event EventHandler<TextDeferredEventArgs> NewCommandAsync;
         event ModuleDelegate SettingsSaved;
+
+        void SaveSettings();
     }
 
     public delegate void TextDelegate(string text);

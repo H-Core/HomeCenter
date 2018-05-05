@@ -12,6 +12,7 @@ namespace H.NET.Core
         #region Properties
 
         public string Name { get; }
+        public string ShortName => GetType().Name;
         public string Description { get; } = string.Empty;
 
         public ISettingsStorage Settings { get; } = new SettingsStorage();
@@ -26,6 +27,7 @@ namespace H.NET.Core
 
         protected void Say(string text) => Run($"say {text}");
         protected void Print(string text) => Run($"print {text}");
+        protected void ShowSettings() => Run($"show-module-settings {ShortName}");
 
         public event EventHandler<TextDeferredEventArgs> NewCommandAsync;
         protected async Task RunAsync(string text) => await NewCommandAsync.InvokeAsync(this, TextDeferredEventArgs.Create(text));
@@ -33,7 +35,7 @@ namespace H.NET.Core
         protected async Task SayAsync(string text) => await RunAsync($"say {text}");
 
         public event ModuleDelegate SettingsSaved;
-        protected void SaveSettings() => SettingsSaved?.Invoke(this);
+        public void SaveSettings() => SettingsSaved?.Invoke(this);
 
         #endregion
 

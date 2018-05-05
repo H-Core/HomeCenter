@@ -66,7 +66,7 @@ namespace HomeCenter.NET.Utilities
                     }
                 };
 
-                module.SettingsSaved += o => Instance.SavePluginSettings(o.Name, o);
+                module.SettingsSaved += o => Instance.SavePluginSettings(o.ShortName, o);
             }
         });
     }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -24,6 +25,11 @@ namespace HomeCenter.NET.Utilities
             button.Click += handler;
 
             list.Add(button);
+        }
+
+        public static bool IsModal(this Window window)
+        {
+            return (bool)typeof(Window).GetField("_showingAsDialog", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(window);
         }
     }
 }

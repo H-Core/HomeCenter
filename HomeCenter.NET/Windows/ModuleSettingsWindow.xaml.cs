@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using H.NET.Core;
+using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Windows
 {
@@ -8,15 +9,15 @@ namespace HomeCenter.NET.Windows
     {
         #region Properties
 
-        private ISettingsStorage Storage { get; }
+        private IModule Module { get; }
 
         #endregion
 
         #region Contructors
 
-        public ModuleSettingsWindow(ISettingsStorage storage)
+        public ModuleSettingsWindow(IModule module)
         {
-            Storage = storage ?? throw new ArgumentNullException(nameof(storage));
+            Module = module ?? throw new ArgumentNullException(nameof(module));
 
             InitializeComponent();
         }
@@ -31,13 +32,21 @@ namespace HomeCenter.NET.Windows
         {
             Save();
 
-            DialogResult = true;
+            if (this.IsModal())
+            {
+                DialogResult = true;
+            }
+
             Close();
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
+            if (this.IsModal())
+            {
+                DialogResult = false;
+            }
+
             Close();
         }
 
@@ -48,7 +57,7 @@ namespace HomeCenter.NET.Windows
         private void Update()
         {
             Panel.Children.Clear();
-            foreach (var pair in Storage)
+            foreach (var pair in Module.Settings)
             {
                 var control = new Controls.SettingControl(pair.Value) { Height = 25 };
                 Panel.Children.Add(control);
@@ -64,8 +73,10 @@ namespace HomeCenter.NET.Windows
                     continue;
                 }
 
-                Storage[settingControl.Setting.Key] = settingControl.Setting;
+                Module.Settings[settingControl.Setting.Key] = settingControl.Setting;
             }
+
+            Module.SaveSettings();
         }
 
         #endregion

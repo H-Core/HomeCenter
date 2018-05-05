@@ -241,7 +241,7 @@ namespace HomeCenter.NET.Windows
             };
             control.Edited += (sender, args) =>
             {
-                var window = new ModuleSettingsWindow(module?.Settings);
+                var window = new ModuleSettingsWindow(module);
                 window.ShowDialog();
 
                 updateAction?.Invoke();
