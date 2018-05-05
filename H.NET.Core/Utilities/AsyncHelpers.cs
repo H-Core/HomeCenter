@@ -18,6 +18,8 @@ namespace H.NET.Core.Utilities
             SynchronizationContext.SetSynchronizationContext(synch);
             synch.Post(async _ =>
             {
+                synch.InnerException = null;
+
                 try
                 {
                     await task();
@@ -51,6 +53,8 @@ namespace H.NET.Core.Utilities
             T ret = default(T);
             synch.Post(async _ =>
             {
+                synch.InnerException = null;
+
                 try
                 {
                     ret = await task();
