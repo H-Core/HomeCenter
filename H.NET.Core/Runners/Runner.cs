@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using H.NET.Core.Utilities;
@@ -159,6 +160,16 @@ namespace H.NET.Core.Runners
             IsWaitCommand = false;
 
             return WaitCommand;
+        }
+
+        protected async Task<bool> WaitAccept(int timeout, params string[] additionalAccepts)
+        {
+            var command = await WaitNextCommand(timeout);
+
+            var defaultAccepts = new List<string> {"yes", "да", "согласен"};
+            defaultAccepts.AddRange(additionalAccepts);
+
+            return command.IsAnyOrdinalIgnoreCase(defaultAccepts.ToArray());
         }
 
         public static void StopWaitCommand(string command)
