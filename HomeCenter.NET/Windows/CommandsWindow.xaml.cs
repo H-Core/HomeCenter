@@ -42,16 +42,14 @@ namespace HomeCenter.NET.Windows
         {
             Runner.Storage.Save();
 
-            DialogResult = true;
-            Close();
+            this.SetDialogResultAndClose(true);
         }
 
         private void Close(object sender, RoutedEventArgs e)
         {
             Runner.Storage.Load(); // Cancel changes
 
-            DialogResult = false;
-            Close();
+            this.SetDialogResultAndClose(false);
         }
 
         #endregion

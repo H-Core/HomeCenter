@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -30,6 +31,29 @@ namespace HomeCenter.NET.Utilities
         public static bool IsModal(this Window window)
         {
             return (bool)typeof(Window).GetField("_showingAsDialog", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(window);
+        }
+
+        public static void SetDialogResult(this Window window, bool? value)
+        {
+            try
+            {
+                if (!window.IsModal())
+                {
+                    return;
+                }
+
+                window.DialogResult = value;
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+
+        public static void SetDialogResultAndClose(this Window window, bool? value)
+        {
+            window.SetDialogResult(value);
+            window.Close();
         }
     }
 }

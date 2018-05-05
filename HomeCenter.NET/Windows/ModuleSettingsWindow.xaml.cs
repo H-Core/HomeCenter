@@ -31,23 +31,13 @@ namespace HomeCenter.NET.Windows
         private void Save_Click(object sender, RoutedEventArgs e)
         {
             Save();
-
-            if (this.IsModal())
-            {
-                DialogResult = true;
-            }
-
-            Close();
+            
+            this.SetDialogResultAndClose(true);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            if (this.IsModal())
-            {
-                DialogResult = false;
-            }
-
-            Close();
+            this.SetDialogResultAndClose(false);
         }
 
         #endregion
