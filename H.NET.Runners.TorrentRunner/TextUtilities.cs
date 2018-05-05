@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace H.NET.Runners
 {
@@ -27,6 +29,24 @@ namespace H.NET.Runners
             }
 
             return m[string1.Length, string2.Length];
+        }
+
+        public static int MinimalLevenshteinDistance(string string1, string string2)
+        {
+            var bigString = string1.Length > string2.Length ? string1 : string2;
+            var smallString = string1.Length > string2.Length ? string2 : string1;
+
+            var list = new List<int>();
+            var count = bigString.Length - smallString.Length + 1;
+            for (var i = 0; i < count; ++i)
+            {
+                var subString = bigString.Substring(i, smallString.Length);
+                Console.WriteLine(subString);
+                Console.WriteLine(smallString);
+                list.Add(LevenshteinDistance(subString, smallString));
+            }
+
+            return list.OrderBy(i => i).ToList().FirstOrDefault();
         }
     }
 }
