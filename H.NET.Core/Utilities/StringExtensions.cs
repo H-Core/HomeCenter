@@ -58,5 +58,24 @@ namespace H.NET.Core.Utilities
         }
 
         private static string GetVariableName(int i) => $"$VARIABLE{i}$";
+
+        public static bool IsAny(this string text, StringComparison comparison, params string [] otherStrings)
+        {
+            foreach (var str in otherStrings)
+            {
+                if (string.Equals(text, str, comparison))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool IsAny(this string text, params string[] otherStrings) =>
+            text.IsAny(StringComparison.CurrentCulture, otherStrings);
+
+        public static bool IsAnyOrdinalIgnoreCase(this string text, params string[] otherStrings) =>
+            text.IsAny(StringComparison.OrdinalIgnoreCase, otherStrings);
     }
 }
