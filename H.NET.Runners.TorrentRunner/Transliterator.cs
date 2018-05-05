@@ -37,7 +37,7 @@ namespace H.NET.Runners
             ['«'] = "", ['»'] = "", ['—'] = "-"//, [' '] = "-"
         };
 
-        public static string Convert(string text, TranslateType type = TranslateType.Gost)
+        public static string Convert(string text, TranslateType type)
         {
             var dictionary = type == TranslateType.Gost ? GostDictionary : IsoDictionary;
 
