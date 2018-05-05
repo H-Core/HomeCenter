@@ -94,20 +94,20 @@ namespace H.NET.Runners
                 Print($"File {distance.Item2}. Distance: {distance.Item1}");
             }
 
+            await StartMovie(goodDistances[0].Item2);
         }
 
         private async Task StartMovie(string path)
         {
             await SayAsync("Нашла. Запускаю");
-            Run($"start {path}");
+            Run($"explorer {path}");
         }
 
         private async Task CheckTorrent(string text)
         {
             await SayAsync("Скачать с торрента?");
 
-            var answer = await WaitAccept(5000, "скачай", "скачать");
-            if (!answer)
+            if (!await WaitAccept(5000, "скачай", "скачать"))
             {
                 return;
             }
