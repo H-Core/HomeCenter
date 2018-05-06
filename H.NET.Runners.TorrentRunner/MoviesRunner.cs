@@ -28,7 +28,7 @@ namespace H.NET.Runners
             AddSetting(nameof(Folder2), o => Folder2 = o, NoEmpty, string.Empty, SettingType.Folder);
             AddSetting(nameof(Folder3), o => Folder3 = o, NoEmpty, string.Empty, SettingType.Folder);
             AddSetting(nameof(MoviesExtensions), o => MoviesExtensions = o, NoEmpty, "avi;mkv;mp4");
-            AddSetting(nameof(MaximumDistance), o => MaximumDistance = o, Positive, 5);
+            AddSetting(nameof(MaximumDistance), o => MaximumDistance = o, Positive, 2);
 
             AddAsyncAction("find-movie", FindMovieCommand, "name");
         }
@@ -107,18 +107,25 @@ namespace H.NET.Runners
         {
             await SayAsync("Скачать с торрента?");
 
-            if (!await WaitAccept(5000, "скачай", "скачать"))
+            if (!await WaitAccept(3000, "скачай", "скачать"))
             {
                 return;
             }
 
-            Run($"torrent {text}");
+            await RunAsync($"torrent {text}");
         }
 
         private static Tuple<int, string> GetDistance(string path, string text)
         {
             var name = Path.GetFileNameWithoutExtension(path);
-            var distance = TextUtilities.MinimalLevenshteinDistance(name, text);
+            if (name == null)
+            {
+                return new Tuple<int, string>(int.MaxValue, path);
+            }
+
+            var distance = text.Length < name.Length
+                ? TextUtilities.MinimalLevenshteinDistance(name, text)
+                : TextUtilities.LevenshteinDistance(name, text);
 
             return new Tuple<int, string>(distance, path);
         }
