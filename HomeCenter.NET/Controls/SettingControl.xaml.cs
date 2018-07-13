@@ -50,26 +50,35 @@ namespace HomeCenter.NET.Controls
 
             InitializeComponent();
 
-            switch (Setting.SettingType)
+            if (Setting.Type == typeof(bool))
             {
-                case SettingType.Default:
-                    break;
-                case SettingType.Path:
-                case SettingType.Folder:
-                    BrowseButton.Visibility = Visibility.Visible;
-                    break;
-                case SettingType.Enumerable:
-                    if (Setting.DefaultValue is IEnumerable enumerable)
-                    {
-                        TextBox.Visibility = Visibility.Hidden;
-                        ComboBoxBorder.Visibility = Visibility.Visible;
-                        ComboBox.ItemsSource = enumerable;
+                TextBox.Visibility = Visibility.Hidden;
+                CheckBox.Visibility = Visibility.Visible;
+                CheckBox.IsChecked = (bool)Setting.Value;
+            }
+            else
+            {
+                switch (Setting.SettingType)
+                {
+                    case SettingType.Default:
+                        break;
+                    case SettingType.Path:
+                    case SettingType.Folder:
+                        BrowseButton.Visibility = Visibility.Visible;
+                        break;
+                    case SettingType.Enumerable:
+                        if (Setting.DefaultValue is IEnumerable enumerable)
+                        {
+                            TextBox.Visibility = Visibility.Hidden;
+                            ComboBoxBorder.Visibility = Visibility.Visible;
+                            ComboBox.ItemsSource = enumerable;
 
-                        ComboBox.SelectedItem = Setting.Value;
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                            ComboBox.SelectedItem = Setting.Value;
+                        }
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
 
             UpdateColor();
@@ -125,6 +134,12 @@ namespace HomeCenter.NET.Controls
             Value = ComboBox.SelectedItem;
         }
 
+        private void CheckBox_OnClick(object sender, RoutedEventArgs e)
+        {
+            Value = CheckBox.IsChecked ?? false;
+        }
+
         #endregion
+
     }
 }

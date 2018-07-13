@@ -17,6 +17,7 @@ namespace H.NET.Runners
         private string Folder3 { get; set; }
         private string MoviesExtensions { get; set; }
         private int MaximumDistance { get; set; }
+        private bool AutoTorrent { get; set; }
 
         #endregion
 
@@ -29,6 +30,7 @@ namespace H.NET.Runners
             AddSetting(nameof(Folder3), o => Folder3 = o, NoEmpty, string.Empty, SettingType.Folder);
             AddSetting(nameof(MoviesExtensions), o => MoviesExtensions = o, NoEmpty, "avi;mkv;mp4");
             AddSetting(nameof(MaximumDistance), o => MaximumDistance = o, Positive, 2);
+            AddSetting(nameof(AutoTorrent), o => AutoTorrent = o, Always, false);
 
             AddAsyncAction("find-movie", FindMovieCommand, "name");
         }
@@ -105,9 +107,7 @@ namespace H.NET.Runners
 
         private async Task CheckTorrent(string text)
         {
-            await SayAsync("Скачать с торрента?");
-
-            if (!await WaitAccept(3000, "скачай", "скачать"))
+            if (!AutoTorrent && !await WaitAccept("Скачать с торрента?", 3000, "скачай", "скачать"))
             {
                 return;
             }

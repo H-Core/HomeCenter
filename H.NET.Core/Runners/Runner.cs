@@ -172,6 +172,13 @@ namespace H.NET.Core.Runners
             return command.IsAnyOrdinalIgnoreCase(defaultAccepts.ToArray());
         }
 
+        protected async Task<bool> WaitAccept(string message, int timeout, params string[] additionalAccepts)
+        {
+            await SayAsync(message);
+
+            return await WaitAccept(timeout, additionalAccepts);
+        }
+
         public static void StopWaitCommand(string command)
         {
             WaitCommand = command;

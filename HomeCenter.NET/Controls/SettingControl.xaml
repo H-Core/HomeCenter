@@ -18,6 +18,7 @@
         <Border Grid.Column="1" x:Name="ComboBoxBorder" BorderThickness="1" Visibility="Hidden">
             <ComboBox x:Name="ComboBox" IsEditable="True" SelectionChanged="ComboBox_SelectionChanged"/>
         </Border>
+        <CheckBox Width="25" Grid.Column="1" x:Name="CheckBox" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed" Click="CheckBox_OnClick"/>
         <Button Width="25" Grid.Column="2" x:Name="BrowseButton" Content="..." Visibility="Collapsed" Click="BrowseButton_Click"/>
         <Button Grid.Column="3" Content="⮰" Click="DefaultButton_Click"/>
     </Grid>
