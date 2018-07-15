@@ -295,7 +295,15 @@ namespace H.NET.Runners
                 return false;
             }
 
-            Process.Start(path);
+            const string mpc = "C:\\Program Files (x86)\\K-Lite Codec Pack\\MPC-HC64\\mpc-hc64_nvo.exe";
+            if (File.Exists(mpc))
+            {
+                Process.Start(mpc, $"/fullscreen \"{path}\"");
+            }
+            else
+            {
+                Process.Start(path);
+            }
             Say(@"Запускаю");
 
             return true;
