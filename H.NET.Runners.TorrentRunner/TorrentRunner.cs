@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using H.NET.Core.Runners;
 using H.NET.Core.Settings;
+using H.NET.Runners.Searchers;
 using HtmlAgilityPack;
 using MonoTorrent.Common;
 
@@ -20,7 +21,7 @@ namespace H.NET.Runners
 
         private string SaveTo { get; set; }
         private string QBitTorrentPath { get; set; }
-        private string GooglePattern { get; set; }
+        private string SearchPattern { get; set; }
         private int MaxDelaySeconds { get; set; }
         private double MinSizeGb { get; set; }
         private double MaxSizeGb { get; set; }
@@ -40,7 +41,7 @@ namespace H.NET.Runners
             AddSetting(nameof(SaveTo), o => SaveTo = o, NoEmpty, string.Empty, SettingType.Folder);
             AddSetting(nameof(QBitTorrentPath), o => QBitTorrentPath = o, FileExists, string.Empty, SettingType.Path);
             AddSetting(nameof(MaxDelaySeconds), o => MaxDelaySeconds = o, null, 60);
-            AddSetting(nameof(GooglePattern), o => GooglePattern = o, NoEmpty, "download torrent *");
+            AddSetting(nameof(SearchPattern), o => SearchPattern = o, NoEmpty, "download torrent *");
             AddSetting(nameof(MinSizeGb), o => MinSizeGb = o, null, 1.0);
             AddSetting(nameof(MaxSizeGb), o => MaxSizeGb = o, null, 4.0);
             AddSetting(nameof(Extension), o => Extension = o, null, string.Empty);
@@ -176,10 +177,10 @@ namespace H.NET.Runners
         {
             Say($"Ищу торрент {text}");
 
-            var query = GooglePattern.Replace("*", text);
-            Log($"Google Query: {query}");
-            var urls = GoogleSearch.Go(query).Take(MaxSearchResults).ToList();
-            Log($"Google Urls: {Environment.NewLine}{string.Join(Environment.NewLine, urls)}");
+            var query = SearchPattern.Replace("*", text);
+            Log($"Search Query: {query}");
+            var urls = SearchManager.Go<YandexSearcher>(query, MaxSearchResults);
+            Log($"Search Urls: {Environment.NewLine}{string.Join(Environment.NewLine, urls)}");
             if (!urls.Any())
             {
                 await SayAsync("Поиск в гугле не дал результатов");
