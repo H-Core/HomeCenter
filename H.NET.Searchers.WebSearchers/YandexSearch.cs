@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using H.NET.Core;
 using HtmlAgilityPack;
 
-namespace H.NET.Runners.Searchers
+namespace H.NET.Searchers
 {
-    public class YandexSearcher : ISearcher
+    public class YandexSearcher : Module, ISearcher
     {
-        public List<string> Search(string query)
+        public async Task<List<string>> Search(string query)
         {
             var url = $"https://www.yandex.ru/search/?text={query}";
 

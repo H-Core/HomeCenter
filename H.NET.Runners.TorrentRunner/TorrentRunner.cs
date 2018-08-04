@@ -9,7 +9,6 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using H.NET.Core.Runners;
 using H.NET.Core.Settings;
-using H.NET.Runners.Searchers;
 using HtmlAgilityPack;
 using MonoTorrent.Common;
 
@@ -179,7 +178,7 @@ namespace H.NET.Runners
 
             var query = SearchPattern.Replace("*", text);
             Log($"Search Query: {query}");
-            var urls = SearchManager.Go<YandexSearcher>(query, MaxSearchResults);
+            var urls = await Search(query, MaxSearchResults);
             Log($"Search Urls: {Environment.NewLine}{string.Join(Environment.NewLine, urls)}");
             if (!urls.Any())
             {

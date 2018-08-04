@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using H.NET.Core;
 
-namespace H.NET.Runners.Searchers
+namespace H.NET.Searchers
 {
-    public class GoogleSearcher : ISearcher
+    public class GoogleSearcher : Module, ISearcher
     {
-        public List<string> Search(string query)
+        public async Task<List<string>> Search(string query)
         {
             /*
             using (var service = new CustomsearchService(
