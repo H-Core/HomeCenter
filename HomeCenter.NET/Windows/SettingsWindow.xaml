@@ -72,6 +72,21 @@
                     </Grid>
                 </Grid>
             </TabItem>
+            <TabItem Header="Searchers">
+                <Grid Background="#FFE5E5E5" Margin="5, 5, 5, 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="100*" />
+                    </Grid.RowDefinitions>
+                    <c:EnumSettingControl Grid.Row="0" x:Name="SearcherControl" Text="Using seacher:"/>
+                    <Grid Grid.Row="2">
+                        <ScrollViewer>
+                            <StackPanel x:Name="SearchersPanel"/>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </TabItem>
             <TabItem Header="Runners">
                 <ScrollViewer>
                     <StackPanel x:Name="RunnersPanel"/>

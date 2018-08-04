@@ -70,6 +70,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Utilities.Startup", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Runners.CSharpRunner", "H.NET.Runners.CSharpRunner\H.NET.Runners.CSharpRunner.csproj", "{BAF0CA91-5602-4EA6-9293-164C1E5DA704}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Searchers.WebSearchers", "H.NET.Searchers.WebSearchers\H.NET.Searchers.WebSearchers.csproj", "{F4C6E293-72FE-4243-8B79-66824387A09A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -164,6 +166,10 @@ Global
 		{BAF0CA91-5602-4EA6-9293-164C1E5DA704}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAF0CA91-5602-4EA6-9293-164C1E5DA704}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAF0CA91-5602-4EA6-9293-164C1E5DA704}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4C6E293-72FE-4243-8B79-66824387A09A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4C6E293-72FE-4243-8B79-66824387A09A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4C6E293-72FE-4243-8B79-66824387A09A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4C6E293-72FE-4243-8B79-66824387A09A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

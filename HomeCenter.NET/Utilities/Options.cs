@@ -18,6 +18,7 @@ namespace HomeCenter.NET.Utilities
         public static Keys RecordKey => Hook.FromString(Settings.Default.RecordKey);
 
         public static IRecorder Recorder => ModuleManager.Instance.GetPlugin<IRecorder>(Settings.Default.Recorder)?.Value;
+        public static ISearcher Searcher => ModuleManager.Instance.GetPlugin<ISearcher>(Settings.Default.Searcher)?.Value;
         public static IConverter Converter => ModuleManager.Instance.GetPlugin<IConverter>(Settings.Default.Converter)?.Value;
         public static List<IConverter> AlternativeConverters => Settings.Default.UseAlternativeConverters
             ? ModuleManager.Instance

@@ -71,6 +71,7 @@ namespace HomeCenter.NET.Windows
             Properties.Settings.Default.Recorder = RecorderControl.ComboBox.SelectedItem as string;
             Properties.Settings.Default.Converter = ConverterControl.ComboBox.SelectedItem as string;
             Properties.Settings.Default.Synthesizer = SynthesizerControl.ComboBox.SelectedItem as string;
+            Properties.Settings.Default.Searcher = SearcherControl.ComboBox.SelectedItem as string;
             Properties.Settings.Default.Save();
             Startup.Set(Options.FilePath, StartupControl.IsChecked ?? false);
         }
@@ -90,6 +91,7 @@ namespace HomeCenter.NET.Windows
             UpdateRecorders();
             UpdateConverters();
             UpdateSynthesizers();
+            UpdateSearchers();
             UpdateRunners();
             UpdateNotifiers();
         }
@@ -180,6 +182,12 @@ namespace HomeCenter.NET.Windows
         {
             UpdateComboBox<ISynthesizer>(SynthesizerControl.ComboBox, Properties.Settings.Default.Synthesizer);
             UpdatePanel<ISynthesizer>(SynthesizersPanel, Update);
+        });
+
+        private void UpdateSearchers() => SafeActions.Run(() =>
+        {
+            UpdateComboBox<ISearcher>(SearcherControl.ComboBox, Properties.Settings.Default.Searcher);
+            UpdatePanel<ISearcher>(SearchersPanel, Update);
         });
 
         private void UpdateRunners() => SafeActions.Run(() =>

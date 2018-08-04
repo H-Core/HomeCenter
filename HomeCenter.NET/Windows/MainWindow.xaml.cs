@@ -26,6 +26,7 @@ namespace HomeCenter.NET.Windows
 
         private BaseManager Manager { get; set; } = new BaseManager();
         private ISynthesizer Synthesizer { get; set; }
+        private ISearcher Searcher { get; set; }
 
         private IpcServer IpcServer { get; } = new IpcServer(Options.IpcPortToHomeCenter);
 
@@ -141,6 +142,17 @@ namespace HomeCenter.NET.Windows
             await bytes.PlayAsync();
         }
 
+        private async Task<List<string>> Search(string text)
+        {
+            if (Searcher == null)
+            {
+                Print("Searcher is not found");
+                return new List<string>();
+            }
+
+            return await Searcher.Search(text);
+        }
+
         private async Task HiddenRunAsync(string message) => await GlobalRunner.Run(message, false);
 
         private async void Run(string message) => await GlobalRunner.Run(message);
@@ -155,6 +167,7 @@ namespace HomeCenter.NET.Windows
             Manager.Converter = Options.Converter;
             Manager.AlternativeConverters = Options.AlternativeConverters;
             Synthesizer = Options.Synthesizer;
+            Searcher = Options.Searcher;
 
             Combinations.Clear();
             foreach (var pair in GlobalRunner.Storage.UniqueValues(i => i.Value).Where(i => i.Value.HotKey != null))
@@ -242,7 +255,7 @@ namespace HomeCenter.NET.Windows
 
             var staticRunners = new List<IRunner>
             {
-                new DefaultRunner(Print, Say),
+                new DefaultRunner(Print, Say, Search),
                 new KeyboardRunner(),
                 new WindowsRunner(),
                 new ClipboardRunner
@@ -273,6 +286,7 @@ namespace HomeCenter.NET.Windows
             AssembliesManager.LogAction = Print;
             Module.LogAction = Print;
             Runner.GetVariableValueGlobalFunc = GlobalRunner.GetVariableValue;
+            Runner.SearchFunc = Search;
             GlobalRunAction = Run;
 
             Print("Loading modules...");
