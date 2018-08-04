@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,11 +18,12 @@ namespace HomeCenter.NET.Runners
 
         #region Constructors
 
-        public DefaultRunner(Action<string> printAction, Func<string, Task> sayFunc)
+        public DefaultRunner(Action<string> printAction, Func<string, Task> sayFunc, Func<string, Task<List<string>>> searchFunc)
         {
             AddAsyncAction("say", sayFunc, "text");
             AddInternalAction("print", printAction, "text");
             AddInternalAction("run", Run, "other_command_key");
+            AddAction("search", async key => printAction(string.Join(Environment.NewLine, await searchFunc(key))), "key");
 
             AddAsyncAction("sleep", SleepCommand, "integer");
             AddAction("sync-sleep", command => Thread.Sleep(int.TryParse(command, out var result) ? result : 1000), "integer");
@@ -33,7 +35,7 @@ namespace HomeCenter.NET.Runners
             {
                 if (string.IsNullOrWhiteSpace(UserName))
                 {
-                    await SayAsync("Я еще не знаю вашего имени. Скажите ваше имя");
+                    await SayAsync("Я еще не знаю вашего имени. Пожалуйста, представьтесь");
 
                     var name = await WaitNextCommand(8000);
                     if (string.IsNullOrWhiteSpace(name))
