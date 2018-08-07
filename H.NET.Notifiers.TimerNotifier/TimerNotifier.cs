@@ -1,4 +1,5 @@
-﻿using System.Timers;
+﻿using System;
+using System.Timers;
 using H.NET.Core.Notifiers;
 
 namespace H.NET.Notifiers
@@ -8,11 +9,9 @@ namespace H.NET.Notifiers
         #region Properties
 
         private int _interval;
-        public int Interval
-        {
+        public int Interval {
             get => _interval;
-            set
-            {
+            set {
                 _interval = value;
 
                 if (value <= 0)
@@ -34,10 +33,6 @@ namespace H.NET.Notifiers
 
         #endregion
 
-        #region Events
-
-        #endregion
-
         #region Constructors
 
         public TimerNotifier()
@@ -49,7 +44,7 @@ namespace H.NET.Notifiers
         #endregion
 
         #region IDisposable
-        
+
         public override void Dispose()
         {
             base.Dispose();
@@ -74,8 +69,18 @@ namespace H.NET.Notifiers
             }
 
             CurrentTime = 0;
-            OnElapsed();
-        } 
+
+            try
+            {
+                OnElapsed();
+            }
+            catch (Exception exception)
+            {
+                Log($"Exception: {exception}");
+                Log($"Disabling module: {Name}");
+                Disable();
+            }
+        }
 
         #endregion
 
