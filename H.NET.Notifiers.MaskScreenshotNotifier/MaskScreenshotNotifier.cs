@@ -21,6 +21,8 @@ namespace H.NET.Notifiers
 
                 if (!PathIsValid(value))
                 {
+                    Mask?.Dispose();
+                    Mask = null;
                     return;
                 }
 
@@ -43,10 +45,17 @@ namespace H.NET.Notifiers
 
         #region Protected methods
 
-        public static bool PathIsValid(string path) => !string.IsNullOrWhiteSpace(path) && File.Exists(path);
+        private static bool PathIsValid(string path) => !string.IsNullOrWhiteSpace(path) && File.Exists(path);
 
         protected override bool Analyze(Bitmap bitmap)
         {
+            if (Mask == null || Mask.IsEmpty)
+            {
+                Log("Mask is not found. Disabling module...");
+                Disable();
+                return false;
+            }
+
             using (var mat = bitmap.ToMat())
             using (var grayMat = mat.ToGray())
             {
