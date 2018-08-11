@@ -11,6 +11,9 @@ namespace HomeCenter.NET.Utilities
     {
         #region Properties
 
+        public static TextDelegate RunAction { get; set; }
+        public static Func<string, Task> RunAsyncFunc { get; set; }
+
         public static PluginsManager<IModule> Instance { get; } = new PluginsManager<IModule>(Options.CompanyName,
             (module, list) =>
             {
@@ -40,29 +43,32 @@ namespace HomeCenter.NET.Utilities
             }
         });
 
-        public static void RegisterHandlers(TextDelegate commandAction, Func<string, Task> asyncCommandFunc) => SafeActions.Run(() =>
+        public static void RegisterHandlers() => SafeActions.Run(() =>
         {
-            var instances = Instance.Instances.Objects.Values;
+            var instances = Instance.Instances.Objects;
 
             foreach (var instance in instances)
             {
-                var module = instance.Value;
-                if (module == null)
+                var name = instance.Key;
+                var module = instance.Value.Value;
+                if (module == null || module.IsRegistered)
                 {
                     continue;
                 }
 
-                module.NewCommand += commandAction;
+                module.IsRegistered = true;
+                module.UniqueName = name;
+                module.NewCommand += RunAction;
                 module.NewCommandAsync += async (sender, args) =>
                 {
-                    if (asyncCommandFunc == null || args == null)
+                    if (RunAsyncFunc == null || args == null)
                     {
                         return;
                     }
 
                     using (args.GetDeferral())
                     {
-                        await asyncCommandFunc(args.Text);
+                        await RunAsyncFunc(args.Text);
                     }
                 };
 

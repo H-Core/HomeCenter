@@ -257,6 +257,7 @@ namespace HomeCenter.NET.Windows
             control.EnabledChanged += enabled =>
             {
                 ModuleManager.Instance.SetInstanceIsEnabled(name, enabled);
+                ModuleManager.RegisterHandlers();
 
                 updateAction?.Invoke();
             };

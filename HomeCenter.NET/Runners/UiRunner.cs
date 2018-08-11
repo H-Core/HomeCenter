@@ -34,8 +34,28 @@ namespace HomeCenter.NET.Runners
             AddInternalAction("show-module-settings", command => ShowModuleSettingsAction?.Invoke(command), "name");
             AddInternalAction("start-record", command => StartRecordAction?.Invoke(int.TryParse(command, out var result) ? result : DefaultRecordTimeout));
             AddInternalAction("deskband", DeskBandCommand);
-            AddInternalAction("enable-module", command => ModuleManager.Instance.SetInstanceIsEnabled(command, true), "name");
-            AddInternalAction("disable-module", command => ModuleManager.Instance.SetInstanceIsEnabled(command, false), "name");
+            AddAction("enable-module", name =>
+            {
+                ModuleManager.Instance.SetInstanceIsEnabled(name, true);
+                var obj = ModuleManager.Instance.Instances.GetObject(name);
+                if (obj.Exception != null)
+                {
+                    throw obj.Exception;
+                }
+
+                ModuleManager.RegisterHandlers();
+            }, "name");
+            AddAction("disable-module", name =>
+            {
+                ModuleManager.Instance.SetInstanceIsEnabled(name, false);
+                var obj = ModuleManager.Instance.Instances.GetObject(name);
+                if (obj.Exception != null)
+                {
+                    throw obj.Exception;
+                }
+
+                ModuleManager.RegisterHandlers();
+            }, "name");
 
             AddInternalAction("install-assembly", command => ModuleManager.Instance.Install(command), "path");
             AddInternalAction("uninstall-assembly", command => ModuleManager.Instance.Uninstall(command), "name");

@@ -292,13 +292,15 @@ namespace HomeCenter.NET.Windows
             Print("Loading modules...");
             try
             {
+                ModuleManager.RunAction = Run; // TODO: Hidden?
+                ModuleManager.RunAsyncFunc = HiddenRunAsync;
                 await Task.Run(() =>
                 {
                     ModuleManager.Instance.Load();
                     ModuleManager.Instance.EnableInstances();
                 });
                 ModuleManager.AddUniqueInstancesIfNeed();
-                ModuleManager.RegisterHandlers(HiddenRun, HiddenRunAsync);
+                ModuleManager.RegisterHandlers();
 
                 SetUpRuntimeModule();
 

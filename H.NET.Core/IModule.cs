@@ -7,6 +7,8 @@ namespace H.NET.Core
     {
         string Name { get; }
         string ShortName { get; }
+        string UniqueName { get; set; }
+        bool IsRegistered { get; set; }
         string Description { get; }
 
         ISettingsStorage Settings { get; }

@@ -13,6 +13,8 @@ namespace H.NET.Core
 
         public string Name { get; }
         public string ShortName => GetType().Name;
+        public string UniqueName { get; set; }
+        public bool IsRegistered { get; set; }
         public string Description { get; } = string.Empty;
 
         public ISettingsStorage Settings { get; } = new SettingsStorage();
@@ -27,12 +29,15 @@ namespace H.NET.Core
 
         protected void Say(string text) => Run($"say {text}");
         protected void Print(string text) => Run($"print {text}");
-        protected void ShowSettings() => Run($"show-module-settings {ShortName}");
+        protected void ShowSettings() => Run($"show-module-settings {UniqueName}");
 
         public event EventHandler<TextDeferredEventArgs> NewCommandAsync;
         protected async Task RunAsync(string text) => await NewCommandAsync.InvokeAsync(this, TextDeferredEventArgs.Create(text));
 
         protected async Task SayAsync(string text) => await RunAsync($"say {text}");
+
+        protected void Enable() => Run($"enable-module {UniqueName}");
+        protected void Disable() => Run($"disable-module {UniqueName}");
 
         public event ModuleDelegate SettingsSaved;
         public void SaveSettings() => SettingsSaved?.Invoke(this);
@@ -44,6 +49,7 @@ namespace H.NET.Core
         protected Module()
         {
             Name = GetType().FullName;
+            UniqueName = GetType().Name;
 
             Settings.PropertyChanged += (sender, args) =>
             {
