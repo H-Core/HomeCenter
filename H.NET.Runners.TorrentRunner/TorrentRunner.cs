@@ -20,6 +20,7 @@ namespace H.NET.Runners
 
         private string SaveTo { get; set; }
         private string QBitTorrentPath { get; set; }
+        private string MpcPath { get; set; }
         private string SearchPattern { get; set; }
         private int MaxDelaySeconds { get; set; }
         private double MinSizeGb { get; set; }
@@ -39,6 +40,7 @@ namespace H.NET.Runners
         {
             AddSetting(nameof(SaveTo), o => SaveTo = o, NoEmpty, string.Empty, SettingType.Folder);
             AddSetting(nameof(QBitTorrentPath), o => QBitTorrentPath = o, FileExists, string.Empty, SettingType.Path);
+            AddSetting(nameof(MpcPath), o => MpcPath = o, FileExists, "C:\\Program Files (x86)\\K-Lite Codec Pack\\MPC-HC64\\mpc-hc64_nvo.exe", SettingType.Path);
             AddSetting(nameof(MaxDelaySeconds), o => MaxDelaySeconds = o, null, 60);
             AddSetting(nameof(SearchPattern), o => SearchPattern = o, NoEmpty, "download torrent *");
             AddSetting(nameof(MinSizeGb), o => MinSizeGb = o, null, 1.0);
@@ -294,16 +296,16 @@ namespace H.NET.Runners
             {
                 return false;
             }
-
-            const string mpc = "C:\\Program Files (x86)\\K-Lite Codec Pack\\MPC-HC64\\mpc-hc64_nvo.exe";
-            if (File.Exists(mpc))
+            
+            if (File.Exists(MpcPath))
             {
-                Process.Start(mpc, $"/fullscreen \"{path}\"");
+                Process.Start(MpcPath, $"/fullscreen \"{path}\"");
             }
             else
             {
                 Process.Start(path);
             }
+
             Say(@"Запускаю");
 
             return true;
