@@ -3,6 +3,7 @@ using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Xml;
 using H.NET.Core.Settings;
+using H.NET.Notifiers.Properties;
 
 namespace H.NET.Notifiers
 {
@@ -10,6 +11,7 @@ namespace H.NET.Notifiers
     {
         #region Properties
 
+        private bool Sound { get; set; }
         private string Url { get; set; }
 
         private string LastTitle { get; set; }
@@ -20,6 +22,7 @@ namespace H.NET.Notifiers
 
         public RssNotifier()
         {
+            AddSetting(nameof(Sound), o => Sound = o, o => true, false);
             AddSetting(nameof(Url), o => Url = o, o => true, string.Empty, SettingType.Path);
             //AddVariable("$rss_last_title$", () => LastTitle);
         }
@@ -56,9 +59,21 @@ namespace H.NET.Notifiers
                 }
 
                 Print("New Rss: " + title);
+                if (Sound)
+                {
+                    PlayNotify();
+                }
+
                 //OnEvent(); TODO: required create Multi runner variables
             }
+        }
 
+        private static void PlayNotify()
+        {
+            using (var player = new System.Media.SoundPlayer(Resources.beep))
+            {
+                player.Play();
+            }
         }
 
         #endregion
