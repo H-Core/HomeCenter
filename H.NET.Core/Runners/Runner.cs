@@ -11,7 +11,6 @@ namespace H.NET.Core.Runners
         #region Properties
 
         private InvariantStringDictionary<RunInformation> HandlerDictionary { get; } = new InvariantStringDictionary<RunInformation>();
-        private InvariantStringDictionary<Func<object>> Variables { get; } = new InvariantStringDictionary<Func<object>>();
 
         #endregion
 
@@ -70,8 +69,6 @@ namespace H.NET.Core.Runners
 
         public string[] GetSupportedCommands() =>
             HandlerDictionary.Select(i => $"{i.Key} {i.Value.Description}").ToArray();
-
-        public string[] GetSupportedVariables() => Variables.Keys.ToArray();
 
         public virtual bool IsSupport(string key, string data) => GetInformation(key, data) != null;
         public bool IsInternal(string key, string data) => GetInformation(key, data)?.IsInternal ?? false;
@@ -198,9 +195,6 @@ namespace H.NET.Core.Runners
             WaitCommand = command;
             IsWaitCommand = false;
         }
-
-        protected void AddVariable(string key, Func<string> action) => Variables[key] = action;
-        public object GetVariableValue(string key) => Variables.TryGetValue(key, out var func) ? func?.Invoke() : null;
 
         protected void AddAction(string key, Action<string> action, string description = null, bool isInternal = false) =>
             AddAction(key, new RunInformation
