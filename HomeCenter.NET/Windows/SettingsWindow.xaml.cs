@@ -60,6 +60,19 @@ namespace HomeCenter.NET.Windows
             Add(path);
         }
 
+        private void AddIgnoredButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var path = DialogUtilities.OpenFileDialog();
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                return;
+            }
+
+            Options.HookIgnoredApps = Options.HookIgnoredApps.Concat(new[] { path }).ToList();
+
+            UpdateIgnored();
+        }
+
         #endregion
 
         #region Private methods
@@ -94,6 +107,7 @@ namespace HomeCenter.NET.Windows
             UpdateSearchers();
             UpdateRunners();
             UpdateNotifiers();
+            UpdateIgnored();
         }
 
         private void UpdateModules() => SafeActions.Run(() =>
@@ -198,6 +212,31 @@ namespace HomeCenter.NET.Windows
         private void UpdateNotifiers() => SafeActions.Run(() =>
         {
             UpdatePanel<INotifier>(NotifiersPanel, Update);
+        });
+
+        private void UpdateIgnored() => SafeActions.Run(() =>
+        {
+            var controls = Options.HookIgnoredApps.Select(app =>
+            {
+                var control = new ObjectControl(app)
+                {
+                    Height = 25,
+                    Color = Colors.LightGreen,
+                    EnableEditing = false,
+                    EnableAdding = false,
+                    EnableUpdating = false
+                };
+                control.Deleted += (sender, args) =>
+                {
+                    Options.HookIgnoredApps = Options.HookIgnoredApps.Except(new[] {app}).ToList();
+
+                    Update();
+                };
+
+                return control;
+            });
+
+            HookIgnoredPanel.Update(controls);
         });
 
         #endregion

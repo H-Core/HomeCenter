@@ -31,5 +31,11 @@ namespace HomeCenter.NET.Utilities
             .GetEnabledPlugins<IRunner>()
             .Select(i => i.Value.Value)
             .ToList();
+
+        public static List<string> HookIgnoredApps
+        {
+            get => Settings.Default.HookIgnoredApps.Split(';').Where(i => !string.IsNullOrWhiteSpace(i)).ToList();
+            set => Settings.Default.HookIgnoredApps = string.Join(";", value);
+        }
     }
 }

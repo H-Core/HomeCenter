@@ -24,6 +24,22 @@
                     <c:KeySettingControl Text="Record Button:" Key="{Binding Source={x:Static properties:Settings.Default},Path=RecordKey}"/>
                 </StackPanel>
             </TabItem>
+            <TabItem Header="Hook Ignored Apps">
+                <Grid Background="#FFE5E5E5" Margin="5, 5, 5, 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="25" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ScrollViewer Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                        <StackPanel x:Name="HookIgnoredPanel"/>
+                    </ScrollViewer>
+                    <Button Grid.Row="1" Grid.Column="0" Content="+"  Height="25" Click="AddIgnoredButton_OnClick"/>
+                </Grid>
+            </TabItem>
             <TabItem Header="Recorders">
                 <Grid Background="#FFE5E5E5" Margin="5, 5, 5, 5">
                     <Grid.RowDefinitions>
