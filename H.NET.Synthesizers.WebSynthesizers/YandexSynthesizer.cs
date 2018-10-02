@@ -39,10 +39,11 @@ namespace H.NET.Synthesizers
         {
             try
             {
+                var lang = TextToLang(ref text) ?? Lang;
                 using (var client = new HttpClient())
                 {
                     return await client.GetByteArrayAsync(
-                        $"https://tts.voicetech.yandex.net/generate?text={text}&format={Format}&lang={Lang}&speaker={Speaker}&emotion={Emotion}&key={Key}&quality={Quality}&speed={Speed}");
+                        $"https://tts.voicetech.yandex.net/generate?text={text}&format={Format}&lang={lang}&speaker={Speaker}&emotion={Emotion}&key={Key}&quality={Quality}&speed={Speed}");
                 }
             }
             catch (Exception exception)
@@ -53,6 +54,18 @@ namespace H.NET.Synthesizers
         }
 
         protected override string TextToKey(string text) => $"{text}_{Speaker}_{Lang}_{Emotion}_{Speed}_{Format}_{Quality}";
+
+        private static string TextToLang(ref string text)
+        {
+            if (text.Contains("[EN]"))
+            {
+                text = text.Replace("[EN]", string.Empty).TrimStart();
+
+                return "en-US";
+            }
+
+            return null;
+        }
 
         #endregion
     }
