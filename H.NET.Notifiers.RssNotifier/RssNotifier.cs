@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.ServiceModel.Syndication;
 using System.Xml;
 using H.NET.Core.Settings;
@@ -38,34 +39,44 @@ namespace H.NET.Notifiers
                 return;
             }
 
-            using (var reader = XmlReader.Create(Url))
+            SyndicationFeed feed;
+            try
             {
-                var feed = SyndicationFeed.Load(reader);
-                var firstItem = feed.Items.FirstOrDefault();
-                var title = firstItem?.Title.Text;
-
-                if (title == null ||
-                    string.Equals(title, LastTitle, StringComparison.OrdinalIgnoreCase))
+                using (var reader = XmlReader.Create(Url))
                 {
-                    return;
+                    feed = SyndicationFeed.Load(reader);
                 }
-
-                var isFirstFeed = LastTitle == null;
-                LastTitle = title;
-
-                if (isFirstFeed)
-                {
-                    return;
-                }
-
-                Print("New Rss: " + title);
-                if (Sound)
-                {
-                    PlayNotify();
-                }
-
-                //OnEvent(); TODO: required create Multi runner variables
             }
+            catch (WebException exception)
+            {
+                Print($"Rss Web Exception: {exception.Message}");
+                return;
+            }
+
+            var firstItem = feed.Items.FirstOrDefault();
+            var title = firstItem?.Title.Text;
+
+            if (title == null ||
+                string.Equals(title, LastTitle, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            var isFirstFeed = LastTitle == null;
+            LastTitle = title;
+
+            if (isFirstFeed)
+            {
+                return;
+            }
+
+            Print("New Rss: " + title);
+            if (Sound)
+            {
+                PlayNotify();
+            }
+
+            //OnEvent(); TODO: required create Multi runner variables
         }
 
         private static void PlayNotify()
