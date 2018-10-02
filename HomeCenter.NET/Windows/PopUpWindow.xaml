@@ -4,11 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="PopUpWindow" 
+        Title="HomeCenter.NET PopUpWindow" 
         MinHeight="80" MinWidth="300"
         Topmost="True" ShowInTaskbar="False" ResizeMode="NoResize" WindowStyle="None"
         Opacity="0.8" AllowsTransparency="True" Background="#CC0139F9"
         SizeToContent="WidthAndHeight"
-        Loaded="Window_Loaded" SizeChanged="Window_SizeChanged">
+        Loaded="Window_Loaded" SizeChanged="Window_SizeChanged" ShowActivated="False">
     <Label Margin="5" x:Name="TextControl" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
 </Window>
