@@ -13,6 +13,7 @@ namespace H.NET.Notifiers
         #region Properties
 
         private bool Sound { get; set; }
+        private bool RequiredSay { get; set; }
         private string Url { get; set; }
 
         private string LastTitle { get; set; }
@@ -24,6 +25,7 @@ namespace H.NET.Notifiers
         public RssNotifier()
         {
             AddSetting(nameof(Sound), o => Sound = o, o => true, false);
+            AddSetting(nameof(RequiredSay), o => RequiredSay = o, o => true, false);
             AddSetting(nameof(Url), o => Url = o, o => true, string.Empty, SettingType.Path);
             //AddVariable("$rss_last_title$", () => LastTitle);
         }
@@ -71,7 +73,11 @@ namespace H.NET.Notifiers
             }
 
             Print("New Rss: " + title);
-            if (Sound)
+            if (RequiredSay)
+            {
+                Say("New work: " + title);
+            }
+            else if (Sound)
             {
                 PlayNotify();
             }
