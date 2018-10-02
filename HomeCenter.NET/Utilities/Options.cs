@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using H.NET.Core;
@@ -36,6 +38,24 @@ namespace HomeCenter.NET.Utilities
         {
             get => Settings.Default.HookIgnoredApps.Split(';').Where(i => !string.IsNullOrWhiteSpace(i)).ToList();
             set => Settings.Default.HookIgnoredApps = string.Join(";", value);
+        }
+
+        public static bool IsIgnoredApplication()
+        {
+            try
+            {
+                var hwnd = User32Methods.GetForegroundWindow();
+                var id = User32Methods.GetWindowProcessId(hwnd);
+                //var appProcessName = Process.GetProcessById(GetWindowProcessID(hwnd)).ProcessName;
+                var appExePath = Process.GetProcessById(id).MainModule.FileName;
+                //var appExeName = appExePath.Substring(appExePath.LastIndexOf(@"\") + 1);
+
+                return HookIgnoredApps.Contains(appExePath);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

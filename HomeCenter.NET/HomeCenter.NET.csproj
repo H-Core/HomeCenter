@@ -149,6 +149,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Utilities\UiExtensions.cs" />
+    <Compile Include="Utilities\User32Methods.cs" />
     <Compile Include="Windows\CommandsWindow.xaml.cs">
       <DependentUpon>CommandsWindow.xaml</DependentUpon>
     </Compile>

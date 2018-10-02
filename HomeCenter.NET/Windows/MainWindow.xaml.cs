@@ -389,9 +389,14 @@ namespace HomeCenter.NET.Windows
         private void Global_KeyDown(object sender, KeyboardHookEventArgs e)
         {
             if (e.Key != Keys.None && e.Key == Options.RecordKey ||
-                e.IsAltPressed && e.IsCtrlPressed)
+                e.Key == Keys.Space && e.IsAltPressed && e.IsCtrlPressed)
             {
                 Manager.Start();
+            }
+
+            if (Options.IsIgnoredApplication())
+            {
+                return;
             }
 
             //Print($"{e.Key:G}");
@@ -405,6 +410,10 @@ namespace HomeCenter.NET.Windows
         private void Global_MouseDown(object sender, MouseEventExtArgs e)
         {
             if (e.SpecialButton == 0)
+            {
+                return;
+            }
+            if (Options.IsIgnoredApplication())
             {
                 return;
             }
