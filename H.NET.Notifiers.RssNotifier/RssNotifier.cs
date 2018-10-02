@@ -75,7 +75,7 @@ namespace H.NET.Notifiers
             Print("New Rss: " + title);
             if (RequiredSay)
             {
-                Say("New work: " + title);
+                Say("[EN]New work: " + title);
             }
             else if (Sound)
             {
