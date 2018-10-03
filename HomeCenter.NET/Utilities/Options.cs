@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using H.NET.Core;
@@ -44,10 +43,15 @@ namespace HomeCenter.NET.Utilities
         {
             try
             {
-                var hwnd = User32Methods.GetForegroundWindow();
-                var id = User32Methods.GetWindowProcessId(hwnd);
-                //var appProcessName = Process.GetProcessById(GetWindowProcessID(hwnd)).ProcessName;
-                var appExePath = Process.GetProcessById(id).MainModule.FileName;
+                if (User32Utilities.AreApplicationFullScreen())
+                {
+                    return true;
+                }
+
+                var process = User32Utilities.GetForegroundProcess();
+                var appExePath = process.MainModule.FileName;
+                
+                //var appProcessName = process.ProcessName;
                 //var appExeName = appExePath.Substring(appExePath.LastIndexOf(@"\") + 1);
 
                 return HookIgnoredApps.Contains(appExePath);

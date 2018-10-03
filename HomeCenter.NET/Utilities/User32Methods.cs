@@ -1,20 +1,32 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 namespace HomeCenter.NET.Utilities
 {
     public static class User32Methods
     {
-        [DllImport("user32.dll")]
-        public static extern int GetForegroundWindow();
-
-        [DllImport("user32")]
-        private static extern uint GetWindowThreadProcessId(int hWnd, out int lpdwProcessId);
-
-        public static int GetWindowProcessId(int hwnd)
+        [StructLayout(LayoutKind.Sequential)]
+        public struct Rect
         {
-            GetWindowThreadProcessId(hwnd, out var pid);
-
-            return pid;
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
         }
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetForegroundWindow();
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetDesktopWindow();
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetShellWindow();
+
+        [DllImport("user32.dll")]
+        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out int lpdwProcessId);
+
+        [DllImport("user32.dll")]
+        public static extern bool GetWindowRect(IntPtr hWnd, [In, Out] ref Rect rect);
     }
 }
