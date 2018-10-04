@@ -20,10 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\H.NET.Converters.WebConverters\H.NET.Converters.WebConverters.csproj" />
+    <ProjectReference Include="..\Converters\WebConverters\WebConverters.csproj" />
     <ProjectReference Include="..\H.NET.Core\H.NET.Core.csproj" />
-    <ProjectReference Include="..\H.NET.Recorders.WinmmRecorder\H.NET.Recorders.WinmmRecorder.csproj" />
-    <ProjectReference Include="..\H.NET.Synthesizers.WebSynthesizers\H.NET.Synthesizers.WebSynthesizers.csproj" />
+    <ProjectReference Include="..\Recorders\WinmmRecorder\WinmmRecorder.csproj" />
+    <ProjectReference Include="..\Synthesizers\WebSynthesizers\WebSynthesizers.csproj" />
   </ItemGroup>
 
 </Project>

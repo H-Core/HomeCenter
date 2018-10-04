@@ -32,49 +32,65 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCenter.NET", "HomeCente
 		{AB260CD7-41AF-4EB4-B635-9144C1049177} = {AB260CD7-41AF-4EB4-B635-9144C1049177}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.SearchDeskBand", "H.NET.SearchDeskBand\H.NET.SearchDeskBand.csproj", "{B1A02ADB-14C2-4451-93C4-1A7E33D3EB2D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchDeskBand", "SearchDeskBand\SearchDeskBand\SearchDeskBand.csproj", "{B1A02ADB-14C2-4451-93C4-1A7E33D3EB2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Storages.CommandsStorage", "H.NET.Storages.CommandsStorage\H.NET.Storages.CommandsStorage.csproj", "{9C0197EC-B353-4CDD-ADDC-E23876C7B72F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandsStorage", "Utilities\CommandsStorage\CommandsStorage.csproj", "{9C0197EC-B353-4CDD-ADDC-E23876C7B72F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.SearchDeskBand.TestApp", "H.NET.SearchDeskBand.TestApp\H.NET.SearchDeskBand.TestApp.csproj", "{FF391D32-B326-4661-AB2C-4D209E4DADD9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchDeskBand.TestApp", "SearchDeskBand\SearchDeskBand.TestApp\SearchDeskBand.TestApp.csproj", "{FF391D32-B326-4661-AB2C-4D209E4DADD9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Core", "H.NET.Core\H.NET.Core.csproj", "{E3EE7480-FD57-43E0-B6E1-B69255068DCB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Utilities.IPC", "H.NET.Utilities.IPC\H.NET.Utilities.IPC.csproj", "{A2CB840C-0158-4227-BD1E-6B03B098D5E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IPC", "Utilities\IPC\IPC.csproj", "{A2CB840C-0158-4227-BD1E-6B03B098D5E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Utilities.SpecialFolder", "H.NET.Utilities.SpecialFolder\H.NET.Utilities.SpecialFolder.csproj", "{235EB5F6-DFAE-44A8-9F8B-3273FD6A858B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecialFolder", "Utilities\SpecialFolder\SpecialFolder.csproj", "{235EB5F6-DFAE-44A8-9F8B-3273FD6A858B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Converters.WebConverters", "H.NET.Converters.WebConverters\H.NET.Converters.WebConverters.csproj", "{F88CF118-C192-4354-AE09-5479622FA5FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebConverters", "Converters\WebConverters\WebConverters.csproj", "{F88CF118-C192-4354-AE09-5479622FA5FA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Synthesizers.WebSynthesizers", "H.NET.Synthesizers.WebSynthesizers\H.NET.Synthesizers.WebSynthesizers.csproj", "{6ABF69B3-3F17-4D93-B69A-092E3CBD1DBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSynthesizers", "Synthesizers\WebSynthesizers\WebSynthesizers.csproj", "{6ABF69B3-3F17-4D93-B69A-092E3CBD1DBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Runners.TelegramRunner", "H.NET.Runners.TelegramRunner\H.NET.Runners.TelegramRunner.csproj", "{FAD16B4C-5CED-4799-A4BC-4DC3221314DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramRunner", "Runners\TelegramRunner\TelegramRunner.csproj", "{FAD16B4C-5CED-4799-A4BC-4DC3221314DA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Recorders.WinmmRecorder", "H.NET.Recorders.WinmmRecorder\H.NET.Recorders.WinmmRecorder.csproj", "{1BFB7E2D-E190-4394-8720-FB23D5A4EDBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinmmRecorder", "Recorders\WinmmRecorder\WinmmRecorder.csproj", "{1BFB7E2D-E190-4394-8720-FB23D5A4EDBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Recorders.NAudioRecorder", "H.NET.Recorders.NAudioRecorder\H.NET.Recorders.NAudioRecorder.csproj", "{1134240E-B221-4411-A236-C5371D7DA160}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAudioRecorder", "Recorders\NAudioRecorder\NAudioRecorder.csproj", "{1134240E-B221-4411-A236-C5371D7DA160}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Plugins", "H.NET.Plugins\H.NET.Plugins.csproj", "{72121390-8576-4234-94FD-ECBFF98DABB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugins", "Utilities\Plugins\Plugins.csproj", "{72121390-8576-4234-94FD-ECBFF98DABB4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Notifiers.TimerNotifier", "H.NET.Notifiers.TimerNotifier\H.NET.Notifiers.TimerNotifier.csproj", "{42C14380-3FFA-4AED-A674-FEDDB8EE0FE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimerNotifier", "Notifiers\TimerNotifier\TimerNotifier.csproj", "{42C14380-3FFA-4AED-A674-FEDDB8EE0FE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Notifiers.ScreenshotNotifier", "H.NET.Notifiers.ScreenshotNotifier\H.NET.Notifiers.ScreenshotNotifier.csproj", "{69A68B09-45E9-4BA0-8038-6EDF0FFE0959}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScreenshotNotifier", "Notifiers\ScreenshotNotifier\ScreenshotNotifier.csproj", "{69A68B09-45E9-4BA0-8038-6EDF0FFE0959}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Notifiers.MaskScreenshotNotifier.Tests", "H.NET.Notifiers.MaskScreenshotNotifier.Tests\H.NET.Notifiers.MaskScreenshotNotifier.Tests.csproj", "{AB260CD7-41AF-4EB4-B635-9144C1049177}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaskScreenshotNotifier.Tests", "Notifiers\MaskScreenshotNotifier.Tests\MaskScreenshotNotifier.Tests.csproj", "{AB260CD7-41AF-4EB4-B635-9144C1049177}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Notifiers.MaskScreenshotNotifier", "H.NET.Notifiers.MaskScreenshotNotifier\H.NET.Notifiers.MaskScreenshotNotifier.csproj", "{B6E41280-0925-4967-BA80-9ECC769E09B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaskScreenshotNotifier", "Notifiers\MaskScreenshotNotifier\MaskScreenshotNotifier.csproj", "{B6E41280-0925-4967-BA80-9ECC769E09B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Runners.TorrentRunner", "H.NET.Runners.TorrentRunner\H.NET.Runners.TorrentRunner.csproj", "{3B631441-A561-4CD5-A61E-6FD02694A00F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorrentRunner", "Runners\TorrentRunner\TorrentRunner.csproj", "{3B631441-A561-4CD5-A61E-6FD02694A00F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Utilities.Hook", "H.NET.Utilities.Hook\H.NET.Utilities.Hook.csproj", "{440051B2-288D-4B81-AF01-DAB1BD928F52}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hook", "Utilities\Hook\Hook.csproj", "{440051B2-288D-4B81-AF01-DAB1BD928F52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Utilities.Startup", "H.NET.Utilities.Startup\H.NET.Utilities.Startup.csproj", "{96DD6F93-C347-40F7-8DF5-47C66AF46DE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Startup", "Utilities\Startup\Startup.csproj", "{96DD6F93-C347-40F7-8DF5-47C66AF46DE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Runners.CSharpRunner", "H.NET.Runners.CSharpRunner\H.NET.Runners.CSharpRunner.csproj", "{BAF0CA91-5602-4EA6-9293-164C1E5DA704}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpRunner", "Runners\CSharpRunner\CSharpRunner.csproj", "{BAF0CA91-5602-4EA6-9293-164C1E5DA704}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Searchers.WebSearchers", "H.NET.Searchers.WebSearchers\H.NET.Searchers.WebSearchers.csproj", "{F4C6E293-72FE-4243-8B79-66824387A09A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSearchers", "Searchers\WebSearchers\WebSearchers.csproj", "{F4C6E293-72FE-4243-8B79-66824387A09A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "H.NET.Notifiers.RssNotifier", "H.NET.Notifiers.RssNotifier\H.NET.Notifiers.RssNotifier.csproj", "{68C8D9B7-1722-44F4-A7BD-83167A29495C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssNotifier", "Notifiers\RssNotifier\RssNotifier.csproj", "{68C8D9B7-1722-44F4-A7BD-83167A29495C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runners", "Runners", "{BD5C6E7C-E921-4665-817F-269259C9DC2F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notifiers", "Notifiers", "{56332C65-C5C9-4C92-82C1-1CB8B590BA20}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Recorders", "Recorders", "{0EFAD11E-DAF9-4D33-A235-C4ECE2A221EE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Converters", "Converters", "{54C63C87-427C-4737-9AD6-94217054E8EC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Searchers", "Searchers", "{63B6027F-9388-4CA9-B5EA-A69AEAC6837A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Synthesizers", "Synthesizers", "{FE398DF2-8118-4148-BE85-B5615DA0A78F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{E14F4C88-C2A8-437F-A924-C47606A0E5D4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DeskBand", "DeskBand", "{59BC58CE-C9A5-4BF0-9CDA-B3F6CCCDE942}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -181,6 +197,29 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B1A02ADB-14C2-4451-93C4-1A7E33D3EB2D} = {59BC58CE-C9A5-4BF0-9CDA-B3F6CCCDE942}
+		{9C0197EC-B353-4CDD-ADDC-E23876C7B72F} = {E14F4C88-C2A8-437F-A924-C47606A0E5D4}
+		{FF391D32-B326-4661-AB2C-4D209E4DADD9} = {59BC58CE-C9A5-4BF0-9CDA-B3F6CCCDE942}
+		{A2CB840C-0158-4227-BD1E-6B03B098D5E6} = {E14F4C88-C2A8-437F-A924-C47606A0E5D4}
+		{235EB5F6-DFAE-44A8-9F8B-3273FD6A858B} = {E14F4C88-C2A8-437F-A924-C47606A0E5D4}
+		{F88CF118-C192-4354-AE09-5479622FA5FA} = {54C63C87-427C-4737-9AD6-94217054E8EC}
+		{6ABF69B3-3F17-4D93-B69A-092E3CBD1DBF} = {FE398DF2-8118-4148-BE85-B5615DA0A78F}
+		{FAD16B4C-5CED-4799-A4BC-4DC3221314DA} = {BD5C6E7C-E921-4665-817F-269259C9DC2F}
+		{1BFB7E2D-E190-4394-8720-FB23D5A4EDBF} = {0EFAD11E-DAF9-4D33-A235-C4ECE2A221EE}
+		{1134240E-B221-4411-A236-C5371D7DA160} = {0EFAD11E-DAF9-4D33-A235-C4ECE2A221EE}
+		{72121390-8576-4234-94FD-ECBFF98DABB4} = {E14F4C88-C2A8-437F-A924-C47606A0E5D4}
+		{42C14380-3FFA-4AED-A674-FEDDB8EE0FE6} = {56332C65-C5C9-4C92-82C1-1CB8B590BA20}
+		{69A68B09-45E9-4BA0-8038-6EDF0FFE0959} = {56332C65-C5C9-4C92-82C1-1CB8B590BA20}
+		{AB260CD7-41AF-4EB4-B635-9144C1049177} = {56332C65-C5C9-4C92-82C1-1CB8B590BA20}
+		{B6E41280-0925-4967-BA80-9ECC769E09B6} = {56332C65-C5C9-4C92-82C1-1CB8B590BA20}
+		{3B631441-A561-4CD5-A61E-6FD02694A00F} = {BD5C6E7C-E921-4665-817F-269259C9DC2F}
+		{440051B2-288D-4B81-AF01-DAB1BD928F52} = {E14F4C88-C2A8-437F-A924-C47606A0E5D4}
+		{96DD6F93-C347-40F7-8DF5-47C66AF46DE5} = {E14F4C88-C2A8-437F-A924-C47606A0E5D4}
+		{BAF0CA91-5602-4EA6-9293-164C1E5DA704} = {BD5C6E7C-E921-4665-817F-269259C9DC2F}
+		{F4C6E293-72FE-4243-8B79-66824387A09A} = {63B6027F-9388-4CA9-B5EA-A69AEAC6837A}
+		{68C8D9B7-1722-44F4-A7BD-83167A29495C} = {56332C65-C5C9-4C92-82C1-1CB8B590BA20}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03EBDA7B-EC52-413D-B5C5-1CDB93A17ADB}
