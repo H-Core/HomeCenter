@@ -8,4 +8,7 @@ script:
   - cd H.NET.Core
   - dotnet restore
   - dotnet build
-#  - dotnet test
+  - cd ../H.NET.Tests
+  - dotnet restore
+  - dotnet build
+  - dotnet test
