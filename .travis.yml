@@ -6,6 +6,6 @@ mono: none
 dotnet: 2.0.0
 script:
   - dotnet restore
-  - cd H.NET.Tests
+  - cd H.NET.Core
   - dotnet build
-  - dotnet test
+#  - dotnet test
