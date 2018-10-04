@@ -10,8 +10,8 @@ before_build:
   - appveyor-retry dotnet restore -v Minimal "H.NET.Core"
   - appveyor-retry dotnet restore -v Minimal "H.NET.Tests"
 build_script:
-  - dotnet build "H.NET.Core" -c %CONFIGURATION% --no-dependencies
-  - dotnet build "H.NET.Tests" -c %CONFIGURATION% --no-dependencies
+  - dotnet build "H.NET.Core" -c %CONFIGURATION%
+  - dotnet build "H.NET.Tests" -c %CONFIGURATION%
 test_script:
   - dotnet test "H.NET.Tests" -c %CONFIGURATION%
 on_success:
