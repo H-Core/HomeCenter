@@ -21,7 +21,7 @@ namespace H.NET.Plugins.Extensions
 
         public static string GetSimpleName(this Assembly assembly) => assembly.GetName().Name;
 
-        public static string[] GetDllPaths(this Assembly assembly)
+        public static string[] GetDllPaths(this Assembly assembly, int level = 0)
         {
             var list = new List<string> { assembly.Location };
 
@@ -32,15 +32,19 @@ namespace H.NET.Plugins.Extensions
                             !Path.GetFileName(i).StartsWith("mscorlib") &&
                             !Path.GetFileName(i).StartsWith("netstandard"))
                 .ToArray();
-
+            
             list.AddRange(references);
             list.AddRange(references
                 .Select(Assembly.LoadFrom)
-                .SelectMany(GetDllPaths));
+                .SelectMany(i => GetDllPaths(i, level + 1)));
 
-            // Emgu.CV and other wrapper fix
-            list.AddRange(GetFilesIfExists(Path.Combine(folder, "x86")));
-            list.AddRange(GetFilesIfExists(Path.Combine(folder, "x64")));
+            // TODO: rough fix
+            if (level == 0)
+            {
+                // Emgu.CV and other wrapper fix
+                list.AddRange(GetFilesIfExists(Path.Combine(folder, "x86")));
+                list.AddRange(GetFilesIfExists(Path.Combine(folder, "x64")));
+            }
 
             list = list.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
 
