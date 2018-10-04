@@ -88,7 +88,7 @@ namespace H.NET.Utilities
         }
 
         private static bool Compare(string first, string second) => 
-            string.Equals(first.Trim(' ', '\"'), second.Trim(' ', '\"'), StringComparison.OrdinalIgnoreCase);
+            string.Equals(first?.Trim(' ', '\"'), second?.Trim(' ', '\"'), StringComparison.OrdinalIgnoreCase);
 
         #endregion
 

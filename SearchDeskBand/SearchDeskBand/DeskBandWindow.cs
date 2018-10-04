@@ -63,7 +63,7 @@ namespace H.NET.SearchDeskBand
                 if (!Process.GetProcessesByName(ApplicationName).Any())
                 {
                     var path = Startup.GetFilePath($"{ApplicationName}.exe");
-                    if (File.Exists(path))
+                    if (!string.IsNullOrWhiteSpace(path) && File.Exists(path))
                     {
                         Process.Start(path);
                     }
