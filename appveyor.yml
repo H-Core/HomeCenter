@@ -7,7 +7,7 @@ configuration:
 build:
   verbosity: minimal
 before_build:
-  - appveyor-retry dotnet restore -v Minimal  
+  - appveyor-retry dotnet restore -v Minimal "H.NET.Core"
 build_script:
   - dotnet build "H.NET.Core" -c %CONFIGURATION% --no-dependencies
 # test_script:
