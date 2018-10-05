@@ -51,7 +51,7 @@ namespace HomeCenter.NET.Windows
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            var path = DialogUtilities.OpenFileDialog();
+            var path = DialogUtilities.OpenFileDialog(filter: @"DLL files (*.dll) |*.dll");
             if (string.IsNullOrWhiteSpace(path))
             {
                 return;
@@ -62,7 +62,7 @@ namespace HomeCenter.NET.Windows
 
         private void AddIgnoredButton_OnClick(object sender, RoutedEventArgs e)
         {
-            var path = DialogUtilities.OpenFileDialog();
+            var path = DialogUtilities.OpenFileDialog(filter: @"EXE files (*.exe) |*.exe");
             if (string.IsNullOrWhiteSpace(path))
             {
                 return;

@@ -5,9 +5,13 @@ namespace HomeCenter.NET.Utilities
 {
     public static class DialogUtilities
     {
-        public static string OpenFileDialog(string path = null)
+        public static string OpenFileDialog(string path = null, string filter = null)
         {
             var dialog = new VistaOpenFileDialog();
+            if (!string.IsNullOrWhiteSpace(filter))
+            {
+                dialog.Filter = filter;
+            }
             if (!string.IsNullOrWhiteSpace(path) && File.Exists(path))
             {
                 dialog.FileName = path;
