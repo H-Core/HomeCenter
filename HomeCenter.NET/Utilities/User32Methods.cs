@@ -28,5 +28,15 @@ namespace HomeCenter.NET.Utilities
 
         [DllImport("user32.dll")]
         public static extern bool GetWindowRect(IntPtr hWnd, [In, Out] ref Rect rect);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern bool ShowWindow(HandleRef hwnd, int nCmdShow);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(HandleRef hwnd);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetFocus(HandleRef hwnd);
+
     }
 }

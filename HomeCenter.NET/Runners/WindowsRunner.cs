@@ -1,8 +1,8 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using H.NET.Core.Runners;
+using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Runners
 {
@@ -15,6 +15,7 @@ namespace HomeCenter.NET.Runners
             AddAction("explorer", ExplorerCommand, "path");
 
             AddAction("show-window", ShowWindowCommand, "process_name");
+            AddAction("show-process-names", ShowProcessNames);
         }
 
         #endregion
@@ -26,27 +27,37 @@ namespace HomeCenter.NET.Runners
 
         private void ExplorerCommand(string command) => Run($"start explorer \"{NormalizePath(command)}\"");
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern bool ShowWindow(HandleRef hwnd, int nCmdShow);
-        [DllImport("user32.dll")]
-        private static extern bool SetForegroundWindow(HandleRef hwnd);
-        [DllImport("user32.dll")]
-        private static extern IntPtr SetFocus(HandleRef hwnd);
-
-        public static void ShowWindowCommand(string command)
+        private void ShowProcessNames(string command)
         {
-            var processes = Process.GetProcessesByName(command).Where(i => !string.IsNullOrWhiteSpace(i.MainWindowTitle));
+            Print(@"Current process names:");
+            var processes = Process
+                .GetProcesses()
+                .Where(i => !string.IsNullOrWhiteSpace(i.MainWindowTitle));
+
+            foreach (var process in processes)
+            {
+                Print(process.ProcessName);
+            }
+        }
+
+        private void ShowWindowCommand(string command)
+        {
+            var processes = Process
+                .GetProcessesByName(command)
+                .Where(i => !string.IsNullOrWhiteSpace(i.MainWindowTitle));
+
             var process = processes.FirstOrDefault();
             if (process == null)
             {
+                Print($@"Process: {command} is not found");
                 return;
             }
 
             var ptr = new HandleRef(null, process.MainWindowHandle);
             const int swShow = 5;
-            ShowWindow(ptr, swShow);
-            SetForegroundWindow(ptr);
-            SetFocus(ptr);
+            User32Methods.ShowWindow(ptr, swShow);
+            User32Methods.SetForegroundWindow(ptr);
+            User32Methods.SetFocus(ptr);
         }
 
         #endregion
