@@ -31,24 +31,11 @@ namespace H.NET.Core
         #region Events
 
         public event TextDelegate NewCommand;
-        protected void Run(string text) => NewCommand?.Invoke(text);
-
-        protected void Say(string text) => Run($"say {text}");
-        protected void Print(string text) => Run($"print {text}");
-        protected void ShowSettings() => Run($"show-module-settings {UniqueName}");
-
         public event EventHandler<TextDeferredEventArgs> NewCommandAsync;
-        protected async Task RunAsync(string text) => await NewCommandAsync.InvokeAsync(this, TextDeferredEventArgs.Create(text));
-
-        protected async Task SayAsync(string text) => await RunAsync($"say {text}");
-
-        protected void Enable() => Run($"enable-module {UniqueName}");
-        protected void Disable() => Run($"disable-module {UniqueName}");
-
         public event ModuleDelegate SettingsSaved;
-        public void SaveSettings() => SettingsSaved?.Invoke(this);
-
+        
         #endregion
+
 
         #region Constructors
 
@@ -66,6 +53,25 @@ namespace H.NET.Core
                 }
             };
         }
+
+        #endregion
+
+        #region Main Methods
+
+        public void Run(string text) => NewCommand?.Invoke(text);
+
+        public void Say(string text) => Run($"say {text}");
+        public void Print(string text) => Run($"print {text}");
+        public void ShowSettings() => Run($"show-module-settings {UniqueName}");
+
+        public async Task RunAsync(string text) => await NewCommandAsync.InvokeAsync(this, TextDeferredEventArgs.Create(text));
+
+        public async Task SayAsync(string text) => await RunAsync($"say {text}");
+
+        public void Enable() => Run($"enable-module {UniqueName}");
+        public void Disable() => Run($"disable-module {UniqueName}");
+
+        public void SaveSettings() => SettingsSaved?.Invoke(this);
 
         #endregion
 
