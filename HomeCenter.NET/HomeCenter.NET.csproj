@@ -93,6 +93,7 @@
     <Compile Include="Controls\ObjectControl.xaml.cs">
       <DependentUpon>ObjectControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\RunnerExtensions.cs" />
     <Compile Include="Runners\ClipboardRunner.cs" />
     <Compile Include="Runners\WindowsRunner.cs" />
     <Compile Include="Runners\KeyboardRunner.cs" />

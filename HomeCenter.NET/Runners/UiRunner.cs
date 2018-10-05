@@ -2,6 +2,7 @@
 using System.Linq;
 using H.NET.Core.Runners;
 using H.NET.Utilities;
+using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Runners
@@ -57,9 +58,9 @@ namespace HomeCenter.NET.Runners
                 ModuleManager.RegisterHandlers();
             }, "name");
 
-            AddInternalAction("install-assembly", command => ModuleManager.Instance.Install(command), "path");
-            AddInternalAction("uninstall-assembly", command => ModuleManager.Instance.Uninstall(command), "name");
-            AddInternalAction("update-assembly", command => ModuleManager.Instance.Update(command), "name");
+            AddInternalAction("install-assembly", command => this.CheckPathAndRun(command, ModuleManager.Instance.Install), "path");
+            AddInternalAction("uninstall-assembly", command => this.CheckPathAndRun(command, ModuleManager.Instance.Uninstall), "name");
+            AddInternalAction("update-assembly", command => this.CheckPathAndRun(command, ModuleManager.Instance.Update), "name");
             AddInternalAction("check-assemblies-updates", command =>
             {
                 var names = GetCanBeUpdatedAssemblies();
