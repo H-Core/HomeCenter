@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Windows;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Utilities;
@@ -18,7 +17,7 @@ namespace HomeCenter.NET
             if (isKillAll)
             {
                 Process.GetProcessesByName(Options.ApplicationName)
-                    .Where(i => i .Id != Process.GetCurrentProcess().Id)
+                    .Where(i => i.Id != Process.GetCurrentProcess().Id)
                     .AsParallel()
                     .ForAll(i => i.Kill());
             }
@@ -33,12 +32,19 @@ namespace HomeCenter.NET
                 return;
             }
 
-            AppDomain.CurrentDomain.UnhandledException += (o, args) => OnException(args.ExceptionObject);
+
+            #region Exception Handling
+
+            SafeActions.DefaultExceptionAction = ShowException;
+            AppDomain.CurrentDomain.UnhandledException += (o, args) =>
+                SafeActions.OnUnhandledException(args.ExceptionObject);
             Current.DispatcherUnhandledException += (o, args) =>
             {
                 args.Handled = true;
-                OnException(args.Exception);
+                SafeActions.OnUnhandledException(args.Exception);
             };
+
+            #endregion
 
             Window = new Windows.MainWindow();
 
@@ -75,20 +81,13 @@ namespace HomeCenter.NET
 
         private static void Run(string command) => NET.Windows.MainWindow.GlobalRun(command);
 
-        private static void OnException(object exceptionObject)
+        private static void ShowException(Exception exception)
         {
-            if (!(exceptionObject is Exception exception))
-            {
-                exception = new NotSupportedException($"Unhandled exception doesn't derive from System.Exception: {exceptionObject}");
-            }
-
-            // Ignore ThreadAbortException
-            if (exception is ThreadAbortException)
-            {
-                return;
-            }
-
-            SafeActions.ShowException(exception);
+            MessageBox.Show(
+                exception.ToString(),
+                "Exception:",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
         }
     }
 }

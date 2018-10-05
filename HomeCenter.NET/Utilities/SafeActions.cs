@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace HomeCenter.NET.Utilities
 {
     public static class SafeActions
     {
-        public static void Run(Action action)
+        public static Action<Exception> DefaultExceptionAction { get; set; } = 
+            e => Console.WriteLine($@"Exception: {e.ToString()}");
+
+        public static void Run(Action action, Action<Exception> extencionAction = null)
         {
             try
             {
@@ -14,13 +17,38 @@ namespace HomeCenter.NET.Utilities
             }
             catch (Exception exception)
             {
-                ShowException(exception);
+                if (extencionAction != null)
+                {
+                    extencionAction(exception);
+                }
+                else
+                {
+                    DefaultExceptionAction?.Invoke(exception);
+                }
             }
         }
 
-        public static void ShowException(Exception exception)
+        public static void OnUnhandledException(object exceptionObject, Action<Exception> extencionAction = null)
         {
-            MessageBox.Show(exception.ToString(), "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            if (!(exceptionObject is Exception exception))
+            {
+                exception = new NotSupportedException($"Unhandled exception doesn't derive from System.Exception: {exceptionObject}");
+            }
+
+            // Ignore ThreadAbortException
+            if (exception is ThreadAbortException)
+            {
+                return;
+            }
+
+            if (extencionAction != null)
+            {
+                extencionAction(exception);
+            }
+            else
+            {
+                DefaultExceptionAction?.Invoke(exception);
+            }
         }
 
         public static async Task SafeAction(Func<Task> action, Action<Exception> exceptionAction, Func<bool> check = null, Action finallyAction = null)
