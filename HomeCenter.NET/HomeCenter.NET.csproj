@@ -104,6 +104,7 @@
     <Compile Include="Utilities\MediaUtilities.cs" />
     <Compile Include="Utilities\ModuleManager.cs" />
     <Compile Include="Utilities\Options.cs" />
+    <Compile Include="Utilities\WpfSafeActions.cs" />
     <Compile Include="Utilities\SafeActions.cs" />
     <Page Include="Controls\KeySettingControl.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using HomeCenter.NET.Properties;
@@ -32,22 +31,10 @@ namespace HomeCenter.NET
                 return;
             }
 
-
-            #region Exception Handling
-
-            SafeActions.DefaultExceptionAction = ShowException;
-            AppDomain.CurrentDomain.UnhandledException += (o, args) =>
-                SafeActions.OnUnhandledException(args.ExceptionObject);
-            Current.DispatcherUnhandledException += (o, args) =>
-            {
-                args.Handled = true;
-                SafeActions.OnUnhandledException(args.Exception);
-            };
-
-            #endregion
+            // Catching unhandled exceptions
+            WpfSafeActions.Initialize();
 
             Window = new Windows.MainWindow();
-
             if (isRestart || !Settings.Default.IsStartMinimized)
             {
                 Window.Show();
@@ -80,14 +67,5 @@ namespace HomeCenter.NET
         }
 
         private static void Run(string command) => NET.Windows.MainWindow.GlobalRun(command);
-
-        private static void ShowException(Exception exception)
-        {
-            MessageBox.Show(
-                exception.ToString(),
-                "Exception:",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
-        }
     }
 }
