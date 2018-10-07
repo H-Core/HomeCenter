@@ -125,7 +125,7 @@ namespace HomeCenter.NET.Windows
 
             if (Settings.Default.EnablePopUpMessages)
             {
-                PopUpWindow.Show(text, 3000);
+                PopUpWindow.Show(text, 5000);
             }
         });
 
