@@ -17,15 +17,11 @@ namespace HomeCenter.NET.Controls
         public object Value {
             get => Setting.Value;
             set {
-                try
+                SafeActions.Run(() =>
                 {
                     Setting.Value = Convert.ChangeType(value, Setting.Type);
                     OnPropertyChanged(nameof(Value));
-                }
-                catch (Exception exception)
-                {
-                    SafeActions.ShowException(exception);
-                }
+                });
 
                 UpdateColor();
             }
