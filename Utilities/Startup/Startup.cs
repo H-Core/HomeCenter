@@ -25,7 +25,7 @@ namespace H.NET.Utilities
                     var value = ToValue(fileName, arguments);
                     key.SetValue(name, value);
                 }
-                else
+                else if (key.GetValue(name) != null)
                 {
                     key.DeleteValue(name);
                 }
