@@ -320,6 +320,10 @@ namespace HomeCenter.NET.Windows
                 KeyboardHook.KeyUp += Global_KeyUp;
                 KeyboardHook.KeyDown += Global_KeyDown;
 
+                MouseHook.MouseUp += ScreenshotRectangle.Global_MouseUp;
+                MouseHook.MouseDown += ScreenshotRectangle.Global_MouseDown;
+                MouseHook.MouseMove += ScreenshotRectangle.Global_MouseMove;
+
                 MouseHook.MouseDown += Global_MouseDown;
             }
             catch (Exception exception)
@@ -407,6 +411,8 @@ namespace HomeCenter.NET.Windows
             }
         }
 
+        #region Global Mouse
+        
         private void Global_MouseDown(object sender, MouseEventExtArgs e)
         {
             if (e.SpecialButton == 0)
@@ -425,6 +431,8 @@ namespace HomeCenter.NET.Windows
             }
             //Print($"{e.SpecialButton}");
         }
+
+        #endregion
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
