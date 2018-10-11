@@ -12,6 +12,7 @@ namespace H.NET.Utilities
         public event EventHandler<MouseEventExtArgs> MouseClickExt;
         public event EventHandler<MouseEventExtArgs> MouseDoubleClick;
         public event EventHandler<MouseEventExtArgs> MouseWheel;
+        public event EventHandler<MouseEventExtArgs> MouseMove;
 
         #endregion
 
@@ -38,8 +39,9 @@ namespace H.NET.Utilities
             MouseButtons button = MouseButtons.None;
             short mouseDelta = 0;
             int clickCount = 0;
-            bool mouseDown = false;
-            bool mouseUp = false;
+            var mouseDown = false;
+            var mouseUp = false;
+            var mouseMove = false;
 
             switch (wParam)
             {
@@ -102,6 +104,7 @@ namespace H.NET.Utilities
                     break;
 
                 case Winuser.WM_MOUSEMOVE:
+                    mouseMove = true;
                     break;
 
                 default:
@@ -154,23 +157,21 @@ namespace H.NET.Utilities
             {
                 MouseWheel?.Invoke(null, e);
             }
-            /*
+            
             //If someone listens to move and there was a change in coordinates raise move event
-            if (m_OldX != mouseHookStruct.Point.X || m_OldY != mouseHookStruct.Point.Y)
+            //if (m_OldX != mouseHookStruct.Point.X || m_OldY != mouseHookStruct.Point.Y)
+            if (mouseMove)
             {
-                m_OldX = mouseHookStruct.Point.X;
-                m_OldY = mouseHookStruct.Point.Y;
-                if (s_MouseMove != null)
-                {
-                    s_MouseMove.Invoke(null, e);
-                }
+                //m_OldX = mouseHookStruct.Point.X;
+                //m_OldY = mouseHookStruct.Point.Y;
+                
+                MouseMove?.Invoke(null, e);
 
-                if (s_MouseMoveExt != null)
-                {
-                    s_MouseMoveExt.Invoke(null, e);
-                }
+                //if (s_MouseMoveExt != null)
+                //{
+                //    s_MouseMoveExt.Invoke(null, e);
+                //}
             }
-            */
 
             return e.Handled ? -1 : 0;
         }
