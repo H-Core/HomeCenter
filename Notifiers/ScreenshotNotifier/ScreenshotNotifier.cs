@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using H.NET.Utilities;
 
 namespace H.NET.Notifiers
 {

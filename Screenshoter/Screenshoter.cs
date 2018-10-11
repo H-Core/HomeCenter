@@ -3,8 +3,9 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace H.NET.Notifiers
+namespace H.NET.Utilities
 {
+    // ReSharper disable once IdentifierTypo
     public static class Screenshoter
     {
         // P/Invoke declarations
@@ -49,7 +50,7 @@ namespace H.NET.Notifiers
         }
 
         /// <summary>
-        /// Need to Dispose after usage
+        /// Required to Dispose after usage
         /// </summary>
         /// <returns></returns>
         public static Image Shot()
@@ -62,7 +63,8 @@ namespace H.NET.Notifiers
             var hBmp = CreateCompatibleBitmap(dc, size.Width, size.Height);
             var hOldBmp = SelectObject(toDc, hBmp);
 
-            BitBlt(toDc, 0, 0, size.Width, size.Height, dc, 0, 0, CopyPixelOperation.SourceCopy | CopyPixelOperation.CaptureBlt);
+            // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
+            BitBlt(toDc, 0, 0, size.Width, size.Height, dc, 0, 0, CopyPixelOperation.CaptureBlt | CopyPixelOperation.SourceCopy);
 
             var bitmap = Image.FromHbitmap(hBmp);
             SelectObject(toDc, hOldBmp);
@@ -74,5 +76,14 @@ namespace H.NET.Notifiers
         }
 
         public static async Task<Image> ShotAsync() => await Task.Run(() => Shot());
+
+        public static async Task<Image> ShotRectangleAsync(Rectangle rectangle)
+        {
+            using (var image = await ShotAsync())
+            using (var bitmap = new Bitmap(image))
+            {
+                return bitmap.Clone(rectangle, bitmap.PixelFormat);
+            }
+        }
     }
 }

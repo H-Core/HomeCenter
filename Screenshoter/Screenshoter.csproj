@@ -4,15 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{69A68B09-45E9-4BA0-8038-6EDF0FFE0959}</ProjectGuid>
+    <ProjectGuid>{C51459AE-0B28-4C6A-847B-11FAE81E0FE5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>H.NET.Notifiers</RootNamespace>
-    <AssemblyName>H.NET.Notifiers.ScreenshotNotifier</AssemblyName>
+    <RootNamespace>H.NET.Utilities</RootNamespace>
+    <AssemblyName>Screenshoter</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,22 +36,8 @@
     <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ScreenshotNotifier.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj">
-      <Project>{8b7b7a71-cde2-4066-8960-c960e374a400}</Project>
-      <Name>H.NET.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Screenshoter\Screenshoter.csproj">
-      <Project>{c51459ae-0b28-4c6a-847b-11fae81e0fe5}</Project>
-      <Name>Screenshoter</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TimerNotifier\TimerNotifier.csproj">
-      <Project>{2defa9fc-418b-4fb4-a973-73f77b48bd7b}</Project>
-      <Name>TimerNotifier</Name>
-    </ProjectReference>
+    <Compile Include="Screenshoter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
