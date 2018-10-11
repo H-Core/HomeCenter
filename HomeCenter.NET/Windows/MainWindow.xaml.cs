@@ -320,6 +320,8 @@ namespace HomeCenter.NET.Windows
                 KeyboardHook.KeyUp += Global_KeyUp;
                 KeyboardHook.KeyDown += Global_KeyDown;
 
+                ScreenshotRectangle.ActivationKeys.Add(Key.Space);
+                ScreenshotRectangle.ActivationModifiers.Add(ModifierKeys.Shift);
                 MouseHook.MouseUp += ScreenshotRectangle.Global_MouseUp;
                 MouseHook.MouseDown += ScreenshotRectangle.Global_MouseDown;
                 MouseHook.MouseMove += ScreenshotRectangle.Global_MouseMove;

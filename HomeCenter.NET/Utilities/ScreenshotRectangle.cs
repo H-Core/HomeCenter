@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using H.NET.Utilities;
@@ -11,13 +13,15 @@ namespace HomeCenter.NET.Utilities
 {
     public static class ScreenshotRectangle
     {
-        private static RectangleView RectangleView { get; } = new RectangleView();
+        public static List<Key> ActivationKeys { get; set; } = new List<Key>();
+        public static List<ModifierKeys> ActivationModifiers { get; set; } = new List<ModifierKeys>();
+
+        private static RectangleView RectangleView { get; } = new  RectangleView();
         private static Point RectanglePoint { get; set; }
         private static bool IsMouseDown { get; set; }
 
         private static bool IsScreenshotCombination() =>
-            Keyboard.IsKeyDown(Key.Space) &&
-            (Keyboard.Modifiers & ModifierKeys.Alt) == ModifierKeys.Alt;
+            ActivationKeys.All(Keyboard.IsKeyDown) && ActivationModifiers.All(i => (Keyboard.Modifiers & i) == i);
 
         public static async void Global_MouseUp(object sender, MouseEventExtArgs e)
         {
