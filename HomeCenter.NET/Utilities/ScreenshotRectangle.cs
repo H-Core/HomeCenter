@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 using H.NET.Utilities;
-using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Views;
 using Point = System.Drawing.Point;
 
@@ -15,6 +13,9 @@ namespace HomeCenter.NET.Utilities
     {
         public static List<Key> ActivationKeys { get; set; } = new List<Key>();
         public static List<ModifierKeys> ActivationModifiers { get; set; } = new List<ModifierKeys>();
+
+        public delegate void ImageDelegate(Image image);
+        public static event ImageDelegate NewImage;
 
         private static RectangleView RectangleView { get; } = new  RectangleView();
         private static Point RectanglePoint { get; set; }
@@ -41,7 +42,7 @@ namespace HomeCenter.NET.Utilities
 
             using (var image = await Screenshoter.ShotRectangleAsync(rectangle))
             {
-                Clipboard.SetImage(image.ToBitmapImage());
+                NewImage?.Invoke(image);
             }
         }
 

@@ -14,6 +14,7 @@ using H.NET.Plugins;
 using H.NET.Storages;
 using H.NET.Storages.Extensions;
 using H.NET.Utilities;
+using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Runners;
 using HomeCenter.NET.Utilities;
@@ -322,6 +323,7 @@ namespace HomeCenter.NET.Windows
 
                 ScreenshotRectangle.ActivationKeys.Add(Key.Space);
                 ScreenshotRectangle.ActivationModifiers.Add(ModifierKeys.Shift);
+                ScreenshotRectangle.NewImage += image => Clipboard.SetImage(image.ToBitmapImage());
                 MouseHook.MouseUp += ScreenshotRectangle.Global_MouseUp;
                 MouseHook.MouseDown += ScreenshotRectangle.Global_MouseDown;
                 MouseHook.MouseMove += ScreenshotRectangle.Global_MouseMove;
