@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Bootstrapper.cs" />
     <Compile Include="Commands\ShowHideCommand.cs" />
     <Compile Include="Controls\KeySettingControl.xaml.cs">
       <DependentUpon>KeySettingControl.xaml</DependentUpon>
@@ -84,6 +85,7 @@
     <Compile Include="Controls\ObjectControl.xaml.cs">
       <DependentUpon>ObjectControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\RunnerExtensions.cs" />
     <Compile Include="Runners\ClipboardRunner.cs" />
     <Compile Include="Runners\WindowsRunner.cs" />
@@ -95,6 +97,7 @@
     <Compile Include="Utilities\MediaUtilities.cs" />
     <Compile Include="Utilities\ModuleManager.cs" />
     <Compile Include="Utilities\Options.cs" />
+    <Compile Include="Utilities\ScreenshotRectangle.cs" />
     <Compile Include="Utilities\WpfSafeActions.cs" />
     <Compile Include="Utilities\SafeActions.cs" />
     <Page Include="Controls\KeySettingControl.xaml">
@@ -129,6 +132,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\CommandSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SingleCommandView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SingleKeyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
     <Page Include="Windows\CommandsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -144,6 +159,18 @@
     <Compile Include="Utilities\UiExtensions.cs" />
     <Compile Include="Utilities\User32Utilities.cs" />
     <Compile Include="Utilities\User32Methods.cs" />
+    <Compile Include="ViewModels\SingleCommandViewModel.cs" />
+    <Compile Include="ViewModels\SingleKeyViewModel.cs" />
+    <Compile Include="ViewModels\CommandSettingsViewModel.cs" />
+    <Compile Include="Views\CommandSettingsView.xaml.cs">
+      <DependentUpon>CommandSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SingleCommandView.xaml.cs">
+      <DependentUpon>SingleCommandView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SingleKeyView.xaml.cs">
+      <DependentUpon>SingleKeyView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\CommandsWindow.xaml.cs">
       <DependentUpon>CommandsWindow.xaml</DependentUpon>
     </Compile>
@@ -156,6 +183,9 @@
     </Compile>
     <Compile Include="Windows\PopUpWindow.xaml.cs">
       <DependentUpon>PopUpWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RectangleView.xaml.cs">
+      <DependentUpon>RectangleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\RenameWindow.xaml.cs">
       <DependentUpon>RenameWindow.xaml</DependentUpon>
@@ -176,6 +206,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\PopUpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RectangleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -223,6 +257,10 @@
     <ProjectReference Include="..\H.NET.Core\H.NET.Core.csproj">
       <Project>{e3ee7480-fd57-43e0-b6e1-b69255068dcb}</Project>
       <Name>H.NET.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Screenshoter\Screenshoter.csproj">
+      <Project>{c51459ae-0b28-4c6a-847b-11fae81e0fe5}</Project>
+      <Name>Screenshoter</Name>
     </ProjectReference>
     <ProjectReference Include="..\Utilities\Plugins\Plugins.csproj">
       <Project>{72121390-8576-4234-94fd-ecbff98dabb4}</Project>

@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="HomeCenter.NET.Views.SingleCommandView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d" 
+             d:DesignHeight="25" d:DesignWidth="600">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="100*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" x:Name="CommandName" Width="100"/>
+        <TextBox Grid.Column="1" x:Name="DescriptionEditable" TextWrapping="Wrap" AcceptsReturn="True"/>
+        <Label Grid.Column="1" x:Name="DescriptionNotEditable"/>
+        <Label Grid.Column="2" x:Name="HotKey" Width="100"/>
+        <Button Grid.Column="3" x:Name="Run" Width="25" Content="R" cal:Message.Attach="RunCommand($dataContext)"/>
+        <Button Grid.Column="4" x:Name="Edit" Width="25" Content="⚙" cal:Message.Attach="EditCommand($dataContext)"/>
+        <Button Grid.Column="5" x:Name="Delete" Width="25" Content="✖" cal:Message.Attach="DeleteCommand($dataContext)"/>
+    </Grid>
+</UserControl>
