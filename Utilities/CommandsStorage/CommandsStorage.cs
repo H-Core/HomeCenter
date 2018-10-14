@@ -38,7 +38,7 @@ namespace H.NET.Storages
 
         public override void Save()
         {
-            var uniqueCommands = this.UniqueValues(command => command.Value.Data).Select(pair => pair.Value);
+            var uniqueCommands = this.UniqueValues(command => string.Concat(command.Value.Lines)).Select(pair => pair.Value);
             AppDataFile.FileData = JsonConvert.SerializeObject(uniqueCommands, Formatting.Indented, new JsonSerializerSettings
             {
                 ContractResolver = new GoodPropertiesOnlyResolver()

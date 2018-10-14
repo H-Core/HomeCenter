@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace H.NET.Storages
@@ -12,9 +11,8 @@ namespace H.NET.Storages
         public List<SingleKey> Keys { get; set; } = new List<SingleKey>();
         public string HotKey { get; set; }
 
-        public string KeysString => string.Join(Environment.NewLine, Keys);
-
-        public string Data => string.Join(Environment.NewLine, Lines);
+        public string FirstKeyText => Keys.FirstOrDefault()?.Text ?? string.Empty;
+        public string FirstDataText => Lines.FirstOrDefault()?.Text ?? string.Empty;
 
         #endregion
 

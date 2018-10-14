@@ -77,10 +77,10 @@ namespace HomeCenter.NET.Windows
 
         private void UpdateUserCommands() => SafeActions.Run(() =>
         {
-            var controls = Runner.Storage.UniqueValues(entry => entry.Value.Data).Select(pair =>
+            var controls = Runner.Storage.UniqueValues(entry => string.Concat(entry.Value.Lines)).Select(pair =>
             {
                 var command = pair.Value;
-                var control = new CommandControl(command.KeysString, command.Data, command.HotKey, 
+                var control = new CommandControl(command.FirstKeyText, command.FirstDataText, command.HotKey, 
                     run: true, edit: true, delete: true)
                 {
                     Height = 25
