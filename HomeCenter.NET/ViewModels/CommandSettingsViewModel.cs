@@ -7,47 +7,14 @@ using HomeCenter.NET.Windows;
 
 namespace HomeCenter.NET.ViewModels
 {
+    // TODO: EditCommandViewModel ?
     public class CommandSettingsViewModel : Screen
     {
-        /*
-        #region Static methods
-
-        public static (bool isSaved, Command newCommand) Show(Command command)
-        {
-            var window = new ChangeCommandWindow(command);
-            var result = window.ShowDialog() == true;
-
-            return (result, window.Command);
-        }
-
-        public static bool ShowAndSaveIfNeeded(Command command, IStorage<Command> storage)
-        {
-            var (result, newCommand) = Show(command);
-            if (!result)
-            {
-                return false;
-            }
-
-            foreach (var key in command.Keys)
-            {
-                storage.Remove(key.Text);
-            }
-
-            foreach (var key in newCommand.Keys)
-            {
-                storage[key.Text] = newCommand;
-            }
-
-            return true;
-        }
-        #endregion
-        
-        */
         #region Properties
 
         public Command Command { get; }
         public BindableCollection<SingleKeyViewModel> Keys { get; }
-        public BindableCollection<SingleCommandViewModel> Commands { get; }
+        public BindableCollection<CommandBaseViewModel> Commands { get; }
 
         public string HotKey
         {
@@ -74,22 +41,12 @@ namespace HomeCenter.NET.ViewModels
 
         public CommandSettingsViewModel(Command command)
         {
-            Command = command?.Clone() as Command ?? throw new ArgumentNullException(nameof(command));
+            Command = command ?? throw new ArgumentNullException(nameof(command));
 
-            Keys = new BindableCollection<SingleKeyViewModel>(Command.Keys.Select(CreateKeyModel));
-            Commands = new BindableCollection<SingleCommandViewModel>(Command.Lines.Select(CreateCommandModel));
+            Keys = new BindableCollection<SingleKeyViewModel>(Command.Keys.Select(i => new SingleKeyViewModel(i)));
+            Commands = new BindableCollection<CommandBaseViewModel>(Command.Lines.Select(i => new SingleCommandViewModel(i)));
             HotKey = command.HotKey;
         }
-
-        #endregion
-
-        #region Factories
-
-        public static SingleKeyViewModel CreateKeyModel(SingleKey key) =>
-            new SingleKeyViewModel(key);
-
-        public static SingleCommandViewModel CreateCommandModel(SingleCommand command) => 
-            new SingleCommandViewModel(command, null, command.Text, editable: true, run: true, delete: true);
 
         #endregion
 
@@ -102,7 +59,7 @@ namespace HomeCenter.NET.ViewModels
             var key = new SingleKey(string.Empty);
 
             Command.Keys.Add(key);
-            Keys.Add(CreateKeyModel(key));
+            Keys.Add(new SingleKeyViewModel(key));
 
             /* TODO: Focus last element
             var control = DataPanel.Children.OfType<TextControl>().LastOrDefault();
@@ -127,6 +84,14 @@ namespace HomeCenter.NET.ViewModels
 
         #region Command methods
 
+        public void AddCommand()
+        {
+            var command = new SingleCommand(string.Empty);
+
+            Command.Lines.Add(command);
+            Commands.Add(new SingleCommandViewModel(command));
+        }
+
         public void DeleteCommand(SingleCommandViewModel viewModel)
         {
             Commands.Remove(viewModel);
@@ -136,14 +101,6 @@ namespace HomeCenter.NET.ViewModels
         public void RunCommand(SingleCommandViewModel viewModel)
         {
             MainWindow.GlobalRun(viewModel.Description);
-        }
-
-        public void AddCommand()
-        {
-            var command = new SingleCommand(string.Empty);
-
-            Command.Lines.Add(command);
-            Commands.Add(CreateCommandModel(command));
         }
 
         #endregion
@@ -158,6 +115,34 @@ namespace HomeCenter.NET.ViewModels
             HotKey = combination?.ToString() ?? string.Empty;
 
             EditHotKeyIsEnabled = true;
+        }
+
+        #endregion
+
+        #region Save/Cancel methods
+
+        public void Save()
+        {
+            try
+            {
+                TryClose(true);
+            }
+            catch (Exception)
+            {
+                TryClose();
+            }
+        }
+
+        public void Cancel()
+        {
+            try
+            {
+                TryClose(false);
+            }
+            catch (Exception)
+            {
+                TryClose();
+            }
         }
 
         #endregion

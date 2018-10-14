@@ -132,11 +132,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\CommandsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\CommandSettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SingleCommandView.xaml">
+    <Page Include="Views\CommandBaseView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -160,13 +164,27 @@
     <Compile Include="Utilities\User32Utilities.cs" />
     <Compile Include="Utilities\User32Methods.cs" />
     <Compile Include="ViewModels\SingleCommandViewModel.cs" />
+    <Compile Include="ViewModels\ProcessViewModel.cs" />
+    <Compile Include="ViewModels\VariableViewModel.cs" />
+    <Compile Include="ViewModels\UserCommandViewModel.cs" />
+    <Compile Include="ViewModels\AllCommandViewModel.cs" />
+    <Compile Include="ViewModels\CommandsViewModel.cs" />
+    <Compile Include="Views\ProcessView.cs" />
+    <Compile Include="Views\SingleCommandView.cs" />
+    <Compile Include="Views\VariableView.cs" />
+    <Compile Include="Views\UserCommandView.cs" />
+    <Compile Include="Views\AllCommandView.cs" />
+    <Compile Include="Views\CommandsView.xaml.cs">
+      <DependentUpon>CommandsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\CommandBaseViewModel.cs" />
     <Compile Include="ViewModels\SingleKeyViewModel.cs" />
     <Compile Include="ViewModels\CommandSettingsViewModel.cs" />
     <Compile Include="Views\CommandSettingsView.xaml.cs">
       <DependentUpon>CommandSettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SingleCommandView.xaml.cs">
-      <DependentUpon>SingleCommandView.xaml</DependentUpon>
+    <Compile Include="Views\CommandBaseView.xaml.cs">
+      <DependentUpon>CommandBaseView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SingleKeyView.xaml.cs">
       <DependentUpon>SingleKeyView.xaml</DependentUpon>

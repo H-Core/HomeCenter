@@ -4,6 +4,8 @@ using System.Windows;
 using System.Windows.Threading;
 using Caliburn.Micro;
 using H.NET.Storages;
+using HomeCenter.NET.Runners;
+using HomeCenter.NET.Utilities;
 using HomeCenter.NET.ViewModels;
 
 namespace HomeCenter.NET
@@ -26,10 +28,11 @@ namespace HomeCenter.NET
             Container
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
-                .RegisterInstance(typeof(Command), "command", new Command("test", "test", "B"));
+                .Instance(new GlobalRunner(new CommandsStorage(Options.CompanyName)));
 
             Container
-                .PerRequest<CommandSettingsViewModel>();
+                .PerRequest<CommandSettingsViewModel>()
+                .PerRequest<CommandsViewModel>();
 
             base.Configure();
 
@@ -85,7 +88,7 @@ namespace HomeCenter.NET
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
-            //DisplayRootViewFor<CommandSettingsViewModel>();
+            DisplayRootViewFor<CommandsViewModel>();
         }
 
         protected override object GetInstance(Type service, string key)

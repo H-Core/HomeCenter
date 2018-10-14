@@ -1,6 +1,5 @@
 ﻿using System;
 using Caliburn.Micro;
-using H.NET.Storages;
 
 namespace HomeCenter.NET.ViewModels
 {
@@ -8,18 +7,23 @@ namespace HomeCenter.NET.ViewModels
     {
         #region Properties
 
-        public SingleCommand Command { get; }
+        public string CommandName { get; set; }
 
-        public string CommandName { get; }
-
-        public string DescriptionEditable { get; set; }
-        public string DescriptionNotEditable { get; }
-        public string Description => IsEditable ? DescriptionEditable : DescriptionNotEditable;
+        public Action<string> DescriptionEditAction { get; set; }
+        private string _description;
+        public string Description
+        {
+            get => _description;
+            set
+            {
+                _description = value;
+                DescriptionEditAction?.Invoke(value);
+                NotifyOfPropertyChange(nameof(Description));
+            }
+        }
 
         public bool IsEditable { get; }
-
-        public bool DescriptionEditableIsVisible => IsEditable;
-        public bool DescriptionNotEditableIsVisible => !IsEditable;
+        public bool IsNotEditable => !IsEditable;
 
         public bool CommandNameIsVisible => CommandName != null;
         public bool RunIsVisible { get; }
@@ -33,14 +37,11 @@ namespace HomeCenter.NET.ViewModels
 
         #region Constructors
 
-        public CommandBaseViewModel(SingleCommand command, string name, string description, string hotKey = null, bool editable = false,
+        public CommandBaseViewModel(string name, string description, string hotKey = null, bool editable = false,
         bool run = false, bool edit = false, bool delete = false)
         {
-            Command = command ?? throw new ArgumentNullException(nameof(command));
-
             CommandName = name;
-            DescriptionEditable = description;
-            DescriptionNotEditable = description;
+            Description = description;
 
             IsEditable = editable;
             RunIsVisible = run;
