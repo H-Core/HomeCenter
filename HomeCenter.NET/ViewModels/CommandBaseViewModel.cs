@@ -4,7 +4,7 @@ using H.NET.Storages;
 
 namespace HomeCenter.NET.ViewModels
 {
-    public class SingleCommandViewModel : Screen
+    public class CommandBaseViewModel : Screen
     {
         #region Properties
 
@@ -33,7 +33,7 @@ namespace HomeCenter.NET.ViewModels
 
         #region Constructors
 
-        public SingleCommandViewModel(SingleCommand command, string name, string description, string hotKey = null, bool editable = false,
+        public CommandBaseViewModel(SingleCommand command, string name, string description, string hotKey = null, bool editable = false,
         bool run = false, bool edit = false, bool delete = false)
         {
             Command = command ?? throw new ArgumentNullException(nameof(command));

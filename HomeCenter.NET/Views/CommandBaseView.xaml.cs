@@ -1,8 +1,8 @@
 ﻿namespace HomeCenter.NET.Views
 {
-    public partial class SingleCommandView
+    public partial class CommandBaseView
     {
-        public SingleCommandView()
+        public CommandBaseView()
         {
             InitializeComponent();
         }
