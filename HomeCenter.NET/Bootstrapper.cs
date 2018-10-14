@@ -33,7 +33,8 @@ namespace HomeCenter.NET
 
             Container
                 .PerRequest<CommandSettingsViewModel>()
-                .PerRequest<CommandsViewModel>();
+                .PerRequest<CommandsViewModel>()
+                .Singleton<PopUpViewModel>();
 
             base.Configure();
 
@@ -89,6 +90,11 @@ namespace HomeCenter.NET
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
+            var manager = GetInstance(typeof(IWindowManager), null) as IWindowManager;
+            var instance = GetInstance(typeof(PopUpViewModel), null) as PopUpViewModel ?? throw new Exception(@"PopUpViewModel Instance is null");
+
+            manager?.ShowWindow(instance);
+
             DisplayRootViewFor<CommandsViewModel>();
         }
 

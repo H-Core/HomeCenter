@@ -148,6 +148,10 @@
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
+    <Page Include="Views\PopUpView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\CommandsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -169,6 +173,7 @@
     <Compile Include="ViewModels\Commands\UserCommandViewModel.cs" />
     <Compile Include="ViewModels\Commands\AllCommandViewModel.cs" />
     <Compile Include="ViewModels\Commands\CommandsViewModel.cs" />
+    <Compile Include="ViewModels\PopUpViewModel.cs" />
     <Compile Include="Views\Commands\ProcessView.cs" />
     <Compile Include="Views\Commands\SingleCommandView.cs" />
     <Compile Include="Views\Commands\VariableView.cs" />
@@ -188,6 +193,9 @@
     </Compile>
     <Compile Include="Views\Commands\SingleKeyView.xaml.cs">
       <DependentUpon>SingleKeyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PopUpView.xaml.cs">
+      <DependentUpon>PopUpView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\CommandsWindow.xaml.cs">
       <DependentUpon>CommandsWindow.xaml</DependentUpon>
