@@ -9,7 +9,7 @@ using HomeCenter.NET.Windows;
 namespace HomeCenter.NET.ViewModels.Commands
 {
     // TODO: EditCommandViewModel ?
-    public class CommandSettingsViewModel : Screen
+    public class CommandSettingsViewModel : SaveCancelViewModel
     {
         #region Properties
 
@@ -116,34 +116,6 @@ namespace HomeCenter.NET.ViewModels.Commands
             HotKey = combination?.ToString() ?? string.Empty;
 
             EditHotKeyIsEnabled = true;
-        }
-
-        #endregion
-
-        #region Save/Cancel methods
-
-        public void Save()
-        {
-            try
-            {
-                TryClose(true);
-            }
-            catch (Exception)
-            {
-                TryClose();
-            }
-        }
-
-        public void Cancel()
-        {
-            try
-            {
-                TryClose(false);
-            }
-            catch (Exception)
-            {
-                TryClose();
-            }
         }
 
         #endregion

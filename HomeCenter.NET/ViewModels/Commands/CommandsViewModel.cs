@@ -10,7 +10,7 @@ using HomeCenter.NET.Windows;
 
 namespace HomeCenter.NET.ViewModels.Commands
 {
-    public class CommandsViewModel : Screen
+    public class CommandsViewModel : SaveCancelViewModel
     {
         #region Properties
 
@@ -42,6 +42,9 @@ namespace HomeCenter.NET.ViewModels.Commands
             // TODO: May be -event required?
             Runner.BeforeRun += (o, e) => NotifyOfPropertyChange(nameof(Processes));
             Runner.AfterRun += (o, e) => NotifyOfPropertyChange(nameof(Processes));
+
+            SaveAction = () => Runner.Storage.Save();
+            CancelAction = () => Runner.Storage.Load(); // Cancel changes TODO: may me need to use TempStorage instead this?
         }
 
         #endregion
@@ -150,39 +153,7 @@ namespace HomeCenter.NET.ViewModels.Commands
                     throw new NotImplementedException();
             }
         }
-
-        #region Save/Cancel methods
-
-        public void Save()
-        {
-            Runner.Storage.Save();
-
-            try
-            {
-                TryClose(true);
-            }
-            catch (Exception)
-            {
-                TryClose();
-            }
-        }
-
-        public void Cancel()
-        {
-            Runner.Storage.Load(); // Cancel changes TODO: may me need to use TempStorage instead this?
-
-            try
-            {
-                TryClose(false);
-            }
-            catch (Exception)
-            {
-                TryClose();
-            }
-        }
-
-        #endregion
-
+        
         #endregion
 
     }
