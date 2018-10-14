@@ -1,9 +1,9 @@
 ﻿using System;
 using H.NET.Storages;
 
-namespace HomeCenter.NET.ViewModels
+namespace HomeCenter.NET.ViewModels.Commands
 {
-    public class SingleCommandViewModel : CommandBaseViewModel
+    public class SingleCommandViewModel : ObjectViewModel
     {
         #region Properties
 

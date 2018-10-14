@@ -132,19 +132,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\CommandsView.xaml">
+    <Page Include="Views\Commands\CommandsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\CommandSettingsView.xaml">
+    <Page Include="Views\Commands\CommandSettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\CommandBaseView.xaml">
+    <Page Include="Views\ObjectView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SingleKeyView.xaml">
+    <Page Include="Views\Commands\SingleKeyView.xaml">
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
@@ -163,30 +163,30 @@
     <Compile Include="Utilities\UiExtensions.cs" />
     <Compile Include="Utilities\User32Utilities.cs" />
     <Compile Include="Utilities\User32Methods.cs" />
-    <Compile Include="ViewModels\SingleCommandViewModel.cs" />
-    <Compile Include="ViewModels\ProcessViewModel.cs" />
-    <Compile Include="ViewModels\VariableViewModel.cs" />
-    <Compile Include="ViewModels\UserCommandViewModel.cs" />
-    <Compile Include="ViewModels\AllCommandViewModel.cs" />
-    <Compile Include="ViewModels\CommandsViewModel.cs" />
-    <Compile Include="Views\ProcessView.cs" />
-    <Compile Include="Views\SingleCommandView.cs" />
-    <Compile Include="Views\VariableView.cs" />
-    <Compile Include="Views\UserCommandView.cs" />
-    <Compile Include="Views\AllCommandView.cs" />
-    <Compile Include="Views\CommandsView.xaml.cs">
+    <Compile Include="ViewModels\Commands\SingleCommandViewModel.cs" />
+    <Compile Include="ViewModels\Commands\ProcessViewModel.cs" />
+    <Compile Include="ViewModels\Commands\VariableViewModel.cs" />
+    <Compile Include="ViewModels\Commands\UserCommandViewModel.cs" />
+    <Compile Include="ViewModels\Commands\AllCommandViewModel.cs" />
+    <Compile Include="ViewModels\Commands\CommandsViewModel.cs" />
+    <Compile Include="Views\Commands\ProcessView.cs" />
+    <Compile Include="Views\Commands\SingleCommandView.cs" />
+    <Compile Include="Views\Commands\VariableView.cs" />
+    <Compile Include="Views\Commands\UserCommandView.cs" />
+    <Compile Include="Views\Commands\AllCommandView.cs" />
+    <Compile Include="Views\Commands\CommandsView.xaml.cs">
       <DependentUpon>CommandsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\CommandBaseViewModel.cs" />
-    <Compile Include="ViewModels\SingleKeyViewModel.cs" />
-    <Compile Include="ViewModels\CommandSettingsViewModel.cs" />
-    <Compile Include="Views\CommandSettingsView.xaml.cs">
+    <Compile Include="ViewModels\ObjectViewModel.cs" />
+    <Compile Include="ViewModels\Commands\SingleKeyViewModel.cs" />
+    <Compile Include="ViewModels\Commands\CommandSettingsViewModel.cs" />
+    <Compile Include="Views\Commands\CommandSettingsView.xaml.cs">
       <DependentUpon>CommandSettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CommandBaseView.xaml.cs">
-      <DependentUpon>CommandBaseView.xaml</DependentUpon>
+    <Compile Include="Views\ObjectView.xaml.cs">
+      <DependentUpon>ObjectView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SingleKeyView.xaml.cs">
+    <Compile Include="Views\Commands\SingleKeyView.xaml.cs">
       <DependentUpon>SingleKeyView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\CommandsWindow.xaml.cs">
@@ -202,7 +202,7 @@
     <Compile Include="Windows\PopUpWindow.xaml.cs">
       <DependentUpon>PopUpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\RectangleView.xaml.cs">
+    <Compile Include="Views\Commands\RectangleView.xaml.cs">
       <DependentUpon>RectangleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\RenameWindow.xaml.cs">
@@ -227,7 +227,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\RectangleView.xaml">
+    <Page Include="Views\Commands\RectangleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -315,6 +315,7 @@
       <Version>1.0.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>taskkill /f /fi "imagename eq $(TargetFileName)"</PreBuildEvent>

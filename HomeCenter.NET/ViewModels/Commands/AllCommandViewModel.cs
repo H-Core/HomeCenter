@@ -1,9 +1,9 @@
 ﻿using H.NET.Core;
 using H.NET.Core.Utilities;
 
-namespace HomeCenter.NET.ViewModels
+namespace HomeCenter.NET.ViewModels.Commands
 {
-    public class AllCommandViewModel : CommandBaseViewModel
+    public class AllCommandViewModel : ObjectViewModel
     {
         #region Properties
 

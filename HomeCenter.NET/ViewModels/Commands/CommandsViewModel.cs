@@ -5,9 +5,10 @@ using H.NET.Storages;
 using H.NET.Storages.Extensions;
 using HomeCenter.NET.Runners;
 using HomeCenter.NET.Windows;
+
 // ReSharper disable UnusedMember.Global
 
-namespace HomeCenter.NET.ViewModels
+namespace HomeCenter.NET.ViewModels.Commands
 {
     public class CommandsViewModel : Screen
     {
@@ -67,7 +68,7 @@ namespace HomeCenter.NET.ViewModels
             }
         }
 
-        public void EditCommand(CommandBaseViewModel viewModel)
+        public void EditCommand(ObjectViewModel viewModel)
         {
             switch (viewModel)
             {
@@ -100,7 +101,7 @@ namespace HomeCenter.NET.ViewModels
             }
         }
 
-        public void DeleteCommand(CommandBaseViewModel viewModel)
+        public void DeleteCommand(ObjectViewModel viewModel)
         {
             switch (viewModel)
             {
@@ -122,7 +123,7 @@ namespace HomeCenter.NET.ViewModels
             }
         }
 
-        public void RunCommand(CommandBaseViewModel viewModel)
+        public void RunCommand(ObjectViewModel viewModel)
         {
             switch (viewModel)
             {

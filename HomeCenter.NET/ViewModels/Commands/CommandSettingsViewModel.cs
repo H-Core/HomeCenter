@@ -3,9 +3,10 @@ using System.Linq;
 using Caliburn.Micro;
 using H.NET.Storages;
 using HomeCenter.NET.Windows;
+
 // ReSharper disable UnusedMember.Global
 
-namespace HomeCenter.NET.ViewModels
+namespace HomeCenter.NET.ViewModels.Commands
 {
     // TODO: EditCommandViewModel ?
     public class CommandSettingsViewModel : Screen
@@ -14,7 +15,7 @@ namespace HomeCenter.NET.ViewModels
 
         public Command Command { get; }
         public BindableCollection<SingleKeyViewModel> Keys { get; }
-        public BindableCollection<CommandBaseViewModel> Commands { get; }
+        public BindableCollection<SingleCommandViewModel> Commands { get; }
 
         public string HotKey
         {
@@ -44,7 +45,7 @@ namespace HomeCenter.NET.ViewModels
             Command = command ?? throw new ArgumentNullException(nameof(command));
 
             Keys = new BindableCollection<SingleKeyViewModel>(Command.Keys.Select(i => new SingleKeyViewModel(i)));
-            Commands = new BindableCollection<CommandBaseViewModel>(Command.Lines.Select(i => new SingleCommandViewModel(i)));
+            Commands = new BindableCollection<SingleCommandViewModel>(Command.Lines.Select(i => new SingleCommandViewModel(i)));
             HotKey = command.HotKey;
         }
 

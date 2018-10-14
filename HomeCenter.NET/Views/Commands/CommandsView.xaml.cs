@@ -1,4 +1,4 @@
-﻿namespace HomeCenter.NET.Views
+﻿namespace HomeCenter.NET.Views.Commands
 {
     public partial class CommandsView
     {

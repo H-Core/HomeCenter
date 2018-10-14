@@ -2,9 +2,9 @@
 using System.Windows.Media;
 using HomeCenter.NET.Runners;
 
-namespace HomeCenter.NET.ViewModels
+namespace HomeCenter.NET.ViewModels.Commands
 {
-    public class ProcessViewModel : CommandBaseViewModel
+    public class ProcessViewModel : ObjectViewModel
     {
         #region Properties
 

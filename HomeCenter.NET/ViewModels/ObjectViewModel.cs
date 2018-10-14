@@ -3,7 +3,7 @@ using Caliburn.Micro;
 
 namespace HomeCenter.NET.ViewModels
 {
-    public class CommandBaseViewModel : Screen
+    public class ObjectViewModel : Screen
     {
         #region Properties
 
@@ -37,7 +37,7 @@ namespace HomeCenter.NET.ViewModels
 
         #region Constructors
 
-        public CommandBaseViewModel(string name, string description, string hotKey = null, bool editable = false,
+        public ObjectViewModel(string name, string description, string hotKey = null, bool editable = false,
         bool run = false, bool edit = false, bool delete = false)
         {
             CommandName = name;

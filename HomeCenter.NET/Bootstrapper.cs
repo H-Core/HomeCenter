@@ -7,6 +7,7 @@ using H.NET.Storages;
 using HomeCenter.NET.Runners;
 using HomeCenter.NET.Utilities;
 using HomeCenter.NET.ViewModels;
+using HomeCenter.NET.ViewModels.Commands;
 
 namespace HomeCenter.NET
 {

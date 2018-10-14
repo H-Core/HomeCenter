@@ -1,6 +1,6 @@
-﻿namespace HomeCenter.NET.ViewModels
+﻿namespace HomeCenter.NET.ViewModels.Commands
 {
-    public class VariableViewModel : CommandBaseViewModel
+    public class VariableViewModel : ObjectViewModel
     {
         #region Constructors
 

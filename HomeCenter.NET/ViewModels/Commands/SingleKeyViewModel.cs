@@ -2,7 +2,7 @@
 using Caliburn.Micro;
 using H.NET.Storages;
 
-namespace HomeCenter.NET.ViewModels
+namespace HomeCenter.NET.ViewModels.Commands
 {
     public class SingleKeyViewModel : Screen
     {
