@@ -152,6 +152,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\RenameView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Windows\CommandsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -167,12 +171,14 @@
     <Compile Include="Utilities\UiExtensions.cs" />
     <Compile Include="Utilities\User32Utilities.cs" />
     <Compile Include="Utilities\User32Methods.cs" />
+    <Compile Include="ViewModels\SaveCancelViewModel.cs" />
     <Compile Include="ViewModels\Commands\SingleCommandViewModel.cs" />
     <Compile Include="ViewModels\Commands\ProcessViewModel.cs" />
     <Compile Include="ViewModels\Commands\VariableViewModel.cs" />
     <Compile Include="ViewModels\Commands\UserCommandViewModel.cs" />
     <Compile Include="ViewModels\Commands\AllCommandViewModel.cs" />
     <Compile Include="ViewModels\Commands\CommandsViewModel.cs" />
+    <Compile Include="ViewModels\RenameViewModel.cs" />
     <Compile Include="ViewModels\PopUpViewModel.cs" />
     <Compile Include="Views\Commands\ProcessView.cs" />
     <Compile Include="Views\Commands\SingleCommandView.cs" />
@@ -196,6 +202,9 @@
     </Compile>
     <Compile Include="Views\PopUpView.xaml.cs">
       <DependentUpon>PopUpView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RenameView.xaml.cs">
+      <DependentUpon>RenameView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\CommandsWindow.xaml.cs">
       <DependentUpon>CommandsWindow.xaml</DependentUpon>
