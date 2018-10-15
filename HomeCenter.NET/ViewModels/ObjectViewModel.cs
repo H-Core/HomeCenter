@@ -7,7 +7,7 @@ namespace HomeCenter.NET.ViewModels
     {
         #region Properties
 
-        public string CommandName { get; set; }
+        public string Name { get; set; }
 
         public Action<string> DescriptionEditAction { get; set; }
         private string _description;
@@ -25,7 +25,7 @@ namespace HomeCenter.NET.ViewModels
         public bool IsEditable { get; }
         public bool IsNotEditable => !IsEditable;
 
-        public bool CommandNameIsVisible => CommandName != null;
+        public bool CommandNameIsVisible => Name != null;
         public bool RunIsVisible { get; }
         public bool EditIsVisible { get; }
         public bool DeleteIsVisible { get; }
@@ -40,7 +40,7 @@ namespace HomeCenter.NET.ViewModels
         public ObjectViewModel(string name, string description, string hotKey = null, bool editable = false,
         bool run = false, bool edit = false, bool delete = false)
         {
-            CommandName = name;
+            Name = name;
             Description = description;
 
             IsEditable = editable;
