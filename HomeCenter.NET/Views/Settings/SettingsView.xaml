@@ -1,0 +1,187 @@
+﻿<Window x:Class="HomeCenter.NET.Views.Settings.SettingsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:properties="clr-namespace:HomeCenter.NET.Properties"
+        xmlns:c="clr-namespace:HomeCenter.NET.Controls"
+        mc:Ignorable="d"
+        Title="Settings" Height="300" Width="600" WindowStartupLocation="CenterScreen">
+    <Grid Background="#FFE5E5E5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="35" />
+        </Grid.RowDefinitions>
+        <TabControl Grid.Row="0" TabStripPlacement="Left" Background="#FFE5E5E5">
+            <TabItem Header="General">
+                <StackPanel Background="#FFE5E5E5" Margin="5, 5, 5, 5">
+                    <c:BoolSettingControl Text="Run the program when the computer starts:" IsChecked="{Binding IsStartup}"/>
+                    <c:BoolSettingControl Text="Starts minimized:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=IsStartMinimized}"/>
+                    <c:BoolSettingControl Text="Enable Keyboard Hook:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnableKeyboardHook}"/>
+                    <c:BoolSettingControl Text="Enable Mouse Hook:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnableMouseHook}"/>
+                    <c:BoolSettingControl Text="Enable PopUp Messages:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnablePopUpMessages}"/>
+                    <c:BoolSettingControl Text="Auto-update assemblies:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=AutoUpdateAssemblies}"/>
+                    <c:KeySettingControl Text="Record Button:" Key="{Binding Source={x:Static properties:Settings.Default},Path=RecordKey}"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Ignored Apps">
+                <Grid Background="#FFE5E5E5" Margin="5, 5, 5, 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="25" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="25" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <ScrollViewer Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                        <ItemsControl x:Name="IgnoredApplications"/>
+                    </ScrollViewer>
+                    <Button Grid.Row="1" Grid.Column="0" x:Name="AddIgnoredApplication" Content="+"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Recorders">
+                <Grid Background="#FFE5E5E5" Margin="5, 5, 5, 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="100*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Using recorder:"/>
+                        <ComboBox Grid.Column="1" x:Name="RecorderElements" IsEditable="True"/>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <ScrollViewer>
+                            <ItemsControl x:Name="Recorders"/>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Converters">
+                <Grid Background="#FFE5E5E5" Margin="5, 5, 5, 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="100*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Using converter:"/>
+                        <ComboBox Grid.Column="1" x:Name="ConverterElements" IsEditable="True"/>
+                    </Grid>
+                    <c:BoolSettingControl Grid.Row="1" Text="Use alternative converters if default converter answer is empty:"
+                                          IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=UseAlternativeConverters}" />
+                    <Grid Grid.Row="3">
+                        <ScrollViewer>
+                            <ItemsControl x:Name="Converters"/>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Synthesizers">
+                <Grid Background="#FFE5E5E5" Margin="5, 5, 5, 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="100*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Using synthesizer:"/>
+                        <ComboBox Grid.Column="1" x:Name="SynthesizerElements" IsEditable="True"/>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <ScrollViewer>
+                            <ItemsControl x:Name="Synthesizers"/>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Searchers">
+                <Grid Background="#FFE5E5E5" Margin="5, 5, 5, 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25" />
+                        <RowDefinition Height="5" />
+                        <RowDefinition Height="100*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Using searcher:"/>
+                        <ComboBox Grid.Column="1" x:Name="SearcherElements" IsEditable="True"/>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <ScrollViewer>
+                            <ItemsControl x:Name="Searchers"/>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Runners">
+                <ScrollViewer>
+                    <ItemsControl x:Name="Runners"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Notifiers">
+                <ScrollViewer>
+                    <ItemsControl x:Name="Notifiers"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Plugins">
+                <TabControl TabStripPlacement="Left" Background="#FFE5E5E5">
+                    <TabItem Header="Assemblies">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="25" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="25" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <ScrollViewer Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                                <ItemsControl x:Name="Assemblies"/>
+                            </ScrollViewer>
+                            <Button Grid.Row="1" Grid.Column="0" x:Name="AddAssembly" Content="+"/>
+                        </Grid>
+                    </TabItem>
+                    <TabItem Header="Available Types">
+                        <ScrollViewer>
+                            <ItemsControl x:Name="AvailableTypes"/>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem Header="All Modules">
+                        <ScrollViewer>
+                            <ItemsControl x:Name="Modules"/>
+                        </ScrollViewer>
+                    </TabItem>
+                </TabControl>
+            </TabItem>
+        </TabControl>
+        <Grid Grid.Row="1" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25*" />
+                <ColumnDefinition Width="25*" />
+                <ColumnDefinition Width="25*" />
+                <ColumnDefinition Width="25*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" x:Name="Reload" Content="Reload Plugins"/>
+            <Button Grid.Column="2" x:Name="Save" Content="Save"/>
+            <Button Grid.Column="3" x:Name="Cancel" Content="Cancel"/>
+        </Grid>
+    </Grid>
+</Window>

@@ -85,6 +85,8 @@
     <Compile Include="Controls\ObjectControl.xaml.cs">
       <DependentUpon>ObjectControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BooleanToOnOffConverter.cs" />
+    <Compile Include="Converters\BooleanToStringConverter.cs" />
     <Compile Include="Converters\BooleanToColorConverter.cs" />
     <Compile Include="Converters\BooleanToGreenBisqueColorConverter.cs" />
     <Compile Include="Converters\BooleanToGreenRedColorConverter.cs" />
@@ -163,6 +165,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Settings\InstanceView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Settings\ItemView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ObjectView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -176,6 +186,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\RenameView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Settings\SettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -200,6 +214,12 @@
     <Compile Include="ViewModels\Modules\TextLineSettingViewModel.cs" />
     <Compile Include="ViewModels\Modules\SettingViewModel.cs" />
     <Compile Include="ViewModels\Modules\ModuleSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Settings\InstanceViewModel.cs" />
+    <Compile Include="ViewModels\Settings\AssemblyViewModel.cs" />
+    <Compile Include="ViewModels\Settings\AvailableTypeViewModel.cs" />
+    <Compile Include="ViewModels\Settings\IgnoredApplicationViewModel.cs" />
+    <Compile Include="ViewModels\Settings\ItemViewModel.cs" />
+    <Compile Include="ViewModels\Settings\SettingsViewModel.cs" />
     <Compile Include="ViewModels\SaveCancelViewModel.cs" />
     <Compile Include="ViewModels\Commands\SingleCommandViewModel.cs" />
     <Compile Include="ViewModels\Commands\ProcessViewModel.cs" />
@@ -238,6 +258,15 @@
     <Compile Include="Views\Modules\BrowseSettingView.xaml.cs">
       <DependentUpon>BrowseSettingView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Settings\AvailableTypeView.cs" />
+    <Compile Include="Views\Settings\AssemblyView.cs" />
+    <Compile Include="Views\Settings\IgnoredApplicationView.cs" />
+    <Compile Include="Views\Settings\InstanceView.xaml.cs">
+      <DependentUpon>InstanceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\ItemView.xaml.cs">
+      <DependentUpon>ItemView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ObjectView.xaml.cs">
       <DependentUpon>ObjectView.xaml</DependentUpon>
     </Compile>
@@ -249,6 +278,9 @@
     </Compile>
     <Compile Include="Views\RenameView.xaml.cs">
       <DependentUpon>RenameView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\CommandsWindow.xaml.cs">
       <DependentUpon>CommandsWindow.xaml</DependentUpon>

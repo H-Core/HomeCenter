@@ -4,11 +4,13 @@ using System.Windows;
 using System.Windows.Threading;
 using Caliburn.Micro;
 using H.NET.Storages;
+using HomeCenter.NET.Properties;
 using HomeCenter.NET.Runners;
 using HomeCenter.NET.Utilities;
 using HomeCenter.NET.ViewModels;
 using HomeCenter.NET.ViewModels.Commands;
 using HomeCenter.NET.ViewModels.Modules;
+using HomeCenter.NET.ViewModels.Settings;
 
 namespace HomeCenter.NET
 {
@@ -30,12 +32,14 @@ namespace HomeCenter.NET
             Container
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
+                .Instance(Settings.Default)
                 .Instance(new GlobalRunner(new CommandsStorage(Options.CompanyName)));
 
             Container
                 .PerRequest<CommandSettingsViewModel>()
                 .PerRequest<CommandsViewModel>()
                 .PerRequest<ModuleSettingsViewModel>()
+                .PerRequest<SettingsViewModel>()
                 .Singleton<PopUpViewModel>();
 
             base.Configure();
@@ -97,7 +101,7 @@ namespace HomeCenter.NET
 
             manager?.ShowWindow(instance);
 
-            //DisplayRootViewFor<ModuleSettingsViewModel>();
+            //DisplayRootViewFor<SettingsViewModel>();
         }
 
         protected override object GetInstance(Type service, string key)

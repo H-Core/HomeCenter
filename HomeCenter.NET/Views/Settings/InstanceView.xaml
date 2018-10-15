@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="HomeCenter.NET.Views.Settings.InstanceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d"
+             d:DesignWidth="600"
+             d:DesignHeight="25"
+             Background="{Binding IsValid, Converter={StaticResource BooleanToGreenBisqueColorConverter}}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="100*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" x:Name="InstanceName" Content="{Binding Name}" Width="100"/>
+        <Label Grid.Column="1" x:Name="Description"/>
+        <Button Grid.Column="2" x:Name="Enable" Content="{Binding IsEnabled, Converter={StaticResource BooleanToOnOffConverter}}" Width="25" cal:Message.Attach="EnableInstance($dataContext)" Background="{Binding IsEnabled, Converter={StaticResource BooleanToGreenBisqueColorConverter}}"/>
+        <Button Grid.Column="3" x:Name="Rename" Content="❏" Width="25" cal:Message.Attach="RenameInstance($dataContext)"/>
+        <Button Grid.Column="4" x:Name="Edit" Content="⚙" Width="25" cal:Message.Attach="EditInstance($dataContext)"/>
+        <Button Grid.Column="5" x:Name="Delete" Content="✖" Width="25" cal:Message.Attach="DeleteInstance($dataContext)"/>
+    </Grid>
+</UserControl>

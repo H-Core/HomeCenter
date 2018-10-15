@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="HomeCenter.NET.Views.Settings.ItemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d"
+             d:DesignWidth="600"
+             d:DesignHeight="25">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="100*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" x:Name="ItemName" Content="{Binding Name}" Width="100"/>
+        <Label Grid.Column="1" x:Name="Description"/>
+        <Button Grid.Column="2" x:Name="Update" Content="U" Width="25" cal:Message.Attach="UpdateItem($dataContext)"/>
+        <Button Grid.Column="3" x:Name="Add" Content="+" Width="25" cal:Message.Attach="AddItem($dataContext)"/>
+        <Button Grid.Column="4" x:Name="Edit" Content="⚙" Width="25" cal:Message.Attach="EditItem($dataContext)"/>
+        <Button Grid.Column="5" x:Name="Delete" Content="✖" Width="25" cal:Message.Attach="DeleteItem($dataContext)"/>
+    </Grid>
+</UserControl>
