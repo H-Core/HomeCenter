@@ -6,14 +6,14 @@ namespace HomeCenter.NET.ViewModels
 {
     public class SaveCancelViewModel : Screen
     {
-        #region Public methods
+        #region Properties
 
         protected Action SaveAction { get; set; }
         protected Action CancelAction { get; set; }
 
         #endregion
 
-        #region Public methods
+        #region Constructors
 
         public SaveCancelViewModel(Action saveAction = null, Action cancelAction = null)
         {
@@ -28,6 +28,7 @@ namespace HomeCenter.NET.ViewModels
         public void Save()
         {
             SaveAction?.Invoke();
+            // TODO: alternative solution?
             try
             {
                 TryClose(true);
