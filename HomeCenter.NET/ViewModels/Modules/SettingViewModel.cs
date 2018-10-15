@@ -25,7 +25,7 @@ namespace HomeCenter.NET.ViewModels.Modules
             }
         }
 
-        public string KeyName => $"{Setting.Key}({Setting.Type})";
+        public string Name => $"{Setting.Key}({Setting.Type})";
 
         public bool IsValid => Setting.IsValid();
 

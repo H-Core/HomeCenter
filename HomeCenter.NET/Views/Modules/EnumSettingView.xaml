@@ -12,7 +12,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="25"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label Grid.Column="0" x:Name="KeyName"/>
+        <Label Grid.Column="0" Content="{Binding Name}"/>
         <Border Grid.Column="1" BorderThickness="1"  BorderBrush="{Binding IsValid, Converter={StaticResource BooleanToGreenRedColorConverter}}">
             <ComboBox x:Name="Elements" IsEditable="True"/>
         </Border>

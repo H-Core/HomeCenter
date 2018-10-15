@@ -13,6 +13,7 @@
                     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
                     <converters:BooleanToGreenRedColorConverter x:Key="BooleanToGreenRedColorConverter" />
                     <converters:BooleanToGreenBisqueColorConverter x:Key="BooleanToGreenBisqueColorConverter" />
+                    <converters:BooleanToOnOffConverter x:Key="BooleanToOnOffConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
