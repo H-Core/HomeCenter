@@ -19,7 +19,7 @@ namespace HomeCenter.NET.ViewModels.Commands
             var (runner, command) = tuple;
             var values = command.SplitOnlyFirst(' ');
 
-            CommandName = $"{runner.GetType().Name}: {values[0]}";
+            Name = $"{runner.GetType().Name}: {values[0]}";
             Prefix = values[0];
             Description = values[1];
         }

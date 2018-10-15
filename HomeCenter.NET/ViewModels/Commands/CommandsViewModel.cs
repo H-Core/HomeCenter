@@ -142,11 +142,11 @@ namespace HomeCenter.NET.ViewModels.Commands
                     break;
 
                 case VariableViewModel _:
-                    viewModel.Description = Runner.GetVariableValue(viewModel.CommandName)?.ToString() ?? string.Empty;
+                    viewModel.Description = Runner.GetVariableValue(viewModel.Name)?.ToString() ?? string.Empty;
                     break;
 
                 case ProcessViewModel _:
-                    MainWindow.GlobalRun(viewModel.CommandName);
+                    MainWindow.GlobalRun(viewModel.Name);
                     break;
 
                 default:
