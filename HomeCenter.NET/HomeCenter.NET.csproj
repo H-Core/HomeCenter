@@ -85,6 +85,9 @@
     <Compile Include="Controls\ObjectControl.xaml.cs">
       <DependentUpon>ObjectControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BooleanToColorConverter.cs" />
+    <Compile Include="Converters\BooleanToGreenBisqueColorConverter.cs" />
+    <Compile Include="Converters\BooleanToGreenRedColorConverter.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\RunnerExtensions.cs" />
     <Compile Include="Runners\ClipboardRunner.cs" />
@@ -140,6 +143,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Modules\ModuleSettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Modules\BooleanSettingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Modules\EnumSettingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Modules\TextLineSettingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Modules\BrowseSettingView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ObjectView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -171,6 +194,12 @@
     <Compile Include="Utilities\UiExtensions.cs" />
     <Compile Include="Utilities\User32Utilities.cs" />
     <Compile Include="Utilities\User32Methods.cs" />
+    <Compile Include="ViewModels\Modules\BrowseSettingViewModel.cs" />
+    <Compile Include="ViewModels\Modules\BooleanSettingViewModel.cs" />
+    <Compile Include="ViewModels\Modules\EnumSettingViewModel.cs" />
+    <Compile Include="ViewModels\Modules\TextLineSettingViewModel.cs" />
+    <Compile Include="ViewModels\Modules\SettingViewModel.cs" />
+    <Compile Include="ViewModels\Modules\ModuleSettingsViewModel.cs" />
     <Compile Include="ViewModels\SaveCancelViewModel.cs" />
     <Compile Include="ViewModels\Commands\SingleCommandViewModel.cs" />
     <Compile Include="ViewModels\Commands\ProcessViewModel.cs" />
@@ -193,6 +222,21 @@
     <Compile Include="ViewModels\Commands\CommandSettingsViewModel.cs" />
     <Compile Include="Views\Commands\CommandSettingsView.xaml.cs">
       <DependentUpon>CommandSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modules\ModuleSettingsView.xaml.cs">
+      <DependentUpon>ModuleSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modules\BooleanSettingView.xaml.cs">
+      <DependentUpon>BooleanSettingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modules\EnumSettingView.xaml.cs">
+      <DependentUpon>EnumSettingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modules\TextLineSettingView.xaml.cs">
+      <DependentUpon>TextLineSettingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Modules\BrowseSettingView.xaml.cs">
+      <DependentUpon>BrowseSettingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ObjectView.xaml.cs">
       <DependentUpon>ObjectView.xaml</DependentUpon>

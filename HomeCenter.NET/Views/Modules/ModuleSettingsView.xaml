@@ -1,0 +1,28 @@
+﻿<Window x:Class="HomeCenter.NET.Views.Modules.ModuleSettingsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Module Settings"
+        Width="600"
+        Height="300">
+    <Grid Background="#FFE5E5E5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="35" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0">
+            <ItemsControl x:Name="Settings"/>
+        </ScrollViewer>
+        <Grid Grid.Row="1" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="80" />
+                <ColumnDefinition Width="80" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="1" x:Name="Save" Content="Save"/>
+            <Button Grid.Column="2" x:Name="Cancel" Content="Cancel"/>
+        </Grid>
+    </Grid>
+</Window>

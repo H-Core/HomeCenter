@@ -8,6 +8,7 @@ using HomeCenter.NET.Runners;
 using HomeCenter.NET.Utilities;
 using HomeCenter.NET.ViewModels;
 using HomeCenter.NET.ViewModels.Commands;
+using HomeCenter.NET.ViewModels.Modules;
 
 namespace HomeCenter.NET
 {
@@ -34,6 +35,7 @@ namespace HomeCenter.NET
             Container
                 .PerRequest<CommandSettingsViewModel>()
                 .PerRequest<CommandsViewModel>()
+                .PerRequest<ModuleSettingsViewModel>()
                 .Singleton<PopUpViewModel>();
 
             base.Configure();
@@ -95,7 +97,7 @@ namespace HomeCenter.NET
 
             manager?.ShowWindow(instance);
 
-            DisplayRootViewFor<CommandsViewModel>();
+            //DisplayRootViewFor<ModuleSettingsViewModel>();
         }
 
         protected override object GetInstance(Type service, string key)
