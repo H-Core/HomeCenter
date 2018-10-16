@@ -3,7 +3,7 @@ using H.NET.Core.Utilities;
 
 namespace HomeCenter.NET.ViewModels.Commands
 {
-    public class AllCommandViewModel : ObjectViewModel
+    public class AllCommandViewModel : CommandViewModel
     {
         #region Properties
 

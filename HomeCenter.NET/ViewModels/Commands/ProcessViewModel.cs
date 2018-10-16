@@ -4,7 +4,7 @@ using HomeCenter.NET.Runners;
 
 namespace HomeCenter.NET.ViewModels.Commands
 {
-    public class ProcessViewModel : ObjectViewModel
+    public class ProcessViewModel : CommandViewModel
     {
         #region Properties
 

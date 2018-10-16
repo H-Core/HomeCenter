@@ -3,7 +3,7 @@ using H.NET.Storages;
 
 namespace HomeCenter.NET.ViewModels.Commands
 {
-    public class UserCommandViewModel : ObjectViewModel
+    public class UserCommandViewModel : CommandViewModel
     {
         #region Properties
 

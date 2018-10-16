@@ -71,7 +71,7 @@ namespace HomeCenter.NET.ViewModels.Commands
             }
         }
 
-        public void EditCommand(ObjectViewModel viewModel)
+        public void EditCommand(CommandViewModel viewModel)
         {
             switch (viewModel)
             {
@@ -104,7 +104,7 @@ namespace HomeCenter.NET.ViewModels.Commands
             }
         }
 
-        public void DeleteCommand(ObjectViewModel viewModel)
+        public void DeleteCommand(CommandViewModel viewModel)
         {
             switch (viewModel)
             {
@@ -126,7 +126,7 @@ namespace HomeCenter.NET.ViewModels.Commands
             }
         }
 
-        public void RunCommand(ObjectViewModel viewModel)
+        public void RunCommand(CommandViewModel viewModel)
         {
             switch (viewModel)
             {

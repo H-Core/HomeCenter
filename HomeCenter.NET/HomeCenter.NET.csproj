@@ -237,7 +237,7 @@
     <Compile Include="Views\Commands\CommandsView.xaml.cs">
       <DependentUpon>CommandsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\ObjectViewModel.cs" />
+    <Compile Include="ViewModels\Commands\CommandViewModel.cs" />
     <Compile Include="ViewModels\Commands\SingleKeyViewModel.cs" />
     <Compile Include="ViewModels\Commands\CommandSettingsViewModel.cs" />
     <Compile Include="Views\Commands\CommandSettingsView.xaml.cs">

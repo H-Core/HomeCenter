@@ -1,9 +1,9 @@
 ﻿using System;
 using Caliburn.Micro;
 
-namespace HomeCenter.NET.ViewModels
+namespace HomeCenter.NET.ViewModels.Commands
 {
-    public class ObjectViewModel : Screen
+    public class CommandViewModel : Screen
     {
         #region Properties
 
@@ -37,7 +37,7 @@ namespace HomeCenter.NET.ViewModels
 
         #region Constructors
 
-        public ObjectViewModel(string name, string description, string hotKey = null, bool editable = false,
+        public CommandViewModel(string name, string description, string hotKey = null, bool editable = false,
         bool run = false, bool edit = false, bool delete = false)
         {
             Name = name;
