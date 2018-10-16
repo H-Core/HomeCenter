@@ -137,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\Commands\CommandsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -173,7 +177,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ObjectView.xaml">
+    <Page Include="Views\Commands\CommandView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -208,6 +212,9 @@
     <Compile Include="Utilities\UiExtensions.cs" />
     <Compile Include="Utilities\User32Utilities.cs" />
     <Compile Include="Utilities\User32Methods.cs" />
+    <Compile Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\Modules\BrowseSettingViewModel.cs" />
     <Compile Include="ViewModels\Modules\BooleanSettingViewModel.cs" />
     <Compile Include="ViewModels\Modules\EnumSettingViewModel.cs" />
@@ -267,8 +274,8 @@
     <Compile Include="Views\Settings\ItemView.xaml.cs">
       <DependentUpon>ItemView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ObjectView.xaml.cs">
-      <DependentUpon>ObjectView.xaml</DependentUpon>
+    <Compile Include="Views\Commands\CommandView.xaml.cs">
+      <DependentUpon>CommandView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Commands\SingleKeyView.xaml.cs">
       <DependentUpon>SingleKeyView.xaml</DependentUpon>
