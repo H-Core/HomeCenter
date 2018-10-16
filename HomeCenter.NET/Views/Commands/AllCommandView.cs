@@ -1,6 +1,6 @@
 ﻿namespace HomeCenter.NET.Views.Commands
 {
-    public class AllCommandView : ObjectView
+    public class AllCommandView : CommandView
     {
         #region Constructors
 

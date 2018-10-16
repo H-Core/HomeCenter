@@ -1,6 +1,6 @@
 ﻿namespace HomeCenter.NET.Views.Commands
 {
-    public class VariableView : ObjectView
+    public class VariableView : CommandView
     {
     }
 }

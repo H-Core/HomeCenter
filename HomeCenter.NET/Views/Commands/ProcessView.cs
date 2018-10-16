@@ -1,6 +1,6 @@
 ﻿namespace HomeCenter.NET.Views.Commands
 {
-    public class ProcessView : ObjectView
+    public class ProcessView : CommandView
     {
     }
 }

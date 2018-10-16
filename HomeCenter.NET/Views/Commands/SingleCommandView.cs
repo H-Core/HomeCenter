@@ -1,6 +1,6 @@
 ﻿namespace HomeCenter.NET.Views.Commands
 {
-    public class SingleCommandView : ObjectView
+    public class SingleCommandView : CommandView
     {
     }
 }
