@@ -2,9 +2,9 @@
 
 namespace HomeCenter.NET.Converters
 {
-    public class BooleanToGreenBisqueColorConverter : BooleanToColorConverter
+    public class BooleanToGreenBisqueColorConverter : BooleanConverter
     {
-        public BooleanToGreenBisqueColorConverter() : base(Colors.LightGreen, Colors.Bisque)
+        public BooleanToGreenBisqueColorConverter() : base(new SolidColorBrush(Colors.LightGreen), new SolidColorBrush(Colors.Bisque))
         {
         }
     }

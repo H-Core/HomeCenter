@@ -4,21 +4,21 @@ using System.Windows.Data;
 
 namespace HomeCenter.NET.Converters
 {
-    public class BooleanToStringConverter : IValueConverter
+    public class BooleanConverter : IValueConverter
     {
         #region Properties
 
-        public string TrueText { get; }
-        public string FalseText { get; }
+        public object TrueObject { get; }
+        public object FalseObject { get; }
 
         #endregion
 
         #region Constructors
 
-        protected BooleanToStringConverter(string trueText, string falseText)
+        protected BooleanConverter(object trueObject, object falseObject)
         {
-            TrueText = trueText;
-            FalseText = falseText;
+            TrueObject = trueObject;
+            FalseObject = falseObject;
         }
 
         #endregion
@@ -33,14 +33,14 @@ namespace HomeCenter.NET.Converters
             }
 
             var boolean = (bool)value;
-            var text = boolean ? TrueText : FalseText;
+            var obj = boolean ? TrueObject : FalseObject;
 
-            return text;
+            return obj;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return Equals(value, TrueObject);
         }
 
         #endregion
