@@ -3,8 +3,9 @@ using System.Linq;
 using Caliburn.Micro;
 using H.NET.Storages;
 using H.NET.Storages.Extensions;
+using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Runners;
-using HomeCenter.NET.Windows;
+using HomeCenter.NET.Services;
 
 // ReSharper disable UnusedMember.Global
 
@@ -14,8 +15,10 @@ namespace HomeCenter.NET.ViewModels.Commands
     {
         #region Properties
 
-        public IWindowManager Manager { get; }
-        public GlobalRunner Runner { get; }
+        public MainService MainService { get; }
+        public HookService HookService { get; }
+        public GlobalRunner Runner => MainService.GlobalRunner;
+
         public BindableCollection<UserCommandViewModel> UserCommands { get; }
         public BindableCollection<AllCommandViewModel> AllCommands { get; }
         public BindableCollection<VariableViewModel> Variables { get; }
@@ -25,10 +28,10 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         #region Constructors
 
-        public CommandsViewModel(GlobalRunner runner, IWindowManager manager)
+        public CommandsViewModel(MainService mainService, HookService hookService)
         {
-            Runner = runner ?? throw new ArgumentNullException(nameof(runner));
-            Manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            MainService = mainService ?? throw new ArgumentNullException(nameof(mainService));
+            HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
 
             UserCommands = new BindableCollection<UserCommandViewModel>(
                 Runner.Storage.UniqueValues(entry => entry.Value).Select(i => new UserCommandViewModel(i.Value)));
@@ -43,7 +46,13 @@ namespace HomeCenter.NET.ViewModels.Commands
             Runner.BeforeRun += (o, e) => NotifyOfPropertyChange(nameof(Processes));
             Runner.AfterRun += (o, e) => NotifyOfPropertyChange(nameof(Processes));
 
-            SaveAction = () => Runner.Storage.Save();
+            SaveAction = () =>
+            {
+                Runner.Storage.Save();
+
+                // TODO: simplify?
+                MainService.Update();
+            };
             CancelAction = () => Runner.Storage.Load(); // Cancel changes TODO: may me need to use TempStorage instead this?
         }
 
@@ -57,8 +66,8 @@ namespace HomeCenter.NET.ViewModels.Commands
             command.Keys.Add(new SingleKey(string.Empty));
             command.Lines.Add(new SingleCommand(string.Empty));
 
-            var viewModel = new CommandSettingsViewModel(command);
-            var result = Manager.ShowDialog(viewModel);
+            var viewModel = new CommandSettingsViewModel(command, MainService, HookService);
+            var result = this.ShowDialog(viewModel);
             if (result != true)
             {
                 return;
@@ -77,8 +86,8 @@ namespace HomeCenter.NET.ViewModels.Commands
             {
                 case UserCommandViewModel userCommandViewModel:
                     var newCommand = (Command)userCommandViewModel.Command.Clone();
-                    var dialogViewModel = new CommandSettingsViewModel(newCommand);
-                    var result = Manager.ShowDialog(dialogViewModel);
+                    var dialogViewModel = new CommandSettingsViewModel(newCommand, MainService, HookService);
+                    var result = this.ShowDialog(dialogViewModel);
                     if (result != true)
                     {
                         return;
@@ -133,12 +142,12 @@ namespace HomeCenter.NET.ViewModels.Commands
                 case UserCommandViewModel userCommandViewModel:
                     foreach (var line in userCommandViewModel.Command.Lines)
                     {
-                        MainWindow.GlobalRun(line.Text);
+                        MainService.Run(line.Text);
                     }
                     break;
 
                 case AllCommandViewModel allCommandViewModel:
-                    MainWindow.GlobalRun($"{allCommandViewModel.Prefix} {viewModel.Description}");
+                    MainService.Run($"{allCommandViewModel.Prefix} {viewModel.Description}");
                     break;
 
                 case VariableViewModel _:
@@ -146,7 +155,7 @@ namespace HomeCenter.NET.ViewModels.Commands
                     break;
 
                 case ProcessViewModel _:
-                    MainWindow.GlobalRun(viewModel.Name);
+                    MainService.Run(viewModel.Name);
                     break;
 
                 default:

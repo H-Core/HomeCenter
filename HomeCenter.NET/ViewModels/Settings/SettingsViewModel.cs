@@ -5,6 +5,8 @@ using Caliburn.Micro;
 using H.NET.Core;
 using H.NET.Core.Extensions;
 using H.NET.Utilities;
+using HomeCenter.NET.Extensions;
+using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
 using HomeCenter.NET.ViewModels.Modules;
 // ReSharper disable UnusedMember.Global
@@ -16,7 +18,7 @@ namespace HomeCenter.NET.ViewModels.Settings
         #region Properties
 
         public Properties.Settings Settings { get; }
-        public IWindowManager WindowManager { get; }
+        public HookService HookService { get; }
 
         public bool IsStartup { get; set; }
 
@@ -77,10 +79,10 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         #region Constructors
 
-        public SettingsViewModel(Properties.Settings settings, IWindowManager windowManager)
+        public SettingsViewModel(Properties.Settings settings, HookService hookService)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            WindowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
+            HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
 
             IgnoredApplications = new BindableCollection<ItemViewModel>(
                 Options.HookIgnoredApps.Select(i => new IgnoredApplicationViewModel(i)));
@@ -94,6 +96,9 @@ namespace HomeCenter.NET.ViewModels.Settings
             SaveAction = () =>
             {
                 ModuleManager.Instance.Save();
+
+                HookService.KeyboardHook.SetEnabled(Settings.EnableKeyboardHook);
+                HookService.MouseHook.SetEnabled(Settings.EnableMouseHook);
 
                 Settings.Recorder = SelectedRecorderElement;
                 Settings.Converter = SelectedConverterElement;
@@ -285,7 +290,7 @@ namespace HomeCenter.NET.ViewModels.Settings
             var oldName = viewModel.Name;
             var renameViewModel = new RenameViewModel(oldName, oldName);
 
-            var result = WindowManager.ShowDialog(renameViewModel);
+            var result = this.ShowDialog(renameViewModel);
             if (result != true)
             {
                 return;
@@ -305,7 +310,7 @@ namespace HomeCenter.NET.ViewModels.Settings
         public void EditInstance(InstanceViewModel viewModel)
         {
             var moduleSettingsView = new ModuleSettingsViewModel(viewModel.Instance.Value);
-            var result = WindowManager.ShowDialog(moduleSettingsView);
+            var result = this.ShowDialog(moduleSettingsView);
             if (result != true)
             {
                 return;

@@ -4,6 +4,7 @@ using Caliburn.Micro;
 
 namespace HomeCenter.NET.ViewModels
 {
+    // TODO: rename to Popup
     public class PopUpViewModel : Screen, IDisposable
     {
         #region Properties

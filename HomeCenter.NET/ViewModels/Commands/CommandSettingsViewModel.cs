@@ -2,7 +2,7 @@
 using System.Linq;
 using Caliburn.Micro;
 using H.NET.Storages;
-using HomeCenter.NET.Windows;
+using HomeCenter.NET.Services;
 
 // ReSharper disable UnusedMember.Global
 
@@ -14,6 +14,8 @@ namespace HomeCenter.NET.ViewModels.Commands
         #region Properties
 
         public Command Command { get; }
+        public MainService MainService { get; }
+        public HookService HookService { get; }
         public BindableCollection<SingleKeyViewModel> Keys { get; }
         public BindableCollection<SingleCommandViewModel> Commands { get; }
 
@@ -40,9 +42,11 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         #region Constructors
 
-        public CommandSettingsViewModel(Command command)
+        public CommandSettingsViewModel(Command command, MainService mainService, HookService hookService)
         {
             Command = command ?? throw new ArgumentNullException(nameof(command));
+            MainService = mainService ?? throw new ArgumentNullException(nameof(mainService));
+            HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
 
             Keys = new BindableCollection<SingleKeyViewModel>(Command.Keys.Select(i => new SingleKeyViewModel(i)));
             Commands = new BindableCollection<SingleCommandViewModel>(Command.Lines.Select(i => new SingleCommandViewModel(i)));
@@ -101,7 +105,7 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         public void RunCommand(SingleCommandViewModel viewModel)
         {
-            MainWindow.GlobalRun(viewModel.Description);
+            MainService.Run(viewModel.Description);
         }
 
         #endregion
@@ -112,7 +116,7 @@ namespace HomeCenter.NET.ViewModels.Commands
         {
             EditHotKeyIsEnabled = false;
 
-            var combination = await MainWindow.CatchKey();
+            var combination = await HookService.CatchKey();
             HotKey = combination?.ToString() ?? string.Empty;
 
             EditHotKeyIsEnabled = true;
