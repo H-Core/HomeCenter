@@ -36,6 +36,10 @@ namespace HomeCenter.NET.ViewModels.Modules
                     {
                         return new TextLineSettingViewModel(setting);
                     }
+                    if (setting.Type == typeof(int))
+                    {
+                        return new TextLineSettingViewModel(setting);
+                    }
                     if (setting.Type == typeof(bool))
                     {
                         return new BooleanSettingViewModel(setting);

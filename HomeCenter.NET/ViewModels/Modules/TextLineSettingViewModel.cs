@@ -9,7 +9,7 @@ namespace HomeCenter.NET.ViewModels.Modules
 
         public TextLineSettingViewModel(Setting setting) : base(setting)
         {
-            if (setting.Type != typeof(string))
+            if (setting.Type != typeof(string) && setting.Type != typeof(int))
             {
                 throw new ArgumentException(@"Incorrect setting type", nameof(setting));
             }
