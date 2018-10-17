@@ -61,29 +61,8 @@
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Commands\ShowHideCommand.cs" />
-    <Compile Include="Controls\KeySettingControl.xaml.cs">
-      <DependentUpon>KeySettingControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\BoolSettingControl.xaml.cs">
       <DependentUpon>BoolSettingControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\EnumSettingControl.xaml.cs">
-      <DependentUpon>EnumSettingControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\CommandControl.xaml.cs">
-      <DependentUpon>CommandControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\InstanceControl.xaml.cs">
-      <DependentUpon>InstanceControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\SettingControl.xaml.cs">
-      <DependentUpon>SettingControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\TextControl.xaml.cs">
-      <DependentUpon>TextControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ObjectControl.xaml.cs">
-      <DependentUpon>ObjectControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BooleanToBlueGrayConverter.cs" />
     <Compile Include="Converters\BooleanToRecordConverter.cs" />
@@ -111,35 +90,7 @@
     <Compile Include="Utilities\ScreenshotRectangle.cs" />
     <Compile Include="Utilities\WpfSafeActions.cs" />
     <Compile Include="Utilities\SafeActions.cs" />
-    <Page Include="Controls\KeySettingControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Controls\BoolSettingControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\EnumSettingControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\CommandControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\InstanceControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\SettingControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\TextControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\ObjectControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

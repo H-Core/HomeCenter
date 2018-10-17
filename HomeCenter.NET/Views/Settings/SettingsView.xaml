@@ -21,7 +21,14 @@
                     <c:BoolSettingControl Text="Enable Mouse Hook:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnableMouseHook}"/>
                     <c:BoolSettingControl Text="Enable PopUp Messages:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=EnablePopUpMessages}"/>
                     <c:BoolSettingControl Text="Auto-update assemblies:" IsChecked="{Binding Source={x:Static properties:Settings.Default},Path=AutoUpdateAssemblies}"/>
-                    <c:KeySettingControl Text="Record Button:" Key="{Binding Source={x:Static properties:Settings.Default},Path=RecordKey}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Content="Record Button:"/>
+                        <Button Grid.Column="1" Content="{Binding Source={x:Static properties:Settings.Default},Path=RecordKey}"/>
+                    </Grid>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Ignored Apps">
