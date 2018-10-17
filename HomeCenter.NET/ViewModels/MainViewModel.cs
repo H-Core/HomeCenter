@@ -177,8 +177,8 @@ namespace HomeCenter.NET.ViewModels
             {
                 await MainService.Load();
 
-                //HookService.KeyboardHook.SetEnabled(Settings.EnableKeyboardHook);
-                //HookService.MouseHook.SetEnabled(Settings.EnableMouseHook);
+                HookService.KeyboardHook.SetEnabled(Settings.EnableKeyboardHook);
+                HookService.MouseHook.SetEnabled(Settings.EnableMouseHook);
 
                 Print("Loaded");
             }

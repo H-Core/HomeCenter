@@ -64,7 +64,8 @@ namespace HomeCenter.NET.Services
             ModuleManager.AddUniqueInstancesIfNeed();
             ModuleManager.RegisterHandlers();
 
-            Update();
+            UpdateCombinations();
+            UpdateActiveModules();
         }
 
         public void StartRecord(int timeout)
@@ -72,7 +73,7 @@ namespace HomeCenter.NET.Services
             Manager.ChangeWithTimeout(timeout);
         }
 
-        public void Update()
+        public void UpdateCombinations()
         {
             Combinations.Clear();
             foreach (var pair in GlobalRunner.Storage.UniqueValues(i => i.Value).Where(i => i.Value.HotKey != null))
@@ -87,6 +88,13 @@ namespace HomeCenter.NET.Services
 
                 Combinations[combination] = command;
             }
+        }
+
+        public void UpdateActiveModules()
+        {
+            Manager.Recorder = Options.Recorder;
+            Manager.Converter = Options.Converter;
+            Manager.AlternativeConverters = Options.AlternativeConverters;
         }
 
         #region Run

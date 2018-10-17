@@ -19,6 +19,7 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         public Properties.Settings Settings { get; }
         public HookService HookService { get; }
+        public MainService MainService { get; }
 
         public bool IsStartup { get; set; }
 
@@ -79,10 +80,11 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         #region Constructors
 
-        public SettingsViewModel(Properties.Settings settings, HookService hookService)
+        public SettingsViewModel(Properties.Settings settings, HookService hookService, MainService mainService)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
             HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
+            MainService = mainService ?? throw new ArgumentNullException(nameof(mainService));
 
             IgnoredApplications = new BindableCollection<ItemViewModel>(
                 Options.HookIgnoredApps.Select(i => new IgnoredApplicationViewModel(i)));
@@ -106,6 +108,8 @@ namespace HomeCenter.NET.ViewModels.Settings
                 Settings.Searcher = SelectedSearcherElement;
                 Settings.Save();
                 Startup.Set(Options.FilePath, IsStartup);
+
+                MainService.UpdateActiveModules();
             };
         }
 

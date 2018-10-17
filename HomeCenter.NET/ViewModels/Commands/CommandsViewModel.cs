@@ -51,7 +51,7 @@ namespace HomeCenter.NET.ViewModels.Commands
                 Runner.Storage.Save();
 
                 // TODO: simplify?
-                MainService.Update();
+                MainService.UpdateCombinations();
             };
             CancelAction = () => Runner.Storage.Load(); // Cancel changes TODO: may me need to use TempStorage instead this?
         }
