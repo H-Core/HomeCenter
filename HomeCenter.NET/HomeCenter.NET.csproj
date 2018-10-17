@@ -85,18 +85,22 @@
     <Compile Include="Controls\ObjectControl.xaml.cs">
       <DependentUpon>ObjectControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BooleanToBlueGrayConverter.cs" />
+    <Compile Include="Converters\BooleanToRecordConverter.cs" />
     <Compile Include="Converters\BooleanToOnOffConverter.cs" />
-    <Compile Include="Converters\BooleanToStringConverter.cs" />
-    <Compile Include="Converters\BooleanToColorConverter.cs" />
-    <Compile Include="Converters\BooleanToGreenBisqueColorConverter.cs" />
-    <Compile Include="Converters\BooleanToGreenRedColorConverter.cs" />
+    <Compile Include="Converters\BooleanConverter.cs" />
+    <Compile Include="Converters\BooleanToGreenBisqueConverter.cs" />
+    <Compile Include="Converters\BooleanToGreenRedConverter.cs" />
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\RunnerExtensions.cs" />
+    <Compile Include="Extensions\ScreenExtensions.cs" />
     <Compile Include="Runners\ClipboardRunner.cs" />
     <Compile Include="Runners\WindowsRunner.cs" />
     <Compile Include="Runners\KeyboardRunner.cs" />
     <Compile Include="Runners\UiRunner.cs" />
     <Compile Include="Runners\GlobalRunner.cs" />
+    <Compile Include="Services\MainService.cs" />
+    <Compile Include="Services\HookService.cs" />
     <Compile Include="Utilities\DialogUtilities.cs" />
     <Compile Include="Utilities\KeysCombination.cs" />
     <Compile Include="Utilities\MediaUtilities.cs" />
@@ -137,7 +141,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MainWindow.xaml">
+    <Page Include="Views\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -212,8 +216,9 @@
     <Compile Include="Utilities\UiExtensions.cs" />
     <Compile Include="Utilities\User32Utilities.cs" />
     <Compile Include="Utilities\User32Methods.cs" />
-    <Compile Include="Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Views\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\Modules\BrowseSettingViewModel.cs" />
     <Compile Include="ViewModels\Modules\BooleanSettingViewModel.cs" />
