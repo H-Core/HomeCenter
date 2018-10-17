@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Caliburn.Micro;
 using H.NET.Core;
 using H.NET.Core.Runners;
 using H.NET.Plugins;
@@ -14,6 +15,7 @@ using HomeCenter.NET.Properties;
 using HomeCenter.NET.Runners;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.ViewModels;
+using HomeCenter.NET.ViewModels.Modules;
 
 namespace HomeCenter.NET.Utilities
 {
@@ -116,8 +118,27 @@ namespace HomeCenter.NET.Utilities
             }
         }
 
-        internal static void InitializeStaticRunners(MainViewModel model, MainService mainService)
+        internal static void InitializeStaticRunners(IWindowManager windowManager, MainViewModel model, MainService mainService)
         {
+            void ShowModuleSettings(string name)
+            {
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    model.Print("ShowModuleSettings: Module name is empty");
+                    return;
+                }
+
+                var module = ModuleManager.Instance.GetPlugin<IModule>(name)?.Value;
+                if (module == null)
+                {
+                    model.Print($"ShowModuleSettings: Module {name} is not found");
+                    return;
+                }
+
+                windowManager.ShowWindow(new ModuleSettingsViewModel(module));
+            }
+
+
             var staticRunners = new List<IRunner>
             {
                 new DefaultRunner(model.Print, model.Say, model.Search),
@@ -136,7 +157,7 @@ namespace HomeCenter.NET.Utilities
                     ShowUiAction = () => Application.Current.Dispatcher.Invoke(() => model.IsVisible = !model.IsVisible),
                     ShowSettingsAction = () => Application.Current.Dispatcher.Invoke(model.ShowSettings),
                     ShowCommandsAction = () => Application.Current.Dispatcher.Invoke(model.ShowCommands),
-                    ShowModuleSettingsAction = name => Application.Current.Dispatcher.Invoke(() => model.ShowModuleSettings(name)),
+                    ShowModuleSettingsAction = name => Application.Current.Dispatcher.Invoke(() => ShowModuleSettings(name)),
                     StartRecordAction = timeout => Application.Current.Dispatcher.Invoke(() => mainService.StartRecord(timeout))
                 }
             };

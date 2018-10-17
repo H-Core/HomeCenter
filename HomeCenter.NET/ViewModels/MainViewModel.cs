@@ -143,24 +143,6 @@ namespace HomeCenter.NET.ViewModels
             this.ShowWindow<SettingsViewModel>();
         }
 
-        public void ShowModuleSettings(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-            {
-                Print("ShowModuleSettings: Module name is empty");
-                return;
-            }
-
-            var module = ModuleManager.Instance.GetPlugin<IModule>(name)?.Value;
-            if (module == null)
-            {
-                Print($"ShowModuleSettings: Module {name} is not found");
-                return;
-            }
-
-            this.ShowWindow(new ModuleSettingsViewModel(module));
-        }
-
         public void BeforeExit()
         {
             PopUpViewModel.TryClose();

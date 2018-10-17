@@ -137,7 +137,7 @@ namespace HomeCenter.NET
             // TODO: custom window manager is required
             model.IsVisible = e.Args.Contains("/restart") || !Settings.Default.IsStartMinimized;
 
-            Initializer.InitializeStaticRunners(model, mainService);
+            Initializer.InitializeStaticRunners(manager, model, mainService);
             
             await Initializer.InitializeDynamicModules(mainService, hookService, model);
 

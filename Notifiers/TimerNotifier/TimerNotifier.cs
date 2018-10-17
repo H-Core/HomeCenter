@@ -37,8 +37,8 @@ namespace H.NET.Notifiers
 
         public TimerNotifier()
         {
-            AddSetting("Interval", o => Interval = o, value => value > 0, int.MaxValue);
-            AddSetting("Frequency", o => Frequency = o, value => value >= 0, 0);
+            AddSetting("Interval", o => Interval = o, Positive, int.MaxValue);
+            AddSetting("Frequency", o => Frequency = o, NotNegative, 0);
         }
 
         #endregion
