@@ -36,6 +36,7 @@ namespace HomeCenter.NET
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<HookService>()
                 .Singleton<MainService>()
+                .Singleton<ScreenshotRectangle>()
                 .Instance(Settings.Default);
 
             Container
@@ -122,10 +123,11 @@ namespace HomeCenter.NET
 
             // Create permanent hidden PopupView
             manager.ShowWindow(instance);
-
+            
             var model = IoC.GetInstance(typeof(MainViewModel), null) as MainViewModel ?? throw new ArgumentNullException();
             var mainService = IoC.GetInstance(typeof(MainService), null) as MainService ?? throw new ArgumentNullException();
             var hookService = IoC.GetInstance(typeof(HookService), null) as HookService ?? throw new ArgumentNullException();
+            var screenshotRectangle = IoC.GetInstance(typeof(ScreenshotRectangle), null) as ScreenshotRectangle ?? throw new ArgumentNullException();
 
             var hWindowManager = manager as HWindowManager ?? throw new ArgumentNullException();
 
@@ -139,7 +141,7 @@ namespace HomeCenter.NET
             
             await Initializer.InitializeDynamicModules(mainService, hookService, model);
 
-            Initializer.InitializeHooks(mainService, hookService, model);
+            Initializer.InitializeHooks(mainService, hookService, model, screenshotRectangle);
 
             Initializer.CheckUpdate(e.Args, mainService);
             Initializer.CheckRun(e.Args, mainService);

@@ -9,22 +9,22 @@ using Point = System.Drawing.Point;
 
 namespace HomeCenter.NET.Utilities
 {
-    public static class ScreenshotRectangle
+    public class ScreenshotRectangle
     {
-        public static List<Key> ActivationKeys { get; set; } = new List<Key>();
-        public static List<ModifierKeys> ActivationModifiers { get; set; } = new List<ModifierKeys>();
+        public List<Key> ActivationKeys { get; set; } = new List<Key>();
+        public List<ModifierKeys> ActivationModifiers { get; set; } = new List<ModifierKeys>();
 
         public delegate void ImageDelegate(Image image);
-        public static event ImageDelegate NewImage;
+        public event ImageDelegate NewImage;
 
-        private static RectangleView RectangleView { get; } = new  RectangleView();
-        private static Point RectanglePoint { get; set; }
-        private static bool IsMouseDown { get; set; }
+        private RectangleView RectangleView { get; set; }
+        private Point RectanglePoint { get; set; }
+        private bool IsMouseDown { get; set; }
 
-        private static bool IsScreenshotCombination() =>
+        private bool IsScreenshotCombination() =>
             ActivationKeys.All(Keyboard.IsKeyDown) && ActivationModifiers.All(i => (Keyboard.Modifiers & i) == i);
 
-        public static async void Global_MouseUp(object sender, MouseEventExtArgs e)
+        public async void Global_MouseUp(object sender, MouseEventExtArgs e)
         {
             IsMouseDown = false;
             if (!IsScreenshotCombination())
@@ -32,7 +32,8 @@ namespace HomeCenter.NET.Utilities
                 return;
             }
 
-            RectangleView.Hide();
+            RectangleView.Close();
+            RectangleView = null;
 
             var rectangle = CalculateRectangle(e);
             if (rectangle.Width == 0 || rectangle.Height == 0)
@@ -46,11 +47,12 @@ namespace HomeCenter.NET.Utilities
             }
         }
 
-        public static void Global_MouseMove(object sender, MouseEventExtArgs e)
+        public void Global_MouseMove(object sender, MouseEventExtArgs e)
         {
             if (!IsMouseDown || !IsScreenshotCombination())
             {
-                RectangleView.Hide();
+                RectangleView.Close();
+                RectangleView = null;
                 return;
             }
 
@@ -63,7 +65,7 @@ namespace HomeCenter.NET.Utilities
             RectangleView.Height = rectangle.Height;
         }
 
-        public static void Global_MouseDown(object sender, MouseEventExtArgs e)
+        public void Global_MouseDown(object sender, MouseEventExtArgs e)
         {
             IsMouseDown = true;
             if (!IsScreenshotCombination())
@@ -71,6 +73,7 @@ namespace HomeCenter.NET.Utilities
                 return;
             }
 
+            RectangleView = new RectangleView();
             RectangleView.Show();
             RectangleView.Left = e.X;
             RectangleView.Top = e.Y;
@@ -80,7 +83,7 @@ namespace HomeCenter.NET.Utilities
             RectanglePoint = new Point(e.X, e.Y);
         }
 
-        private static Rectangle CalculateRectangle(MouseEventExtArgs e)
+        private Rectangle CalculateRectangle(MouseEventExtArgs e)
         {
             var dx = e.X - RectanglePoint.X;
             var dy = e.Y - RectanglePoint.Y;

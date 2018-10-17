@@ -42,7 +42,7 @@ namespace HomeCenter.NET.Utilities
             #endregion
         }
 
-        internal static void InitializeHooks(MainService mainService, HookService hookService, MainViewModel model)
+        internal static void InitializeHooks(MainService mainService, HookService hookService, MainViewModel model, ScreenshotRectangle screenshotRectangle)
         {
             void GlobalKeyUp(object sender, KeyboardHookEventArgs e)
             {
@@ -101,12 +101,12 @@ namespace HomeCenter.NET.Utilities
                 hookService.KeyboardHook.KeyUp += GlobalKeyUp;
                 hookService.KeyboardHook.KeyDown += GlobalKeyDown;
 
-                ScreenshotRectangle.ActivationKeys.Add(Key.Space);
-                ScreenshotRectangle.ActivationModifiers.Add(ModifierKeys.Shift);
-                ScreenshotRectangle.NewImage += image => Clipboard.SetImage(image.ToBitmapImage());
-                hookService.MouseHook.MouseUp += ScreenshotRectangle.Global_MouseUp;
-                hookService.MouseHook.MouseDown += ScreenshotRectangle.Global_MouseDown;
-                hookService.MouseHook.MouseMove += ScreenshotRectangle.Global_MouseMove;
+                screenshotRectangle.ActivationKeys.Add(Key.Space);
+                screenshotRectangle.ActivationModifiers.Add(ModifierKeys.Shift);
+                screenshotRectangle.NewImage += image => Clipboard.SetImage(image.ToBitmapImage());
+                hookService.MouseHook.MouseUp += screenshotRectangle.Global_MouseUp;
+                hookService.MouseHook.MouseDown += screenshotRectangle.Global_MouseDown;
+                hookService.MouseHook.MouseMove += screenshotRectangle.Global_MouseMove;
 
                 hookService.MouseHook.MouseDown += GlobalMouseDown;
             }
