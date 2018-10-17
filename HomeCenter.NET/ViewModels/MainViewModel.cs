@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using Caliburn.Micro;
-using H.NET.Core;
 using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Services;
-using HomeCenter.NET.Utilities;
 using HomeCenter.NET.ViewModels.Commands;
-using HomeCenter.NET.ViewModels.Modules;
 using HomeCenter.NET.ViewModels.Settings;
 
 namespace HomeCenter.NET.ViewModels
@@ -100,32 +95,6 @@ namespace HomeCenter.NET.ViewModels
             {
                 PopUpViewModel.Show(text, 5000);
             }
-        }
-
-        public async Task Say(string text)
-        {
-            var synthesizer = Options.Synthesizer;
-            if (synthesizer == null)
-            {
-                Print("Synthesizer is not found");
-                return;
-            }
-
-            var bytes = await synthesizer.Convert(text);
-
-            await bytes.PlayAsync();
-        }
-
-        public async Task<List<string>> Search(string text)
-        {
-            var searcher = Options.Searcher;
-            if (searcher == null)
-            {
-                Print("Searcher is not found");
-                return new List<string>();
-            }
-
-            return await searcher.Search(text);
         }
 
         public void Record()

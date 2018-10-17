@@ -23,11 +23,8 @@ namespace HomeCenter.NET.Utilities
     {
         internal static async Task InitializeDynamicModules(MainService mainService, HookService hookService, MainViewModel model)
         {
-            #region Modules
-
             AssembliesManager.LogAction = model.Print;
             Module.LogAction = model.Print;
-            Runner.SearchFunc = model.Search;
 
             model.Print("Loading modules...");
             try
@@ -40,8 +37,6 @@ namespace HomeCenter.NET.Utilities
             {
                 model.Print(exception.ToString());
             }
-
-            #endregion
         }
 
         internal static void InitializeHooks(MainService mainService, HookService hookService, MainViewModel model, ScreenshotRectangle screenshotRectangle)
@@ -138,10 +133,37 @@ namespace HomeCenter.NET.Utilities
                 windowManager.ShowWindow(new ModuleSettingsViewModel(module));
             }
 
+            async Task Say(string text)
+            {
+                var synthesizer = Options.Synthesizer;
+                if (synthesizer == null)
+                {
+                    model.Print("Synthesizer is not found");
+                    return;
+                }
+
+                var bytes = await synthesizer.Convert(text);
+
+                await bytes.PlayAsync();
+            }
+
+            async Task<List<string>> Search(string text)
+            {
+                var searcher = Options.Searcher;
+                if (searcher == null)
+                {
+                    model.Print("Searcher is not found");
+                    return new List<string>();
+                }
+
+                return await searcher.Search(text);
+            }
+
+            Runner.SearchFunc = Search;
 
             var staticRunners = new List<IRunner>
             {
-                new DefaultRunner(model.Print, model.Say, model.Search),
+                new DefaultRunner(model.Print, Say, Search),
                 new KeyboardRunner(),
                 new WindowsRunner(),
                 new ClipboardRunner
