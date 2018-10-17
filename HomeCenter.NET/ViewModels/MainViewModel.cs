@@ -161,11 +161,20 @@ namespace HomeCenter.NET.ViewModels
             this.ShowWindow(new ModuleSettingsViewModel(module));
         }
 
+        public void BeforeExit()
+        {
+            PopUpViewModel.TryClose();
+        }
 
         public void Close()
         {
             UserCanClose = true;
             TryClose();
+
+            if (!IsVisible)
+            {
+                BeforeExit();
+            }
         }
 
         #endregion
@@ -231,7 +240,7 @@ namespace HomeCenter.NET.ViewModels
         {
             if (UserCanClose)
             {
-                PopUpViewModel.TryClose();
+                BeforeExit();
                 return;
             }
 
