@@ -13,7 +13,7 @@
             <ColumnDefinition Width="25"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Label Grid.Column="0" Content="{Binding Name}"/>
-        <TextBox Grid.Column="1" x:Name="Value" Background="{Binding IsValid, Converter={StaticResource BooleanToGreenBisqueColorConverter}}"/>
+        <TextBox Grid.Column="1" x:Name="Value" Background="{Binding IsValid, Converter={StaticResource BooleanToGreenBisqueConverter}}"/>
         <Button Grid.Column="2" x:Name="ResetDefault" Content="⮰"/>
     </Grid>
 </UserControl>

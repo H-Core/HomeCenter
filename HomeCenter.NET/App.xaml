@@ -11,9 +11,14 @@
                 <ResourceDictionary>
                     <local:Bootstrapper x:Key="Bootstrapper" />
                     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-                    <converters:BooleanToGreenRedColorConverter x:Key="BooleanToGreenRedColorConverter" />
-                    <converters:BooleanToGreenBisqueColorConverter x:Key="BooleanToGreenBisqueColorConverter" />
+                    <converters:BooleanToGreenRedConverter x:Key="BooleanToGreenRedConverter" />
+                    <converters:BooleanToGreenBisqueConverter x:Key="BooleanToGreenBisqueConverter" />
+                    <converters:BooleanToBlueGrayConverter x:Key="BooleanToBlueGrayConverter" />
                     <converters:BooleanToOnOffConverter x:Key="BooleanToOnOffConverter" />
+                    <converters:BooleanToRecordConverter x:Key="BooleanToRecordConverter" />
+                    <Style x:Key="HiddenWindowStyle" TargetType="Window">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                    </Style>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

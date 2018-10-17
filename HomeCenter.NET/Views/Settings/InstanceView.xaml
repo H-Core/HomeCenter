@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignWidth="600"
              d:DesignHeight="25"
-             Background="{Binding IsValid, Converter={StaticResource BooleanToGreenBisqueColorConverter}}">
+             Background="{Binding IsValid, Converter={StaticResource BooleanToGreenBisqueConverter}}">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
         <Label Grid.Column="0" x:Name="InstanceName" Content="{Binding Name}" Width="100"/>
         <Label Grid.Column="1" x:Name="Description"/>
-        <Button Grid.Column="2" x:Name="Enable" Content="{Binding IsEnabled, Converter={StaticResource BooleanToOnOffConverter}}" Width="25" cal:Message.Attach="EnableInstance($dataContext)" Background="{Binding IsEnabled, Converter={StaticResource BooleanToGreenBisqueColorConverter}}"/>
+        <Button Grid.Column="2" x:Name="Enable" Content="{Binding IsEnabled, Converter={StaticResource BooleanToOnOffConverter}}" Width="25" cal:Message.Attach="EnableInstance($dataContext)" Background="{Binding IsEnabled, Converter={StaticResource BooleanToGreenBisqueConverter}}"/>
         <Button Grid.Column="3" x:Name="Rename" Content="❏" Width="25" cal:Message.Attach="RenameInstance($dataContext)"/>
         <Button Grid.Column="4" x:Name="Edit" Content="⚙" Width="25" cal:Message.Attach="EditInstance($dataContext)"/>
         <Button Grid.Column="5" x:Name="Delete" Content="✖" Width="25" cal:Message.Attach="DeleteInstance($dataContext)"/>

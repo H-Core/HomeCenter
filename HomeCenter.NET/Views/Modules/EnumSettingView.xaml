@@ -13,7 +13,7 @@
             <ColumnDefinition Width="25"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Label Grid.Column="0" Content="{Binding Name}"/>
-        <Border Grid.Column="1" BorderThickness="1"  BorderBrush="{Binding IsValid, Converter={StaticResource BooleanToGreenRedColorConverter}}">
+        <Border Grid.Column="1" BorderThickness="1"  BorderBrush="{Binding IsValid, Converter={StaticResource BooleanToGreenRedConverter}}">
             <ComboBox x:Name="Elements" IsEditable="True"/>
         </Border>
         <Button Grid.Column="2" x:Name="ResetDefault" Content="⮰"/>
