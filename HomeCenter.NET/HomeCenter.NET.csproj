@@ -203,14 +203,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\CommandsWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -296,53 +288,11 @@
     <Compile Include="Views\Settings\SettingsView.xaml.cs">
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\CommandsWindow.xaml.cs">
-      <DependentUpon>CommandsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\ChangeCommandWindow.xaml.cs">
-      <DependentUpon>ChangeCommandWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Runners\DefaultRunner.cs" />
-    <Compile Include="Windows\ModuleSettingsWindow.xaml.cs">
-      <DependentUpon>ModuleSettingsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\PopUpWindow.xaml.cs">
-      <DependentUpon>PopUpWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Commands\RectangleView.xaml.cs">
       <DependentUpon>RectangleView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\RenameWindow.xaml.cs">
-      <DependentUpon>RenameWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Windows\ChangeCommandWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\ModuleSettingsWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Windows\PopUpWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Commands\RectangleView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\RenameWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
