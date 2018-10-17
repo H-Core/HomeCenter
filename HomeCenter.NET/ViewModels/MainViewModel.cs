@@ -6,9 +6,6 @@ using System.Linq;
 using System.Windows.Input;
 using Caliburn.Micro;
 using H.NET.Core;
-using H.NET.Core.Runners;
-using H.NET.Plugins;
-using H.NET.Utilities;
 using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
@@ -18,7 +15,7 @@ using HomeCenter.NET.ViewModels.Settings;
 
 namespace HomeCenter.NET.ViewModels
 {
-    internal class MainViewModel : Screen, IDisposable
+    internal class MainViewModel : Screen
     {
         #region Properties
 
@@ -164,54 +161,16 @@ namespace HomeCenter.NET.ViewModels
             this.ShowWindow(new ModuleSettingsViewModel(module));
         }
 
-        public async Task Load(bool isUpdating = false)
+
+        public void Close()
         {
-            #region Modules
-
-            AssembliesManager.LogAction = Print;
-            Module.LogAction = Print;
-            Runner.SearchFunc = Search;
-
-            Print("Loading modules...");
-            try
-            {
-                await MainService.Load();
-
-                HookService.KeyboardHook.SetEnabled(Settings.EnableKeyboardHook);
-                HookService.MouseHook.SetEnabled(Settings.EnableMouseHook);
-
-                Print("Loaded");
-            }
-            catch (Exception exception)
-            {
-                Print(exception.ToString());
-            }
-
-            #endregion
-
-            #region Hook
-
-            try
-            {
-                HookService.KeyboardHook.KeyUp += Global_KeyUp;
-                HookService.KeyboardHook.KeyDown += Global_KeyDown;
-
-                //ScreenshotRectangle.ActivationKeys.Add(Key.Space);
-                //ScreenshotRectangle.ActivationModifiers.Add(ModifierKeys.Shift);
-                //ScreenshotRectangle.NewImage += image => Clipboard.SetImage(image.ToBitmapImage());
-                //HookService.MouseHook.MouseUp += ScreenshotRectangle.Global_MouseUp;
-                //HookService.MouseHook.MouseDown += ScreenshotRectangle.Global_MouseDown;
-                //HookService.MouseHook.MouseMove += ScreenshotRectangle.Global_MouseMove;
-
-                HookService.MouseHook.MouseDown += Global_MouseDown;
-            }
-            catch (Exception exception)
-            {
-                Print(exception.ToString());
-            }
-
-            #endregion
+            UserCanClose = true;
+            TryClose();
         }
+
+        #endregion
+
+        #region Event Handlers
 
         public void Input_KeyUp(KeyEventArgs e)
         {
@@ -243,55 +202,6 @@ namespace HomeCenter.NET.ViewModels
             }
         }
 
-        private void Global_KeyUp(object sender, KeyboardHookEventArgs e)
-        {
-            if (e.Key != Keys.None && e.Key == Options.RecordKey ||
-                e.IsAltPressed && e.IsCtrlPressed)
-            {
-                MainService.Manager.Stop();
-            }
-        }
-
-        private void Global_KeyDown(object sender, KeyboardHookEventArgs e)
-        {
-            if (e.Key != Keys.None && e.Key == Options.RecordKey ||
-                e.Key == Keys.Space && e.IsAltPressed && e.IsCtrlPressed)
-            {
-                MainService.Manager.Start();
-            }
-
-            if (Options.IsIgnoredApplication())
-            {
-                return;
-            }
-
-            //Print($"{e.Key:G}");
-            var combination = new KeysCombination(e.Key, e.IsCtrlPressed, e.IsShiftPressed, e.IsAltPressed);
-            if (MainService.RunCombination(combination))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void Global_MouseDown(object sender, MouseEventExtArgs e)
-        {
-            if (e.SpecialButton == 0)
-            {
-                return;
-            }
-            if (Options.IsIgnoredApplication())
-            {
-                return;
-            }
-
-            var combination = KeysCombination.FromSpecialData(e.SpecialButton);
-            if (MainService.RunCombination(combination))
-            {
-                e.Handled = true;
-            }
-            //Print($"{e.SpecialButton}");
-        }
-
         public void OnKeyUp(KeyEventArgs e)
         {
             // TODO: to record key
@@ -316,28 +226,6 @@ namespace HomeCenter.NET.ViewModels
                 MainService.Restart();
             }
         }
-
-        public void Close()
-        {
-            UserCanClose = true;
-            TryClose();
-        }
-
-        public void Dispose()
-        {
-            /* TODO: fix
-            if (TaskbarIcon != null)
-            {
-                TaskbarIcon.Icon = null;
-                TaskbarIcon.Visibility = Visibility.Hidden;
-                TaskbarIcon.Dispose();
-                TaskbarIcon = null;
-            }*/
-        }
-
-        #endregion
-
-        #region Event Handlers
 
         public void OnClosing(CancelEventArgs e)
         {

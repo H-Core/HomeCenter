@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using Caliburn.Micro;
-using H.NET.Core;
 using HomeCenter.NET.Properties;
-using HomeCenter.NET.Runners;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
 using HomeCenter.NET.ViewModels;
 using HomeCenter.NET.ViewModels.Commands;
 using HomeCenter.NET.ViewModels.Modules;
 using HomeCenter.NET.ViewModels.Settings;
+using HomeCenter.NET.Views;
 
 namespace HomeCenter.NET
 {
     public class Bootstrapper : BootstrapperBase
     {
         private SimpleContainer Container { get; set; }
+        private MainView MainView { get; set; }
 
         public Bootstrapper()
         {
@@ -33,7 +32,7 @@ namespace HomeCenter.NET
             Container.Instance(Container);
 
             Container
-                .Singleton<IWindowManager, WindowManager>()
+                .Singleton<IWindowManager, HWindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<HookService>()
                 .Singleton<MainService>()
@@ -103,13 +102,6 @@ namespace HomeCenter.NET
             #endregion
         }
 
-        private static void Run(string command)
-        {
-            var service = IoC.GetInstance(typeof(MainService), null) as MainService ?? throw new ArgumentNullException();
-
-            service.Run(command);
-        }
-
         private static void DisposeObject<T>() where T : class, IDisposable
         {
             var obj = IoC.GetInstance(typeof(T), null) as T ?? throw new ArgumentNullException();
@@ -117,106 +109,50 @@ namespace HomeCenter.NET
             obj.Dispose();
         }
 
-        protected override void OnExit(object sender, EventArgs e)
-        {
-            DisposeObject<MainViewModel>();
-            DisposeObject<MainService>();
-            DisposeObject<HookService>();
-        }
-
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
+            Initializer.CheckKillAll(e.Args);
+            Initializer.CheckNotFirstProcess(e.Args);
+
+            // Catching unhandled exceptions
+            WpfSafeActions.Initialize();
+
             var manager = GetInstance(typeof(IWindowManager), null) as IWindowManager ?? throw new ArgumentNullException();
             var instance = GetInstance(typeof(PopUpViewModel), null) as PopUpViewModel ?? throw new Exception(@"PopUpViewModel Instance is null");
 
             // Create permanent hidden PopupView
             manager.ShowWindow(instance);
 
-            //DisplayRootViewFor<MainViewModel>();
-
             var model = IoC.GetInstance(typeof(MainViewModel), null) as MainViewModel ?? throw new ArgumentNullException();
             var mainService = IoC.GetInstance(typeof(MainService), null) as MainService ?? throw new ArgumentNullException();
+            var hookService = IoC.GetInstance(typeof(HookService), null) as HookService ?? throw new ArgumentNullException();
 
-            //manager?.ShowWindow(IoC.GetInstance(typeof(MainViewModel), null));
+            var hWindowManager = manager as HWindowManager ?? throw new ArgumentNullException();
 
+            // Create hidden window(without moment of show/hide)
+            MainView = hWindowManager.CreateWindow(model) as MainView ?? throw new ArgumentNullException();
 
-            var isKillAll = e.Args.Contains("/killall");
-            if (isKillAll)
-            {
-                Process.GetProcessesByName(Options.ApplicationName)
-                    .Where(i => i.Id != Process.GetCurrentProcess().Id)
-                    .AsParallel()
-                    .ForAll(i => i.Kill());
-            }
-
-            var isRestart = e.Args.Contains("/restart");
-
-            // If current process is not first
-            if (Process.GetProcessesByName(Options.ApplicationName).Length > 1 &&
-                !isRestart && !isKillAll)
-            {
-                Application.Shutdown();
-                return;
-            }
-
-            // Catching unhandled exceptions
-            WpfSafeActions.Initialize();
-
-            manager.ShowWindow(model);
             // TODO: custom window manager is required
-            model.IsVisible = isRestart || !Settings.Default.IsStartMinimized;
+            model.IsVisible = e.Args.Contains("/restart") || !Settings.Default.IsStartMinimized;
 
+            Initializer.InitializeStaticRunners(model, mainService);
+            
+            await Initializer.InitializeDynamicModules(mainService, hookService, model);
 
-            var isUpdating = e.Args.Contains("/updating");
+            Initializer.InitializeHooks(mainService, hookService, model);
 
-            #region Static Runners
+            Initializer.CheckUpdate(e.Args, mainService);
+            Initializer.CheckRun(e.Args, mainService);
+        }
 
-            var staticRunners = new List<IRunner>
-            {
-                new DefaultRunner(model.Print, model.Say, model.Search),
-                new KeyboardRunner(),
-                new WindowsRunner(),
-                new ClipboardRunner
-                {
-                    ClipboardAction = command => Application.Current.Dispatcher.Invoke(() => Clipboard.SetText(command)),
-                    ClipboardFunc = () => Application.Current.Dispatcher.Invoke(Clipboard.GetText)
-                },
-                new UiRunner
-                {
-                    // TODO: refactor
-                    RestartAction = command => Application.Current.Dispatcher.Invoke(() => mainService.Restart(command)),
-                    UpdateRestartAction = command => Application.Current.Dispatcher.Invoke(() => mainService.RestartWithUpdate(command)),
-                    ShowUiAction = () => Application.Current.Dispatcher.Invoke(() => model.IsVisible = !model.IsVisible),
-                    ShowSettingsAction = () => Application.Current.Dispatcher.Invoke(() => model.ShowSettings()),
-                    ShowCommandsAction = () => Application.Current.Dispatcher.Invoke(() => model.ShowCommands()),
-                    ShowModuleSettingsAction = name => Application.Current.Dispatcher.Invoke(() => model.ShowModuleSettings(name)),
-                    StartRecordAction = timeout => Application.Current.Dispatcher.Invoke(() => mainService.StartRecord(timeout))
-                }
-            };
-            foreach (var runner in staticRunners)
-            {
-                ModuleManager.Instance.AddStaticInstance(runner.ShortName, runner);
-            }
+        protected override void OnExit(object sender, EventArgs e)
+        {
+            MainView?.Dispose();
 
-            #endregion
+            DisposeObject<MainService>();
+            DisposeObject<HookService>();
 
-            await model.Load(isUpdating);
-
-            if (!isUpdating && Settings.Default.AutoUpdateAssemblies)
-            {
-                Run("update-assemblies");
-            }
-            if (e.Args.Contains("/run"))
-            {
-                var commandIndex = e.Args.ToList().IndexOf("/run") + 1;
-                var text = e.Args[commandIndex].Trim('"');
-                var commands = text.Split(';');
-
-                foreach (var command in commands)
-                {
-                    Run(command);
-                }
-            }
+            Application.Shutdown();
         }
 
         protected override object GetInstance(Type service, string key)

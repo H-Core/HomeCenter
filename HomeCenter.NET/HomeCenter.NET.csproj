@@ -102,6 +102,8 @@
     <Compile Include="Services\MainService.cs" />
     <Compile Include="Services\HookService.cs" />
     <Compile Include="Utilities\DialogUtilities.cs" />
+    <Compile Include="Utilities\HWindowManager.cs" />
+    <Compile Include="Utilities\Initializer.cs" />
     <Compile Include="Utilities\KeysCombination.cs" />
     <Compile Include="Utilities\MediaUtilities.cs" />
     <Compile Include="Utilities\ModuleManager.cs" />
