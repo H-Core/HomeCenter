@@ -13,7 +13,7 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         #region Constructors
 
-        public AvailableTypeViewModel(Type type) : base(type.Assembly.FullName, type.Name, add: type.AllowMultipleInstance())
+        public AvailableTypeViewModel(Type type) : base(type.Name, type.Assembly.GetName().Name, add: type.AllowMultipleInstance())
         {
             Type = type;
         }

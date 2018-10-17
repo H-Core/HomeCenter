@@ -264,7 +264,7 @@ namespace HomeCenter.NET.ViewModels.Settings
             switch (viewModel)
             {
                 case AvailableTypeViewModel availableTypeViewModel:
-                    ModuleManager.Instance.AddInstance($"{viewModel.Description}_{new Random().Next()}", availableTypeViewModel.Type, false);
+                    ModuleManager.Instance.AddInstance($"{viewModel.Name}_{new Random().Next()}", availableTypeViewModel.Type, false);
                     UpdateModules();
                     // TODO: Focus to Modules tab?
                     break;
