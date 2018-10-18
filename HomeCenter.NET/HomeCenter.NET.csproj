@@ -85,7 +85,7 @@
     <Compile Include="Services\HookService.cs" />
     <Compile Include="Utilities\DialogUtilities.cs" />
     <Compile Include="Utilities\HWindowManager.cs" />
-    <Compile Include="Utilities\Initializer.cs" />
+    <Compile Include="Initializers\InitializeHelper.cs" />
     <Compile Include="Utilities\KeysCombination.cs" />
     <Compile Include="Utilities\MediaUtilities.cs" />
     <Compile Include="Services\ModuleService.cs" />

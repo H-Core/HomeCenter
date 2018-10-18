@@ -124,8 +124,8 @@ namespace HomeCenter.NET
 
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
-            Initializer.CheckKillAll(e.Args);
-            Initializer.CheckNotFirstProcess(e.Args);
+            InitializeHelper.CheckKillAll(e.Args);
+            InitializeHelper.CheckNotFirstProcess(e.Args);
 
             // Catching unhandled exceptions
             WpfSafeActions.Initialize();
@@ -151,12 +151,12 @@ namespace HomeCenter.NET
 
             Get<StaticModulesInitializer>();
             
-            await Initializer.InitializeDynamicModules(mainService, hookService, moduleService, model);
+            await InitializeHelper.InitializeDynamicModules(mainService, hookService, moduleService, model);
 
             Get<HookInitializer>();
 
-            Initializer.CheckUpdate(e.Args, mainService);
-            Initializer.CheckRun(e.Args, mainService);
+            InitializeHelper.CheckUpdate(e.Args, mainService);
+            InitializeHelper.CheckRun(e.Args, mainService);
         }
 
         protected override void OnExit(object sender, EventArgs e)

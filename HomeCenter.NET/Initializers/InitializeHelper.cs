@@ -7,11 +7,12 @@ using H.NET.Core;
 using H.NET.Plugins;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Services;
+using HomeCenter.NET.Utilities;
 using HomeCenter.NET.ViewModels;
 
-namespace HomeCenter.NET.Utilities
+namespace HomeCenter.NET.Initializers
 {
-    public static class Initializer
+    public static class InitializeHelper
     {
         public static async Task InitializeDynamicModules(MainService mainService, HookService hookService, ModuleService moduleService, MainViewModel model)
         {
