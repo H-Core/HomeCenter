@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
@@ -75,8 +77,8 @@ namespace HomeCenter.NET.Initializers
                 new UiRunner(moduleService, ipcService)
                 {
                     // TODO: refactor
-                    RestartAction = command => Application.Current.Dispatcher.Invoke(() => mainService.Restart(command)),
-                    UpdateRestartAction = command => Application.Current.Dispatcher.Invoke(() => mainService.RestartWithUpdate(command)),
+                    RestartAction = command => Application.Current.Dispatcher.Invoke(() => Restart(command)),
+                    UpdateRestartAction = command => Application.Current.Dispatcher.Invoke(() => RestartWithUpdate(command)),
                     ShowUiAction = () => Application.Current.Dispatcher.Invoke(() => model.IsVisible = !model.IsVisible),
                     ShowSettingsAction = () => Application.Current.Dispatcher.Invoke(model.ShowSettings),
                     ShowCommandsAction = () => Application.Current.Dispatcher.Invoke(model.ShowCommands),
@@ -89,5 +91,32 @@ namespace HomeCenter.NET.Initializers
                 moduleService.AddStaticInstance(runner.ShortName, runner);
             }
         }
+
+        #region Restart
+
+        public static void RestartWithUpdate(string command) => Restart(command, "/updating");
+
+        public static void Restart(string command, string additionalArguments = null)
+        {
+            if (string.IsNullOrWhiteSpace(command))
+            {
+                Restart(new List<string>(), additionalArguments);
+            }
+            else
+            {
+                Restart(new[] { command }, additionalArguments);
+            }
+        }
+
+        public static void Restart(ICollection<string> commands, string additionalArguments = null)
+        {
+            var run = commands.Any() ? $"/run \"{string.Join(";", commands)}\"" : string.Empty;
+
+            Process.Start($"\"{Options.FilePath}\"", $"/restart {run} {additionalArguments}");
+            Application.Current.Shutdown();
+        }
+
+        #endregion
+
     }
 }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows;
 using H.NET.Core.Managers;
 using H.NET.Core.Recorders;
 using H.NET.Core.Runners;
@@ -110,23 +108,6 @@ namespace HomeCenter.NET.Services
         public async Task HiddenRunAsync(string message) => await GlobalRunner.Run(message, false);
 
         public async void HiddenRun(string message) => await GlobalRunner.Run(message, false);
-
-        #endregion
-
-        #region Restart
-
-        public void RestartWithUpdate(string command) => Restart(command, "/updating");
-
-        public void Restart() => Restart(new List<string>());
-        public void Restart(string command, string additionalArguments = null) => Restart(new[] { command }, additionalArguments);
-
-        public void Restart(ICollection<string> commands, string additionalArguments = null)
-        {
-            var run = commands.Any() ? $"/run \"{string.Join(";", commands)}\"" : string.Empty;
-            
-            Process.Start($"\"{Options.FilePath}\"", $"/restart {run} {additionalArguments}");
-            Application.Current.Shutdown();
-        }
 
         #endregion
 

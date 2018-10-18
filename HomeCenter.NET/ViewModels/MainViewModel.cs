@@ -183,7 +183,7 @@ namespace HomeCenter.NET.ViewModels
             {
                 e.Handled = true;
 
-                MainService.Restart();
+                MainService.Run("restart");
             }
         }
 
