@@ -16,7 +16,7 @@ namespace HomeCenter.NET.Initializers
         {
             void GlobalKeyUp(object sender, KeyboardHookEventArgs e)
             {
-                if (e.Key != Keys.None && e.Key == Options.RecordKey ||
+                if (e.Key != Keys.None && e.Key == hookService.RecordKey ||
                     e.IsAltPressed && e.IsCtrlPressed)
                 {
                     mainService.Manager.Stop();
@@ -25,13 +25,13 @@ namespace HomeCenter.NET.Initializers
 
             void GlobalKeyDown(object sender, KeyboardHookEventArgs e)
             {
-                if (e.Key != Keys.None && e.Key == Options.RecordKey ||
+                if (e.Key != Keys.None && e.Key == hookService.RecordKey ||
                     e.Key == Keys.Space && e.IsAltPressed && e.IsCtrlPressed)
                 {
                     mainService.Manager.Start();
                 }
 
-                if (Options.IsIgnoredApplication())
+                if (hookService.IsIgnoredApplication())
                 {
                     return;
                 }
@@ -50,7 +50,7 @@ namespace HomeCenter.NET.Initializers
                 {
                     return;
                 }
-                if (Options.IsIgnoredApplication())
+                if (hookService.IsIgnoredApplication())
                 {
                     return;
                 }

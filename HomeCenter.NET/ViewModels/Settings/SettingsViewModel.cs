@@ -89,7 +89,7 @@ namespace HomeCenter.NET.ViewModels.Settings
             ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
 
             IgnoredApplications = new BindableCollection<ItemViewModel>(
-                Options.HookIgnoredApps.Select(i => new IgnoredApplicationViewModel(i)));
+                hookService.HookIgnoredApps.Select(i => new IgnoredApplicationViewModel(i)));
 
             // TODO: To Container?
             UpdateAssemblies(false);
@@ -230,7 +230,7 @@ namespace HomeCenter.NET.ViewModels.Settings
             switch (viewModel)
             {
                 case IgnoredApplicationViewModel _:
-                    Options.HookIgnoredApps = Options.HookIgnoredApps.Except(new[] { viewModel.Description }).ToList();
+                    HookService.HookIgnoredApps = HookService.HookIgnoredApps.Except(new[] { viewModel.Description }).ToList();
                     IgnoredApplications.Remove(viewModel);
                     break;
 
@@ -338,7 +338,7 @@ namespace HomeCenter.NET.ViewModels.Settings
                 return;
             }
 
-            Options.HookIgnoredApps = Options.HookIgnoredApps.Concat(new[] { path }).ToList();
+            HookService.HookIgnoredApps = HookService.HookIgnoredApps.Concat(new[] { path }).ToList();
             IgnoredApplications.Add(new IgnoredApplicationViewModel(path));
         }
 

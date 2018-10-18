@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using H.NET.Utilities;
+using HomeCenter.NET.Properties;
 using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Services
@@ -9,8 +12,27 @@ namespace HomeCenter.NET.Services
     {
         #region Properties
 
+        public Settings Settings { get; }
+
         public LowLevelMouseHook MouseHook { get; set; } = new LowLevelMouseHook();
         public LowLevelKeyboardHook KeyboardHook { get; set; } = new LowLevelKeyboardHook();
+
+        public Keys RecordKey => Hook.FromString(Settings.RecordKey);
+
+        public List<string> HookIgnoredApps {
+            get => Settings.HookIgnoredApps.Split(';').Where(i => !string.IsNullOrWhiteSpace(i)).ToList();
+            set => Settings.HookIgnoredApps = string.Join(";", value);
+        }
+
+
+        #endregion
+
+        #region Constructors
+
+        public HookService(Settings settings)
+        {
+            Settings = settings ?? throw new ArgumentNullException(nameof(settings));
+        }
 
         #endregion
 
@@ -71,6 +93,29 @@ namespace HomeCenter.NET.Services
             MouseHook.SetEnabled(mouseHookState);
 
             return isCancel ? null : combination;
+        }
+
+        public bool IsIgnoredApplication()
+        {
+            try
+            {
+                if (User32Utilities.AreApplicationFullScreen())
+                {
+                    return true;
+                }
+
+                var process = User32Utilities.GetForegroundProcess();
+                var appExePath = process.MainModule.FileName;
+
+                //var appProcessName = process.ProcessName;
+                //var appExeName = appExePath.Substring(appExePath.LastIndexOf(@"\") + 1);
+
+                return HookIgnoredApps.Contains(appExePath);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public void Dispose()
