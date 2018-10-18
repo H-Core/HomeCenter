@@ -52,11 +52,7 @@ namespace HomeCenter.NET.Services
         {
             moduleService.RunAction = Run; // TODO: Hidden?
             moduleService.RunAsyncFunc = HiddenRunAsync;
-            await Task.Run(() =>
-            {
-                moduleService.Load();
-                moduleService.EnableInstances();
-            });
+            await Task.Run(() => moduleService.Load());
             moduleService.AddUniqueInstancesIfNeed();
             moduleService.RegisterHandlers();
 
