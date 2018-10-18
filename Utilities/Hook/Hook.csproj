@@ -34,6 +34,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="KeysCombination.cs" />
     <Compile Include="LowLevelMouseHook.cs" />
     <Compile Include="LowLevelKeyboardHook.cs" />
     <Compile Include="Hook.cs" />

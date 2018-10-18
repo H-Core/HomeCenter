@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Linq;
-using H.NET.Utilities;
 
-namespace HomeCenter.NET.Utilities
+namespace H.NET.Utilities
 {
     public class KeysCombination
     {
