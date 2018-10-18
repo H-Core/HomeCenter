@@ -325,7 +325,7 @@ namespace HomeCenter.NET.ViewModels.Settings
         {
             viewModel.IsEnabled = !viewModel.IsEnabled;
             ModuleService.SetInstanceIsEnabled(viewModel.Name, viewModel.IsEnabled);
-            ModuleService.RegisterHandlers();
+            ModuleService.RegisterHandlers(MainService);
 
             UpdateModules(); // TODO: update single item??
         }

@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using H.NET.Core;
 using H.NET.Core.Runners;
-using H.NET.Core.Storages;
 using H.NET.Storages;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
@@ -71,10 +70,11 @@ namespace HomeCenter.NET.Runners
 
         #region Constructors
 
-        public GlobalRunner(ModuleService moduleService, IStorage<Command> storage = null)
+        public GlobalRunner(ModuleService moduleService, IStorage<Command> storage)
         {
             ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
-            Storage = storage ?? new InvariantDictionaryStorage<Command>();
+            Storage = storage ?? throw new ArgumentNullException(nameof(storage));
+
             Storage.Load();
         }
 

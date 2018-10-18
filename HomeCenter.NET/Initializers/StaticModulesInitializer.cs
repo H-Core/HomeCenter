@@ -74,7 +74,7 @@ namespace HomeCenter.NET.Initializers
                     ClipboardAction = command => Application.Current.Dispatcher.Invoke(() => Clipboard.SetText(command)),
                     ClipboardFunc = () => Application.Current.Dispatcher.Invoke(Clipboard.GetText)
                 },
-                new UiRunner(moduleService, ipcService)
+                new UiRunner(moduleService, ipcService, mainService)
                 {
                     // TODO: refactor
                     RestartAction = command => Application.Current.Dispatcher.Invoke(() => Restart(command)),

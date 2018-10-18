@@ -9,7 +9,6 @@ using H.NET.Storages;
 using H.NET.Storages.Extensions;
 using H.NET.Utilities;
 using HomeCenter.NET.Runners;
-using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Services
 {
@@ -26,9 +25,9 @@ namespace HomeCenter.NET.Services
 
         #region Constructors
 
-        public MainService(ModuleService moduleService)
+        public MainService(ModuleService moduleService, CommandsStorage storage)
         {
-            GlobalRunner = new GlobalRunner(moduleService, new CommandsStorage(Options.CompanyName));
+            GlobalRunner = new GlobalRunner(moduleService, storage);
             Manager.NewText += text =>
             {
                 if (Runner.IsWaitCommand)
@@ -49,11 +48,9 @@ namespace HomeCenter.NET.Services
 
         public async Task Load(ModuleService moduleService)
         {
-            moduleService.RunAction = Run; // TODO: Hidden?
-            moduleService.RunAsyncFunc = HiddenRunAsync;
             await Task.Run(() => moduleService.Load());
             moduleService.AddUniqueInstancesIfNeed();
-            moduleService.RegisterHandlers();
+            moduleService.RegisterHandlers(this);
 
             UpdateCombinations();
             UpdateActiveModules(moduleService);

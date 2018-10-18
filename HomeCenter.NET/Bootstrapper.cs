@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using Caliburn.Micro;
+using H.NET.Storages;
 using HomeCenter.NET.Initializers;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Services;
@@ -40,7 +41,8 @@ namespace HomeCenter.NET
                 .Singleton<ModuleService>()
                 .Singleton<IpcService>()
                 .Singleton<ScreenshotRectangle>()
-                .Instance(Settings.Default);
+                .Instance(Settings.Default)
+                .Instance(new CommandsStorage(Options.CompanyName));
 
             Container
                 .PerRequest<CommandSettingsViewModel>()

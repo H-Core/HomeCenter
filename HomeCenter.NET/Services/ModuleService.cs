@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using H.NET.Core;
 using H.NET.Core.Extensions;
 using H.NET.Plugins;
@@ -15,9 +14,6 @@ namespace HomeCenter.NET.Services
         #region Properties
 
         public Settings Settings { get; }
-
-        public TextDelegate RunAction { get; set; }
-        public Func<string, Task> RunAsyncFunc { get; set; }
 
         public IRecorder Recorder => GetPlugin<IRecorder>(Settings.Recorder)?.Value;
         public ISearcher Searcher => GetPlugin<ISearcher>(Settings.Searcher)?.Value;
@@ -58,7 +54,7 @@ namespace HomeCenter.NET.Services
             }
         });
 
-        public void RegisterHandlers() => SafeActions.Run(() =>
+        public void RegisterHandlers(MainService mainService) => SafeActions.Run(() =>
         {
             var instances = Instances.Objects;
 
@@ -73,17 +69,17 @@ namespace HomeCenter.NET.Services
 
                 module.IsRegistered = true;
                 module.UniqueName = name;
-                module.NewCommand += RunAction;
+                module.NewCommand += mainService.Run;
                 module.NewCommandAsync += async (sender, args) =>
                 {
-                    if (RunAsyncFunc == null || args == null)
+                    if (args == null)
                     {
                         return;
                     }
 
                     using (args.GetDeferral())
                     {
-                        await RunAsyncFunc(args.Text);
+                        await mainService.HiddenRunAsync(args.Text);
                     }
                 };
 

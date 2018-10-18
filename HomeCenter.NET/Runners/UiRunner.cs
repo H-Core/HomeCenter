@@ -26,7 +26,7 @@ namespace HomeCenter.NET.Runners
 
         #region Constructors
 
-        public UiRunner(ModuleService moduleService, IpcService ipcService)
+        public UiRunner(ModuleService moduleService, IpcService ipcService, MainService mainService)
         {
             ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
 
@@ -47,7 +47,7 @@ namespace HomeCenter.NET.Runners
                     throw obj.Exception;
                 }
 
-                moduleService.RegisterHandlers();
+                moduleService.RegisterHandlers(mainService);
             }, "name");
             AddAction("disable-module", name =>
             {
@@ -58,7 +58,8 @@ namespace HomeCenter.NET.Runners
                     throw obj.Exception;
                 }
 
-                moduleService.RegisterHandlers();
+                // TODO: it's required?
+                //moduleService.RegisterHandlers();
             }, "name");
 
             AddInternalAction("install-assembly", command => this.CheckPathAndRun(command, moduleService.Install), "path");
