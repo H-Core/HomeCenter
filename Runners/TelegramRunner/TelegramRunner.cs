@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using H.NET.Core.Runners;
 using Telegram.Bot;
@@ -10,40 +11,10 @@ namespace H.NET.Runners
     {
         #region Properties
 
-        private int _userId;
-        public int UserId
-        {
-            get => _userId;
-            set {
-                _userId = value;
-
-                if (!UsedIdIsValid(value))
-                {
-                    return;
-                }
-
-                ChatId = new ChatId(value);
-            }
-        }
-
-        private string _token;
-        public string Token
-        {
-            get => _token;
-            set {
-                _token = value;
-
-                if (!TokenIsValid(value))
-                {
-                    return;
-                }
-
-                Client = new TelegramBotClient(value);
-            }
-        }
-
-        private TelegramBotClient Client { get; set; }
-        private ChatId ChatId { get; set; }
+        public int UserId { get; set; }
+        public string Token { get; set; }
+        public string ProxyIp { get; set; }
+        public int ProxyPort { get; set; }
 
         #endregion
 
@@ -53,7 +24,9 @@ namespace H.NET.Runners
         {
             AddSetting(nameof(Token), o => Token = o, TokenIsValid, string.Empty);
             AddSetting(nameof(UserId), o => UserId = o, UsedIdIsValid, 0);
-
+            AddSetting(nameof(ProxyIp), o => ProxyIp = o, null, string.Empty);
+            AddSetting(nameof(ProxyPort), o => ProxyPort = o, null, 0);
+                                                                  
             AddAsyncAction("telegram", SendMessage, "text");
         }
 
@@ -67,6 +40,7 @@ namespace H.NET.Runners
             try
             {
                 var unused = new TelegramBotClient(token);
+
                 return true;
             }
             catch (Exception)
@@ -81,8 +55,16 @@ namespace H.NET.Runners
 
         #region Private methods
 
-        private async Task SendMessage(string text) =>
-            await Client.SendTextMessageAsync(ChatId, text);
+        private async Task SendMessage(string text)
+        {
+            var isProxy = !string.IsNullOrWhiteSpace(ProxyIp) && Positive(ProxyPort);
+            var client = isProxy
+                ? new TelegramBotClient(Token, new WebProxy(ProxyIp, ProxyPort))
+                : new TelegramBotClient(Token);
+            
+            await client.SendTextMessageAsync(new ChatId(UserId), text);
+
+        }
 
         #endregion
     }
