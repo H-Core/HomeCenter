@@ -73,6 +73,7 @@
     <Compile Include="Extensions\ImageExtensions.cs" />
     <Compile Include="Extensions\RunnerExtensions.cs" />
     <Compile Include="Extensions\ScreenExtensions.cs" />
+    <Compile Include="Initializers\StaticModulesInitializer.cs" />
     <Compile Include="Runners\ClipboardRunner.cs" />
     <Compile Include="Runners\WindowsRunner.cs" />
     <Compile Include="Runners\KeyboardRunner.cs" />

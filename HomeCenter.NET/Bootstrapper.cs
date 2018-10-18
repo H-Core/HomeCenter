@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using Caliburn.Micro;
+using HomeCenter.NET.Initializers;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
@@ -48,6 +49,9 @@ namespace HomeCenter.NET
                 .Singleton<SettingsViewModel>()
                 .Singleton<PopUpViewModel>()
                 .Singleton<MainViewModel>();
+
+            Container
+                .PerRequest<StaticModulesInitializer>();
 
             base.Configure();
 
@@ -135,7 +139,6 @@ namespace HomeCenter.NET
             var mainService = Get<MainService>();
             var hookService = Get<HookService>();
             var moduleService = Get<ModuleService>();
-            var ipcService = Get<IpcService>();
             var screenshotRectangle = Get<ScreenshotRectangle>();
 
             var hWindowManager = manager as HWindowManager ?? throw new ArgumentNullException();
@@ -146,7 +149,7 @@ namespace HomeCenter.NET
             // TODO: custom window manager is required
             model.IsVisible = e.Args.Contains("/restart") || !Settings.Default.IsStartMinimized;
 
-            Initializer.InitializeStaticRunners(manager, model, mainService, moduleService, ipcService);
+            Get<StaticModulesInitializer>();
             
             await Initializer.InitializeDynamicModules(mainService, hookService, moduleService, model);
 
