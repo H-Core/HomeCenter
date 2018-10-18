@@ -51,7 +51,8 @@ namespace HomeCenter.NET
                 .Singleton<MainViewModel>();
 
             Container
-                .PerRequest<StaticModulesInitializer>();
+                .PerRequest<StaticModulesInitializer>()
+                .PerRequest<HookInitializer>();
 
             base.Configure();
 
@@ -139,7 +140,6 @@ namespace HomeCenter.NET
             var mainService = Get<MainService>();
             var hookService = Get<HookService>();
             var moduleService = Get<ModuleService>();
-            var screenshotRectangle = Get<ScreenshotRectangle>();
 
             var hWindowManager = manager as HWindowManager ?? throw new ArgumentNullException();
 
@@ -153,7 +153,7 @@ namespace HomeCenter.NET
             
             await Initializer.InitializeDynamicModules(mainService, hookService, moduleService, model);
 
-            Initializer.InitializeHooks(mainService, hookService, model, screenshotRectangle);
+            Get<HookInitializer>();
 
             Initializer.CheckUpdate(e.Args, mainService);
             Initializer.CheckRun(e.Args, mainService);
