@@ -5,13 +5,13 @@ using System.Net.Sockets;
 
 namespace H.NET.Utilities
 {
-    public class IpcServer
+    public class IpcServer : IDisposable
     {
         #region Properties
 
         public bool IsEnabled { get; private set; }
         public int Port { get; }
-        private TcpListener Listener { get; }
+        private TcpListener Listener { get; set; }
 
         #endregion
 
@@ -67,5 +67,16 @@ namespace H.NET.Utilities
                 listener.BeginAcceptTcpClient(OnClientAccepted, listener);
             }
         }
+
+        #region Dispose
+
+        public void Dispose()
+        {
+            Listener?.Stop();
+            Listener?.Server?.Dispose();
+            Listener = null;
+        }
+
+        #endregion
     }
 }

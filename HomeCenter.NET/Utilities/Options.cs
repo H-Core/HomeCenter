@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using H.NET.Core;
 using H.NET.Utilities;
 using HomeCenter.NET.Properties;
 
@@ -13,8 +12,6 @@ namespace HomeCenter.NET.Utilities
         public static string FilePath => Assembly.GetExecutingAssembly().Location; //Application.ResourceAssembly.Location
         public const string ApplicationName = "HomeCenter.NET";
         public const string CompanyName = "HomeCenter.NET";
-        public const int IpcPortToHomeCenter = 19445;
-        public const int IpcPortToDeskBand = 19446;
 
         public static Keys RecordKey => Hook.FromString(Settings.Default.RecordKey);
 

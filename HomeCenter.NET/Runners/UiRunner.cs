@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Linq;
 using H.NET.Core.Runners;
-using H.NET.Utilities;
 using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Services;
-using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Runners
 {
@@ -28,7 +26,7 @@ namespace HomeCenter.NET.Runners
 
         #region Constructors
 
-        public UiRunner(ModuleService moduleService)
+        public UiRunner(ModuleService moduleService, IpcService ipcService)
         {
             ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
 
@@ -39,7 +37,7 @@ namespace HomeCenter.NET.Runners
             AddInternalAction("show-commands", command => ShowCommandsAction?.Invoke());
             AddInternalAction("show-module-settings", command => ShowModuleSettingsAction?.Invoke(command), "name");
             AddInternalAction("start-record", command => StartRecordAction?.Invoke(int.TryParse(command, out var result) ? result : DefaultRecordTimeout));
-            AddInternalAction("deskband", DeskBandCommand);
+            AddInternalAction("deskband", ipcService.DeskBandCommand);
             AddAction("enable-module", name =>
             {
                 moduleService.SetInstanceIsEnabled(name, true);
@@ -117,18 +115,6 @@ namespace HomeCenter.NET.Runners
 
         private string[] GetCanBeUpdatedAssemblies() =>
             ModuleService.AssembliesSettings.Keys.Where(ModuleService.UpdatingIsNeed).ToArray();
-
-        private static async void DeskBandCommand(string command)
-        {
-            try
-            {
-                await IpcClient.Write(command, Options.IpcPortToDeskBand);
-            }
-            catch (Exception exception)
-            {
-                Log(exception.Message);
-            }
-        }
 
         #endregion
     }

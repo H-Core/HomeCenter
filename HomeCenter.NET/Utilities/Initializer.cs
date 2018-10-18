@@ -113,7 +113,7 @@ namespace HomeCenter.NET.Utilities
             }
         }
 
-        public static void InitializeStaticRunners(IWindowManager windowManager, MainViewModel model, MainService mainService, ModuleService moduleService)
+        public static void InitializeStaticRunners(IWindowManager windowManager, MainViewModel model, MainService mainService, ModuleService moduleService, IpcService ipcService)
         {
             void ShowModuleSettings(string name)
             {
@@ -171,7 +171,7 @@ namespace HomeCenter.NET.Utilities
                     ClipboardAction = command => Application.Current.Dispatcher.Invoke(() => Clipboard.SetText(command)),
                     ClipboardFunc = () => Application.Current.Dispatcher.Invoke(Clipboard.GetText)
                 },
-                new UiRunner(moduleService)
+                new UiRunner(moduleService, ipcService)
                 {
                     // TODO: refactor
                     RestartAction = command => Application.Current.Dispatcher.Invoke(() => mainService.Restart(command)),

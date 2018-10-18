@@ -25,30 +25,6 @@ namespace HomeCenter.NET.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string WitAiToken {
-            get {
-                return ((string)(this["WitAiToken"]));
-            }
-            set {
-                this["WitAiToken"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string YandexToken {
-            get {
-                return ((string)(this["YandexToken"]));
-            }
-            set {
-                this["YandexToken"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3000")]
         public int AutoStopInterval {
             get {
@@ -212,6 +188,24 @@ namespace HomeCenter.NET.Properties {
             }
             set {
                 this["HookIgnoredApps"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("19445")]
+        public int InputIpcPort {
+            get {
+                return ((int)(this["InputIpcPort"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("19446")]
+        public int OutputIpcPort {
+            get {
+                return ((int)(this["OutputIpcPort"]));
             }
         }
     }

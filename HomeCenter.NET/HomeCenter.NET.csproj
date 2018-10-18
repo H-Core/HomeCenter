@@ -78,6 +78,7 @@
     <Compile Include="Runners\KeyboardRunner.cs" />
     <Compile Include="Runners\UiRunner.cs" />
     <Compile Include="Runners\GlobalRunner.cs" />
+    <Compile Include="Services\IpcService.cs" />
     <Compile Include="Services\MainService.cs" />
     <Compile Include="Services\HookService.cs" />
     <Compile Include="Utilities\DialogUtilities.cs" />

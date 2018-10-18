@@ -2,12 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="HomeCenter.NET.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="WitAiToken" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="YandexToken" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="AutoStopInterval" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">3000</Value>
     </Setting>
@@ -49,6 +43,12 @@
     </Setting>
     <Setting Name="HookIgnoredApps" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="InputIpcPort" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">19445</Value>
+    </Setting>
+    <Setting Name="OutputIpcPort" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">19446</Value>
     </Setting>
   </Settings>
 </SettingsFile>

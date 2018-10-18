@@ -37,6 +37,7 @@ namespace HomeCenter.NET
                 .Singleton<HookService>()
                 .Singleton<MainService>()
                 .Singleton<ModuleService>()
+                .Singleton<IpcService>()
                 .Singleton<ScreenshotRectangle>()
                 .Instance(Settings.Default);
 
@@ -134,6 +135,7 @@ namespace HomeCenter.NET
             var mainService = Get<MainService>();
             var hookService = Get<HookService>();
             var moduleService = Get<ModuleService>();
+            var ipcService = Get<IpcService>();
             var screenshotRectangle = Get<ScreenshotRectangle>();
 
             var hWindowManager = manager as HWindowManager ?? throw new ArgumentNullException();
@@ -144,7 +146,7 @@ namespace HomeCenter.NET
             // TODO: custom window manager is required
             model.IsVisible = e.Args.Contains("/restart") || !Settings.Default.IsStartMinimized;
 
-            Initializer.InitializeStaticRunners(manager, model, mainService, moduleService);
+            Initializer.InitializeStaticRunners(manager, model, mainService, moduleService, ipcService);
             
             await Initializer.InitializeDynamicModules(mainService, hookService, moduleService, model);
 
@@ -161,6 +163,7 @@ namespace HomeCenter.NET
             DisposeObject<MainService>();
             DisposeObject<HookService>();
             DisposeObject<ModuleService>();
+            DisposeObject<IpcService>();
 
             Application.Shutdown();
         }

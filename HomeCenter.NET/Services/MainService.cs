@@ -9,7 +9,6 @@ using H.NET.Core.Recorders;
 using H.NET.Core.Runners;
 using H.NET.Storages;
 using H.NET.Storages.Extensions;
-using H.NET.Utilities;
 using HomeCenter.NET.Runners;
 using HomeCenter.NET.Utilities;
 
@@ -21,7 +20,6 @@ namespace HomeCenter.NET.Services
 
         public BaseManager Manager { get; set; } = new BaseManager();
         public GlobalRunner GlobalRunner { get; }
-        public IpcServer IpcServer { get; } = new IpcServer(Options.IpcPortToHomeCenter);
 
         public Dictionary<KeysCombination, Command> Combinations { get; } = new Dictionary<KeysCombination, Command>();
 
@@ -42,9 +40,6 @@ namespace HomeCenter.NET.Services
 
                 Run(text);
             };
-
-
-            IpcServer.NewMessage += Run;
 
             Runner.GetVariableValueGlobalFunc = GlobalRunner.GetVariableValue;
         }
@@ -133,7 +128,6 @@ namespace HomeCenter.NET.Services
         {
             var run = commands.Any() ? $"/run \"{string.Join(";", commands)}\"" : string.Empty;
             
-            IpcServer.Stop();
             Process.Start($"\"{Options.FilePath}\"", $"/restart {run} {additionalArguments}");
             Application.Current.Shutdown();
         }
