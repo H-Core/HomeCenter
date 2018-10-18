@@ -208,7 +208,7 @@ namespace H.NET.Core.Runners
             AddAction(key, action, description, true);
 
         protected void AddAsyncAction(string key, Func<string, Task> func, string description = null, bool isInternal = false) =>
-            AddAction(key, text => AsyncHelpers.RunSync(() => func?.Invoke(text)), description, isInternal);
+            AddAction(key, async text => await (func?.Invoke(text) ?? Task.Delay(0)), description, isInternal);
 
         protected void AddInternalAsyncAction(string key, Func<string, Task> func, string description = null) =>
             AddAsyncAction(key, func, description, true);
