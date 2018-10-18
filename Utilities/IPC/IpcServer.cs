@@ -23,7 +23,7 @@ namespace H.NET.Utilities
             Listener = new TcpListener(new IPEndPoint(IPAddress.Any, Port));
             Listener.Start();
             Listener.BeginAcceptTcpClient(OnClientAccepted, Listener);
-
+            
             IsEnabled = true;
         }
 

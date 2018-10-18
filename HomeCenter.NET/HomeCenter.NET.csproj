@@ -85,7 +85,7 @@
     <Compile Include="Utilities\Initializer.cs" />
     <Compile Include="Utilities\KeysCombination.cs" />
     <Compile Include="Utilities\MediaUtilities.cs" />
-    <Compile Include="Utilities\ModuleManager.cs" />
+    <Compile Include="Services\ModuleService.cs" />
     <Compile Include="Utilities\Options.cs" />
     <Compile Include="Utilities\ScreenshotRectangle.cs" />
     <Compile Include="Utilities\WpfSafeActions.cs" />
@@ -267,7 +267,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>

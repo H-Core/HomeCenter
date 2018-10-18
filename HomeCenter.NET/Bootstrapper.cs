@@ -36,6 +36,7 @@ namespace HomeCenter.NET
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<HookService>()
                 .Singleton<MainService>()
+                .Singleton<ModuleService>()
                 .Singleton<ScreenshotRectangle>()
                 .Instance(Settings.Default);
 
@@ -110,6 +111,11 @@ namespace HomeCenter.NET
             obj.Dispose();
         }
 
+        private static T Get<T>() where T : class 
+        {
+            return IoC.GetInstance(typeof(T), null) as T ?? throw new ArgumentNullException();
+        }
+
         protected override async void OnStartup(object sender, StartupEventArgs e)
         {
             Initializer.CheckKillAll(e.Args);
@@ -118,16 +124,17 @@ namespace HomeCenter.NET
             // Catching unhandled exceptions
             WpfSafeActions.Initialize();
 
-            var manager = GetInstance(typeof(IWindowManager), null) as IWindowManager ?? throw new ArgumentNullException();
-            var instance = GetInstance(typeof(PopUpViewModel), null) as PopUpViewModel ?? throw new Exception(@"PopUpViewModel Instance is null");
+            var manager = Get<IWindowManager>();
+            var instance = Get<PopUpViewModel>();
 
             // Create permanent hidden PopupView
             manager.ShowWindow(instance);
             
-            var model = IoC.GetInstance(typeof(MainViewModel), null) as MainViewModel ?? throw new ArgumentNullException();
-            var mainService = IoC.GetInstance(typeof(MainService), null) as MainService ?? throw new ArgumentNullException();
-            var hookService = IoC.GetInstance(typeof(HookService), null) as HookService ?? throw new ArgumentNullException();
-            var screenshotRectangle = IoC.GetInstance(typeof(ScreenshotRectangle), null) as ScreenshotRectangle ?? throw new ArgumentNullException();
+            var model = Get<MainViewModel>();
+            var mainService = Get<MainService>();
+            var hookService = Get<HookService>();
+            var moduleService = Get<ModuleService>();
+            var screenshotRectangle = Get<ScreenshotRectangle>();
 
             var hWindowManager = manager as HWindowManager ?? throw new ArgumentNullException();
 
@@ -137,9 +144,9 @@ namespace HomeCenter.NET
             // TODO: custom window manager is required
             model.IsVisible = e.Args.Contains("/restart") || !Settings.Default.IsStartMinimized;
 
-            Initializer.InitializeStaticRunners(manager, model, mainService);
+            Initializer.InitializeStaticRunners(manager, model, mainService, moduleService);
             
-            await Initializer.InitializeDynamicModules(mainService, hookService, model);
+            await Initializer.InitializeDynamicModules(mainService, hookService, moduleService, model);
 
             Initializer.InitializeHooks(mainService, hookService, model, screenshotRectangle);
 
@@ -153,6 +160,7 @@ namespace HomeCenter.NET
 
             DisposeObject<MainService>();
             DisposeObject<HookService>();
+            DisposeObject<ModuleService>();
 
             Application.Shutdown();
         }

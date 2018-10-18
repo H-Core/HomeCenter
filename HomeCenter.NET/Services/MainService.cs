@@ -20,7 +20,7 @@ namespace HomeCenter.NET.Services
         #region Properties
 
         public BaseManager Manager { get; set; } = new BaseManager();
-        public GlobalRunner GlobalRunner { get; set; } = new GlobalRunner(new CommandsStorage(Options.CompanyName));
+        public GlobalRunner GlobalRunner { get; }
         public IpcServer IpcServer { get; } = new IpcServer(Options.IpcPortToHomeCenter);
 
         public Dictionary<KeysCombination, Command> Combinations { get; } = new Dictionary<KeysCombination, Command>();
@@ -29,8 +29,9 @@ namespace HomeCenter.NET.Services
 
         #region Constructors
 
-        public MainService()
+        public MainService(ModuleService moduleService)
         {
+            GlobalRunner = new GlobalRunner(moduleService, new CommandsStorage(Options.CompanyName));
             Manager.NewText += text =>
             {
                 if (Runner.IsWaitCommand)
@@ -52,20 +53,20 @@ namespace HomeCenter.NET.Services
 
         #region Public methods
 
-        public async Task Load()
+        public async Task Load(ModuleService moduleService)
         {
-            ModuleManager.RunAction = Run; // TODO: Hidden?
-            ModuleManager.RunAsyncFunc = HiddenRunAsync;
+            moduleService.RunAction = Run; // TODO: Hidden?
+            moduleService.RunAsyncFunc = HiddenRunAsync;
             await Task.Run(() =>
-                {
-                    ModuleManager.Instance.Load();
-                    ModuleManager.Instance.EnableInstances();
-                });
-            ModuleManager.AddUniqueInstancesIfNeed();
-            ModuleManager.RegisterHandlers();
+            {
+                moduleService.Load();
+                moduleService.EnableInstances();
+            });
+            moduleService.AddUniqueInstancesIfNeed();
+            moduleService.RegisterHandlers();
 
             UpdateCombinations();
-            UpdateActiveModules();
+            UpdateActiveModules(moduleService);
         }
 
         public void StartRecord(int timeout)
@@ -90,11 +91,11 @@ namespace HomeCenter.NET.Services
             }
         }
 
-        public void UpdateActiveModules()
+        public void UpdateActiveModules(ModuleService moduleService)
         {
-            Manager.Recorder = Options.Recorder;
-            Manager.Converter = Options.Converter;
-            Manager.AlternativeConverters = Options.AlternativeConverters;
+            Manager.Recorder = moduleService.Recorder;
+            Manager.Converter = moduleService.Converter;
+            Manager.AlternativeConverters = moduleService.AlternativeConverters;
         }
 
         #region Run
@@ -131,7 +132,7 @@ namespace HomeCenter.NET.Services
         public void Restart(ICollection<string> commands, string additionalArguments = null)
         {
             var run = commands.Any() ? $"/run \"{string.Join(";", commands)}\"" : string.Empty;
-
+            
             IpcServer.Stop();
             Process.Start($"\"{Options.FilePath}\"", $"/restart {run} {additionalArguments}");
             Application.Current.Shutdown();

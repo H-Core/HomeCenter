@@ -21,7 +21,7 @@ namespace HomeCenter.NET.Utilities
 {
     public static class Initializer
     {
-        internal static async Task InitializeDynamicModules(MainService mainService, HookService hookService, MainViewModel model)
+        public static async Task InitializeDynamicModules(MainService mainService, HookService hookService, ModuleService moduleService, MainViewModel model)
         {
             AssembliesManager.LogAction = model.Print;
             Module.LogAction = model.Print;
@@ -29,7 +29,7 @@ namespace HomeCenter.NET.Utilities
             model.Print("Loading modules...");
             try
             {
-                await mainService.Load();
+                await mainService.Load(moduleService);
 
                 model.Print("Loaded");
             }
@@ -39,7 +39,7 @@ namespace HomeCenter.NET.Utilities
             }
         }
 
-        internal static void InitializeHooks(MainService mainService, HookService hookService, MainViewModel model, ScreenshotRectangle screenshotRectangle)
+        public static void InitializeHooks(MainService mainService, HookService hookService, MainViewModel model, ScreenshotRectangle screenshotRectangle)
         {
             void GlobalKeyUp(object sender, KeyboardHookEventArgs e)
             {
@@ -113,7 +113,7 @@ namespace HomeCenter.NET.Utilities
             }
         }
 
-        internal static void InitializeStaticRunners(IWindowManager windowManager, MainViewModel model, MainService mainService)
+        public static void InitializeStaticRunners(IWindowManager windowManager, MainViewModel model, MainService mainService, ModuleService moduleService)
         {
             void ShowModuleSettings(string name)
             {
@@ -123,7 +123,7 @@ namespace HomeCenter.NET.Utilities
                     return;
                 }
 
-                var module = ModuleManager.Instance.GetPlugin<IModule>(name)?.Value;
+                var module = moduleService.GetPlugin<IModule>(name)?.Value;
                 if (module == null)
                 {
                     model.Print($"ShowModuleSettings: Module {name} is not found");
@@ -135,7 +135,7 @@ namespace HomeCenter.NET.Utilities
 
             async Task Say(string text)
             {
-                var synthesizer = Options.Synthesizer;
+                var synthesizer = moduleService.Synthesizer;
                 if (synthesizer == null)
                 {
                     model.Print("Synthesizer is not found");
@@ -149,7 +149,7 @@ namespace HomeCenter.NET.Utilities
 
             async Task<List<string>> Search(string text)
             {
-                var searcher = Options.Searcher;
+                var searcher = moduleService.Searcher;
                 if (searcher == null)
                 {
                     model.Print("Searcher is not found");
@@ -171,7 +171,7 @@ namespace HomeCenter.NET.Utilities
                     ClipboardAction = command => Application.Current.Dispatcher.Invoke(() => Clipboard.SetText(command)),
                     ClipboardFunc = () => Application.Current.Dispatcher.Invoke(Clipboard.GetText)
                 },
-                new UiRunner
+                new UiRunner(moduleService)
                 {
                     // TODO: refactor
                     RestartAction = command => Application.Current.Dispatcher.Invoke(() => mainService.Restart(command)),
@@ -185,7 +185,7 @@ namespace HomeCenter.NET.Utilities
             };
             foreach (var runner in staticRunners)
             {
-                ModuleManager.Instance.AddStaticInstance(runner.ShortName, runner);
+                moduleService.AddStaticInstance(runner.ShortName, runner);
             }
         }
 

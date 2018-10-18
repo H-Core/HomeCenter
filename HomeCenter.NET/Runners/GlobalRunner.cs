@@ -8,6 +8,7 @@ using H.NET.Core;
 using H.NET.Core.Runners;
 using H.NET.Core.Storages;
 using H.NET.Storages;
+using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Runners
@@ -49,11 +50,10 @@ namespace HomeCenter.NET.Runners
 
         #region Properties
 
+        public ModuleService ModuleService { get; }
         public IStorage<Command> Storage { get; }
         public List<string> History { get; } = new List<string>();
         public BlockingCollection<Process> Processes { get; } = new BlockingCollection<Process>();
-
-        private static List<IRunner> Runners => Options.Runners;
 
         #endregion
 
@@ -71,8 +71,9 @@ namespace HomeCenter.NET.Runners
 
         #region Constructors
 
-        public GlobalRunner(IStorage<Command> storage = null)
+        public GlobalRunner(ModuleService moduleService, IStorage<Command> storage = null)
         {
+            ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
             Storage = storage ?? new InvariantDictionaryStorage<Command>();
             Storage.Load();
         }
@@ -81,16 +82,17 @@ namespace HomeCenter.NET.Runners
 
         #region Public methods
 
-        public (IRunner runner, string command)[] GetSupportedCommands() => Runners
+        public (IRunner runner, string command)[] GetSupportedCommands() => ModuleService
+            .Runners
             .Select(runner => (runner: runner, commands: runner.GetSupportedCommands()))
             .SelectMany(i => i.commands, (i, command) => (i.runner, command))
             .ToArray();
 
-        public string[] GetSupportedVariables() => Runners.SelectMany(i => i.GetSupportedVariables()).ToArray();
+        public string[] GetSupportedVariables() => ModuleService.Runners.SelectMany(i => i.GetSupportedVariables()).ToArray();
 
         public IRunner GetRunnerFor(string key, string data)
         {
-            foreach (var runner in Runners)
+            foreach (var runner in ModuleService.Runners)
             {
                 if (runner.IsSupport(key, data))
                 {
@@ -105,9 +107,9 @@ namespace HomeCenter.NET.Runners
         }
 
         public object GetVariableValue(string key) =>
-            Runners.FirstOrDefault(i => i.GetSupportedVariables().Contains(key))?.GetVariableValue(key);
+            ModuleService.Runners.FirstOrDefault(i => i.GetSupportedVariables().Contains(key))?.GetVariableValue(key);
 
-        private bool IsInternal(string key, string data) => Runners.Any(i => i.IsInternal(key, data));
+        private bool IsInternal(string key, string data) => ModuleService.Runners.Any(i => i.IsInternal(key, data));
 
         #endregion
 

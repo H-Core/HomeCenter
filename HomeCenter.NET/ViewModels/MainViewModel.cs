@@ -10,7 +10,7 @@ using HomeCenter.NET.ViewModels.Settings;
 
 namespace HomeCenter.NET.ViewModels
 {
-    internal class MainViewModel : Screen
+    public class MainViewModel : Screen
     {
         #region Properties
 
