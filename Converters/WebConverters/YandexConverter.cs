@@ -48,8 +48,7 @@ namespace H.NET.Converters
                 var info = await message.GetResponseText();
                 if (string.IsNullOrWhiteSpace(info.Text))
                 {
-                    Exception = info.Exception;
-                    return null;
+                    throw info.Exception;
                 }
 
                 var document = XDocument.Parse(info.Text);

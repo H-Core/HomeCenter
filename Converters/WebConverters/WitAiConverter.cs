@@ -40,8 +40,7 @@ namespace H.NET.Converters
                 var info = await message.GetResponseText();
                 if (string.IsNullOrWhiteSpace(info.Text) || string.Equals(info.Text, "The remote server returned an error: (400) Bad Request"))
                 {
-                    Exception = info.Exception;
-                    return null;
+                    throw info.Exception;
                 }
 
                 var obj = JsonConvert.DeserializeObject<RootObject>(info.Text);
