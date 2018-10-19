@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using H.NET.Storages;
-using H.NET.Storages.Extensions;
 using H.NET.Utilities;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Utilities;
@@ -15,7 +14,7 @@ namespace HomeCenter.NET.Services
         #region Properties
 
         public Settings Settings { get; }
-        public CommandsStorage Storage { get; }
+        public StorageService StorageService { get; }
         public RunnerService RunnerService { get; }
 
         public LowLevelMouseHook MouseHook { get; set; } = new LowLevelMouseHook();
@@ -35,11 +34,11 @@ namespace HomeCenter.NET.Services
 
         #region Constructors
 
-        public HookService(RunnerService runnerService, Settings settings, CommandsStorage storage)
+        public HookService(RunnerService runnerService, Settings settings, StorageService storageService)
         {
             RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            Storage = storage ?? throw new ArgumentNullException(nameof(storage));
+            StorageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
         }
 
         #endregion
@@ -49,7 +48,7 @@ namespace HomeCenter.NET.Services
         public void UpdateCombinations()
         {
             Combinations.Clear();
-            foreach (var pair in Storage.UniqueValues(i => i.Value).Where(i => i.Value.HotKey != null))
+            foreach (var pair in StorageService.GetUniqueCommands().Where(i => i.Value.HotKey != null))
             {
                 var command = pair.Value;
                 var hotKey = command.HotKey;

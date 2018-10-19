@@ -2,7 +2,6 @@
 using System.Linq;
 using Caliburn.Micro;
 using H.NET.Storages;
-using H.NET.Storages.Extensions;
 using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Services;
 
@@ -16,6 +15,7 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         public RunnerService RunnerService { get; }
         public HookService HookService { get; }
+        public StorageService StorageService { get; }
 
         public BindableCollection<UserCommandViewModel> UserCommands { get; }
         public BindableCollection<AllCommandViewModel> AllCommands { get; }
@@ -26,13 +26,14 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         #region Constructors
 
-        public CommandsViewModel(RunnerService runnerService, HookService hookService)
+        public CommandsViewModel(RunnerService runnerService, HookService hookService, StorageService storageService)
         {
             RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
             HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
+            StorageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
 
             UserCommands = new BindableCollection<UserCommandViewModel>(
-                RunnerService.Storage.UniqueValues(entry => entry.Value).Select(i => new UserCommandViewModel(i.Value)));
+                StorageService.GetUniqueCommands().Select(i => new UserCommandViewModel(i.Value)));
             AllCommands = new BindableCollection<AllCommandViewModel>(
                 RunnerService.GetSupportedCommands().Select(i => new AllCommandViewModel(i)));
             Variables = new BindableCollection<VariableViewModel>(
@@ -46,12 +47,12 @@ namespace HomeCenter.NET.ViewModels.Commands
 
             SaveAction = () =>
             {
-                RunnerService.Storage.Save();
+                StorageService.Save();
 
                 // TODO: simplify?
                 hookService.UpdateCombinations();
             };
-            CancelAction = () => RunnerService.Storage.Load(); // Cancel changes TODO: may me need to use TempStorage instead this?
+            CancelAction = () => StorageService.Load(); // Cancel changes TODO: may me need to use TempStorage instead this?
         }
 
         #endregion
@@ -74,7 +75,7 @@ namespace HomeCenter.NET.ViewModels.Commands
             UserCommands.Add(new UserCommandViewModel(command));
             foreach (var key in command.Keys)
             {
-                RunnerService.Storage[key.Text] = command;
+                StorageService[key.Text] = command;
             }
         }
 
@@ -93,11 +94,11 @@ namespace HomeCenter.NET.ViewModels.Commands
 
                     foreach (var key in userCommandViewModel.Command.Keys)
                     {
-                        RunnerService.Storage.Remove(key.Text);
+                        StorageService.Remove(key.Text);
                     }
                     foreach (var key in newCommand.Keys)
                     {
-                        RunnerService.Storage[key.Text] = newCommand;
+                        StorageService[key.Text] = newCommand;
                     }
 
                     var index = UserCommands.IndexOf(userCommandViewModel);
@@ -118,7 +119,7 @@ namespace HomeCenter.NET.ViewModels.Commands
                 case UserCommandViewModel userCommandViewModel:
                     foreach (var key in userCommandViewModel.Command.Keys)
                     {
-                        RunnerService.Storage.Remove(key.Text);
+                        StorageService.Remove(key.Text);
                     }
                     UserCommands.Remove(userCommandViewModel);
                     break;

@@ -82,6 +82,7 @@
     <Compile Include="Services\RunnerService.cs" />
     <Compile Include="Services\IpcService.cs" />
     <Compile Include="Services\HookService.cs" />
+    <Compile Include="Services\StorageService.cs" />
     <Compile Include="Utilities\DialogUtilities.cs" />
     <Compile Include="Utilities\HWindowManager.cs" />
     <Compile Include="Initializers\InitializeHelper.cs" />

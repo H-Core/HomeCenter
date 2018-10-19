@@ -50,8 +50,7 @@ namespace HomeCenter.NET.Services
         #region Properties
 
         public ModuleService ModuleService { get; }
-        // TODO: to StorageService
-        public IStorage<Command> Storage { get; }
+        public StorageService StorageService { get; }
         public BaseManager Manager { get; }
 
         public List<string> History { get; } = new List<string>();
@@ -73,15 +72,13 @@ namespace HomeCenter.NET.Services
 
         #region Constructors
 
-        public RunnerService(ModuleService moduleService, CommandsStorage storage, BaseManager manager)
+        public RunnerService(ModuleService moduleService, StorageService storageService, BaseManager manager)
         {
             ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
-            Storage = storage ?? throw new ArgumentNullException(nameof(storage));
+            StorageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
             Manager = manager ?? throw new ArgumentNullException(nameof(manager));
 
             Runner.GetVariableValueGlobalFunc = GetVariableValue;
-
-            Storage.Load();
 
             Manager.NewText += text =>
             {
@@ -143,53 +140,6 @@ namespace HomeCenter.NET.Services
 
         #region Protected methods
 
-        private (string key, Command command) GetCommand(string key)
-        {
-            key = key ?? throw new ArgumentNullException(nameof(key));
-
-            if (Storage.TryGetValue(key, out var result))
-            {
-                return (key, result);
-            }
-
-            foreach (var pair in Storage)
-            {
-                var tryKey = pair.Key;
-                if (!tryKey.Contains("*"))
-                {
-                    continue;
-                }
-
-                var subKeys = tryKey.Split('*');
-                if (subKeys.Length < 2)
-                {
-                    continue;
-                }
-
-                if (string.IsNullOrWhiteSpace(subKeys[0]))
-                {
-                    continue;
-                }
-
-                if (key.StartsWith(subKeys[0]))
-                {
-                    var command = pair.Value?.Clone() as Command;
-                    if (command != null)
-                    {
-                        var argument = key.Substring(subKeys[0].Length);
-                        foreach (var line in command.Lines)
-                        {
-                            line.Text = line.Text.Replace("*", argument);
-                        }
-                    }
-
-                    return (key, command);
-                }
-            }
-
-            return (null, new Command(null, key));
-        }
-
         public async Task RunAsync(string keyOrData, bool show = true)
         {
             if (string.IsNullOrWhiteSpace(keyOrData))
@@ -203,7 +153,7 @@ namespace HomeCenter.NET.Services
                 History.Add(keyOrData);
             }
 
-            var (newKey, newCommand) = GetCommand(keyOrData);
+            var (newKey, newCommand) = StorageService.GetCommand(keyOrData);
             var realActionData = newKey ?? newCommand.Lines.FirstOrDefault()?.Text;
             var isInternal = newCommand.Lines.All(i => IsInternal(newKey, i.Text));
             if (show && !isInternal)
