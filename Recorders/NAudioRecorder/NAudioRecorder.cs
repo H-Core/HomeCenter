@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using H.NET.Core.Recorders;
 using NAudio.Wave;
 
@@ -40,13 +41,17 @@ namespace H.NET.Recorders
         {
             WaveIn.StopRecording();
 
-            /*
-            using (var waveFile = new WaveFileWriter(@"D:\Test0001.wav", WaveIn.WaveFormat))
+            // Convert raw data to wav in memory
+            using (var stream = new MemoryStream())
+            using (var waveFile = new WaveFileWriter(stream, WaveIn.WaveFormat))
             {
                 waveFile.Write(Data, 0, Data.Length);
                 waveFile.Flush();
+
+                stream.Position = 0;
+
+                Data = stream.ToArray();
             }
-            */
 
             base.Stop();
         }

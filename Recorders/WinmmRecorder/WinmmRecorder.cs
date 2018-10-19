@@ -32,8 +32,11 @@ namespace H.NET.Recorders
             MciSendString("save recsound " + path);
             MciSendString("close recsound ");
 
-            Data = File.ReadAllBytes(path);
-            File.Delete(path);
+            if (File.Exists(path))
+            {
+                Data = File.ReadAllBytes(path);
+                File.Delete(path);
+            }
 
             base.Stop();
         }
