@@ -1,0 +1,17 @@
+﻿<Window x:Class="HomeCenter.NET.Views.MessageBoxView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="{Binding Title}"
+        SizeToContent="WidthAndHeight"
+        MinWidth="400"
+        MinHeight="250"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="ToolWindow"
+        >
+    <Grid>
+        <TextBox x:Name="Text" IsReadOnly="True" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+    </Grid>
+</Window>

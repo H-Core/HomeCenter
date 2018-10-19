@@ -113,6 +113,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\MessageBoxView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Modules\ModuleSettingsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -169,6 +173,7 @@
     <Compile Include="Utilities\User32Utilities.cs" />
     <Compile Include="Utilities\User32Methods.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\MessageBoxViewModel.cs" />
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -206,6 +211,9 @@
     <Compile Include="ViewModels\Commands\CommandSettingsViewModel.cs" />
     <Compile Include="Views\Commands\CommandSettingsView.xaml.cs">
       <DependentUpon>CommandSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MessageBoxView.xaml.cs">
+      <DependentUpon>MessageBoxView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Modules\ModuleSettingsView.xaml.cs">
       <DependentUpon>ModuleSettingsView.xaml</DependentUpon>

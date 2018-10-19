@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using H.NET.Core;
 using H.NET.Core.Extensions;
 using H.NET.Plugins;
+using HomeCenter.NET.Extensions;
 
 namespace HomeCenter.NET.ViewModels.Settings
 {
@@ -79,5 +80,15 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         #endregion
 
+        #region Public methods
+
+        public void ShowDescription()
+        {
+            this.ShowMessageBox(
+                Instance.Value?.Name ?? Instance.Exception?.ToString() ?? string.Empty,
+                "Description");
+        }
+
+        #endregion
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Caliburn.Micro;
+using HomeCenter.NET.ViewModels;
 
 namespace HomeCenter.NET.Extensions
 {
@@ -29,5 +30,13 @@ namespace HomeCenter.NET.Extensions
         {
             return WindowManager.ShowDialog(rootModel, context, settings);
         }
+
+        public static void ShowMessageBox(this Screen screen, string text, string title = null)
+        {
+            var model = new MessageBoxViewModel(text, title);
+
+            screen.ShowWindow(model);
+        }
+
     }
 }
