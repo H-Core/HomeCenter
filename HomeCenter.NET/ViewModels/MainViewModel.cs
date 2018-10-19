@@ -120,21 +120,6 @@ namespace HomeCenter.NET.ViewModels
             PopUpViewModel.TryClose();
         }
 
-        public void Close()
-        {
-            UserCanClose = true;
-            TryClose();
-
-            if (!IsVisible)
-            {
-                BeforeExit();
-            }
-        }
-
-        #endregion
-
-        #region Event Handlers
-
         public void PreviousCommand()
         {
             if (!RunnerService.History.Any())
@@ -160,6 +145,7 @@ namespace HomeCenter.NET.ViewModels
         public void AddNewLine()
         {
             Input += Environment.NewLine;
+            // TODO: Need to implement
             //InputTextBox.CaretIndex = InputTextBox.Text.Length - 1;
         }
 
@@ -178,6 +164,17 @@ namespace HomeCenter.NET.ViewModels
 
             IsVisible = false;
             e.Cancel = true;
+        }
+
+        public void Close()
+        {
+            UserCanClose = true;
+            TryClose();
+
+            if (!IsVisible)
+            {
+                BeforeExit();
+            }
         }
 
         #endregion

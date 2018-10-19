@@ -42,7 +42,8 @@
                 <ColumnDefinition Width="2"></ColumnDefinition>
                 <ColumnDefinition Width="25"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Grid.RowSpan="8" x:Name="Input" TextWrapping="Wrap" cal:Message.Attach="[KeyUp Up] = [PreviousCommand]; [KeyUp Ctrl+Enter] = [AddNewLine]; [KeyUp Enter] = [RunInput]"/>
+            <TextBox Grid.Column="0" Grid.RowSpan="8" x:Name="Input" TextWrapping="Wrap"
+                     cal:Message.Attach="[KeyUp Up] = [PreviousCommand]; [KeyUp Ctrl+Enter] = [AddNewLine]; [KeyUp Enter] = [RunInput]"/>
             <Button Grid.Column="2" Grid.Row="1" x:Name="Record" Content="{Binding IsRecord, Converter={StaticResource BooleanToRecordConverter}}" Background="{Binding IsRecord, Converter={StaticResource BooleanToBlueGrayConverter}}"/>
             <Button Grid.Column="2" Grid.Row="3" x:Name="ShowCommands" Content="☰"/>
             <Button Grid.Column="2" Grid.Row="5" x:Name="ShowSettings" Content="⚙"/>
