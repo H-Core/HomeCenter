@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Input;
+using H.NET.Core.Managers;
 using H.NET.Utilities;
 using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Properties;
@@ -12,14 +13,14 @@ namespace HomeCenter.NET.Initializers
 {
     public class HookInitializer
     {
-        public HookInitializer(MainService mainService, HookService hookService, MainViewModel model, ScreenshotRectangle screenshotRectangle, Settings settings)
+        public HookInitializer(BaseManager manager, HookService hookService, MainViewModel model, ScreenshotRectangle screenshotRectangle, Settings settings)
         {
             void GlobalKeyUp(object sender, KeyboardHookEventArgs e)
             {
                 if (e.Key != Keys.None && e.Key == hookService.RecordKey ||
                     e.IsAltPressed && e.IsCtrlPressed)
                 {
-                    mainService.Manager.Stop();
+                    manager.Stop();
                 }
             }
 
@@ -28,7 +29,7 @@ namespace HomeCenter.NET.Initializers
                 if (e.Key != Keys.None && e.Key == hookService.RecordKey ||
                     e.Key == Keys.Space && e.IsAltPressed && e.IsCtrlPressed)
                 {
-                    mainService.Manager.Start();
+                    manager.Start();
                 }
 
                 if (hookService.IsIgnoredApplication())
@@ -38,7 +39,7 @@ namespace HomeCenter.NET.Initializers
 
                 //Print($"{e.Key:G}");
                 var combination = new KeysCombination(e.Key, e.IsCtrlPressed, e.IsShiftPressed, e.IsAltPressed);
-                if (mainService.RunCombination(combination))
+                if (hookService.RunCombination(combination))
                 {
                     e.Handled = true;
                 }
@@ -56,7 +57,7 @@ namespace HomeCenter.NET.Initializers
                 }
 
                 var combination = KeysCombination.FromSpecialData(e.SpecialButton);
-                if (mainService.RunCombination(combination))
+                if (hookService.RunCombination(combination))
                 {
                     e.Handled = true;
                 }

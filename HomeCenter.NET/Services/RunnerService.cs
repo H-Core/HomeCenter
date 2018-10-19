@@ -5,14 +5,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using H.NET.Core;
+using H.NET.Core.Managers;
 using H.NET.Core.Runners;
 using H.NET.Storages;
-using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
 
-namespace HomeCenter.NET.Runners
+namespace HomeCenter.NET.Services
 {
-    public class GlobalRunner
+    public class RunnerService
     {
         public class Process
         {
@@ -50,7 +50,10 @@ namespace HomeCenter.NET.Runners
         #region Properties
 
         public ModuleService ModuleService { get; }
+        // TODO: to StorageService
         public IStorage<Command> Storage { get; }
+        public BaseManager Manager { get; }
+
         public List<string> History { get; } = new List<string>();
         public BlockingCollection<Process> Processes { get; } = new BlockingCollection<Process>();
 
@@ -70,13 +73,38 @@ namespace HomeCenter.NET.Runners
 
         #region Constructors
 
-        public GlobalRunner(ModuleService moduleService, IStorage<Command> storage)
+        public RunnerService(ModuleService moduleService, CommandsStorage storage, BaseManager manager)
         {
             ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
             Storage = storage ?? throw new ArgumentNullException(nameof(storage));
+            Manager = manager ?? throw new ArgumentNullException(nameof(manager));
+
+            Runner.GetVariableValueGlobalFunc = GetVariableValue;
 
             Storage.Load();
+
+            Manager.NewText += text =>
+            {
+                if (Runner.IsWaitCommand)
+                {
+                    Runner.StopWaitCommand(text);
+                    return;
+                }
+
+                Run(text);
+            };
         }
+
+        #endregion
+
+        #region Run
+
+        public async void Run(string message) => await RunAsync(message);
+
+        public async void HiddenRun(string message) => await RunAsync(message, false);
+
+        public async Task HiddenRunAsync(string message) => await RunAsync(message, false);
+
 
         #endregion
 
@@ -162,7 +190,7 @@ namespace HomeCenter.NET.Runners
             return (null, new Command(null, key));
         }
 
-        public async Task Run(string keyOrData, bool show = true)
+        public async Task RunAsync(string keyOrData, bool show = true)
         {
             if (string.IsNullOrWhiteSpace(keyOrData))
             {

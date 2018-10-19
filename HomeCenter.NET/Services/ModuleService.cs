@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using H.NET.Core;
 using H.NET.Core.Extensions;
+using H.NET.Core.Managers;
 using H.NET.Plugins;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Utilities;
@@ -14,6 +15,7 @@ namespace HomeCenter.NET.Services
         #region Properties
 
         public Settings Settings { get; }
+        public BaseManager Manager { get; }
 
         public IRecorder Recorder => GetPlugin<IRecorder>(Settings.Recorder)?.Value;
         public ISearcher Searcher => GetPlugin<ISearcher>(Settings.Searcher)?.Value;
@@ -28,7 +30,7 @@ namespace HomeCenter.NET.Services
 
         #endregion
 
-        public ModuleService(Settings settings) : base(
+        public ModuleService(Settings settings, BaseManager manager) : base(
             Options.CompanyName,
             (module, list) =>
             {
@@ -40,6 +42,7 @@ namespace HomeCenter.NET.Services
             module => module.Settings.Select(pair => new SettingItem(pair.Key, pair.Value.Value)))
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            Manager = manager ?? throw new ArgumentNullException(nameof(manager));
         }
 
         public void AddUniqueInstancesIfNeed() => SafeActions.Run(() =>
@@ -54,7 +57,14 @@ namespace HomeCenter.NET.Services
             }
         });
 
-        public void RegisterHandlers(MainService mainService) => SafeActions.Run(() =>
+        public void UpdateActiveModules()
+        {
+            Manager.Recorder = Recorder;
+            Manager.Converter = Converter;
+            Manager.AlternativeConverters = AlternativeConverters;
+        }
+
+        public void RegisterHandlers(RunnerService runnerService) => SafeActions.Run(() =>
         {
             var instances = Instances.Objects;
 
@@ -69,7 +79,7 @@ namespace HomeCenter.NET.Services
 
                 module.IsRegistered = true;
                 module.UniqueName = name;
-                module.NewCommand += mainService.Run;
+                module.NewCommand += runnerService.Run;
                 module.NewCommandAsync += async (sender, args) =>
                 {
                     if (args == null)
@@ -79,7 +89,7 @@ namespace HomeCenter.NET.Services
 
                     using (args.GetDeferral())
                     {
-                        await mainService.HiddenRunAsync(args.Text);
+                        await runnerService.RunAsync(args.Text);
                     }
                 };
 

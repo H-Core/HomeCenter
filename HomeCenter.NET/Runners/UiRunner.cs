@@ -26,7 +26,7 @@ namespace HomeCenter.NET.Runners
 
         #region Constructors
 
-        public UiRunner(ModuleService moduleService, IpcService ipcService, MainService mainService)
+        public UiRunner(ModuleService moduleService, IpcService ipcService, RunnerService runnerService)
         {
             ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
 
@@ -47,7 +47,7 @@ namespace HomeCenter.NET.Runners
                     throw obj.Exception;
                 }
 
-                moduleService.RegisterHandlers(mainService);
+                moduleService.RegisterHandlers(runnerService);
             }, "name");
             AddAction("disable-module", name =>
             {

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using H.NET.Core;
+using H.NET.Core.Managers;
+using H.NET.Core.Recorders;
 using H.NET.Core.Runners;
 using HomeCenter.NET.Runners;
 using HomeCenter.NET.Services;
@@ -16,7 +18,7 @@ namespace HomeCenter.NET.Initializers
 {
     public class StaticModulesInitializer
     {
-        public StaticModulesInitializer(IWindowManager windowManager, MainViewModel model, MainService mainService, ModuleService moduleService, IpcService ipcService)
+        public StaticModulesInitializer(IWindowManager windowManager, MainViewModel model, RunnerService runnerService, ModuleService moduleService, IpcService ipcService, BaseManager baseManager)
         {
             void ShowModuleSettings(string name)
             {
@@ -74,7 +76,7 @@ namespace HomeCenter.NET.Initializers
                     ClipboardAction = command => Application.Current.Dispatcher.Invoke(() => Clipboard.SetText(command)),
                     ClipboardFunc = () => Application.Current.Dispatcher.Invoke(Clipboard.GetText)
                 },
-                new UiRunner(moduleService, ipcService, mainService)
+                new UiRunner(moduleService, ipcService, runnerService)
                 {
                     // TODO: refactor
                     RestartAction = command => Application.Current.Dispatcher.Invoke(() => Restart(command)),
@@ -83,7 +85,7 @@ namespace HomeCenter.NET.Initializers
                     ShowSettingsAction = () => Application.Current.Dispatcher.Invoke(model.ShowSettings),
                     ShowCommandsAction = () => Application.Current.Dispatcher.Invoke(model.ShowCommands),
                     ShowModuleSettingsAction = name => Application.Current.Dispatcher.Invoke(() => ShowModuleSettings(name)),
-                    StartRecordAction = timeout => Application.Current.Dispatcher.Invoke(() => mainService.StartRecord(timeout))
+                    StartRecordAction = timeout => Application.Current.Dispatcher.Invoke(() => baseManager.ChangeWithTimeout(timeout))
                 }
             };
             foreach (var runner in staticRunners)

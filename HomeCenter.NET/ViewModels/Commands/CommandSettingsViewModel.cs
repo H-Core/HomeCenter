@@ -14,7 +14,7 @@ namespace HomeCenter.NET.ViewModels.Commands
         #region Properties
 
         public Command Command { get; }
-        public MainService MainService { get; }
+        public RunnerService RunnerService { get; }
         public HookService HookService { get; }
         public BindableCollection<SingleKeyViewModel> Keys { get; }
         public BindableCollection<SingleCommandViewModel> Commands { get; }
@@ -42,10 +42,10 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         #region Constructors
 
-        public CommandSettingsViewModel(Command command, MainService mainService, HookService hookService)
+        public CommandSettingsViewModel(Command command, RunnerService runnerService, HookService hookService)
         {
             Command = command ?? throw new ArgumentNullException(nameof(command));
-            MainService = mainService ?? throw new ArgumentNullException(nameof(mainService));
+            RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
             HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
 
             Keys = new BindableCollection<SingleKeyViewModel>(Command.Keys.Select(i => new SingleKeyViewModel(i)));
@@ -105,7 +105,7 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         public void RunCommand(SingleCommandViewModel viewModel)
         {
-            MainService.Run(viewModel.Description);
+            RunnerService.Run(viewModel.Description);
         }
 
         #endregion

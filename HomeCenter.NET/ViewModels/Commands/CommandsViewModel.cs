@@ -4,7 +4,6 @@ using Caliburn.Micro;
 using H.NET.Storages;
 using H.NET.Storages.Extensions;
 using HomeCenter.NET.Extensions;
-using HomeCenter.NET.Runners;
 using HomeCenter.NET.Services;
 
 // ReSharper disable UnusedMember.Global
@@ -15,9 +14,8 @@ namespace HomeCenter.NET.ViewModels.Commands
     {
         #region Properties
 
-        public MainService MainService { get; }
+        public RunnerService RunnerService { get; }
         public HookService HookService { get; }
-        public GlobalRunner Runner => MainService.GlobalRunner;
 
         public BindableCollection<UserCommandViewModel> UserCommands { get; }
         public BindableCollection<AllCommandViewModel> AllCommands { get; }
@@ -28,32 +26,32 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         #region Constructors
 
-        public CommandsViewModel(MainService mainService, HookService hookService)
+        public CommandsViewModel(RunnerService runnerService, HookService hookService)
         {
-            MainService = mainService ?? throw new ArgumentNullException(nameof(mainService));
+            RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
             HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
 
             UserCommands = new BindableCollection<UserCommandViewModel>(
-                Runner.Storage.UniqueValues(entry => entry.Value).Select(i => new UserCommandViewModel(i.Value)));
+                RunnerService.Storage.UniqueValues(entry => entry.Value).Select(i => new UserCommandViewModel(i.Value)));
             AllCommands = new BindableCollection<AllCommandViewModel>(
-                Runner.GetSupportedCommands().Select(i => new AllCommandViewModel(i)));
+                RunnerService.GetSupportedCommands().Select(i => new AllCommandViewModel(i)));
             Variables = new BindableCollection<VariableViewModel>(
-                Runner.GetSupportedVariables().Select(i => new VariableViewModel(i)));
+                RunnerService.GetSupportedVariables().Select(i => new VariableViewModel(i)));
             Processes = new BindableCollection<ProcessViewModel>(
-                Runner.Processes.Select(i => new ProcessViewModel(i)));
+                RunnerService.Processes.Select(i => new ProcessViewModel(i)));
 
             // TODO: May be -event required?
-            Runner.BeforeRun += (o, e) => NotifyOfPropertyChange(nameof(Processes));
-            Runner.AfterRun += (o, e) => NotifyOfPropertyChange(nameof(Processes));
+            RunnerService.BeforeRun += (o, e) => NotifyOfPropertyChange(nameof(Processes));
+            RunnerService.AfterRun += (o, e) => NotifyOfPropertyChange(nameof(Processes));
 
             SaveAction = () =>
             {
-                Runner.Storage.Save();
+                RunnerService.Storage.Save();
 
                 // TODO: simplify?
-                MainService.UpdateCombinations();
+                hookService.UpdateCombinations();
             };
-            CancelAction = () => Runner.Storage.Load(); // Cancel changes TODO: may me need to use TempStorage instead this?
+            CancelAction = () => RunnerService.Storage.Load(); // Cancel changes TODO: may me need to use TempStorage instead this?
         }
 
         #endregion
@@ -66,7 +64,7 @@ namespace HomeCenter.NET.ViewModels.Commands
             command.Keys.Add(new SingleKey(string.Empty));
             command.Lines.Add(new SingleCommand(string.Empty));
 
-            var viewModel = new CommandSettingsViewModel(command, MainService, HookService);
+            var viewModel = new CommandSettingsViewModel(command, RunnerService, HookService);
             var result = this.ShowDialog(viewModel);
             if (result != true)
             {
@@ -76,7 +74,7 @@ namespace HomeCenter.NET.ViewModels.Commands
             UserCommands.Add(new UserCommandViewModel(command));
             foreach (var key in command.Keys)
             {
-                Runner.Storage[key.Text] = command;
+                RunnerService.Storage[key.Text] = command;
             }
         }
 
@@ -86,7 +84,7 @@ namespace HomeCenter.NET.ViewModels.Commands
             {
                 case UserCommandViewModel userCommandViewModel:
                     var newCommand = (Command)userCommandViewModel.Command.Clone();
-                    var dialogViewModel = new CommandSettingsViewModel(newCommand, MainService, HookService);
+                    var dialogViewModel = new CommandSettingsViewModel(newCommand, RunnerService, HookService);
                     var result = this.ShowDialog(dialogViewModel);
                     if (result != true)
                     {
@@ -95,11 +93,11 @@ namespace HomeCenter.NET.ViewModels.Commands
 
                     foreach (var key in userCommandViewModel.Command.Keys)
                     {
-                        Runner.Storage.Remove(key.Text);
+                        RunnerService.Storage.Remove(key.Text);
                     }
                     foreach (var key in newCommand.Keys)
                     {
-                        Runner.Storage[key.Text] = newCommand;
+                        RunnerService.Storage[key.Text] = newCommand;
                     }
 
                     var index = UserCommands.IndexOf(userCommandViewModel);
@@ -120,7 +118,7 @@ namespace HomeCenter.NET.ViewModels.Commands
                 case UserCommandViewModel userCommandViewModel:
                     foreach (var key in userCommandViewModel.Command.Keys)
                     {
-                        Runner.Storage.Remove(key.Text);
+                        RunnerService.Storage.Remove(key.Text);
                     }
                     UserCommands.Remove(userCommandViewModel);
                     break;
@@ -142,20 +140,20 @@ namespace HomeCenter.NET.ViewModels.Commands
                 case UserCommandViewModel userCommandViewModel:
                     foreach (var line in userCommandViewModel.Command.Lines)
                     {
-                        MainService.Run(line.Text);
+                        RunnerService.Run(line.Text);
                     }
                     break;
 
                 case AllCommandViewModel allCommandViewModel:
-                    MainService.Run($"{allCommandViewModel.Prefix} {viewModel.Description}");
+                    RunnerService.Run($"{allCommandViewModel.Prefix} {viewModel.Description}");
                     break;
 
                 case VariableViewModel _:
-                    viewModel.Description = Runner.GetVariableValue(viewModel.Name)?.ToString() ?? string.Empty;
+                    viewModel.Description = RunnerService.GetVariableValue(viewModel.Name)?.ToString() ?? string.Empty;
                     break;
 
                 case ProcessViewModel _:
-                    MainService.Run(viewModel.Name);
+                    RunnerService.Run(viewModel.Name);
                     break;
 
                 default:

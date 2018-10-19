@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 using Caliburn.Micro;
+using H.NET.Core.Managers;
+using H.NET.Core.Recorders;
 using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.ViewModels.Commands;
@@ -15,10 +17,11 @@ namespace HomeCenter.NET.ViewModels
         #region Properties
 
         public IWindowManager WindowManager { get; }
-        public MainService MainService { get; }
+        public RunnerService RunnerService { get; }
         public HookService HookService { get; }
         public Properties.Settings Settings { get; }
         public PopUpViewModel PopUpViewModel { get; }
+        public BaseManager Manager { get; }
 
         private string _text;
         public string Text {
@@ -62,24 +65,25 @@ namespace HomeCenter.NET.ViewModels
 
         #region Constructors
 
-        public MainViewModel(IWindowManager windowManager, Properties.Settings settings, PopUpViewModel popUpViewModel, MainService mainService, HookService hookService)
+        public MainViewModel(IWindowManager windowManager, Properties.Settings settings, PopUpViewModel popUpViewModel, RunnerService runnerService, HookService hookService, BaseManager manager)
         {
             WindowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
             PopUpViewModel = popUpViewModel ?? throw new ArgumentNullException(nameof(popUpViewModel));
-            MainService = mainService ?? throw new ArgumentNullException(nameof(mainService));
+            RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
             HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
+            Manager = manager ?? throw new ArgumentNullException(nameof(manager));
 
-            MainService.GlobalRunner.NewOutput += Print;
-            MainService.Manager.Started += (sender, args) =>
+            RunnerService.NewOutput += Print;
+            Manager.Started += (sender, args) =>
             {
                 IsRecord = true;
-                MainService.HiddenRun("deskband start");
+                RunnerService.HiddenRun("deskband start");
             };
-            MainService.Manager.Stopped += (sender, args) =>
+            Manager.Stopped += (sender, args) =>
             {
                 IsRecord = false;
-                MainService.HiddenRun("deskband stop");
+                RunnerService.HiddenRun("deskband stop");
             };
         }
 
@@ -99,7 +103,7 @@ namespace HomeCenter.NET.ViewModels
 
         public void Record()
         {
-            MainService.StartRecord(3000);
+            Manager.ChangeWithTimeout(3000);
         }
 
         public void ShowCommands()
@@ -148,15 +152,15 @@ namespace HomeCenter.NET.ViewModels
                         break;
                     }
 
-                    MainService.Run(Input);
+                    RunnerService.Run(Input);
                     Input = string.Empty;
                     break;
 
                 case Key.Up:
-                    if (MainService.GlobalRunner.History.Any())
+                    if (RunnerService.History.Any())
                     {
-                        Input = MainService.GlobalRunner.History.LastOrDefault() ?? "";
-                        MainService.GlobalRunner.History.RemoveAt(MainService.GlobalRunner.History.Count - 1);
+                        Input = RunnerService.History.LastOrDefault() ?? "";
+                        RunnerService.History.RemoveAt(RunnerService.History.Count - 1);
                     }
                     break;
             }
@@ -183,7 +187,7 @@ namespace HomeCenter.NET.ViewModels
             {
                 e.Handled = true;
 
-                MainService.Run("restart");
+                RunnerService.Run("restart");
             }
         }
 

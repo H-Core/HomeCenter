@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Media;
-using HomeCenter.NET.Runners;
+using HomeCenter.NET.Services;
 
 namespace HomeCenter.NET.ViewModels.Commands
 {
@@ -8,14 +8,14 @@ namespace HomeCenter.NET.ViewModels.Commands
     {
         #region Properties
 
-        public GlobalRunner.Process Process { get; }
+        public RunnerService.Process Process { get; }
         public Color Color { get; } // TODO: Remove Windows dependency
 
         #endregion
 
         #region Constructors
 
-        public ProcessViewModel(GlobalRunner.Process process) : 
+        public ProcessViewModel(RunnerService.Process process) : 
             base(null, process?.Name ?? string.Empty,
                 run: true, delete: !process?.IsCompleted ?? false)
         {

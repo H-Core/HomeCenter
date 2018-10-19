@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using H.NET.Storages;
+using H.NET.Storages.Extensions;
 using H.NET.Utilities;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Utilities;
@@ -13,9 +15,13 @@ namespace HomeCenter.NET.Services
         #region Properties
 
         public Settings Settings { get; }
+        public CommandsStorage Storage { get; }
+        public RunnerService RunnerService { get; }
 
         public LowLevelMouseHook MouseHook { get; set; } = new LowLevelMouseHook();
         public LowLevelKeyboardHook KeyboardHook { get; set; } = new LowLevelKeyboardHook();
+
+        public Dictionary<KeysCombination, Command> Combinations { get; } = new Dictionary<KeysCombination, Command>();
 
         public Keys RecordKey => Hook.FromString(Settings.RecordKey);
 
@@ -29,14 +35,44 @@ namespace HomeCenter.NET.Services
 
         #region Constructors
 
-        public HookService(Settings settings)
+        public HookService(RunnerService runnerService, Settings settings, CommandsStorage storage)
         {
+            RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
+            Storage = storage ?? throw new ArgumentNullException(nameof(storage));
         }
 
         #endregion
 
         #region Public methods
+
+        public void UpdateCombinations()
+        {
+            Combinations.Clear();
+            foreach (var pair in Storage.UniqueValues(i => i.Value).Where(i => i.Value.HotKey != null))
+            {
+                var command = pair.Value;
+                var hotKey = command.HotKey;
+                var combination = KeysCombination.FromString(hotKey);
+                if (combination.IsEmpty)
+                {
+                    continue;
+                }
+
+                Combinations[combination] = command;
+            }
+        }
+
+        public bool RunCombination(KeysCombination combination)
+        {
+            if (!Combinations.TryGetValue(combination, out var command))
+            {
+                return false;
+            }
+
+            RunnerService.Run(command.Keys.FirstOrDefault()?.Text);
+            return true;
+        }
 
         public async Task<KeysCombination> CatchKey()
         {

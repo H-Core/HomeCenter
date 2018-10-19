@@ -8,7 +8,7 @@ namespace HomeCenter.NET.Services
     {
         #region Properties
 
-        public MainService MainService { get; }
+        public RunnerService RunnerService { get; }
         public Settings Settings { get; }
 
         public IpcServer IpcServer { get; set; }
@@ -17,13 +17,13 @@ namespace HomeCenter.NET.Services
 
         #region Constructors
 
-        public IpcService(MainService mainService, Settings settings)
+        public IpcService(RunnerService runnerService, Settings settings)
         {
-            MainService = mainService ?? throw new ArgumentNullException(nameof(mainService));
+            RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
 
             IpcServer = new IpcServer(settings.InputIpcPort);
-            IpcServer.NewMessage += mainService.Run;
+            IpcServer.NewMessage += RunnerService.Run;
         }
 
         #endregion
@@ -38,7 +38,7 @@ namespace HomeCenter.NET.Services
             }
             catch (Exception exception)
             {
-                MainService.Run($"print {exception.Message}");
+                RunnerService.Run($"print {exception.Message}");
             }
         }
 

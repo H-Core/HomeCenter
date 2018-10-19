@@ -19,7 +19,7 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         public Properties.Settings Settings { get; }
         public HookService HookService { get; }
-        public MainService MainService { get; }
+        public RunnerService RunnerService { get; }
         public ModuleService ModuleService { get; }
 
         public bool IsStartup { get; set; }
@@ -81,11 +81,11 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         #region Constructors
 
-        public SettingsViewModel(Properties.Settings settings, HookService hookService, MainService mainService, ModuleService moduleService)
+        public SettingsViewModel(Properties.Settings settings, HookService hookService, RunnerService runnerService, ModuleService moduleService)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
             HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
-            MainService = mainService ?? throw new ArgumentNullException(nameof(mainService));
+            RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
             ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
 
             IgnoredApplications = new BindableCollection<ItemViewModel>(
@@ -111,7 +111,7 @@ namespace HomeCenter.NET.ViewModels.Settings
                 Settings.Save();
                 Startup.Set(Options.FilePath, IsStartup);
 
-                MainService.UpdateActiveModules(moduleService);
+                ModuleService.UpdateActiveModules();
             };
         }
 
@@ -325,7 +325,7 @@ namespace HomeCenter.NET.ViewModels.Settings
         {
             viewModel.IsEnabled = !viewModel.IsEnabled;
             ModuleService.SetInstanceIsEnabled(viewModel.Name, viewModel.IsEnabled);
-            ModuleService.RegisterHandlers(MainService);
+            ModuleService.RegisterHandlers(RunnerService);
 
             UpdateModules(); // TODO: update single item??
         }

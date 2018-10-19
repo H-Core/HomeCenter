@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Threading;
 using Caliburn.Micro;
+using H.NET.Core.Managers;
 using H.NET.Storages;
 using HomeCenter.NET.Initializers;
 using HomeCenter.NET.Properties;
@@ -37,10 +38,11 @@ namespace HomeCenter.NET
                 .Singleton<IWindowManager, HWindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<HookService>()
-                .Singleton<MainService>()
                 .Singleton<ModuleService>()
+                .Singleton<RunnerService>()
                 .Singleton<IpcService>()
                 .Singleton<ScreenshotRectangle>()
+                .Singleton<BaseManager>()
                 .Instance(Settings.Default)
                 .Instance(new CommandsStorage(Options.CompanyName));
 
@@ -139,7 +141,7 @@ namespace HomeCenter.NET
             manager.ShowWindow(instance);
             
             var model = Get<MainViewModel>();
-            var mainService = Get<MainService>();
+            var runnerService = Get<RunnerService>();
             var hookService = Get<HookService>();
             var moduleService = Get<ModuleService>();
 
@@ -153,19 +155,19 @@ namespace HomeCenter.NET
 
             Get<StaticModulesInitializer>();
             
-            await InitializeHelper.InitializeDynamicModules(mainService, hookService, moduleService, model);
+            await InitializeHelper.InitializeDynamicModules(runnerService, hookService, moduleService, model);
 
             Get<HookInitializer>();
 
-            InitializeHelper.CheckUpdate(e.Args, mainService);
-            InitializeHelper.CheckRun(e.Args, mainService);
+            InitializeHelper.CheckUpdate(e.Args, runnerService);
+            InitializeHelper.CheckRun(e.Args, runnerService);
         }
 
         protected override void OnExit(object sender, EventArgs e)
         {
             MainView?.Dispose();
 
-            DisposeObject<MainService>();
+            DisposeObject<BaseManager>();
             DisposeObject<HookService>();
             DisposeObject<ModuleService>();
             DisposeObject<IpcService>();

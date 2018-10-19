@@ -14,7 +14,7 @@ namespace HomeCenter.NET.Initializers
 {
     public static class InitializeHelper
     {
-        public static async Task InitializeDynamicModules(MainService mainService, HookService hookService, ModuleService moduleService, MainViewModel model)
+        public static async Task InitializeDynamicModules(RunnerService runnerService, HookService hookService, ModuleService moduleService, MainViewModel model)
         {
             AssembliesManager.LogAction = model.Print;
             Module.LogAction = model.Print;
@@ -22,7 +22,13 @@ namespace HomeCenter.NET.Initializers
             model.Print("Loading modules...");
             try
             {
-                await mainService.Load(moduleService);
+                await Task.Run(() => moduleService.Load());
+
+                moduleService.AddUniqueInstancesIfNeed();
+                moduleService.RegisterHandlers(runnerService);
+                moduleService.UpdateActiveModules();
+
+                hookService.UpdateCombinations();
 
                 model.Print("Loaded");
             }
@@ -55,16 +61,16 @@ namespace HomeCenter.NET.Initializers
             }
         }
 
-        public static void CheckUpdate(string[] args, MainService mainService)
+        public static void CheckUpdate(string[] args, RunnerService runnerService)
         {
             var isUpdating = args.Contains("/updating");
             if (!isUpdating && Settings.Default.AutoUpdateAssemblies)
             {
-                mainService.Run("update-assemblies");
+                runnerService.Run("update-assemblies");
             }
         }
 
-        public static void CheckRun(string[] args, MainService mainService)
+        public static void CheckRun(string[] args, RunnerService runnerService)
         {
             if (args.Contains("/run"))
             {
@@ -74,7 +80,7 @@ namespace HomeCenter.NET.Initializers
 
                 foreach (var command in commands)
                 {
-                    mainService.Run(command);
+                    runnerService.Run(command);
                 }
             }
         }
