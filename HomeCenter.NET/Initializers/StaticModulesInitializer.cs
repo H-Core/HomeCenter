@@ -6,7 +6,6 @@ using System.Windows;
 using Caliburn.Micro;
 using H.NET.Core;
 using H.NET.Core.Managers;
-using H.NET.Core.Recorders;
 using H.NET.Core.Runners;
 using HomeCenter.NET.Runners;
 using HomeCenter.NET.Services;
@@ -85,7 +84,7 @@ namespace HomeCenter.NET.Initializers
                     ShowSettingsAction = () => Application.Current.Dispatcher.Invoke(model.ShowSettings),
                     ShowCommandsAction = () => Application.Current.Dispatcher.Invoke(model.ShowCommands),
                     ShowModuleSettingsAction = name => Application.Current.Dispatcher.Invoke(() => ShowModuleSettings(name)),
-                    StartRecordAction = timeout => Application.Current.Dispatcher.Invoke(() => baseManager.ChangeWithTimeout(timeout))
+                    StartRecordAction = () => Application.Current.Dispatcher.Invoke(baseManager.Start)
                 }
             };
             foreach (var runner in staticRunners)
