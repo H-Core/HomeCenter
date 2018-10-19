@@ -1,27 +1,27 @@
-﻿using H.NET.Core.Recorders;
+﻿using System.Linq;
+using H.NET.Core.Recorders;
 using NAudio.Wave;
 
 namespace H.NET.Recorders
 {
     public class NAudioRecorder : Recorder
     {
-        private WaveInEvent Capture { get; set; } = new WaveInEvent();
+        private WaveInEvent WaveIn { get; set; }
 
         #region Constructors
 
         public NAudioRecorder()
         {
-            Capture.DataAvailable += (sender, args) =>
+            WaveIn = new WaveInEvent
             {
-                //var data = new List<byte>();
-                //data.AddRange(args.Buffer.Take(args.BytesRecorded));
+                WaveFormat = new WaveFormat(44100, 1)
+            };
 
-                //Data = data.ToArray();
-                //var waveHeader = new byte[] { 0x1, 0x2, 0xFF, 0xFE };
-                //data.AddRange(waveHeader);
-                //data.AddRange(args.Buffer);
+            WaveIn.DataAvailable += (sender, args) =>
+            {
+                Data = Data ?? new byte[0];
 
-                Data = args.Buffer;
+                Data = Data.Concat(args.Buffer).ToArray();
             };
         }
 
@@ -31,15 +31,23 @@ namespace H.NET.Recorders
 
         public override void Start()
         {
-            Capture.StartRecording();
+            WaveIn.StartRecording();
 
             base.Start();
         }
 
         public override void Stop()
         {
-            Capture.StopRecording();
-            
+            WaveIn.StopRecording();
+
+            /*
+            using (var waveFile = new WaveFileWriter(@"D:\Test0001.wav", WaveIn.WaveFormat))
+            {
+                waveFile.Write(Data, 0, Data.Length);
+                waveFile.Flush();
+            }
+            */
+
             base.Stop();
         }
 
@@ -51,8 +59,8 @@ namespace H.NET.Recorders
         {
             base.Dispose();
 
-            Capture?.Dispose();
-            Capture = null;
+            WaveIn?.Dispose();
+            WaveIn = null;
         }
 
         #endregion
