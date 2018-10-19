@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Input;
 using Caliburn.Micro;
 using H.NET.Core.Managers;
 using H.NET.Core.Recorders;
@@ -136,59 +135,37 @@ namespace HomeCenter.NET.ViewModels
 
         #region Event Handlers
 
-        public void Input_KeyUp(KeyEventArgs e)
+        public void PreviousCommand()
         {
-            switch (e.Key)
+            if (!RunnerService.History.Any())
             {
-                case Key.Enter:
-                    if (Input.Length == 0)
-                    {
-                        break;
-                    }
-                    if ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-                    {
-                        Input += Environment.NewLine;
-                        //InputTextBox.CaretIndex = InputTextBox.Text.Length - 1;
-                        break;
-                    }
-
-                    RunnerService.Run(Input);
-                    Input = string.Empty;
-                    break;
-
-                case Key.Up:
-                    if (RunnerService.History.Any())
-                    {
-                        Input = RunnerService.History.LastOrDefault() ?? "";
-                        RunnerService.History.RemoveAt(RunnerService.History.Count - 1);
-                    }
-                    break;
+                return;
             }
+
+            Input = RunnerService.History.LastOrDefault() ?? "";
+            RunnerService.History.RemoveAt(RunnerService.History.Count - 1);
         }
 
-        public void OnKeyUp(KeyEventArgs e)
+        public void RunInput()
         {
-            // TODO: to record key
-            if (e.Key == Key.OemTilde)
+            if (string.IsNullOrEmpty(Input))
             {
-                e.Handled = true;
+                return;
             }
+
+            RunnerService.Run(Input);
+            Input = string.Empty;
         }
 
-        public void OnKeyDown(KeyEventArgs e)
+        public void AddNewLine()
         {
-            if (e.Key == Key.OemTilde)
-            {
-                e.Handled = true;
-            }
+            Input += Environment.NewLine;
+            //InputTextBox.CaretIndex = InputTextBox.Text.Length - 1;
+        }
 
-            // TODO: To global?
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.R))
-            {
-                e.Handled = true;
-
-                RunnerService.Run("restart");
-            }
+        public void Restart()
+        {
+            RunnerService.Run("restart");
         }
 
         public void OnClosing(CancelEventArgs e)

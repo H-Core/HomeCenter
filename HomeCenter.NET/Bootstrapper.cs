@@ -6,6 +6,7 @@ using System.Windows.Threading;
 using Caliburn.Micro;
 using H.NET.Core.Managers;
 using HomeCenter.NET.Initializers;
+using HomeCenter.NET.Input;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
@@ -109,6 +110,34 @@ namespace HomeCenter.NET
                     // ReSharper disable once PossibleMultipleEnumeration
                     return baseBindActions(elements, viewModel);
                 };
+
+            #endregion
+
+            #region Key Triggers
+
+            var defaultCreateTrigger = Parser.CreateTrigger;
+
+            Parser.CreateTrigger = (target, triggerText) =>
+            {
+                if (triggerText == null)
+                {
+                    return defaultCreateTrigger(target, null);
+                }
+
+                var triggerDetail = triggerText
+                    .Replace("[", string.Empty)
+                    .Replace("]", string.Empty);
+
+                var splits = triggerDetail.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+
+                switch (splits[0])
+                {
+                    case "KeyUp":
+                        return KeyUpTrigger.FromText(splits[1]);
+                }
+
+                return defaultCreateTrigger(target, triggerText);
+            };
 
             #endregion
         }

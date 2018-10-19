@@ -29,7 +29,6 @@ namespace HomeCenter.NET.Services
             set => Settings.HookIgnoredApps = string.Join(";", value);
         }
 
-
         #endregion
 
         #region Constructors

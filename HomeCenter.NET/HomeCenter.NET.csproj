@@ -75,6 +75,10 @@
     <Compile Include="Extensions\ScreenExtensions.cs" />
     <Compile Include="Initializers\HookInitializer.cs" />
     <Compile Include="Initializers\StaticModulesInitializer.cs" />
+    <Compile Include="Input\KeySequence.cs" />
+    <Compile Include="Input\KeyUpTrigger.cs" />
+    <Compile Include="Input\MultiKeyGesture.cs" />
+    <Compile Include="Input\MultiKeyGestureConverter.cs" />
     <Compile Include="Runners\ClipboardRunner.cs" />
     <Compile Include="Runners\WindowsRunner.cs" />
     <Compile Include="Runners\KeyboardRunner.cs" />

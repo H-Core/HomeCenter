@@ -13,7 +13,7 @@
         Width="500" 
         WindowStartupLocation="CenterScreen"
         Icon="../Properties/Icons/icon.ico"
-        cal:Message.Attach="[Event Closing] = [Action OnClosing($eventArgs)]; [Event KeyDown] = [Action OnKeyDown($eventArgs)]; [Event KeyUp] = [Action OnKeyUp($eventArgs)]"
+        cal:Message.Attach="[Event Closing] = [Action OnClosing($eventArgs)]; [KeyUp Ctrl+R] = [Restart]"
         Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"
         >
     <Grid Margin="10,10,10,10">
@@ -42,7 +42,7 @@
                 <ColumnDefinition Width="2"></ColumnDefinition>
                 <ColumnDefinition Width="25"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Grid.RowSpan="8" x:Name="Input" TextWrapping="Wrap" cal:Message.Attach="[Event KeyUp] = [Action Input_KeyUp($eventArgs)]"/>
+            <TextBox Grid.Column="0" Grid.RowSpan="8" x:Name="Input" TextWrapping="Wrap" cal:Message.Attach="[KeyUp Up] = [PreviousCommand]; [KeyUp Ctrl+Enter] = [AddNewLine]; [KeyUp Enter] = [RunInput]"/>
             <Button Grid.Column="2" Grid.Row="1" x:Name="Record" Content="{Binding IsRecord, Converter={StaticResource BooleanToRecordConverter}}" Background="{Binding IsRecord, Converter={StaticResource BooleanToBlueGrayConverter}}"/>
             <Button Grid.Column="2" Grid.Row="3" x:Name="ShowCommands" Content="☰"/>
             <Button Grid.Column="2" Grid.Row="5" x:Name="ShowSettings" Content="⚙"/>
