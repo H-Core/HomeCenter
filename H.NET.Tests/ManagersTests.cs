@@ -13,7 +13,7 @@ namespace H.NET.Tests
         public ManagersTests(ITestOutputHelper output) : base(output)
         {
         }
-
+        /*
         [Fact]
         public void WinmmWitAiManagerTest() =>
             AsyncContext.Run(async () => await BaseManagerTest(new BaseManager
@@ -36,6 +36,6 @@ namespace H.NET.Tests
                     Lang = "ru-RU",
                     Topic = "queries"
                 }
-            }, PlatformID.Win32NT));
+            }, PlatformID.Win32NT));*/
     }
 }

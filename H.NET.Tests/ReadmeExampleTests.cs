@@ -60,7 +60,7 @@ namespace H.NET.Tests
 
             return true;
         }
-
+        /*
         [Fact]
         public void ReadmeExampleTest() => AsyncContext.Run(async () =>
         {
@@ -139,6 +139,6 @@ namespace H.NET.Tests
             await Task.Delay(2000);
 
             Assert.False(manager.IsStarted);
-        });
+        });*/
     }
 }
