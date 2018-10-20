@@ -1,4 +1,4 @@
-﻿namespace HomeCenter.NET.Views.Commands
+﻿namespace HomeCenter.NET.Views
 {
     public partial class RectangleView
     {

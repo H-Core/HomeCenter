@@ -257,10 +257,10 @@
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Runners\DefaultRunner.cs" />
-    <Compile Include="Views\Commands\RectangleView.xaml.cs">
+    <Compile Include="Views\RectangleView.xaml.cs">
       <DependentUpon>RectangleView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Views\Commands\RectangleView.xaml">
+    <Page Include="Views\RectangleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

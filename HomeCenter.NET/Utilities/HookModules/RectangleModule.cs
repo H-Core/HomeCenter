@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Input;
 using H.NET.Utilities;
-using HomeCenter.NET.Views.Commands;
+using HomeCenter.NET.Views;
 using Point = System.Drawing.Point;
 
 namespace HomeCenter.NET.Utilities.HookModules
