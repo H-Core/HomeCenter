@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows;
 using System.Windows.Input;
 using H.NET.Utilities;
 using HomeCenter.NET.Views;
@@ -29,7 +30,7 @@ namespace HomeCenter.NET.Utilities.HookModules
                 return;
             }
 
-            //e.Handled = true;
+            e.Handled = true;
 
             View?.Close();
             View = null;
@@ -57,11 +58,12 @@ namespace HomeCenter.NET.Utilities.HookModules
             // TODO: to full screen view, change only rectangle
             var rectangle = CalculateRectangle(e);
 
-            View.Left = rectangle.Left;
-            View.Top = rectangle.Top;
+            View.Border.Margin = new Thickness(rectangle.Left, rectangle.Top, View.Width - rectangle.Left - rectangle.Width, View.Height - rectangle.Top - rectangle.Height);
+            //View.Left = rectangle.Left;
+            //View.Top = rectangle.Top;
 
-            View.Width = rectangle.Width;
-            View.Height = rectangle.Height;
+            //View.Width = rectangle.Width;
+            //View.Height = rectangle.Height;
         }
 
         public void Global_MouseDown(object sender, MouseEventExtArgs e)
@@ -72,16 +74,17 @@ namespace HomeCenter.NET.Utilities.HookModules
                 return;
             }
 
-            //e.Handled = true;
+            e.Handled = true;
 
             View = new RectangleView();
-            View.Show();
-            View.Left = e.X;
-            View.Top = e.Y;
-            View.Width = 0;
-            View.Height = 0;
 
             StartPoint = new Point(e.X, e.Y);
+
+            View.Border.Margin = new Thickness(e.X, e.Y, View.Width - e.X, View.Height - e.Y);
+            View.Border.Visibility = Visibility.Visible;
+            
+            View.Show();
+
         }
 
         private Rectangle CalculateRectangle(MouseEventExtArgs e)

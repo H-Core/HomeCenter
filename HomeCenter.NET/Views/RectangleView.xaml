@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="RectangleView" 
-        Height="0" Width="0" 
+        Height="0"
+        Width="0" 
+        Left="0"
+        Top="0" 
         Background="Transparent"
         ShowInTaskbar="False" 
         Topmost="True" 
@@ -13,5 +16,5 @@
         ShowActivated="False" 
         WindowStyle="None" 
         AllowsTransparency="True">
-    <Border BorderThickness="2" BorderBrush="CornflowerBlue" Background="Transparent"/>
+    <Border Visibility="Hidden" x:Name="Border" BorderThickness="2" BorderBrush="CornflowerBlue" Background="Transparent"/>
 </Window>
