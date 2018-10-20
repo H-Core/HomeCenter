@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Windows.Input;
 
@@ -32,8 +33,7 @@ namespace HomeCenter.NET.Input
             if (keys.Length < 1)
                 throw new ArgumentException(@"At least 1 key should be provided", nameof(keys));
 
-            Keys = new Key[keys.Length];
-            keys.CopyTo(Keys, 0);
+            Keys = keys.ToArray();
             Modifiers = modifiers;
         }
 

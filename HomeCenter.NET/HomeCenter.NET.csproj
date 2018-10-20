@@ -89,12 +89,14 @@
     <Compile Include="Services\RunnerService.Process.cs" />
     <Compile Include="Services\StorageService.cs" />
     <Compile Include="Utilities\DialogUtilities.cs" />
+    <Compile Include="Utilities\HookModules\RectangleModule.cs" />
     <Compile Include="Utilities\HWindowManager.cs" />
     <Compile Include="Initializers\InitializeHelper.cs" />
     <Compile Include="Utilities\MediaUtilities.cs" />
     <Compile Include="Services\ModuleService.cs" />
     <Compile Include="Utilities\Options.cs" />
-    <Compile Include="Utilities\ScreenshotRectangle.cs" />
+    <Compile Include="Utilities\HookModules\HookModule.cs" />
+    <Compile Include="Utilities\HookModules\ScreenshotModule.cs" />
     <Compile Include="Utilities\WpfSafeActions.cs" />
     <Compile Include="Utilities\SafeActions.cs" />
     <Page Include="Controls\BoolSettingControl.xaml">

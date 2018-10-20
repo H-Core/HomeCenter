@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Input;
 using H.NET.Utilities;
 using HomeCenter.NET.Views.Commands;
 using Point = System.Drawing.Point;
 
-namespace HomeCenter.NET.Utilities
+namespace HomeCenter.NET.Utilities.HookModules
 {
-    public class ScreenshotRectangle
+    public class RectangleModule : HookModule
     {
-        public List<Key> ActivationKeys { get; set; } = new List<Key>();
-        public List<ModifierKeys> ActivationModifiers { get; set; } = new List<ModifierKeys>();
-
         public delegate void ImageDelegate(Image image);
         public event ImageDelegate NewImage;
 
@@ -21,16 +17,19 @@ namespace HomeCenter.NET.Utilities
         private Point RectanglePoint { get; set; }
         private bool IsMouseDown { get; set; }
 
-        private bool IsScreenshotCombination() =>
-            ActivationKeys.All(Keyboard.IsKeyDown) && ActivationModifiers.All(i => (Keyboard.Modifiers & i) == i);
+        public RectangleModule(List<Key> keys, List<ModifierKeys> modifiers) : base(keys, modifiers)
+        {
+        }
 
         public async void Global_MouseUp(object sender, MouseEventExtArgs e)
         {
             IsMouseDown = false;
-            if (!IsScreenshotCombination())
+            if (!IsHookCombination())
             {
                 return;
             }
+
+            e.Handled = true;
 
             RectangleView.Close();
             RectangleView = null;
@@ -49,12 +48,14 @@ namespace HomeCenter.NET.Utilities
 
         public void Global_MouseMove(object sender, MouseEventExtArgs e)
         {
-            if (!IsMouseDown || !IsScreenshotCombination())
+            if (!IsMouseDown || !IsHookCombination())
             {
                 RectangleView.Close();
                 RectangleView = null;
                 return;
             }
+
+            //e.Handled = true;
 
             var rectangle = CalculateRectangle(e);
 
@@ -68,10 +69,12 @@ namespace HomeCenter.NET.Utilities
         public void Global_MouseDown(object sender, MouseEventExtArgs e)
         {
             IsMouseDown = true;
-            if (!IsScreenshotCombination())
+            if (!IsHookCombination())
             {
                 return;
             }
+
+            e.Handled = true;
 
             RectangleView = new RectangleView();
             RectangleView.Show();
@@ -94,7 +97,7 @@ namespace HomeCenter.NET.Utilities
             var width = dx > 0 ? dx : -dx;
             var height = dy > 0 ? dy : -dy;
 
-            return new Rectangle((int)left, (int)top, (int)width, (int)height);
+            return new Rectangle(left, top, width, height);
         }
     }
 }

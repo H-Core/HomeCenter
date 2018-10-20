@@ -10,6 +10,7 @@ using HomeCenter.NET.Input;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
+using HomeCenter.NET.Utilities.HookModules;
 using HomeCenter.NET.ViewModels;
 using HomeCenter.NET.ViewModels.Commands;
 using HomeCenter.NET.ViewModels.Modules;
@@ -42,8 +43,8 @@ namespace HomeCenter.NET
                 .Singleton<RunnerService>()
                 .Singleton<IpcService>()
                 .Singleton<StorageService>()
-                .Singleton<ScreenshotRectangle>()
                 .Singleton<BaseManager>()
+                .Singleton<ScreenshotModule>()
                 .Instance(Settings.Default);
 
             Container

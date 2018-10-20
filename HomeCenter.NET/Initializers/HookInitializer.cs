@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Windows;
-using System.Windows.Input;
 using H.NET.Core.Managers;
 using H.NET.Utilities;
-using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Services;
-using HomeCenter.NET.Utilities;
+using HomeCenter.NET.Utilities.HookModules;
 using HomeCenter.NET.ViewModels;
 
 namespace HomeCenter.NET.Initializers
 {
     public class HookInitializer
     {
-        public HookInitializer(BaseManager manager, HookService hookService, MainViewModel model, ScreenshotRectangle screenshotRectangle, Settings settings)
+        public HookInitializer(BaseManager manager, HookService hookService, MainViewModel model, ScreenshotModule screenshotModule, Settings settings)
         {
             void GlobalKeyUp(object sender, KeyboardHookEventArgs e)
             {
@@ -72,12 +69,9 @@ namespace HomeCenter.NET.Initializers
                 hookService.KeyboardHook.KeyUp += GlobalKeyUp;
                 hookService.KeyboardHook.KeyDown += GlobalKeyDown;
 
-                screenshotRectangle.ActivationKeys.Add(Key.Space);
-                screenshotRectangle.ActivationModifiers.Add(ModifierKeys.Shift);
-                screenshotRectangle.NewImage += image => Clipboard.SetImage(image.ToBitmapImage());
-                hookService.MouseHook.MouseUp += screenshotRectangle.Global_MouseUp;
-                hookService.MouseHook.MouseDown += screenshotRectangle.Global_MouseDown;
-                hookService.MouseHook.MouseMove += screenshotRectangle.Global_MouseMove;
+                hookService.MouseHook.MouseUp += screenshotModule.Global_MouseUp;
+                hookService.MouseHook.MouseDown += screenshotModule.Global_MouseDown;
+                hookService.MouseHook.MouseMove += screenshotModule.Global_MouseMove;
 
                 hookService.MouseHook.MouseDown += GlobalMouseDown;
             }
