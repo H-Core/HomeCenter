@@ -71,6 +71,7 @@ namespace HomeCenter.NET.Initializers
 
                 hookService.MouseHook.MouseUp += screenshotModule.Global_MouseUp;
                 hookService.MouseHook.MouseDown += screenshotModule.Global_MouseDown;
+                // TODO: mouse move speed change bug
                 hookService.MouseHook.MouseMove += screenshotModule.Global_MouseMove;
 
                 hookService.MouseHook.MouseDown += GlobalMouseDown;

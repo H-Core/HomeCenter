@@ -10,18 +10,18 @@ namespace HomeCenter.NET.Utilities.HookModules
 {
     public class RectangleModule : HookModule
     {
-        public delegate void ImageDelegate(Image image);
-        public event ImageDelegate NewImage;
+        public delegate void RectangleDelegate(Rectangle rectangle);
+        public event RectangleDelegate NewRectangle;
 
-        private RectangleView RectangleView { get; set; }
-        private Point RectanglePoint { get; set; }
+        private RectangleView View { get; set; }
+        private Point StartPoint { get; set; }
         private bool IsMouseDown { get; set; }
 
         public RectangleModule(List<Key> keys, List<ModifierKeys> modifiers) : base(keys, modifiers)
         {
         }
 
-        public async void Global_MouseUp(object sender, MouseEventExtArgs e)
+        public void Global_MouseUp(object sender, MouseEventExtArgs e)
         {
             IsMouseDown = false;
             if (!IsHookCombination())
@@ -29,10 +29,10 @@ namespace HomeCenter.NET.Utilities.HookModules
                 return;
             }
 
-            e.Handled = true;
+            //e.Handled = true;
 
-            RectangleView.Close();
-            RectangleView = null;
+            View?.Close();
+            View = null;
 
             var rectangle = CalculateRectangle(e);
             if (rectangle.Width == 0 || rectangle.Height == 0)
@@ -40,30 +40,28 @@ namespace HomeCenter.NET.Utilities.HookModules
                 return;
             }
 
-            using (var image = await Screenshoter.ShotRectangleAsync(rectangle))
-            {
-                NewImage?.Invoke(image);
-            }
+            NewRectangle?.Invoke(rectangle);
         }
 
         public void Global_MouseMove(object sender, MouseEventExtArgs e)
         {
             if (!IsMouseDown || !IsHookCombination())
             {
-                RectangleView.Close();
-                RectangleView = null;
+                View.Close();
+                View = null;
                 return;
             }
 
             //e.Handled = true;
 
+            // TODO: to full screen view, change only rectangle
             var rectangle = CalculateRectangle(e);
 
-            RectangleView.Left = rectangle.Left;
-            RectangleView.Top = rectangle.Top;
+            View.Left = rectangle.Left;
+            View.Top = rectangle.Top;
 
-            RectangleView.Width = rectangle.Width;
-            RectangleView.Height = rectangle.Height;
+            View.Width = rectangle.Width;
+            View.Height = rectangle.Height;
         }
 
         public void Global_MouseDown(object sender, MouseEventExtArgs e)
@@ -74,25 +72,25 @@ namespace HomeCenter.NET.Utilities.HookModules
                 return;
             }
 
-            e.Handled = true;
+            //e.Handled = true;
 
-            RectangleView = new RectangleView();
-            RectangleView.Show();
-            RectangleView.Left = e.X;
-            RectangleView.Top = e.Y;
-            RectangleView.Width = 0;
-            RectangleView.Height = 0;
+            View = new RectangleView();
+            View.Show();
+            View.Left = e.X;
+            View.Top = e.Y;
+            View.Width = 0;
+            View.Height = 0;
 
-            RectanglePoint = new Point(e.X, e.Y);
+            StartPoint = new Point(e.X, e.Y);
         }
 
         private Rectangle CalculateRectangle(MouseEventExtArgs e)
         {
-            var dx = e.X - RectanglePoint.X;
-            var dy = e.Y - RectanglePoint.Y;
+            var dx = e.X - StartPoint.X;
+            var dy = e.Y - StartPoint.Y;
 
-            var left = RectanglePoint.X + Math.Min(0, dx);
-            var top = RectanglePoint.Y + Math.Min(0, dy);
+            var left = StartPoint.X + Math.Min(0, dx);
+            var top = StartPoint.Y + Math.Min(0, dy);
 
             var width = dx > 0 ? dx : -dx;
             var height = dy > 0 ? dy : -dy;
