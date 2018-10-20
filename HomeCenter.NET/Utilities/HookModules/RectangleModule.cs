@@ -48,22 +48,19 @@ namespace HomeCenter.NET.Utilities.HookModules
         {
             if (!IsMouseDown || !IsHookCombination())
             {
-                View.Close();
+                View?.Close();
                 View = null;
                 return;
             }
 
-            //e.Handled = true;
-
-            // TODO: to full screen view, change only rectangle
             var rectangle = CalculateRectangle(e);
 
-            View.Border.Margin = new Thickness(rectangle.Left, rectangle.Top, View.Width - rectangle.Left - rectangle.Width, View.Height - rectangle.Top - rectangle.Height);
-            //View.Left = rectangle.Left;
-            //View.Top = rectangle.Top;
-
-            //View.Width = rectangle.Width;
-            //View.Height = rectangle.Height;
+            View.Border.Margin = new Thickness(
+                rectangle.Left, 
+                rectangle.Top, 
+                View.Width - rectangle.Left - rectangle.Width, 
+                View.Height - rectangle.Top - rectangle.Height);
+            
         }
 
         public void Global_MouseDown(object sender, MouseEventExtArgs e)
