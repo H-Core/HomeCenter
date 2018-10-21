@@ -14,8 +14,10 @@ timeout 1
 echo.   
 start explorer.exe   
 
-%SystemRoot%\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  bin\Debug\WebSearchDeskBand.dll /tlb /codebase /unregister
-%SystemRoot%\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  bin\Release\WebSearchDeskBand.dll /tlb /codebase /unregister
-%SystemRoot%\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  Libraries\SharpShell.dll /tlb /codebase /unregister
+%SystemRoot%\Microsoft.NET\Framework64\v4.0.30319\regasm.exe %~dp0\bin\Debug\H.NET.SearchDeskBand.dll /tlb /codebase /unregister /nologo
+%SystemRoot%\Microsoft.NET\Framework64\v4.0.30319\regasm.exe %~dp0\bin\Release\H.NET.SearchDeskBand.dll /tlb /codebase /unregister /nologo
+%SystemRoot%\Microsoft.NET\Framework64\v4.0.30319\regasm.exe %~dp0\Libraries\SharpShell.dll /tlb /codebase /unregister /nologo
+%SystemRoot%\Microsoft.NET\Framework64\v4.0.30319\regasm.exe %~dp0\bin\Debug\SharpShell.dll /tlb /codebase /unregister /nologo
+%SystemRoot%\Microsoft.NET\Framework64\v4.0.30319\regasm.exe %~dp0\bin\Release\SharpShell.dll /tlb /codebase /unregister /nologo
 
-exit 
+pause

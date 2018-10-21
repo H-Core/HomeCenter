@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <RegisterForComInterop>true</RegisterForComInterop>
+    <RegisterForComInterop>false</RegisterForComInterop>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,7 +50,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComUtilities.cs" />
     <Compile Include="DeskBandControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -99,17 +98,16 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>REM %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetDir)SharpShell.dll /tlb /codebase /nologo
-REM %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetPath) /tlb /codebase /nologo</PostBuildEvent>
+    <PostBuildEvent>%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetDir)SharpShell.dll /tlb /codebase /nologo
+%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetPath) /tlb /codebase /nologo</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>REM IF EXIST $(TargetDir)SharpShell.dll (
-REM  %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetDir)SharpShell.dll /tlb /codebase /unregister /nologo
-REM )
-REM IF EXIST $(TargetPath) (
-REM %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetPath) /tlb /codebase /unregister /nologo
-REM )
-%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  ../../Libraries/SharpShell.dll /tlb /codebase
+    <PreBuildEvent>IF EXIST $(TargetDir)SharpShell.dll (
+  %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetDir)SharpShell.dll /tlb /codebase /unregister /nologo
+)
+IF EXIST $(TargetPath) (
+  %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetPath) /tlb /codebase /unregister /nologo
+ )
 
 </PreBuildEvent>
   </PropertyGroup>

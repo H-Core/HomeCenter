@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using SharpShell.Attributes;
 using SharpShell.SharpDeskBand;
 
@@ -27,11 +26,5 @@ namespace H.NET.SearchDeskBand
                        AlwaysShowGripper = true
                    };
         }
-
-        [ComRegisterFunction]
-        public static void RegisterClass(Type type) => ComUtilities.RegisterDeskBandClass(type);
-
-        [ComUnregisterFunction]
-        public static void UnregisterClass(Type type) => ComUtilities.UnregisterClass(type);
     }
 }
