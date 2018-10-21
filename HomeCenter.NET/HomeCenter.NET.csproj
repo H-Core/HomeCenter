@@ -61,7 +61,7 @@
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Commands\ShowHideCommand.cs" />
-    <Compile Include="Controls\BoolSettingControl.xaml.cs">
+    <Compile Include="Views\Settings\BoolSettingControl.xaml.cs">
       <DependentUpon>BoolSettingControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BooleanToBlueGrayConverter.cs" />
@@ -99,7 +99,7 @@
     <Compile Include="Utilities\HookModules\ScreenshotModule.cs" />
     <Compile Include="Utilities\WpfSafeActions.cs" />
     <Compile Include="Utilities\SafeActions.cs" />
-    <Page Include="Controls\BoolSettingControl.xaml">
+    <Page Include="Views\Settings\BoolSettingControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

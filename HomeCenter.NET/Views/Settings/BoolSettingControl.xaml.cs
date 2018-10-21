@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace HomeCenter.NET.Controls
+namespace HomeCenter.NET.Views.Settings
 {
     public partial class BoolSettingControl
     {
