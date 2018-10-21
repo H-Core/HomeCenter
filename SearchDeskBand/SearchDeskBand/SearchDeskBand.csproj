@@ -103,10 +103,10 @@
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>IF EXIST $(TargetDir)SharpShell.dll (
-  %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetDir)SharpShell.dll /tlb /codebase /unregister /nologo
+  %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetDir)SharpShell.dll /tlb /codebase /unregister /nologo /q
 )
 IF EXIST $(TargetPath) (
-  %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetPath) /tlb /codebase /unregister /nologo
+  %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetPath) /tlb /codebase /unregister /nologo /q
  )
 
 </PreBuildEvent>
