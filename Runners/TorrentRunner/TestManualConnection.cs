@@ -192,7 +192,9 @@ namespace H.NET.Runners
 
         public ConnectionPair(int port)
         {
+#pragma warning disable CS0618 // Type or member is obsolete
             socketListener = new TcpListener(port);
+#pragma warning restore CS0618 // Type or member is obsolete
             socketListener.Start();
 
             Socket s1a = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
