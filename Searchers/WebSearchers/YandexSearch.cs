@@ -8,7 +8,7 @@ namespace H.NET.Searchers
 {
     public class YandexSearcher : Module, ISearcher
     {
-        public async Task<List<string>> Search(string query)
+        public async Task<List<string>> Search(string query) => await Task.Run(() =>
         {
             var url = $"https://www.yandex.ru/search/?text={query}";
 
@@ -20,6 +20,6 @@ namespace H.NET.Searchers
                 .Where(i => i.Attributes.Contains("tabindex") && i.Attributes["tabindex"].Value == "2")
                 .Select(i => i.Attributes["href"].Value)
                 .ToList();
-        }
+        });
     }
 }

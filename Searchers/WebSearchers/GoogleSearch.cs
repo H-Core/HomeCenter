@@ -8,6 +8,7 @@ namespace H.NET.Searchers
     {
         public async Task<List<string>> Search(string query)
         {
+            await Task.Delay(0);
             /*
             using (var service = new CustomsearchService(
                 new BaseClientService.Initializer
