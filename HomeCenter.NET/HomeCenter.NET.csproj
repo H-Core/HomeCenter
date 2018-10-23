@@ -152,7 +152,7 @@
       <SubType>Designer</SubType>
       <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
-    <Page Include="Views\Utilities\PopUpView.xaml">
+    <Page Include="Views\Utilities\PopupView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -244,8 +244,8 @@
     <Compile Include="Views\Commands\SingleKeyView.xaml.cs">
       <DependentUpon>SingleKeyView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Utilities\PopUpView.xaml.cs">
-      <DependentUpon>PopUpView.xaml</DependentUpon>
+    <Compile Include="Views\Utilities\PopupView.xaml.cs">
+      <DependentUpon>PopupView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Utilities\RenameView.xaml.cs">
       <DependentUpon>RenameView.xaml</DependentUpon>

@@ -2,9 +2,9 @@
 
 namespace HomeCenter.NET.Views.Utilities
 {
-    public partial class PopUpView
+    public partial class PopupView
     {
-        public PopUpView()
+        public PopupView()
         {
             InitializeComponent();
 
