@@ -196,7 +196,7 @@
     <Compile Include="ViewModels\Commands\AllCommandViewModel.cs" />
     <Compile Include="ViewModels\Commands\CommandsViewModel.cs" />
     <Compile Include="ViewModels\Utilities\RenameViewModel.cs" />
-    <Compile Include="ViewModels\Utilities\PopUpViewModel.cs" />
+    <Compile Include="ViewModels\Utilities\PopupViewModel.cs" />
     <Compile Include="Views\Commands\ProcessView.cs" />
     <Compile Include="Views\Commands\SingleCommandView.cs" />
     <Compile Include="Views\Commands\VariableView.cs" />
