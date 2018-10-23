@@ -8,6 +8,7 @@ using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.ViewModels.Commands;
 using HomeCenter.NET.ViewModels.Settings;
+using HomeCenter.NET.ViewModels.Utilities;
 
 namespace HomeCenter.NET.ViewModels
 {
@@ -19,7 +20,7 @@ namespace HomeCenter.NET.ViewModels
         public RunnerService RunnerService { get; }
         public HookService HookService { get; }
         public Properties.Settings Settings { get; }
-        public PopUpViewModel PopUpViewModel { get; }
+        public PopupViewModel PopupViewModel { get; }
         public BaseManager Manager { get; }
 
         private string _text;
@@ -64,11 +65,11 @@ namespace HomeCenter.NET.ViewModels
 
         #region Constructors
 
-        public MainViewModel(IWindowManager windowManager, Properties.Settings settings, PopUpViewModel popUpViewModel, RunnerService runnerService, HookService hookService, BaseManager manager)
+        public MainViewModel(IWindowManager windowManager, Properties.Settings settings, PopupViewModel popupViewModel, RunnerService runnerService, HookService hookService, BaseManager manager)
         {
             WindowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            PopUpViewModel = popUpViewModel ?? throw new ArgumentNullException(nameof(popUpViewModel));
+            PopupViewModel = popupViewModel ?? throw new ArgumentNullException(nameof(popupViewModel));
             RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
             HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
             Manager = manager ?? throw new ArgumentNullException(nameof(manager));
@@ -96,7 +97,7 @@ namespace HomeCenter.NET.ViewModels
 
             if (Settings.EnablePopUpMessages)
             {
-                PopUpViewModel.Show(text, 5000);
+                PopupViewModel.Show(text, 5000);
             }
         }
 
@@ -117,7 +118,7 @@ namespace HomeCenter.NET.ViewModels
 
         public void BeforeExit()
         {
-            PopUpViewModel.TryClose();
+            PopupViewModel.TryClose();
         }
 
         public void PreviousCommand()

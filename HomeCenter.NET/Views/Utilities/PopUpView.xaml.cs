@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace HomeCenter.NET.Views
+namespace HomeCenter.NET.Views.Utilities
 {
     public partial class PopUpView
     {

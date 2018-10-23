@@ -2,10 +2,9 @@
 using System.Timers;
 using Caliburn.Micro;
 
-namespace HomeCenter.NET.ViewModels
+namespace HomeCenter.NET.ViewModels.Utilities
 {
-    // TODO: rename to Popup
-    public class PopUpViewModel : Screen, IDisposable
+    public class PopupViewModel : Screen, IDisposable
     {
         #region Properties
 
@@ -35,7 +34,7 @@ namespace HomeCenter.NET.ViewModels
 
         #region Constructors
 
-        public PopUpViewModel()
+        public PopupViewModel()
         {
             Timer.Elapsed += OnElapsed;
         }

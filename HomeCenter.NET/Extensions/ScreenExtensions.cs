@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Caliburn.Micro;
-using HomeCenter.NET.ViewModels;
+using HomeCenter.NET.ViewModels.Utilities;
 
 namespace HomeCenter.NET.Extensions
 {

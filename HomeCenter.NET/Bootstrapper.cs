@@ -15,6 +15,7 @@ using HomeCenter.NET.ViewModels;
 using HomeCenter.NET.ViewModels.Commands;
 using HomeCenter.NET.ViewModels.Modules;
 using HomeCenter.NET.ViewModels.Settings;
+using HomeCenter.NET.ViewModels.Utilities;
 using HomeCenter.NET.Views;
 
 namespace HomeCenter.NET
@@ -52,7 +53,7 @@ namespace HomeCenter.NET
                 .PerRequest<ModuleSettingsViewModel>()
                 .Singleton<CommandsViewModel>()
                 .Singleton<SettingsViewModel>()
-                .Singleton<PopUpViewModel>()
+                .Singleton<PopupViewModel>()
                 .Singleton<MainViewModel>();
 
             Container
@@ -164,7 +165,7 @@ namespace HomeCenter.NET
             WpfSafeActions.Initialize();
 
             var manager = Get<IWindowManager>();
-            var instance = Get<PopUpViewModel>();
+            var instance = Get<PopupViewModel>();
 
             // Create permanent hidden PopupView
             manager.ShowWindow(instance);

@@ -9,6 +9,8 @@ using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
 using HomeCenter.NET.ViewModels.Modules;
+using HomeCenter.NET.ViewModels.Utilities;
+
 // ReSharper disable UnusedMember.Global
 
 namespace HomeCenter.NET.ViewModels.Settings

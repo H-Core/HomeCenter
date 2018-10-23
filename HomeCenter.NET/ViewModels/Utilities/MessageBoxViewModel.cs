@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
 
-namespace HomeCenter.NET.ViewModels
+namespace HomeCenter.NET.ViewModels.Utilities
 {
     public class MessageBoxViewModel : Screen
     {
