@@ -11,7 +11,7 @@ namespace H.NET.Notifiers
 
         protected override async void OnElapsed()
         {
-            using (var image = await Screenshoter.ShotAsync())
+            using (var image = await Screenshoter.ShotVirtualDisplayAsync()) // TODO: shot main display ?
             using (var bitmap = new Bitmap(image))
             {
                 if (Analyze(bitmap))

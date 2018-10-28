@@ -50,7 +50,7 @@ namespace H.NET.Utilities
         /// Required to Dispose after usage
         /// </summary>
         /// <returns></returns>
-        public static Image Shot()
+        public static Image ShotVirtualDisplay()
         {
             var size = GetVirtualDisplaySize();
 
@@ -72,11 +72,11 @@ namespace H.NET.Utilities
             return bitmap;
         }
 
-        public static async Task<Image> ShotAsync() => await Task.Run(() => Shot());
+        public static async Task<Image> ShotVirtualDisplayAsync() => await Task.Run(() => ShotVirtualDisplay());
 
-        public static async Task<Image> ShotRectangleAsync(Rectangle rectangle)
+        public static async Task<Image> ShotVirtualDisplayRectangleAsync(Rectangle rectangle)
         {
-            using (var image = await ShotAsync())
+            using (var image = await ShotVirtualDisplayAsync())
             using (var bitmap = new Bitmap(image))
             {
                 return bitmap.Clone(rectangle, bitmap.PixelFormat);

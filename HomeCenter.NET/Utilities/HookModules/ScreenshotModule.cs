@@ -12,7 +12,7 @@ namespace HomeCenter.NET.Utilities.HookModules
         {
             NewRectangle += async rectangle =>
             {
-                using (var image = await Screenshoter.ShotRectangleAsync(rectangle))
+                using (var image = await Screenshoter.ShotVirtualDisplayRectangleAsync(rectangle))
                 {
                     Clipboard.SetImage(image.ToBitmapImage());
                 }
