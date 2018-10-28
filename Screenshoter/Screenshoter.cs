@@ -29,24 +29,21 @@ namespace H.NET.Utilities
         [DllImport("user32.dll")]
         public static extern IntPtr GetWindowDC(IntPtr ptr);
 
-        [DllImport("gdi32.dll")]
-        static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
-
-        private enum DeviceCap
+        public enum SystemMetric
         {
-            Desktopvertres = 117,
-            Desktophorzres = 118
+            VirtualScreenWidth = 78, // CXVIRTUALSCREEN 0x0000004E 
+            VirtualScreenHeight = 79, // CYVIRTUALSCREEN 0x0000004F 
         }
 
-        public static Size GetPhysicalDisplaySize()
+        [DllImport("user32.dll")]
+        public static extern int GetSystemMetrics(SystemMetric metric);
+
+        public static Size GetVirtualDisplaySize()
         {
-            Graphics g = Graphics.FromHwnd(IntPtr.Zero);
-            IntPtr desktop = g.GetHdc();
+            var width = GetSystemMetrics(SystemMetric.VirtualScreenWidth);
+            var height = GetSystemMetrics(SystemMetric.VirtualScreenHeight);
 
-            int physicalScreenHeight = GetDeviceCaps(desktop, (int)DeviceCap.Desktopvertres);
-            int physicalScreenWidth = GetDeviceCaps(desktop, (int)DeviceCap.Desktophorzres);
-
-            return new Size(physicalScreenWidth, physicalScreenHeight);
+            return new Size(width, height);
         }
 
         /// <summary>
@@ -55,7 +52,7 @@ namespace H.NET.Utilities
         /// <returns></returns>
         public static Image Shot()
         {
-            var size = GetPhysicalDisplaySize();
+            var size = GetVirtualDisplaySize();
 
             var window = GetDesktopWindow();
             var dc = GetWindowDC(window);
