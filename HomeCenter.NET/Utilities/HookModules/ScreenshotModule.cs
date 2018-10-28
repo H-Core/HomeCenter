@@ -8,7 +8,7 @@ namespace HomeCenter.NET.Utilities.HookModules
 {
     public class ScreenshotModule : RectangleModule
     {
-        public ScreenshotModule() : base(new List<Key> { Key.Space }, new List<ModifierKeys>{ ModifierKeys.Shift })
+        public ScreenshotModule() : base(new List<Key> { Key.LeftAlt, Key.RightAlt }, null)
         {
             NewRectangle += async rectangle =>
             {

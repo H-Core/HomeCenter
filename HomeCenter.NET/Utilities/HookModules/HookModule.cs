@@ -14,8 +14,8 @@ namespace HomeCenter.NET.Utilities.HookModules
 
         public HookModule(List<Key> keys, List<ModifierKeys> modifiers)
         {
-            ActivationKeys = keys;
-            ActivationModifiers = modifiers;
+            ActivationKeys = keys ?? new List<Key>();
+            ActivationModifiers = modifiers ?? new List<ModifierKeys>();
         }
     }
 }
