@@ -32,7 +32,7 @@ using System.Timers;
 using System.Threading;
 using System.Threading.Tasks;
 
-void Action(Action<string> Say, Action<string> Print, Action<string> Run, Func<string, object> GetVariableValue)
+void Action(Action<string> Say, Action<string> Print, Action<string> Run, Func<string, object> GetVariable)
 {{
 {text}
 }}
