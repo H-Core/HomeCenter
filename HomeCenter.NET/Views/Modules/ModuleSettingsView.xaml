@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="Module Settings"
         Width="600"
-        Height="300">
+        Height="300" WindowStartupLocation="CenterScreen">
     <Grid Background="#FFE5E5E5">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="Rename"  
         Width="400"
-        Height="120">
+        Height="120" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
