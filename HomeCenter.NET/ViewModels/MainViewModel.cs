@@ -109,6 +109,8 @@ namespace HomeCenter.NET.ViewModels
 
         public void Warning(string text)
         {
+            RunnerService.Run($"say {text}");
+
             ShowMessage(text, true);
         }
 
