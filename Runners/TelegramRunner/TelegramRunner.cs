@@ -63,7 +63,6 @@ namespace H.NET.Runners
                 : new TelegramBotClient(Token);
             
             await client.SendTextMessageAsync(new ChatId(UserId), text);
-
         }
 
         #endregion
