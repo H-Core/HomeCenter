@@ -18,10 +18,11 @@ namespace HomeCenter.NET.Runners
 
         #region Constructors
 
-        public DefaultRunner(Action<string> printAction, Func<string, Task> sayFunc, Func<string, Task<List<string>>> searchFunc)
+        public DefaultRunner(Action<string> printAction, Action<string> warningAction, Func<string, Task> sayFunc, Func<string, Task<List<string>>> searchFunc)
         {
             AddAsyncAction("say", sayFunc, "text");
             AddInternalAction("print", printAction, "text");
+            AddInternalAction("warning", warningAction, "text");
             AddInternalAction("run", Run, "other_command_key");
             AddAction("search", async key => printAction(string.Join(Environment.NewLine, await searchFunc(key))), "key");
 

@@ -91,14 +91,25 @@ namespace HomeCenter.NET.ViewModels
 
         #region Public methods
 
-        public void Print(string text)
+        public void ShowMessage(string text, bool isWarning)
         {
             Text += $"{DateTime.Now:T}: {text}{Environment.NewLine}";
 
             if (Settings.EnablePopUpMessages)
             {
-                PopupViewModel.Show(text, 5000);
+                PopupViewModel.Show(text, 5000, isWarning);
             }
+        }
+
+        public void Print(string text)
+        {
+            ShowMessage(text, false);
+
+        }
+
+        public void Warning(string text)
+        {
+            ShowMessage(text, true);
         }
 
         public void Record()

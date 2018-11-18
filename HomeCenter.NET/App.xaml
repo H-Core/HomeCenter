@@ -14,6 +14,7 @@
                     <converters:BooleanToBlueGrayConverter x:Key="BooleanToBlueGrayConverter" />
                     <converters:BooleanToOnOffConverter x:Key="BooleanToOnOffConverter" />
                     <converters:BooleanToRecordConverter x:Key="BooleanToRecordConverter" />
+                    <converters:BooleanToRedBlueConverter x:Key="BooleanToRedBlueConverter" />
                     <Style x:Key="HiddenWindowStyle" TargetType="Window">
                         <Setter Property="Visibility" Value="Hidden"/>
                     </Style>

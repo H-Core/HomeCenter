@@ -13,7 +13,7 @@
         WindowStyle="None"
         Opacity="0.8" 
         AllowsTransparency="True" 
-        Background="#CC0139F9"
+        Background="{Binding IsWarning, Converter={StaticResource BooleanToRedBlueConverter}, Mode=TwoWay}"
         SizeToContent="WidthAndHeight"
         ShowActivated="False"
         SizeChanged="OnSizeChanged"

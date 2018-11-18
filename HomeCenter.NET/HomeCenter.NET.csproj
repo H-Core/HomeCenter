@@ -58,6 +58,7 @@
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Commands\ShowHideCommand.cs" />
+    <Compile Include="Converters\BooleanToRedBlueConverter.cs" />
     <Compile Include="Views\Settings\BoolSettingControl.xaml.cs">
       <DependentUpon>BoolSettingControl.xaml</DependentUpon>
     </Compile>

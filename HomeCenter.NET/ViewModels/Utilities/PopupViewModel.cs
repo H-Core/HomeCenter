@@ -27,6 +27,15 @@ namespace HomeCenter.NET.ViewModels.Utilities
             }
         }
 
+        private bool _isWarning;
+        public bool IsWarning {
+            get => _isWarning;
+            set {
+                _isWarning = value;
+                NotifyOfPropertyChange(nameof(IsWarning));
+            }
+        }
+
         public int Delay { get; set; }
         private Timer Timer { get; set; } = new Timer(100);
 
@@ -43,8 +52,9 @@ namespace HomeCenter.NET.ViewModels.Utilities
 
         #region Public methods
 
-        public void Show(string text, int delay)
+        public void Show(string text, int delay, bool isWarning)
         {
+            IsWarning = isWarning;
             IsVisible = true;
             Text = text;
             Delay = delay;

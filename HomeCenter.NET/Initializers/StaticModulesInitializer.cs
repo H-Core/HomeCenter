@@ -67,7 +67,7 @@ namespace HomeCenter.NET.Initializers
 
             var staticRunners = new List<IRunner>
             {
-                new DefaultRunner(model.Print, Say, Search),
+                new DefaultRunner(model.Print, model.Warning, Say, Search),
                 new KeyboardRunner(),
                 new WindowsRunner(),
                 new ClipboardRunner
