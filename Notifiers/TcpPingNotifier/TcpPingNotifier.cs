@@ -26,6 +26,9 @@ namespace H.NET.Notifiers
 
         protected override void OnElapsed()
         {
+            // TODO: Check Internet Is Available
+            // TODO: Separate Runner?
+
             try
             {
                 using (new TcpClient(Ip, Port))
