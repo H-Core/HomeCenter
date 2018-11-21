@@ -8,11 +8,11 @@ namespace H.NET.Notifiers
     {
         #region Properties
 
-        private int _interval;
-        public int Interval {
-            get => _interval;
+        private int _intervalInMilliseconds;
+        public int IntervalInMilliseconds {
+            get => _intervalInMilliseconds;
             set {
-                _interval = value;
+                _intervalInMilliseconds = value;
 
                 if (value <= 0)
                 {
@@ -27,9 +27,11 @@ namespace H.NET.Notifiers
         }
 
         public int Frequency { get; set; }
+        public int RequiredCount { get; set; }
 
         private Timer Timer { get; set; }
         private int CurrentTime { get; set; } = int.MaxValue;
+        private int CurrentCount { get; set; }
 
         #endregion
 
@@ -37,8 +39,9 @@ namespace H.NET.Notifiers
 
         public TimerNotifier()
         {
-            AddSetting("Interval", o => Interval = o, Positive, int.MaxValue);
-            AddSetting("Frequency", o => Frequency = o, NotNegative, 0);
+            AddSetting(nameof(IntervalInMilliseconds), o => IntervalInMilliseconds = o, Positive, int.MaxValue);
+            AddSetting(nameof(Frequency), o => Frequency = o, NotNegative, 0);
+            AddSetting(nameof(RequiredCount), o => RequiredCount = o, Positive, 1);
         }
 
         #endregion
@@ -62,13 +65,19 @@ namespace H.NET.Notifiers
 
         private void OnElapsed(object sender, ElapsedEventArgs e)
         {
-            CurrentTime += Interval;
+            CurrentTime += IntervalInMilliseconds;
             if (Frequency > 0 && CurrentTime > 0 && CurrentTime < Frequency)
             {
                 return;
             }
 
             CurrentTime = 0;
+
+            if (CurrentCount < RequiredCount)
+            {
+                CurrentCount++;
+                return;
+            }
 
             try
             {
@@ -78,7 +87,12 @@ namespace H.NET.Notifiers
             {
                 Log($"Exception: {exception}");
                 Log($"Disabling module: {Name}");
+
                 Disable();
+            }
+            finally
+            {
+                CurrentCount = 0;
             }
         }
 
