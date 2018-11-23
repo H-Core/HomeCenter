@@ -34,11 +34,11 @@ namespace H.NET.Notifiers
 
         #region Protected methods
 
-        protected override void OnElapsed()
+        protected override bool OnResult()
         {
             if (string.IsNullOrWhiteSpace(Url))
             {
-                return;
+                return false;
             }
 
             SyndicationFeed feed;
@@ -52,7 +52,8 @@ namespace H.NET.Notifiers
             catch (WebException exception)
             {
                 Print($"Rss Web Exception: {exception.Message}");
-                return;
+
+                return false;
             }
 
             var firstItem = feed.Items.FirstOrDefault();
@@ -61,7 +62,7 @@ namespace H.NET.Notifiers
             if (title == null ||
                 string.Equals(title, LastTitle, StringComparison.OrdinalIgnoreCase))
             {
-                return;
+                return false;
             }
 
             var isFirstFeed = LastTitle == null;
@@ -69,7 +70,7 @@ namespace H.NET.Notifiers
 
             if (isFirstFeed)
             {
-                return;
+                return false;
             }
 
             Print("New Rss: " + title);
@@ -83,6 +84,7 @@ namespace H.NET.Notifiers
             }
 
             //OnEvent(); TODO: required create Multi runner variables
+            return true;
         }
 
         private static void PlayNotify()

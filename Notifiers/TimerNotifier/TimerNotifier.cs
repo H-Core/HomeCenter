@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Timers;
 using H.NET.Core.Notifiers;
 
@@ -61,9 +62,17 @@ namespace H.NET.Notifiers
 
         #region Protected methods
 
-        protected virtual void OnElapsed() => OnEvent();
+        protected virtual async Task<bool> OnResultAsync()
+        {
+            return await Task.FromResult(true);
+        }
 
-        private void OnElapsed(object sender, ElapsedEventArgs e)
+        protected virtual bool OnResult()
+        {
+            return true;
+        }
+
+        private async void OnElapsed(object sender, ElapsedEventArgs e)
         {
             CurrentTime += IntervalInMilliseconds;
             if (Frequency > 0 && CurrentTime > 0 && CurrentTime < Frequency)
@@ -73,15 +82,23 @@ namespace H.NET.Notifiers
 
             CurrentTime = 0;
 
-            if (CurrentCount < RequiredCount)
-            {
-                CurrentCount++;
-                return;
-            }
-
             try
             {
-                OnElapsed();
+                var value = OnResult() && await OnResultAsync();
+                if (!value)
+                {
+                    CurrentCount = 0;
+                    return;
+                }
+
+                CurrentCount++;
+                if (CurrentCount < RequiredCount)
+                {
+                    return;
+                }
+
+                OnEvent();
+                CurrentCount = 0;
             }
             catch (Exception exception)
             {
@@ -89,9 +106,7 @@ namespace H.NET.Notifiers
                 Log($"Disabling module: {Name}");
 
                 Disable();
-            }
-            finally
-            {
+
                 CurrentCount = 0;
             }
         }

@@ -37,12 +37,12 @@ namespace H.NET.Notifiers
                     select face.GetIPv4Statistics()).Any(statistics => (statistics.BytesReceived > 0) && (statistics.BytesSent > 0));
         }
 
-        protected override void OnElapsed()
+        protected override bool OnResult()
         {
             // TODO: Separate Runner?
             if (OnlyIfNetworkActive && !IsAvailableNetworkActive())
             {
-                return;
+                return false;
             }
 
             try
@@ -50,10 +50,12 @@ namespace H.NET.Notifiers
                 using (new TcpClient(Ip, Port))
                 {
                 }
+
+                return false;
             }
             catch (Exception)
             {
-                OnEvent();
+                return true;
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Threading.Tasks;
 using H.NET.Utilities;
 
 namespace H.NET.Notifiers
@@ -9,15 +10,12 @@ namespace H.NET.Notifiers
 
         protected abstract bool Analyze(Bitmap bitmap);
 
-        protected override async void OnElapsed()
+        protected override async Task<bool> OnResultAsync()
         {
             using (var image = await Screenshoter.ShotVirtualDisplayAsync()) // TODO: shot main display ?
             using (var bitmap = new Bitmap(image))
             {
-                if (Analyze(bitmap))
-                {
-                    OnEvent();
-                }
+                return Analyze(bitmap);
             }
         }
 
