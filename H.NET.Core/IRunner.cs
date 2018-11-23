@@ -16,6 +16,6 @@ namespace H.NET.Core
         string[] GetSupportedCommands();
         string[] GetSupportedVariables();
 
-        object GetVariableValue(string name);
+        object GetModuleVariableValue(string name);
     }
 }

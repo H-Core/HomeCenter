@@ -180,7 +180,7 @@ namespace H.NET.Runners
 
             var query = SearchPattern.Replace("*", text);
             Log($"Search Query: {query}");
-            var urls = await Search(query, MaxSearchResults);
+            var urls = await SearchInInternet(query, MaxSearchResults);
             Log($"Search Urls: {Environment.NewLine}{string.Join(Environment.NewLine, urls)}");
             if (!urls.Any())
             {

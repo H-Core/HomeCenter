@@ -45,7 +45,7 @@ namespace HomeCenter.NET.Services
             StorageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
             Manager = manager ?? throw new ArgumentNullException(nameof(manager));
 
-            Runner.GetVariableValueGlobalFunc = GetVariableValue;
+            Module.GetVariableValueGlobalFunc = GetVariableValue;
 
             Manager.NewText += text =>
             {
@@ -99,7 +99,7 @@ namespace HomeCenter.NET.Services
         }
 
         public object GetVariableValue(string key) =>
-            ModuleService.Runners.FirstOrDefault(i => i.GetSupportedVariables().Contains(key))?.GetVariableValue(key);
+            ModuleService.Runners.FirstOrDefault(i => i.GetSupportedVariables().Contains(key))?.GetModuleVariableValue(key);
 
         private bool IsInternal(string key, string data) => ModuleService.Runners.Any(i => i.IsInternal(key, data));
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using H.NET.Core.Settings;
@@ -24,7 +25,7 @@ namespace H.NET.Core
         public string[] GetSupportedVariables() => Variables.Keys.ToArray();
 
         protected void AddVariable(string key, Func<object> action) => Variables[key] = action;
-        public object GetVariableValue(string key) => Variables.TryGetValue(key, out var func) ? func?.Invoke() : null;
+        public object GetModuleVariableValue(string key) => Variables.TryGetValue(key, out var func) ? func?.Invoke() : null;
 
         #endregion
 
@@ -149,6 +150,27 @@ namespace H.NET.Core
 
         public static Action<string> LogAction { get; set; }
         public static void Log(string text) => LogAction?.Invoke(text);
+
+        public static Func<string, object> GetVariableValueGlobalFunc { get; set; }
+        public static object GetVariable(string key) => GetVariableValueGlobalFunc?.Invoke(key);
+        public static T GetVariable<T>(string key, T defaultValue = default(T))
+        {
+            return GetVariable(key) is T value ? value : defaultValue;
+        }
+
+        public static Func<string, Task<List<string>>> SearchFunc { get; set; }
+        protected static async Task<List<string>> SearchInInternet(string key)
+        {
+            if (SearchFunc == null)
+            {
+                return new List<string>();
+            }
+
+            return await SearchFunc.Invoke(key);
+        }
+
+        public static async Task<List<string>> SearchInInternet(string query, int count) =>
+            (await SearchInInternet(query)).Take(count).ToList();
 
         #endregion
     }

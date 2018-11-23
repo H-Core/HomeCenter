@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using H.NET.Core.Runners;
 using H.NET.Core.Utilities;
+using HomeCenter.NET.Properties;
 
 namespace HomeCenter.NET.Runners
 {
@@ -23,6 +24,7 @@ namespace HomeCenter.NET.Runners
             AddAsyncAction("say", sayFunc, "text");
             AddInternalAction("print", printAction, "text");
             AddInternalAction("warning", warningAction, "text");
+            AddInternalAction("notify", Notify);
             AddInternalAction("run", Run, "other_command_key");
             AddAction("search", async key => printAction(string.Join(Environment.NewLine, await searchFunc(key))), "key");
 
@@ -94,6 +96,14 @@ namespace HomeCenter.NET.Runners
             finally
             {
                 process.Close();
+            }
+        }
+
+        private static void Notify(string command)
+        {
+            using (var player = new System.Media.SoundPlayer(Resources.beep))
+            {
+                player.Play();
             }
         }
 

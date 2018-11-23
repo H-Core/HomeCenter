@@ -38,7 +38,7 @@ void Action(Action<string> Say, Action<string> Print, Action<string> Run, Func<s
 }}
 ");
 
-            action(Say, Print, Run, GetVariableValueGlobal);
+            action(Say, Print, Run, GetVariable);
         }
 
         #endregion

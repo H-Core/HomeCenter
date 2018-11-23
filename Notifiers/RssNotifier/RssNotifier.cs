@@ -4,16 +4,14 @@ using System.Net;
 using System.ServiceModel.Syndication;
 using System.Xml;
 using H.NET.Core.Settings;
-using H.NET.Notifiers.Properties;
 
 namespace H.NET.Notifiers
 {
+    // ReSharper disable once UnusedMember.Global
     public class RssNotifier : TimerNotifier
     {
         #region Properties
 
-        private bool Sound { get; set; }
-        private bool RequiredSay { get; set; }
         private string Url { get; set; }
 
         private string LastTitle { get; set; }
@@ -24,10 +22,9 @@ namespace H.NET.Notifiers
 
         public RssNotifier()
         {
-            AddSetting(nameof(Sound), o => Sound = o, o => true, false);
-            AddSetting(nameof(RequiredSay), o => RequiredSay = o, o => true, false);
             AddSetting(nameof(Url), o => Url = o, o => true, string.Empty, SettingType.Path);
-            //AddVariable("$rss_last_title$", () => LastTitle);
+
+            AddVariable("$rss_last_title$", () => LastTitle);
         }
 
         #endregion
@@ -66,33 +63,10 @@ namespace H.NET.Notifiers
             }
 
             var isFirstFeed = LastTitle == null;
+
             LastTitle = title;
 
-            if (isFirstFeed)
-            {
-                return false;
-            }
-
-            Print("New Rss: " + title);
-            if (RequiredSay)
-            {
-                Say("[EN]New work: " + title);
-            }
-            else if (Sound)
-            {
-                PlayNotify();
-            }
-
-            //OnEvent(); TODO: required create Multi runner variables
-            return true;
-        }
-
-        private static void PlayNotify()
-        {
-            using (var player = new System.Media.SoundPlayer(Resources.beep))
-            {
-                player.Play();
-            }
+            return !isFirstFeed;
         }
 
         #endregion

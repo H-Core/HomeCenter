@@ -14,27 +14,6 @@ namespace H.NET.Core.Runners
 
         #endregion
 
-        #region Static methods
-
-        public static Func<string, object> GetVariableValueGlobalFunc { get; set; }
-        public static object GetVariableValueGlobal(string key) => GetVariableValueGlobalFunc?.Invoke(key);
-
-        public static Func<string, Task<List<string>>> SearchFunc { get; set; }
-        protected static async Task<List<string>> Search(string key)
-        {
-            if (SearchFunc == null)
-            {
-                return new List<string>();
-            }
-
-            return await SearchFunc.Invoke(key);
-        }
-
-        public static async Task<List<string>> Search(string query, int count) =>
-            (await Search(query)).Take(count).ToList();
-
-        #endregion
-
         #region Events
 
         public event EventHandler<RunnerEventArgs> BeforeRun;

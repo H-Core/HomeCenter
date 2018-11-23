@@ -29,8 +29,7 @@ namespace H.NET.Notifiers
 
         protected override bool OnResult()
         {
-            var internetValue = GetVariableValue("$internet$");
-            var isAvailableNetworkActive = internetValue is bool value ? value : true;
+            var isAvailableNetworkActive = GetVariable<bool>("$internet$", true);
             if (OnlyIfNetworkActive && !isAvailableNetworkActive)
             {
                 return false;
