@@ -51,7 +51,7 @@ namespace HomeCenter.NET
             Container
                 .PerRequest<CommandSettingsViewModel>()
                 .PerRequest<ModuleSettingsViewModel>()
-                .Singleton<CommandsViewModel>()
+                .PerRequest<CommandsViewModel>()
                 .Singleton<SettingsViewModel>()
                 .Singleton<PopupViewModel>()
                 .Singleton<MainViewModel>();

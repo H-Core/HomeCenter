@@ -80,7 +80,12 @@ namespace HomeCenter.NET.Services
             .SelectMany(i => i.commands, (i, command) => (i.runner, command))
             .ToArray();
 
-        public string[] GetSupportedVariables() => ModuleService.Runners.SelectMany(i => i.GetSupportedVariables()).ToArray();
+        public string[] GetSupportedVariables()
+        {
+            return ModuleService.Modules
+                .SelectMany(i => i.GetSupportedVariables())
+                .ToArray();
+        }
 
         public IRunner GetRunnerFor(string key, string data)
         {
@@ -99,7 +104,7 @@ namespace HomeCenter.NET.Services
         }
 
         public object GetVariableValue(string key) =>
-            ModuleService.Runners.FirstOrDefault(i => i.GetSupportedVariables().Contains(key))?.GetModuleVariableValue(key);
+            ModuleService.Modules.FirstOrDefault(i => i.GetSupportedVariables().Contains(key))?.GetModuleVariableValue(key);
 
         private bool IsInternal(string key, string data) => ModuleService.Runners.Any(i => i.IsInternal(key, data));
 

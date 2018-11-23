@@ -31,8 +31,9 @@ namespace H.NET.Notifiers
         public int RequiredCount { get; set; }
 
         private Timer Timer { get; set; }
-        private int CurrentTime { get; set; } = int.MaxValue;
+
         private int CurrentCount { get; set; }
+        private DateTime LastEventTime { get; set; }
 
         #endregion
 
@@ -74,14 +75,6 @@ namespace H.NET.Notifiers
 
         private async void OnElapsed(object sender, ElapsedEventArgs e)
         {
-            CurrentTime += IntervalInMilliseconds;
-            if (Frequency > 0 && CurrentTime > 0 && CurrentTime < Frequency)
-            {
-                return;
-            }
-
-            CurrentTime = 0;
-
             try
             {
                 var value = OnResult() && await OnResultAsync();
@@ -92,12 +85,14 @@ namespace H.NET.Notifiers
                 }
 
                 CurrentCount++;
-                if (CurrentCount < RequiredCount)
+                if (CurrentCount < RequiredCount || 
+                    LastEventTime.AddMilliseconds(Frequency) < DateTime.Now)
                 {
                     return;
                 }
 
                 OnEvent();
+                LastEventTime = DateTime.Now;
                 CurrentCount = 0;
             }
             catch (Exception exception)

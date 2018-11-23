@@ -19,6 +19,9 @@ namespace H.NET.Core
         event ModuleDelegate SettingsSaved;
 
         void SaveSettings();
+
+        string[] GetSupportedVariables();
+        object GetModuleVariableValue(string name);
     }
 
     public delegate void TextDelegate(string text);

@@ -28,6 +28,8 @@ namespace HomeCenter.NET.Services
         public ISynthesizer Synthesizer => GetPlugin<ISynthesizer>(Settings.Synthesizer)?.Value;
         public List<IRunner> Runners => GetEnabledPlugins<IRunner>().Select(i => i.Value.Value).ToList();
 
+        public List<IModule> Modules => GetEnabledPlugins<IModule>().Select(i => i.Value.Value).ToList();
+
         #endregion
 
         public ModuleService(Settings settings, BaseManager manager) : base(
