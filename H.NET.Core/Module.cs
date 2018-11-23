@@ -23,7 +23,7 @@ namespace H.NET.Core
         protected InvariantStringDictionary<Func<object>> Variables { get; } = new InvariantStringDictionary<Func<object>>();
         public string[] GetSupportedVariables() => Variables.Keys.ToArray();
 
-        protected void AddVariable(string key, Func<string> action) => Variables[key] = action;
+        protected void AddVariable(string key, Func<object> action) => Variables[key] = action;
         public object GetVariableValue(string key) => Variables.TryGetValue(key, out var func) ? func?.Invoke() : null;
 
         #endregion

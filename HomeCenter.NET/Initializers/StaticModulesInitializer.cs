@@ -85,7 +85,8 @@ namespace HomeCenter.NET.Initializers
                     ShowCommandsAction = () => Application.Current.Dispatcher.Invoke(model.ShowCommands),
                     ShowModuleSettingsAction = name => Application.Current.Dispatcher.Invoke(() => ShowModuleSettings(name)),
                     StartRecordAction = () => Application.Current.Dispatcher.Invoke(baseManager.Start)
-                }
+                },
+                new InternetRunner()
             };
             foreach (var runner in staticRunners)
             {

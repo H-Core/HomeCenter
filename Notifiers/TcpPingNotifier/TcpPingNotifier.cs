@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
 namespace H.NET.Notifiers
@@ -28,19 +26,12 @@ namespace H.NET.Notifiers
 
         #region Protected methods
 
-        public static bool IsAvailableNetworkActive()
-        {
-            return NetworkInterface.GetIsNetworkAvailable() &&
-                   (from face in NetworkInterface.GetAllNetworkInterfaces()
-                    where face.OperationalStatus == OperationalStatus.Up
-                    where (face.NetworkInterfaceType != NetworkInterfaceType.Tunnel) && (face.NetworkInterfaceType != NetworkInterfaceType.Loopback)
-                    select face.GetIPv4Statistics()).Any(statistics => (statistics.BytesReceived > 0) && (statistics.BytesSent > 0));
-        }
 
         protected override bool OnResult()
         {
-            // TODO: Separate Runner?
-            if (OnlyIfNetworkActive && !IsAvailableNetworkActive())
+            var internetValue = GetVariableValue("$internet$");
+            var isAvailableNetworkActive = internetValue is bool value ? value : true;
+            if (OnlyIfNetworkActive && !isAvailableNetworkActive)
             {
                 return false;
             }
