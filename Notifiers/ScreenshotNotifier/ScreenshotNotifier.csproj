@@ -45,7 +45,7 @@
       <Project>{8b7b7a71-cde2-4066-8960-c960e374a400}</Project>
       <Name>H.NET.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Screenshoter\Screenshoter.csproj">
+    <ProjectReference Include="..\..\Utilities\Screenshoter\Screenshoter.csproj">
       <Project>{c51459ae-0b28-4c6a-847b-11fae81e0fe5}</Project>
       <Name>Screenshoter</Name>
     </ProjectReference>

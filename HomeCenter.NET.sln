@@ -97,7 +97,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DeskBand", "DeskBand", "{59
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoUpdater", "Utilities\AutoUpdater\AutoUpdater.csproj", "{B28C8B3C-EBA1-41A7-B6C7-0424412416B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Screenshoter", "Screenshoter\Screenshoter.csproj", "{C51459AE-0B28-4C6A-847B-11FAE81E0FE5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Screenshoter", "Utilities\Screenshoter\Screenshoter.csproj", "{C51459AE-0B28-4C6A-847B-11FAE81E0FE5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TcpPingNotifier", "Notifiers\TcpPingNotifier\TcpPingNotifier.csproj", "{4BB4FB25-6009-4A43-8B97-9850B70D1AE7}"
 EndProject

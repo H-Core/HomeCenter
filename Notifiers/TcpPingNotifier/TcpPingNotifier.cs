@@ -26,7 +26,6 @@ namespace H.NET.Notifiers
 
         #region Protected methods
 
-
         protected override bool OnResult()
         {
             var isAvailableNetworkActive = GetVariable<bool>("$internet$", true);

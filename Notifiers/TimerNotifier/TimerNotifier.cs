@@ -54,7 +54,7 @@ namespace H.NET.Notifiers
         {
             base.Dispose();
 
-            Timer.Stop();
+            Timer?.Stop();
             Timer?.Dispose();
             Timer = null;
         }
@@ -85,8 +85,8 @@ namespace H.NET.Notifiers
                 }
 
                 CurrentCount++;
-                if (CurrentCount < RequiredCount || 
-                    LastEventTime.AddMilliseconds(Frequency) < DateTime.Now)
+                if (CurrentCount < RequiredCount ||
+                    DateTime.Now < LastEventTime.AddMilliseconds(Frequency))
                 {
                     return;
                 }
