@@ -61,7 +61,7 @@ namespace H.NET.Utilities
             var hOldBmp = SelectObject(toDc, hBmp);
 
             // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
-            BitBlt(toDc, 0, 0, size.Width, size.Height, dc, 0, 0, CopyPixelOperation.CaptureBlt | CopyPixelOperation.SourceCopy);
+            BitBlt(toDc, 0, 0, size.Width, size.Height, dc, 0, 0, CopyPixelOperation.CaptureBlt | CopyPixelOperation.SourceCopy); //-V3059
 
             var bitmap = Image.FromHbitmap(hBmp);
             SelectObject(toDc, hOldBmp);

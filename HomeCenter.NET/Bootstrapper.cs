@@ -34,7 +34,7 @@ namespace HomeCenter.NET
         {
             Container = new SimpleContainer();
 
-            Container.Instance(Container);
+            //Container.Instance(Container);
 
             Container
                 .Singleton<IWindowManager, HWindowManager>()

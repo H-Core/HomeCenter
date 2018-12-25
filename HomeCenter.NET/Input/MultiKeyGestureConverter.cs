@@ -166,7 +166,7 @@ namespace HomeCenter.NET.Input
                         for (var j = 1; j < sequence.Keys.Length; j++)
                         {
                             builder.Append("+");
-                            builder.Append((string)keyConverter.ConvertTo(context, culture, sequence.Keys[0], destinationType));
+                            builder.Append((string)keyConverter.ConvertTo(context, culture, sequence.Keys[j], destinationType));
                         }
                     }
 

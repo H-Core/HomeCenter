@@ -138,11 +138,6 @@ namespace H.NET.Utilities
             if (clickCount > 0)
             {
                 MouseClick?.Invoke(null, e);
-            }
-
-            //If someone listens to click and a click is heppened
-            if (clickCount > 0)
-            {
                 MouseClickExt?.Invoke(null, e);
             }
 

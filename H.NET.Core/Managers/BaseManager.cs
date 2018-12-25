@@ -20,7 +20,7 @@ namespace H.NET.Core.Managers
 
                 base.Recorder = value;
 
-                if (value != null)
+                if (base.Recorder != null)
                 {
                     base.Recorder.Stopped += OnStoppedRecorder;
                 }

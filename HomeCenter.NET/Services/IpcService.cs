@@ -22,7 +22,7 @@ namespace HomeCenter.NET.Services
             RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
 
-            IpcServer = new IpcServer(settings.InputIpcPort);
+            IpcServer = new IpcServer(Settings.InputIpcPort);
             IpcServer.NewMessage += RunnerService.Run;
         }
 

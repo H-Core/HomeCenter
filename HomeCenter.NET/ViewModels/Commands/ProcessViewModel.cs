@@ -21,7 +21,7 @@ namespace HomeCenter.NET.ViewModels.Commands
         {
             Process = process ?? throw new ArgumentNullException(nameof(process));
 
-            Color = process.IsCanceled ? Colors.Gold : process.IsCompleted ? Colors.LightGreen : Colors.Lavender;
+            Color = Process.IsCanceled ? Colors.Gold : Process.IsCompleted ? Colors.LightGreen : Colors.Lavender;
 
         }
 

@@ -63,19 +63,19 @@ namespace HomeCenter.NET.ViewModels.Settings
         {
             Instance = instance ?? throw new ArgumentNullException(nameof(Module));
             
-            var module = instance.Value;
-            var deletingAllowed = instance.Exception != null || (instance.Type?.AllowMultipleInstance() ?? false);
+            var module = Instance.Value;
+            var deletingAllowed = Instance.Exception != null || (Instance.Type?.AllowMultipleInstance() ?? false);
 
             Name = name;
-            Description = module?.Name ?? instance.Exception?.Message ?? string.Empty;
+            Description = module?.Name ?? Instance.Exception?.Message ?? string.Empty;
 
             IsValid = module != null;
-            IsEnabled = instance.IsEnabled;
+            IsEnabled = Instance.IsEnabled;
 
             EditIsVisible = module != null && module.Settings?.Count > 0;
-            EnableIsVisible = !instance.IsStatic && instance.Exception == null;
-            RenameIsVisible = !instance.IsStatic && (instance.Type?.AllowMultipleInstance() ?? false);
-            DeleteIsVisible = !instance.IsStatic && deletingAllowed;
+            EnableIsVisible = !Instance.IsStatic && Instance.Exception == null;
+            RenameIsVisible = !Instance.IsStatic && (Instance.Type?.AllowMultipleInstance() ?? false);
+            DeleteIsVisible = !Instance.IsStatic && deletingAllowed;
         }
 
         #endregion

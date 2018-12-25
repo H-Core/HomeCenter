@@ -22,7 +22,7 @@ namespace HomeCenter.NET.ViewModels.Modules
             Module = module ?? throw new ArgumentNullException(nameof(module));
 
             Settings = new BindableCollection<SettingViewModel>(
-                module.Settings.Select(i => CreateSettingViewModel(i.Value)));
+                Module.Settings.Select(i => CreateSettingViewModel(i.Value)));
 
             SaveAction = () => Module.SaveSettings();
         }

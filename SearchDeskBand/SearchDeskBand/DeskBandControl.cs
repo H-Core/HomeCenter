@@ -11,8 +11,8 @@ namespace H.NET.SearchDeskBand
     {
         #region Properties
 
-        private DeskBandWindow Window { get; } = new DeskBandWindow();
-        private IpcServer IpcServer { get; } = new IpcServer(Options.IpcPortToDeskBand);
+        private DeskBandWindow Window { get; set; } = new DeskBandWindow();
+        private IpcServer IpcServer { get; set; } = new IpcServer(Options.IpcPortToDeskBand);
         private Dictionary<string, Action<string>> ActionDictionary { get; } = new Dictionary<string, Action<string>>();
 
         #endregion
@@ -67,7 +67,12 @@ namespace H.NET.SearchDeskBand
 
         public new void Dispose()
         {
-            Window.Dispose();
+            IpcServer?.Dispose();
+            IpcServer = null;
+
+            Window?.Dispose();
+            Window = null;
+
             base.Dispose();
         }
 

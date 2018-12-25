@@ -50,7 +50,7 @@ namespace HomeCenter.NET.ViewModels.Commands
 
             Keys = new BindableCollection<SingleKeyViewModel>(Command.Keys.Select(i => new SingleKeyViewModel(i)));
             Commands = new BindableCollection<SingleCommandViewModel>(Command.Lines.Select(i => new SingleCommandViewModel(i)));
-            HotKey = command.HotKey;
+            HotKey = Command.HotKey;
         }
 
         #endregion

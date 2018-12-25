@@ -91,7 +91,7 @@ namespace HomeCenter.NET.ViewModels.Settings
             ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
 
             IgnoredApplications = new BindableCollection<ItemViewModel>(
-                hookService.HookIgnoredApps.Select(i => new IgnoredApplicationViewModel(i)));
+                HookService.HookIgnoredApps.Select(i => new IgnoredApplicationViewModel(i)));
 
             // TODO: To Container?
             UpdateAssemblies(false);

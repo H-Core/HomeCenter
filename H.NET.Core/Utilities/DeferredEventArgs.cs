@@ -22,7 +22,7 @@ using System;
 
 namespace H.NET.Core.Utilities
 {
-    public class DeferredEventArgs : EventArgs
+    public class DeferredEventArgs : EventArgs, IDisposable
     {
         public new static readonly DeferredEventArgs Empty = new DeferredEventArgs();
 
@@ -36,6 +36,12 @@ namespace H.NET.Core.Utilities
             {
                 return _eventDeferral ?? (_eventDeferral = new EventDeferral());
             }
+        }
+
+        public void Dispose()
+        {
+            _eventDeferral?.Dispose();
+            _eventDeferral = null;
         }
 
         internal EventDeferral GetCurrentDeferralAndReset()
