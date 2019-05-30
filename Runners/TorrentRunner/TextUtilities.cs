@@ -41,8 +41,7 @@ namespace H.NET.Runners
             for (var i = 0; i < count; ++i)
             {
                 var subString = bigString.Substring(i, smallString.Length);
-                Console.WriteLine(subString);
-                Console.WriteLine(smallString);
+
                 list.Add(LevenshteinDistance(subString, smallString));
             }
 

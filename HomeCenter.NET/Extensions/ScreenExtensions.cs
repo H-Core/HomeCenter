@@ -13,12 +13,24 @@ namespace HomeCenter.NET.Extensions
 
         public static void ShowWindow<T>(this Screen screen, IDictionary<string, object> settings = null)
         {
-            WindowManager.ShowWindow(GetInstance(typeof(T)), null, settings);
+            var instance = GetInstance(typeof(T));
+            if (instance == null)
+            {
+                throw new ArgumentException($"Cannot find type: {typeof(T)}");
+            }
+
+            WindowManager.ShowWindow(instance, null, settings);
         }
 
         public static bool? ShowDialog<T>(this Screen screen, IDictionary<string, object> settings = null)
         {
-            return WindowManager.ShowDialog(GetInstance(typeof(T)), null, settings);
+            var instance = GetInstance(typeof(T));
+            if (instance == null)
+            {
+                throw new ArgumentException($"Cannot find type: {typeof(T)}");
+            }
+
+            return WindowManager.ShowDialog(instance, null, settings);
         }
 
         public static void ShowWindow(this Screen screen, Screen rootModel, object context = null, IDictionary<string, object> settings = null)
