@@ -10,6 +10,8 @@ namespace HomeCenter.NET.Views.Utilities
 
             Width = SystemParameters.VirtualScreenWidth;
             Height = SystemParameters.VirtualScreenHeight;
+            Left = SystemParameters.VirtualScreenLeft;
+            Top = SystemParameters.VirtualScreenTop;
         }
     }
 }

@@ -56,10 +56,10 @@ namespace HomeCenter.NET.Utilities.HookModules
             var rectangle = CalculateRectangle(e);
 
             View.Border.Margin = new Thickness(
-                rectangle.Left, 
-                rectangle.Top, 
-                View.Width - rectangle.Left - rectangle.Width, 
-                View.Height - rectangle.Top - rectangle.Height);
+                rectangle.Left - View.Left, 
+                rectangle.Top - View.Top, 
+                View.Width + View.Left - rectangle.Left - rectangle.Width, 
+                View.Height + View.Top - rectangle.Top - rectangle.Height);
             
         }
 
@@ -77,7 +77,11 @@ namespace HomeCenter.NET.Utilities.HookModules
 
             StartPoint = new Point(e.X, e.Y);
 
-            View.Border.Margin = new Thickness(e.X, e.Y, View.Width - e.X, View.Height - e.Y);
+            View.Border.Margin = new Thickness(
+                e.X - View.Left,
+                e.Y - View.Top, 
+                View.Width + View.Left - e.X, 
+                View.Height + View.Top - e.Y);
             View.Border.Visibility = Visibility.Visible;
             
             View.Show();

@@ -31,6 +31,8 @@ namespace H.NET.Utilities
 
         public enum SystemMetric
         {
+            VirtualScreenX = 76, // SM_XVIRTUALSCREEN
+            VirtualScreenY = 77, // SM_YVIRTUALSCREEN
             VirtualScreenWidth = 78, // CXVIRTUALSCREEN 0x0000004E 
             VirtualScreenHeight = 79, // CYVIRTUALSCREEN 0x0000004F 
         }
@@ -46,6 +48,14 @@ namespace H.NET.Utilities
             return new Size(width, height);
         }
 
+        public static Point GetVirtualDisplayStartPoint()
+        {
+            var x = GetSystemMetrics(SystemMetric.VirtualScreenX);
+            var y = GetSystemMetrics(SystemMetric.VirtualScreenY);
+
+            return new Point(x, y);
+        }
+
         /// <summary>
         /// Required to Dispose after usage
         /// </summary>
@@ -53,6 +63,7 @@ namespace H.NET.Utilities
         public static Image ShotVirtualDisplay()
         {
             var size = GetVirtualDisplaySize();
+            var startPoint = GetVirtualDisplayStartPoint();
 
             var window = GetDesktopWindow();
             var dc = GetWindowDC(window);
@@ -61,18 +72,18 @@ namespace H.NET.Utilities
             var hOldBmp = SelectObject(toDc, hBmp);
 
             // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
-            BitBlt(toDc, 0, 0, size.Width, size.Height, dc, 0, 0, CopyPixelOperation.CaptureBlt | CopyPixelOperation.SourceCopy); //-V3059
+            BitBlt(toDc, 0, 0, size.Width, size.Height, dc, startPoint.X, startPoint.Y, CopyPixelOperation.CaptureBlt | CopyPixelOperation.SourceCopy); //-V3059
 
-            var bitmap = Image.FromHbitmap(hBmp);
+            var image = Image.FromHbitmap(hBmp);
             SelectObject(toDc, hOldBmp);
             DeleteObject(hBmp);
             DeleteDC(toDc);
             ReleaseDC(window, dc);
 
-            return bitmap;
+            return image;
         }
 
-        public static async Task<Image> ShotVirtualDisplayAsync() => await Task.Run(() => ShotVirtualDisplay());
+        public static async Task<Image> ShotVirtualDisplayAsync() => await Task.Run(ShotVirtualDisplay);
 
         public static async Task<Image> ShotVirtualDisplayRectangleAsync(Rectangle rectangle)
         {
