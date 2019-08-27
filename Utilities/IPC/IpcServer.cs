@@ -20,7 +20,7 @@ namespace H.NET.Utilities
         public IpcServer(int port)
         {
             Port = port;
-            Listener = new TcpListener(new IPEndPoint(IPAddress.Any, Port));
+            Listener = new TcpListener(new IPEndPoint(IPAddress.Parse("127.0.0.1"), Port));
             Listener.Start();
             Listener.BeginAcceptTcpClient(OnClientAccepted, Listener);
         }
