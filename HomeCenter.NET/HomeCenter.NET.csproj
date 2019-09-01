@@ -60,6 +60,7 @@
     <Compile Include="Commands\ShowHideCommand.cs" />
     <Compile Include="Converters\BooleanToRedBlueConverter.cs" />
     <Compile Include="Runners\InternetRunner.cs" />
+    <Compile Include="Utilities\HookModules\ScreenshotToClipboardModule.cs" />
     <Compile Include="Views\Settings\BoolSettingControl.xaml.cs">
       <DependentUpon>BoolSettingControl.xaml</DependentUpon>
     </Compile>

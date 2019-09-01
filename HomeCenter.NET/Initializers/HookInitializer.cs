@@ -10,7 +10,7 @@ namespace HomeCenter.NET.Initializers
 {
     public class HookInitializer
     {
-        public HookInitializer(BaseManager manager, HookService hookService, MainViewModel model, ScreenshotModule screenshotModule, Settings settings)
+        public HookInitializer(BaseManager manager, HookService hookService, MainViewModel model, ScreenshotToClipboardModule screenshotModule, Settings settings)
         {
             void GlobalKeyUp(object sender, KeyboardHookEventArgs e)
             {

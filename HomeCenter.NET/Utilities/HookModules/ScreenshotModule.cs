@@ -1,16 +1,29 @@
-﻿using System.Collections.Generic;
-using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Input;
 using H.NET.Utilities;
-using HomeCenter.NET.Extensions;
 
 namespace HomeCenter.NET.Utilities.HookModules
 {
     public class ScreenshotModule : RectangleModule
     {
-        public ScreenshotModule() : base(new List<Key> { Key.LeftAlt, Key.RightAlt }, null)
+        #region Events
+
+        public event EventHandler<Image> NewImage;
+
+        private void OnNewImage(Image value)
         {
-            NewRectangle += async rectangle =>
+            NewImage?.Invoke(this, value);
+        }
+
+        #endregion
+
+        #region Constructors
+
+        public ScreenshotModule(List<Key> keys, List<ModifierKeys> modifiers) : base(keys, modifiers)
+        {
+            NewRectangle += async (obj, rectangle) =>
             {
                 var startPoint = Screenshoter.GetVirtualDisplayStartPoint();
                 rectangle.X -= startPoint.X;
@@ -18,9 +31,11 @@ namespace HomeCenter.NET.Utilities.HookModules
 
                 using (var image = await Screenshoter.ShotVirtualDisplayRectangleAsync(rectangle))
                 {
-                    Clipboard.SetImage(image.ToBitmapImage());
+                    OnNewImage(image);
                 }
             };
         }
+
+        #endregion
     }
 }

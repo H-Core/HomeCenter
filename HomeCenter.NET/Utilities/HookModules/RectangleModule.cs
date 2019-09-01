@@ -11,16 +11,34 @@ namespace HomeCenter.NET.Utilities.HookModules
 {
     public class RectangleModule : HookModule
     {
-        public delegate void RectangleDelegate(Rectangle rectangle);
-        public event RectangleDelegate NewRectangle;
+        #region Properties
 
         private RectangleView View { get; set; }
         private Point StartPoint { get; set; }
         private bool IsMouseDown { get; set; }
 
+        #endregion
+
+        #region Events
+
+        public event EventHandler<Rectangle> NewRectangle;
+
+        private void OnNewRectangle(Rectangle rectangle)
+        {
+            NewRectangle?.Invoke(this, rectangle);
+        }
+
+        #endregion
+
+        #region Constructors
+
         public RectangleModule(List<Key> keys, List<ModifierKeys> modifiers) : base(keys, modifiers)
         {
         }
+
+        #endregion
+
+        #region Event Handlers
 
         public void Global_MouseUp(object sender, MouseEventExtArgs e)
         {
@@ -41,7 +59,7 @@ namespace HomeCenter.NET.Utilities.HookModules
                 return;
             }
 
-            NewRectangle?.Invoke(rectangle);
+            OnNewRectangle(rectangle);
         }
 
         public void Global_MouseMove(object sender, MouseEventExtArgs e)
@@ -56,11 +74,11 @@ namespace HomeCenter.NET.Utilities.HookModules
             var rectangle = CalculateRectangle(e);
 
             View.Border.Margin = new Thickness(
-                rectangle.Left - View.Left, 
-                rectangle.Top - View.Top, 
-                View.Width + View.Left - rectangle.Left - rectangle.Width, 
+                rectangle.Left - View.Left,
+                rectangle.Top - View.Top,
+                View.Width + View.Left - rectangle.Left - rectangle.Width,
                 View.Height + View.Top - rectangle.Top - rectangle.Height);
-            
+
         }
 
         public void Global_MouseDown(object sender, MouseEventExtArgs e)
@@ -79,14 +97,18 @@ namespace HomeCenter.NET.Utilities.HookModules
 
             View.Border.Margin = new Thickness(
                 e.X - View.Left,
-                e.Y - View.Top, 
-                View.Width + View.Left - e.X, 
+                e.Y - View.Top,
+                View.Width + View.Left - e.X,
                 View.Height + View.Top - e.Y);
             View.Border.Visibility = Visibility.Visible;
-            
+
             View.Show();
 
         }
+
+        #endregion
+
+        #region Private Methods
 
         private Rectangle CalculateRectangle(MouseEventExtArgs e)
         {
@@ -101,5 +123,7 @@ namespace HomeCenter.NET.Utilities.HookModules
 
             return new Rectangle(left, top, width, height);
         }
+
+        #endregion
     }
 }
