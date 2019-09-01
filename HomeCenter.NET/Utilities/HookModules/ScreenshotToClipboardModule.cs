@@ -11,7 +11,6 @@ namespace HomeCenter.NET.Utilities.HookModules
         {
             NewImage += (obj, image) =>
             {
-                // using??
                 Clipboard.SetImage(image.ToBitmapImage());
             };
         }

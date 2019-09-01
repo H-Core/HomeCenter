@@ -64,6 +64,7 @@ namespace HomeCenter.NET.Utilities.HookModules
 
         public void Global_MouseMove(object sender, MouseEventExtArgs e)
         {
+            //if (System.Diagnostics.Debugger.IsAttached)
             if (!IsMouseDown || !IsHookCombination())
             {
                 View?.Close();

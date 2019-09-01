@@ -10,7 +10,7 @@ namespace HomeCenter.NET.Initializers
 {
     public class HookInitializer
     {
-        public HookInitializer(BaseManager manager, HookService hookService, MainViewModel model, ScreenshotToClipboardModule screenshotModule, Settings settings)
+        public HookInitializer(BaseManager manager, HookService hookService, MainViewModel model, ScreenshotToClipboardModule screenshotToClipboardModule, ScreenshotToTextModule screenshotToTextModule, Settings settings)
         {
             void GlobalKeyUp(object sender, KeyboardHookEventArgs e)
             {
@@ -23,7 +23,7 @@ namespace HomeCenter.NET.Initializers
 
             void GlobalKeyDown(object sender, KeyboardHookEventArgs e)
             {
-                if (e.Key != Keys.None && e.Key == hookService.RecordKey ||
+                 if (e.Key != Keys.None && e.Key == hookService.RecordKey ||
                     e.Key == Keys.Space && e.IsAltPressed && e.IsCtrlPressed)
                 {
                     manager.Start();
@@ -69,10 +69,14 @@ namespace HomeCenter.NET.Initializers
                 hookService.KeyboardHook.KeyUp += GlobalKeyUp;
                 hookService.KeyboardHook.KeyDown += GlobalKeyDown;
 
-                hookService.MouseHook.MouseUp += screenshotModule.Global_MouseUp;
-                hookService.MouseHook.MouseDown += screenshotModule.Global_MouseDown;
                 // TODO: mouse move speed change bug
-                hookService.MouseHook.MouseMove += screenshotModule.Global_MouseMove;
+                hookService.MouseHook.MouseUp += screenshotToClipboardModule.Global_MouseUp;
+                hookService.MouseHook.MouseDown += screenshotToClipboardModule.Global_MouseDown;
+                hookService.MouseHook.MouseMove += screenshotToClipboardModule.Global_MouseMove;
+
+                hookService.MouseHook.MouseUp += screenshotToTextModule.Global_MouseUp;
+                hookService.MouseHook.MouseDown += screenshotToTextModule.Global_MouseDown;
+                hookService.MouseHook.MouseMove += screenshotToTextModule.Global_MouseMove;
 
                 hookService.MouseHook.MouseDown += GlobalMouseDown;
             }

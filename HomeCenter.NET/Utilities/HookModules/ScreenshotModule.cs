@@ -8,6 +8,12 @@ namespace HomeCenter.NET.Utilities.HookModules
 {
     public class ScreenshotModule : RectangleModule
     {
+        #region Properties
+
+        public bool AutoDisposeImage { get; set; } = true;
+
+        #endregion
+
         #region Events
 
         public event EventHandler<Image> NewImage;
@@ -29,9 +35,19 @@ namespace HomeCenter.NET.Utilities.HookModules
                 rectangle.X -= startPoint.X;
                 rectangle.Y -= startPoint.Y;
 
-                using (var image = await Screenshoter.ShotVirtualDisplayRectangleAsync(rectangle))
+                Image image = null;
+                try
                 {
+                    image = await Screenshoter.ShotVirtualDisplayRectangleAsync(rectangle);
+
                     OnNewImage(image);
+                }
+                finally
+                {
+                    if (AutoDisposeImage)
+                    {
+                        image?.Dispose();
+                    }
                 }
             };
         }

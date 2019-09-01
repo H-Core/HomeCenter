@@ -46,6 +46,7 @@ namespace HomeCenter.NET
                 .Singleton<StorageService>()
                 .Singleton<BaseManager>()
                 .Singleton<ScreenshotToClipboardModule>()
+                .Singleton<ScreenshotToTextModule>()
                 .Instance(Settings.Default);
 
             Container
