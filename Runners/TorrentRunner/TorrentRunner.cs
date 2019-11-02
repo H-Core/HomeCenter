@@ -97,10 +97,10 @@ namespace H.NET.Runners
 
         private bool IsGoodFile(TorrentFile file)
         {
-            var sizeGb = file.Length / 1000.0 / 1000.0 / 1000.0;
+            var sizeInGigabytes = file.Length / 1_000_000_000.0;
             var extension = Path.GetExtension(file.Path);
-            if (sizeGb > MinSizeGb &&
-                sizeGb < MaxSizeGb &&
+            if (sizeInGigabytes > MinSizeGb &&
+                sizeInGigabytes < MaxSizeGb &&
                 (string.IsNullOrWhiteSpace(Extension) ||
                  string.Equals(extension, Extension, StringComparison.OrdinalIgnoreCase)))
             {
@@ -114,9 +114,9 @@ namespace H.NET.Runners
             return false;
         }
 
-        private static async Task<string[]> DownloadFiles(ICollection<string> urls)
+        private static async Task<string[]> DownloadFiles(IEnumerable<string> urls)
         {
-            return await Task.WhenAll(urls.Zip(Enumerable.Range(0, urls.Count), async (url, i) =>
+            return await Task.WhenAll(urls.Select(async (url, i) =>
             {
                 var temp = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), "TorrentRunnerFiles")).FullName;
                 var path = Path.Combine(temp, $"file_{i}");
