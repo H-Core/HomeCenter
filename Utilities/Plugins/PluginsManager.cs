@@ -5,6 +5,7 @@ using System.Linq;
 using H.NET.Plugins.Extensions;
 using H.NET.Plugins.Utilities;
 using Newtonsoft.Json;
+using Plugins.Extensions;
 
 namespace H.NET.Plugins
 {
@@ -185,7 +186,7 @@ namespace H.NET.Plugins
             var types = assembly.GetTypesOfInterface(interfaceType);
             foreach (var type in types)
             {
-                if (TypeIsAvailable(type) &&
+                if (type.HasParameterlessConstructor() &&
                     filter?.Invoke(type) != false)
                 {
                     AddInstance(type.Name, type, true);
@@ -295,10 +296,8 @@ namespace H.NET.Plugins
 
         private List<Type> GetAvailableTypes() => ActiveAssemblies
             .SelectMany(i => i.Value.GetTypesOfInterface<T>())
-            .Where(TypeIsAvailable)
+            .Where(TypeExtensions.HasParameterlessConstructor)
             .ToList();
-
-        private bool TypeIsAvailable(Type type) => type.GetConstructors().Any(c => c.IsPublic && c.GetParameters().Length == 0);
 
         public void EnableInstances()
         {
