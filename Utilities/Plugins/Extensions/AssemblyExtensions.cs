@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace H.NET.Plugins.Extensions
+namespace H.NET.Utilities.Plugins.Extensions
 {
     public static class AssemblyExtensions
     {

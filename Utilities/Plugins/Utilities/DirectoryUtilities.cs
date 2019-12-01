@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace H.NET.Plugins.Utilities
+namespace H.NET.Utilities.Plugins.Utilities
 {
     public static class DirectoryUtilities
     {

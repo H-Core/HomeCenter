@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace H.NET.Plugins
+namespace H.NET.Utilities.Plugins
 {
     public class Instances<T> : IDisposable where T : class
     {

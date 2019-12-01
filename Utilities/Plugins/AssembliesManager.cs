@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using H.NET.Plugins.Extensions;
-using H.NET.Plugins.Utilities;
+using H.NET.Utilities.Plugins.Extensions;
+using H.NET.Utilities.Plugins.Utilities;
 
-namespace H.NET.Plugins
+namespace H.NET.Utilities.Plugins
 {
     public class AssembliesManager
     {

@@ -2,7 +2,7 @@
 using Caliburn.Micro;
 using H.NET.Core;
 using H.NET.Core.Extensions;
-using H.NET.Plugins;
+using H.NET.Utilities.Plugins;
 using HomeCenter.NET.Extensions;
 
 namespace HomeCenter.NET.ViewModels.Settings

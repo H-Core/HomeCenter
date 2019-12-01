@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace H.NET.Plugins
+namespace H.NET.Utilities.Plugins
 {
     public class AssemblySettings
     {

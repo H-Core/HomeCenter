@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using H.NET.Plugins.Extensions;
-using H.NET.Plugins.Utilities;
+using H.NET.Utilities.Plugins.Extensions;
+using H.NET.Utilities.Plugins.Utilities;
 using Newtonsoft.Json;
-using Plugins.Extensions;
 
-namespace H.NET.Plugins
+namespace H.NET.Utilities.Plugins
 {
     public class PluginsManager<T> : AssembliesManager, IDisposable where T : class
     {

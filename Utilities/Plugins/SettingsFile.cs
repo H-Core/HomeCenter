@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace H.NET.Plugins
+namespace H.NET.Utilities.Plugins
 {
     public class SettingsFile<T> where T : new()
     {

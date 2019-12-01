@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Plugins.Extensions
+namespace H.NET.Utilities.Plugins.Extensions
 {
     public static class TypeExtensions
     {

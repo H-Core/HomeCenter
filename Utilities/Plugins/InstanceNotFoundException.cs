@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace H.NET.Plugins
+namespace H.NET.Utilities.Plugins
 {
     public class InstanceNotFoundException : KeyNotFoundException
     {
