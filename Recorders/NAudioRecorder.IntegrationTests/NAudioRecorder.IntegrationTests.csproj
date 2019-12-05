@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <RootNamespace>H.NET.Recorders.IntegrationTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

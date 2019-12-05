@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using H.NET.Core.Recorders;
@@ -64,6 +65,19 @@ namespace H.NET.Recorders
             base.Stop();
         }
 
+        public static List<DeviceInfo> GetAvailableDevices()
+        {
+            return Enumerable
+                .Range(0, WaveInEvent.DeviceCount)
+                .Select(WaveInEvent.GetCapabilities)
+                .Select(capability => new DeviceInfo
+                {
+                    Name = capability.ProductName,
+                    Channels = capability.Channels,
+                })
+                .ToList();
+        }
+
         #endregion
 
         #region IDisposable
@@ -80,5 +94,11 @@ namespace H.NET.Recorders
         }
 
         #endregion
+    }
+
+    public class DeviceInfo
+    {
+        public string Name { get; set; }
+        public int Channels { get; set; }
     }
 }
