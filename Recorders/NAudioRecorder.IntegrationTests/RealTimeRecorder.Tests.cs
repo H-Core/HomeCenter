@@ -1,15 +1,5 @@
-using Microsoft.VisualStudio.TestPlatform.Utilities;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Media;
-using System.Windows;
-using System;
-
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.Media;
 using NAudio.Wave;
 
 namespace NAudioRecorder.IntegrationTests
@@ -20,6 +10,16 @@ namespace NAudioRecorder.IntegrationTests
         [TestMethod]
         public void RealTimePlayer()
         {
+            using (var audioFile = new AudioFileReader(@"c:\benny.mp3"))
+            using (var outputDevice = new WaveOutEvent())
+            {
+                outputDevice.Init(audioFile);
+                outputDevice.Play();
+                while (outputDevice.PlaybackState == PlaybackState.Playing)
+                {
+                    Thread.Sleep(1000);
+                }
+            }
 
             var testRecorder = new H.NET.Recorders.NAudioRecorder();
             testRecorder.Start();

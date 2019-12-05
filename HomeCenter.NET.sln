@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0896DE4C-A4DF-4A42-90FD-4A9D5F8023A6}"
 	ProjectSection(SolutionItems) = preProject
@@ -55,7 +55,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramRunner", "Runners\T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinmmRecorder", "Recorders\WinmmRecorder\WinmmRecorder.csproj", "{1BFB7E2D-E190-4394-8720-FB23D5A4EDBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAudioRecorder", "Recorders\NAudioRecorder\NAudioRecorder.csproj", "{1134240E-B221-4411-A236-C5371D7DA160}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NAudioRecorder", "Recorders\NAudioRecorder\NAudioRecorder.csproj", "{1134240E-B221-4411-A236-C5371D7DA160}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugins", "Utilities\Plugins\Plugins.csproj", "{72121390-8576-4234-94FD-ECBFF98DABB4}"
 EndProject
@@ -104,6 +104,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DLinkRunner", "Runners\DLinkRunner\DLinkRunner.csproj", "{A0282C7F-C5BF-4F86-95BB-C643C68E7D91}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsSynthesizer", "Synthesizers\WindowsSynthesizer\WindowsSynthesizer.csproj", "{88551E04-84E4-4902-9FC8-7FA1934C38EC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NAudioRecorder.IntegrationTests", "Recorders\NAudioRecorder.IntegrationTests\NAudioRecorder.IntegrationTests.csproj", "{75A06FDC-F676-4623-86AA-EA7941B296D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -227,6 +229,10 @@ Global
 		{88551E04-84E4-4902-9FC8-7FA1934C38EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88551E04-84E4-4902-9FC8-7FA1934C38EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88551E04-84E4-4902-9FC8-7FA1934C38EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75A06FDC-F676-4623-86AA-EA7941B296D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75A06FDC-F676-4623-86AA-EA7941B296D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75A06FDC-F676-4623-86AA-EA7941B296D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75A06FDC-F676-4623-86AA-EA7941B296D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -258,6 +264,7 @@ Global
 		{4BB4FB25-6009-4A43-8B97-9850B70D1AE7} = {56332C65-C5C9-4C92-82C1-1CB8B590BA20}
 		{A0282C7F-C5BF-4F86-95BB-C643C68E7D91} = {BD5C6E7C-E921-4665-817F-269259C9DC2F}
 		{88551E04-84E4-4902-9FC8-7FA1934C38EC} = {FE398DF2-8118-4148-BE85-B5615DA0A78F}
+		{75A06FDC-F676-4623-86AA-EA7941B296D4} = {0EFAD11E-DAF9-4D33-A235-C4ECE2A221EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03EBDA7B-EC52-413D-B5C5-1CDB93A17ADB}
