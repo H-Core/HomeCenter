@@ -8,6 +8,8 @@ namespace H.NET.Recorders
     public class NAudioRecorder : Recorder
     {
         private WaveInEvent WaveIn { get; set; }
+        public Stream Stream { get; set; }
+        public WaveFileWriter WaveFile { get; set; }
 
         #region Constructors
 
@@ -50,7 +52,9 @@ namespace H.NET.Recorders
 
                 stream.Position = 0;
 
+                Stream = stream;
                 Data = stream.ToArray();
+                WaveFile = waveFile;
             }
 
             base.Stop();
