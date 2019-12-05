@@ -8,7 +8,7 @@ namespace H.NET.Recorders
     public class NAudioRecorder : Recorder
     {
         private WaveInEvent WaveIn { get; set; }
-        public Stream Stream { get; set; }
+        public MemoryStream Stream { get; set; }
         public WaveFileWriter WaveFile { get; set; }
 
         #region Constructors
@@ -22,8 +22,10 @@ namespace H.NET.Recorders
 
             WaveIn.DataAvailable += (sender, args) =>
             {
-                Data = Data ?? new byte[0];
+                WaveFile.Write(args.Buffer, 0, args.BytesRecorded);
+                WaveFile.Flush();
 
+                Data = Data ?? new byte[0];
                 Data = Data.Concat(args.Buffer).ToArray();
             };
         }
@@ -36,6 +38,12 @@ namespace H.NET.Recorders
         {
             WaveIn.StartRecording();
 
+            Stream?.Dispose();
+            WaveFile?.Dispose();
+
+            Stream = new MemoryStream();
+            WaveFile = new WaveFileWriter(Stream, WaveIn.WaveFormat);
+
             base.Start();
         }
 
@@ -43,19 +51,11 @@ namespace H.NET.Recorders
         {
             WaveIn.StopRecording();
 
-            // Convert raw data to wav in memory
-            using (var stream = new MemoryStream())
-            using (var waveFile = new WaveFileWriter(stream, WaveIn.WaveFormat))
-            {
-                waveFile.Write(Data, 0, Data.Length);
-                waveFile.Flush();
+            Stream.Position = 0;
 
-                stream.Position = 0;
+            Data = Stream.ToArray();
 
-                Stream = stream;
-                Data = stream.ToArray();
-                WaveFile = waveFile;
-            }
+            Stream.Position = 0;
 
             base.Stop();
         }
@@ -67,6 +67,12 @@ namespace H.NET.Recorders
         public override void Dispose()
         {
             base.Dispose();
+
+            Stream?.Dispose();
+            Stream = null;
+
+            WaveFile?.Dispose();
+            WaveFile = null;
 
             WaveIn?.Dispose();
             WaveIn = null;
