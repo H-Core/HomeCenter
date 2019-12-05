@@ -1,4 +1,6 @@
+using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NAudio.Wave;
 
@@ -8,7 +10,7 @@ namespace NAudioRecorder.IntegrationTests
     public class RealTimeRecorder
     {
         [TestMethod]
-        public void RealTimePlayer()
+        public async Task RealTimePlayer()
         {
             using (var audioFile = new AudioFileReader(@"c:\benny.mp3"))
             using (var outputDevice = new WaveOutEvent())
@@ -17,13 +19,15 @@ namespace NAudioRecorder.IntegrationTests
                 outputDevice.Play();
                 while (outputDevice.PlaybackState == PlaybackState.Playing)
                 {
-                    Thread.Sleep(1000);
+                    await Task.Delay(TimeSpan.FromMilliseconds(1000));
                 }
             }
 
             var testRecorder = new H.NET.Recorders.NAudioRecorder();
             testRecorder.Start();
-            System.Threading.Thread.Sleep(5000);
+
+            await Task.Delay(TimeSpan.FromMilliseconds(5000));
+
             testRecorder.Stop();
             IWaveProvider provider = new RawSourceWaveStream(
                 testRecorder.Stream, new WaveFormat());
