@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using H.NET.Core.Recorders;
 using NAudio.Wave;
@@ -7,9 +8,11 @@ namespace H.NET.Recorders
 {
     public class NAudioRecorder : Recorder
     {
-        private WaveInEvent WaveIn { get; set; }
+        public WaveInEvent WaveIn { get; set; }
         public MemoryStream Stream { get; set; }
         public WaveFileWriter WaveFile { get; set; }
+
+        public event EventHandler<WaveInEventArgs> NewData;
 
         #region Constructors
 
@@ -25,8 +28,10 @@ namespace H.NET.Recorders
                 WaveFile.Write(args.Buffer, 0, args.BytesRecorded);
                 WaveFile.Flush();
 
-                Data = Data ?? new byte[0];
+                Data = Data ?? Array.Empty<byte>();
                 Data = Data.Concat(args.Buffer).ToArray();
+
+                NewData?.Invoke(this, args);
             };
         }
 
@@ -38,7 +43,6 @@ namespace H.NET.Recorders
         {
             WaveIn.StartRecording();
 
-            Stream?.Dispose();
             WaveFile?.Dispose();
 
             Stream = new MemoryStream();

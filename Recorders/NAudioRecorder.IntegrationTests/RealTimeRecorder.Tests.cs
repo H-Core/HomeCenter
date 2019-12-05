@@ -9,35 +9,21 @@ namespace NAudioRecorder.IntegrationTests
     public class RealTimeRecorder
     {
         [TestMethod]
-        public async Task RealTimePlayer()
+        public async Task RealTimePlayRecordTest()
         {
-            using var testRecorder = new H.NET.Recorders.NAudioRecorder();
-            testRecorder.Start();
+            using var recorder = new H.NET.Recorders.NAudioRecorder();
+            var provider = new BufferedWaveProvider(recorder.WaveIn.WaveFormat);
+            using var output = new WaveOutEvent();
+            output.Init(provider);
+            output.Play();
+
+            recorder.NewData += (sender, args) => provider.AddSamples(args.Buffer, 0, args.BytesRecorded);
+            recorder.Start();
 
             await Task.Delay(TimeSpan.FromMilliseconds(5000));
 
-            testRecorder.Stop();
+            recorder.Stop();
 
-            /*
-            {
-                await using var output = new FileStream(@"D:\test.wav", FileMode.Create);
-                testRecorder.Stream.CopyTo(output);
-            }
-            //*/
-
-            using (var provider = new RawSourceWaveStream(testRecorder.Stream, testRecorder.WaveFile.WaveFormat))
-            //using (var provider = new WaveFileReader(@"D:\test.wav"))
-            //using (var provider = new Mp3FileReader(@"c:\benny.mp3"))
-            //using (var audioFile = new AudioFileReader(@"c:\benny.mp3"))
-            using (var output = new WaveOutEvent())
-            {
-                output.Init(provider);
-                output.Play();
-                while (output.PlaybackState == PlaybackState.Playing)
-                {
-                    await Task.Delay(TimeSpan.FromMilliseconds(1));
-                }
-            }
         }
     }
 }
