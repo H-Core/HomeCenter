@@ -17,9 +17,10 @@ namespace NAudioRecorder.IntegrationTests
             await Task.Delay(TimeSpan.FromMilliseconds(5000));
 
             testRecorder.Stop();
+
             /*
-            using (var output = new FileStream(@"D:\test.wav", FileMode.Create))
             {
+                await using var output = new FileStream(@"D:\test.wav", FileMode.Create);
                 testRecorder.Stream.CopyTo(output);
             }
             //*/

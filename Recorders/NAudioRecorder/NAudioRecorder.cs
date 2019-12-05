@@ -68,9 +68,6 @@ namespace H.NET.Recorders
         {
             base.Dispose();
 
-            Stream?.Dispose();
-            Stream = null;
-
             WaveFile?.Dispose();
             WaveFile = null;
 
