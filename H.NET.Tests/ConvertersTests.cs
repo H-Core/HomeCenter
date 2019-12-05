@@ -17,14 +17,15 @@ namespace H.NET.Tests
             });
         */
 
+        /*
         [Fact]
         public async Task YandexConverterTest() => await BaseConverterTest(
-            "проверка", TestUtilities.GetRawSpeech("speech1.wav"),
+            "проверка", ResourcesUtilities.ReadFileAsBytes("speech1.wav"),
             new YandexConverter
             {
                 Key = "1ce29818-0d15-4080-b6a1-ea5267c9fefd",
                 Lang = "ru-RU",
                 Topic = "queries"
-            });
+            });*/
     }
 }
