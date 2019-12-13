@@ -1,0 +1,232 @@
+syntax = "proto3";
+
+package yandex.cloud.iot.devices.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/field_mask.proto";
+import "yandex/cloud/validation.proto";
+import "yandex/cloud/api/operation.proto";
+import "yandex/cloud/operation/operation.proto";
+import "yandex/cloud/iot/devices/v1/registry.proto";
+
+option go_package = "github.com/yandex-cloud/go-genproto/yandex/cloud/iot/devices/v1;devices";
+option java_package = "yandex.cloud.api.iot.devices.v1";
+
+service RegistryService {
+  rpc Get (GetRegistryRequest) returns (Registry) {
+    option (google.api.http) = { get: "/iot-devices/v1/registries/{registry_id}" };
+  }
+
+  rpc List (ListRegistriesRequest) returns (ListRegistriesResponse) {
+    option (google.api.http) = { get: "/iot-devices/v1/registries" };
+  }
+
+  rpc Create (CreateRegistryRequest) returns (operation.Operation) {
+    option (google.api.http) = { post: "/iot-devices/v1/registries" body: "*" };
+    option (yandex.cloud.api.operation) = {
+      metadata: "CreateRegistryMetadata"
+      response: "Registry"
+    };
+  }
+
+  rpc Update (UpdateRegistryRequest) returns (operation.Operation) {
+    option (google.api.http) = { patch: "/iot-devices/v1/registries/{registry_id}" body: "*" };
+    option (yandex.cloud.api.operation) = {
+      metadata: "UpdateRegistryMetadata"
+      response: "Registry"
+    };
+  }
+
+  rpc Delete (DeleteRegistryRequest) returns (operation.Operation) {
+    option (google.api.http) = { delete: "/iot-devices/v1/registries/{registry_id}" };
+    option (yandex.cloud.api.operation) = {
+      metadata: "DeleteRegistryMetadata"
+      response: "google.protobuf.Empty"
+    };
+  }
+
+  rpc ListCertificates (ListRegistryCertificatesRequest) returns (ListRegistryCertificatesResponse) {
+    option (google.api.http) = { get: "/iot-devices/v1/registries/{registry_id}/certificates" };
+  }
+
+  rpc AddCertificate (AddRegistryCertificateRequest) returns (operation.Operation) {
+    option (google.api.http) = { post: "/iot-devices/v1/registries/{registry_id}/certificates" body: "*" };
+    option (yandex.cloud.api.operation) = {
+      metadata: "AddRegistryCertificateMetadata"
+      response: "RegistryCertificate"
+    };
+  }
+
+  rpc DeleteCertificate (DeleteRegistryCertificateRequest) returns (operation.Operation) {
+    option (google.api.http) = { delete: "/iot-devices/v1/registries/{registry_id}/certificates/{fingerprint}" };
+    option (yandex.cloud.api.operation) = {
+      metadata: "DeleteRegistryCertificateMetadata"
+      response: "google.protobuf.Empty"
+    };
+  }
+
+  rpc ListPasswords (ListRegistryPasswordsRequest) returns (ListRegistryPasswordsResponse) {
+    option (google.api.http) = { get: "/iot-devices/v1/registries/{registry_id}/passwords" };
+  }
+
+  rpc AddPassword (AddRegistryPasswordRequest) returns (operation.Operation) {
+    option (google.api.http) = { post: "/iot-devices/v1/registries/{registry_id}/passwords" body: "*" };
+    option (yandex.cloud.api.operation) = {
+      metadata: "AddRegistryPasswordMetadata"
+      response: "RegistryPassword"
+    };
+  }
+
+  rpc DeletePassword (DeleteRegistryPasswordRequest) returns (operation.Operation) {
+    option (google.api.http) = { delete: "/iot-devices/v1/registries/{registry_id}/passwords/{password_id}" };
+    option (yandex.cloud.api.operation) = {
+      metadata: "DeleteRegistryPasswordMetadata"
+      response: "google.protobuf.Empty"
+    };
+  }
+
+  rpc ListDeviceTopicAliases (ListDeviceTopicAliasesRequest) returns (ListDeviceTopicAliasesResponse) {
+    option (google.api.http) = { get: "/iot-devices/v1/registries/{registry_id}:listDeviceTopicAliases" };
+  }
+
+  rpc ListOperations (ListRegistryOperationsRequest) returns (ListRegistryOperationsResponse) {
+    option (google.api.http) = { get: "/iot-devices/v1/registries/{registry_id}/operations" };
+  }
+}
+
+message GetRegistryRequest {
+  string registry_id = 1 [(required) = true, (length) = "<=50"];
+}
+
+message ListRegistriesRequest {
+  string folder_id = 1 [(required) = true, (length) = "<=50"];
+  int64 page_size = 2 [(value) = "0-1000"];
+  string page_token = 3 [(length) = "<=100"];
+}
+
+message ListRegistriesResponse {
+  repeated Registry registries = 1;
+  string next_page_token = 2;
+}
+
+message CreateRegistryRequest {
+  string folder_id = 1 [(required) = true, (length) = "<=50"];
+  string name = 2 [(required) = true, (length) = "<=50", (pattern) = "[a-zA-Z0-9_-]*"];
+  string description = 3 [(length) = "<=256"];
+  map<string, string> labels = 4 [(size) = "<=64", (length) = "<=63", (pattern) = "[-_0-9a-z]*", (map_key).length = "1-63", (map_key).pattern = "[a-z][-_0-9a-z]*"];
+  repeated Certificate certificates = 5;
+  // if specified, must contain at least 3 of 4 ASCII character groups: upper case latin, lower case latin, numbers and special symbols
+  string password = 6;
+
+  message Certificate {
+    string certificate_data = 1;
+  }
+}
+
+message CreateRegistryMetadata {
+  string registry_id = 1;
+}
+
+message UpdateRegistryRequest {
+  string registry_id = 1 [(required) = true, (length) = "<=50"];
+
+  google.protobuf.FieldMask update_mask = 2;
+
+  string name = 3 [(length) = "<=50", (pattern) = "[a-zA-Z0-9_-]*"];
+
+  string description = 4 [(length) = "<=256"];
+
+  map<string, string> labels = 5 [(size) = "<=64", (length) = "<=63", (pattern) = "[-_0-9a-z]*", (map_key).length = "1-63", (map_key).pattern = "[a-z][-_0-9a-z]*"];
+}
+
+message UpdateRegistryMetadata {
+  string registry_id = 1;
+}
+
+message DeleteRegistryRequest {
+  string registry_id = 1 [(required) = true, (length) = "<=50"];
+}
+
+message DeleteRegistryMetadata {
+  string registry_id = 1;
+}
+
+message ListRegistryCertificatesRequest {
+  string registry_id = 1 [(required) = true, (length) = "<=50"];
+}
+
+message ListRegistryCertificatesResponse {
+  repeated RegistryCertificate certificates = 1;
+}
+
+message AddRegistryCertificateRequest {
+  string registry_id = 1 [(required) = true, (length) = "<=50"];
+  string certificate_data = 3;
+}
+
+message AddRegistryCertificateMetadata {
+  string registry_id = 1;
+  string fingerprint = 2;
+}
+
+message DeleteRegistryCertificateRequest {
+  string registry_id = 1 [(required) = true, (length) = "<=50"];
+  string fingerprint = 2 [(required) = true, (length) = "<=50"];
+}
+
+message DeleteRegistryCertificateMetadata {
+  string registry_id = 1 [(required) = true, (length) = "<=50"];
+  string fingerprint = 2 [(required) = true, (length) = "<=50"];
+}
+
+message ListRegistryPasswordsRequest {
+  string registry_id = 1 [(required) = true, (length) = "<=50"];
+}
+
+message ListRegistryPasswordsResponse {
+  repeated RegistryPassword passwords = 1;
+}
+
+message AddRegistryPasswordRequest {
+  string registry_id = 1 [(required) = true, (length) = "<=50"];
+  // must contain at least 3 of 4 ASCII character groups: upper case latin, lower case latin, numbers and special symbols
+  string password = 2 [(length) = ">=14"];
+}
+
+message AddRegistryPasswordMetadata {
+  string registry_id = 1;
+  string password_id = 2;
+}
+
+message DeleteRegistryPasswordRequest {
+  string registry_id = 1 [(required) = true, (length) = "<=50"];
+  string password_id = 2 [(required) = true, (length) = "<=50"];
+}
+
+message DeleteRegistryPasswordMetadata {
+  string registry_id = 1 [(required) = true, (length) = "<=50"];
+  string password_id = 2 [(required) = true, (length) = "<=50"];
+}
+
+message ListDeviceTopicAliasesRequest {
+  string registry_id = 1 [(required) = true, (length) = "<=50"];
+  int64 page_size = 2 [(value) = "0-1000"];
+  string page_token = 3 [(length) = "<=100"];
+}
+
+message ListDeviceTopicAliasesResponse {
+  repeated DeviceAlias aliases = 1;
+  string next_page_token = 2;
+}
+
+message ListRegistryOperationsRequest {
+  string registry_id = 1 [(required) = true];
+  int64 page_size = 2 [(value) = "0-1000"];
+  string page_token = 3 [(length) = "<=100"];
+  string filter = 4 [(length) = "<=1000"];
+}
+
+message ListRegistryOperationsResponse {
+  repeated operation.Operation operations = 1;
+  string next_page_token = 2;
+}

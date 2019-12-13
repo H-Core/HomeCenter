@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Protobuf_NoWarnMissingExpected>true</Protobuf_NoWarnMissingExpected>
+    <DisableProtobufDesignTimeBuild>true</DisableProtobufDesignTimeBuild>
+    <ProtoOutputDir>generated</ProtoOutputDir>
+    <CompileProtoOutputs>false</CompileProtoOutputs>
+    <CompileProtoOutputs Condition="!Exists('$(ProtoOutputDir)')">true</CompileProtoOutputs>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc" Version="2.25.0" PrivateAssets="compile" />
+    <PackageReference Include="Grpc.Tools" Version="2.25.0" PrivateAssets="compile" />
+    <PackageReference Include="Google.Protobuf" Version="3.11.1" PrivateAssets="compile" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="cloudapi/**/*.proto" ProtoRoot="cloudapi/third_party/googleapis;cloudapi" Access="internal" OutputDir="$(ProtoOutputDir)/%(RelativeDir)" GrpcServices="none" CompileOutputs="$(CompileProtoOutputs)" />
+    <Protobuf Update="cloudapi/**/*_service.proto" GrpcServices="Client" CompileOutputs="$(CompileProtoOutputs)" />
+  </ItemGroup>
+
+  <Target Name="Generate" BeforeTargets="BeforeBuild" Condition="!Exists('$(ProtoOutputDir)')">
+    <MSBuild Projects="$(MSBuildProjectFile)"
+             Properties="DisableProtobufDesignTimeBuild=false"
+             Targets="Protobuf_Compile"
+             UnloadProjectsOnCompletion="true"
+    />
+  </Target>
+  <Target Name="CleanGenerated" BeforeTargets="BeforeClean" Condition="Exists('$(ProtoOutputDir)')">
+    <RemoveDir Directories="$(ProtoOutputDir)" />
+  </Target>
+
+</Project>
