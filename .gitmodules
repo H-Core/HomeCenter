@@ -1,0 +1,3 @@
+[submodule "Converters\\YandexConverter\\cloudapi"]
+	path = Converters\\YandexConverter\\cloudapi
+	url = https://www.github.com/yandex-cloud/cloudapi.git
