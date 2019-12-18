@@ -21,8 +21,16 @@ namespace H.NET.Utilities
         {
             Port = port;
             Listener = new TcpListener(new IPEndPoint(IPAddress.Parse("127.0.0.1"), Port));
-            Listener.Start();
-            Listener.BeginAcceptTcpClient(OnClientAccepted, Listener);
+
+            try
+            {
+                Listener.Start();
+                Listener.BeginAcceptTcpClient(OnClientAccepted, Listener);
+            }
+            catch (SocketException)
+            {
+                // ignore - Already started by other source
+            }
         }
 
         #endregion
