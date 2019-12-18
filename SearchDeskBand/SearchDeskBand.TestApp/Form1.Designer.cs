@@ -1,6 +1,6 @@
 ﻿using H.NET.SearchDeskBand;
 
-namespace SearchDeskBand.TestApp
+namespace H.NET.SearchDeskBand.TestApp
 {
     partial class Form1
     {
@@ -30,7 +30,7 @@ namespace SearchDeskBand.TestApp
         /// </summary>
         private void InitializeComponent()
         {
-            this.deskBandControl1 = new DeskBandControl();
+            this.deskBandControl1 = new H.NET.SearchDeskBand.DeskBandControl();
             this.SuspendLayout();
             // 
             // deskBandControl1
@@ -39,11 +39,11 @@ namespace SearchDeskBand.TestApp
             this.deskBandControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.deskBandControl1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.deskBandControl1.Location = new System.Drawing.Point(271, 384);
-            this.deskBandControl1.MaximumSize = new System.Drawing.Size(262, 40);
-            this.deskBandControl1.MinimumSize = new System.Drawing.Size(262, 40);
+            this.deskBandControl1.MaximumSize = new System.Drawing.Size(318, 40);
+            this.deskBandControl1.MinimumSize = new System.Drawing.Size(318, 40);
             this.deskBandControl1.Name = "deskBandControl1";
             this.deskBandControl1.Padding = new System.Windows.Forms.Padding(6);
-            this.deskBandControl1.Size = new System.Drawing.Size(262, 40);
+            this.deskBandControl1.Size = new System.Drawing.Size(318, 40);
             this.deskBandControl1.TabIndex = 0;
             // 
             // Form1
