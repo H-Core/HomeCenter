@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectGuid>{FF391D32-B326-4661-AB2C-4D209E4DADD9}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>H.NET.SearchDeskBand.TestApp</RootNamespace>
     <AssemblyName>H.NET.SearchDeskBand.TestApp</AssemblyName>

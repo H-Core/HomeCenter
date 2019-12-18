@@ -1,16 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>H.NET.Recorders</RootNamespace>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="NAudio" Version="1.9.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
   </ItemGroup>
-
 </Project>

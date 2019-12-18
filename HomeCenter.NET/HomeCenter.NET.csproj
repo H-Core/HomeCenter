@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <ProjectGuid>{140E973F-93DC-483F-AA62-046E9A8536B5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net472</TargetFramework>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -20,6 +19,9 @@
   <PropertyGroup>
     <ApplicationIcon>Properties\Icons\icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="taskkill /f /fi &quot;imagename eq $(TargetFileName)&quot;&#xD;&#xA;exit 0" />
+  </Target>
   <ItemGroup>
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
@@ -52,7 +54,4 @@
   <ItemGroup>
     <None Include="Resources\beep.wav" />
   </ItemGroup>
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="taskkill /f /fi &quot;imagename eq $(TargetFileName)&quot;&#xD;&#xA;exit 0" />
-  </Target>
 </Project>

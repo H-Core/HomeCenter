@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectGuid>{B1A02ADB-14C2-4451-93C4-1A7E33D3EB2D}</ProjectGuid>
     <RootNamespace>H.NET.SearchDeskBand</RootNamespace>
     <AssemblyName>H.NET.SearchDeskBand</AssemblyName>
     <TargetFramework>net472</TargetFramework>
@@ -22,6 +21,12 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="IF EXIST $(TargetDir)SharpShell.dll (&#xD;&#xA;  %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetDir)SharpShell.dll /tlb /codebase /unregister /nologo /silent&#xD;&#xA;)&#xD;&#xA;IF EXIST $(TargetPath) (&#xD;&#xA;  %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetPath) /tlb /codebase /unregister /nologo /silent&#xD;&#xA; )" />
+  </Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetDir)SharpShell.dll /tlb /codebase /nologo&#xD;&#xA;%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetPath) /tlb /codebase /nologo" />
+  </Target>
   <ItemGroup>
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
@@ -60,10 +65,4 @@
   <ItemGroup>
     <PackageReference Include="SharpShell" Version="2.6.0" />
   </ItemGroup>
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="IF EXIST $(TargetDir)SharpShell.dll (&#xD;&#xA;  %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetDir)SharpShell.dll /tlb /codebase /unregister /nologo /silent&#xD;&#xA;)&#xD;&#xA;IF EXIST $(TargetPath) (&#xD;&#xA;  %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetPath) /tlb /codebase /unregister /nologo /silent&#xD;&#xA; )" />
-  </Target>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetDir)SharpShell.dll /tlb /codebase /nologo&#xD;&#xA;%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetPath) /tlb /codebase /nologo" />
-  </Target>
 </Project>
