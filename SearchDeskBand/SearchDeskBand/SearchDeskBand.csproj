@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="CheckAdmin">
   <PropertyGroup>
     <RootNamespace>H.NET.SearchDeskBand</RootNamespace>
     <AssemblyName>H.NET.SearchDeskBand</AssemblyName>
@@ -22,7 +22,17 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <Target Name="Register" BeforeTargets="PostBuildEvent" Condition="!Exists('$(ComDir)')">
+  <Target Name="CheckAdmin">
+    <Exec Command="NET SESSION &gt;nul 2&gt;&amp;1&#xD;&#xA;" IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="IsAdminValue" />
+    </Exec>
+    <PropertyGroup>
+      <IsAdmin>false</IsAdmin>
+      <IsAdmin Condition="'$(IsAdminValue)' == '0'">true</IsAdmin>
+    </PropertyGroup>
+    <Message Condition="!$(IsAdmin)" Text="You do not have administrator rights. The library will not be registered/unregistered" Importance="high"/>
+  </Target>
+  <Target Name="Register" BeforeTargets="PostBuildEvent" Condition="$(IsAdmin) AND !Exists('$(ComDir)')">
     <Message Text="Registering COM dlls..." Importance="high" />
     <MakeDir Directories="$(ComDir)" />
     <ItemGroup>
@@ -32,7 +42,7 @@
     <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)SharpShell.dll /tlb /codebase /nologo" />
     <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)$(TargetFileName) /tlb /codebase /nologo" />
   </Target>
-  <Target Name="Unregister" BeforeTargets="BeforeClean" Condition="Exists('$(ComDir)')">
+  <Target Name="Unregister" BeforeTargets="BeforeClean" Condition="$(IsAdmin) AND Exists('$(ComDir)')">
     <Message Text="Unregistering COM dlls... Killing explorer.exe..." Importance="high" />
     <Exec Command="taskkill /f /im explorer.exe" IgnoreExitCode="true" />
     <Message Text="Running x86/x64 explorer.exe(MSBuild is x86 process)..." Importance="high" />
@@ -40,7 +50,7 @@
     <Exec Command="SCHTASKS /Run /tn &quot;Run Explorer&quot;" IgnoreExitCode="true" />
     <Exec Command="SCHTASKS /Delete /F /tn &quot;Run Explorer&quot;" IgnoreExitCode="true" />
     <Message Text="Wait 1 second..." Importance="high" />
-    <Exec Command="ping -n 2 127.0.0.1 > nul"/>
+    <Exec Command="ping -n 2 127.0.0.1 &gt; nul" />
     <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)SharpShell.dll /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
     <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)SharpShell.dll /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
     <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)$(TargetFileName) /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
@@ -73,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
-    <None Include="unregister.cmd" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
