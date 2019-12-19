@@ -8,6 +8,7 @@
     <Copyright>Copyright ©  2018</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <RegisterForComInterop>false</RegisterForComInterop>
+    <ComDir>com\</ComDir>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -21,11 +22,29 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="IF EXIST $(TargetDir)SharpShell.dll (&#xD;&#xA;  %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetDir)SharpShell.dll /tlb /codebase /unregister /nologo /silent&#xD;&#xA;)&#xD;&#xA;IF EXIST $(TargetPath) (&#xD;&#xA;  %25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetPath) /tlb /codebase /unregister /nologo /silent&#xD;&#xA; )" />
+  <Target Name="Register" BeforeTargets="PostBuildEvent" Condition="!Exists('$(ComDir)')">
+    <Message Text="Registering COM dlls..." Importance="high" />
+    <MakeDir Directories="$(ComDir)" />
+    <ItemGroup>
+      <DeskBandOutput Include="$(TargetDir)**" />
+    </ItemGroup>
+    <Copy SourceFiles="@(DeskBandOutput)" DestinationFolder="$(ComDir)" />
+    <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)SharpShell.dll /tlb /codebase /nologo" />
+    <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)$(TargetFileName) /tlb /codebase /nologo" />
   </Target>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetDir)SharpShell.dll /tlb /codebase /nologo&#xD;&#xA;%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(TargetPath) /tlb /codebase /nologo" />
+  <Target Name="Unregister" BeforeTargets="BeforeClean" Condition="Exists('$(ComDir)')">
+    <Message Text="Unregistering COM dlls... Killing explorer.exe..." Importance="high" />
+    <Exec Command="taskkill /f /im explorer.exe" IgnoreExitCode="true" />
+    <Message Text="Running x86/x64 explorer.exe(MSBuild is x86 process)..." Importance="high" />
+    <Exec Command="SCHTASKS /Create /sc MINUTE /tr &quot;explorer.exe&quot; /tn &quot;Run Explorer&quot;" IgnoreExitCode="true" />
+    <Exec Command="SCHTASKS /Run /tn &quot;Run Explorer&quot;" IgnoreExitCode="true" />
+    <Exec Command="SCHTASKS /Delete /F /tn &quot;Run Explorer&quot;" IgnoreExitCode="true" />
+    <Message Text="Wait 1 second..." Importance="high" />
+    <Exec Command="ping -n 2 127.0.0.1 > nul"/>
+    <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)SharpShell.dll /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
+    <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)SharpShell.dll /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
+    <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)$(TargetFileName) /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
+    <RemoveDir Directories="$(ComDir)" />
   </Target>
   <ItemGroup>
     <Reference Include="System.Windows.Forms" />
