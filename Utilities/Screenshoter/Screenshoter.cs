@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -10,24 +11,28 @@ namespace H.NET.Utilities
     {
         // P/Invoke declarations
         [DllImport("gdi32.dll")]
-        static extern bool BitBlt(IntPtr hdcDest, int xDest, int yDest, int
+        private static extern bool BitBlt(IntPtr hdcDest, int xDest, int yDest, int
             wDest, int hDest, IntPtr hdcSource, int xSrc, int ySrc, CopyPixelOperation rop);
+        [DllImport("gdi32.dll")]
+        private static extern IntPtr DeleteDC(IntPtr hDc);
+        [DllImport("gdi32.dll")]
+        private static extern IntPtr DeleteObject(IntPtr hDc);
+        [DllImport("gdi32.dll")]
+        private static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int nWidth, int nHeight);
+        [DllImport("gdi32.dll")]
+        private static extern IntPtr CreateCompatibleDC(IntPtr hdc);
+        [DllImport("gdi32.dll")]
+        private static extern IntPtr SelectObject(IntPtr hdc, IntPtr bmp);
         [DllImport("user32.dll")]
-        static extern bool ReleaseDC(IntPtr hWnd, IntPtr hDc);
-        [DllImport("gdi32.dll")]
-        static extern IntPtr DeleteDC(IntPtr hDc);
-        [DllImport("gdi32.dll")]
-        static extern IntPtr DeleteObject(IntPtr hDc);
-        [DllImport("gdi32.dll")]
-        static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int nWidth, int nHeight);
-        [DllImport("gdi32.dll")]
-        static extern IntPtr CreateCompatibleDC(IntPtr hdc);
-        [DllImport("gdi32.dll")]
-        static extern IntPtr SelectObject(IntPtr hdc, IntPtr bmp);
+        private static extern IntPtr GetDesktopWindow();
         [DllImport("user32.dll")]
-        public static extern IntPtr GetDesktopWindow();
-        [DllImport("user32.dll")]
-        public static extern IntPtr GetWindowDC(IntPtr ptr);
+        private static extern IntPtr GetWindowDC(IntPtr ptr);
+
+        [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
+        internal static extern IntPtr GetDC(IntPtr hWnd);
+
+        [DllImport("user32.dll", ExactSpelling = true)]
+        internal static extern int ReleaseDC(IntPtr hWnd, IntPtr hDc);
 
         public enum SystemMetric
         {
@@ -38,56 +43,99 @@ namespace H.NET.Utilities
         }
 
         [DllImport("user32.dll")]
-        public static extern int GetSystemMetrics(SystemMetric metric);
+        private static extern int GetSystemMetrics(SystemMetric metric);
 
-        public static Size GetVirtualDisplaySize()
+        public static Rectangle GetVirtualDisplayRectangle()
         {
-            var width = GetSystemMetrics(SystemMetric.VirtualScreenWidth);
-            var height = GetSystemMetrics(SystemMetric.VirtualScreenHeight);
+            var x = (int)Math.Round(ConvertPixel(GetSystemMetrics(SystemMetric.VirtualScreenX)));
+            var y = (int)Math.Round(ConvertPixel(GetSystemMetrics(SystemMetric.VirtualScreenY)));
+            var width = (int)Math.Round(ConvertPixel(GetSystemMetrics(SystemMetric.VirtualScreenWidth)));
+            var height = (int)Math.Round(ConvertPixel(GetSystemMetrics(SystemMetric.VirtualScreenHeight)));
 
-            return new Size(width, height);
+            return new Rectangle(x, y, width, height);
         }
 
-        public static Point GetVirtualDisplayStartPoint()
-        {
-            var x = GetSystemMetrics(SystemMetric.VirtualScreenX);
-            var y = GetSystemMetrics(SystemMetric.VirtualScreenY);
+        [DllImport("gdi32.dll")]
+        internal static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
 
-            return new Point(x, y);
+        private static int? _dpi;
+        private static readonly object _dpiLock = new object();
+
+        internal static int Dpi {
+            get {
+                if (!_dpi.HasValue)
+                {
+                    lock (_dpiLock)
+                    {
+                        if (!_dpi.HasValue)
+                        {
+                            var dc = GetDC(IntPtr.Zero);
+                            if (dc == IntPtr.Zero)
+                            {
+                                throw new Win32Exception();
+                            }
+
+                            try
+                            {
+                                _dpi = GetDeviceCaps(dc, 90);
+                            }
+                            finally
+                            {
+                                ReleaseDC(IntPtr.Zero, dc);
+                            }
+                        }
+                    }
+                }
+
+                return _dpi.Value;
+            }
+        }
+
+        public static double ConvertPixel(double pixel)
+        {
+            var dpi = Dpi;
+
+            return dpi != 0 
+                ? pixel * 96.0 / dpi 
+                : pixel;
         }
 
         /// <summary>
         /// Required to Dispose after usage
         /// </summary>
         /// <returns></returns>
-        public static Image ShotVirtualDisplay()
+        public static (Rectangle rectangle, Image image) ShotVirtualDisplay()
         {
-            var size = GetVirtualDisplaySize();
-            var startPoint = GetVirtualDisplayStartPoint();
+            var rectangle = GetVirtualDisplayRectangle();
 
             var window = GetDesktopWindow();
             var dc = GetWindowDC(window);
             var toDc = CreateCompatibleDC(dc);
-            var hBmp = CreateCompatibleBitmap(dc, size.Width, size.Height);
+            var hBmp = CreateCompatibleBitmap(dc, rectangle.Width, rectangle.Height);
             var hOldBmp = SelectObject(toDc, hBmp);
 
             // ReSharper disable once BitwiseOperatorOnEnumWithoutFlags
-            BitBlt(toDc, 0, 0, size.Width, size.Height, dc, startPoint.X, startPoint.Y, CopyPixelOperation.CaptureBlt | CopyPixelOperation.SourceCopy); //-V3059
+            BitBlt(toDc, 0, 0, rectangle.Width, rectangle.Height, dc, rectangle.X, rectangle.Y, CopyPixelOperation.CaptureBlt | CopyPixelOperation.SourceCopy); //-V3059
 
-            var image = Image.FromHbitmap(hBmp);
+            var bitmap = Image.FromHbitmap(hBmp);
             SelectObject(toDc, hOldBmp);
             DeleteObject(hBmp);
             DeleteDC(toDc);
             ReleaseDC(window, dc);
 
-            return image;
+            return (rectangle, bitmap);
         }
 
-        public static async Task<Image> ShotVirtualDisplayAsync() => await Task.Run(ShotVirtualDisplay);
+        public static async Task<Image> ShotVirtualDisplayAsync() => (await Task.Run(ShotVirtualDisplay)).image;
 
         public static async Task<Image> ShotVirtualDisplayRectangleAsync(Rectangle rectangle)
         {
-            using (var image = await ShotVirtualDisplayAsync())
+            var (displayRectangle, image) = await Task.Run(ShotVirtualDisplay);
+
+            rectangle.X -= displayRectangle.X;
+            rectangle.Y -= displayRectangle.Y;
+
+            using (image)
             using (var bitmap = new Bitmap(image))
             {
                 return bitmap.Clone(rectangle, bitmap.PixelFormat);
