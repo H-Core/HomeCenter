@@ -194,6 +194,14 @@ namespace HomeCenter.NET
             InitializeHelper.CheckRun(e.Args, runnerService);
         }
 
+        // ReSharper disable once UnusedMember.Global
+        public static string StopMouseHook()
+        {
+            ((HookService)IoC.GetInstance(typeof(HookService), null)).MouseHook.Stop();
+
+            return string.Empty;
+        }
+
         protected override void OnExit(object sender, EventArgs e)
         {
             MainView?.Dispose();
