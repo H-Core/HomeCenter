@@ -112,6 +112,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YandexConverter", "Converte
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugins.Tests", "Utilities\Plugins.Tests\Plugins.Tests.csproj", "{E21C1D4F-F5D1-4ED8-841F-0FC16D1DFFAB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YandexConverter.IntegrationTests", "Converters\YandexConverter.IntegrationTests\YandexConverter.IntegrationTests\YandexConverter.IntegrationTests.csproj", "{F658467F-0872-4BF1-AD87-80B75138DC20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -246,6 +248,10 @@ Global
 		{E21C1D4F-F5D1-4ED8-841F-0FC16D1DFFAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E21C1D4F-F5D1-4ED8-841F-0FC16D1DFFAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E21C1D4F-F5D1-4ED8-841F-0FC16D1DFFAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F658467F-0872-4BF1-AD87-80B75138DC20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F658467F-0872-4BF1-AD87-80B75138DC20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F658467F-0872-4BF1-AD87-80B75138DC20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F658467F-0872-4BF1-AD87-80B75138DC20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -280,6 +286,7 @@ Global
 		{75A06FDC-F676-4623-86AA-EA7941B296D4} = {0EFAD11E-DAF9-4D33-A235-C4ECE2A221EE}
 		{FCDDF38A-FB08-45DE-A190-456707453A3E} = {54C63C87-427C-4737-9AD6-94217054E8EC}
 		{E21C1D4F-F5D1-4ED8-841F-0FC16D1DFFAB} = {E14F4C88-C2A8-437F-A924-C47606A0E5D4}
+		{F658467F-0872-4BF1-AD87-80B75138DC20} = {54C63C87-427C-4737-9AD6-94217054E8EC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03EBDA7B-EC52-413D-B5C5-1CDB93A17ADB}
