@@ -35,7 +35,10 @@ namespace HomeCenter.NET.Runners
             AddInternalAction("show-commands", command => ShowCommandsAction?.Invoke());
             AddInternalAction("show-module-settings", command => ShowModuleSettingsAction?.Invoke(command), "name");
             AddInternalAction("start-record", command => StartRecordAction?.Invoke());
+
+            // TODO: Communication through (IDeskBand)Marshal.GetActiveObject("H.NET.SearchDeskBand") ??
             AddInternalAction("deskband", ipcService.DeskBandCommand);
+
             AddAction("enable-module", name =>
             {
                 moduleService.SetInstanceIsEnabled(name, true);

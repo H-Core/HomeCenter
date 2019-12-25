@@ -1,69 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B6E41280-0925-4967-BA80-9ECC769E09B6}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>H.NET.Notifiers</RootNamespace>
     <AssemblyName>H.NET.Notifiers.MaskScreenshotNotifier</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyTitle>H.NET.Notifiers.MaskScreenshotNotifier</AssemblyTitle>
+    <Product>H.NET.Notifiers.MaskScreenshotNotifier</Product>
+    <Copyright>Copyright ©  2018</Copyright>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
+    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
+    <ProjectReference Include="..\ScreenshotNotifier\ScreenshotNotifier.csproj" />
+    <ProjectReference Include="..\TimerNotifier\TimerNotifier.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\BitmapExtensions.cs" />
-    <Compile Include="Extensions\MatExtensions.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MaskScreenshotNotifier.cs" />
-    <Compile Include="Utilities\ScreenshotUtilities.cs" />
+    <PackageReference Include="EMGU.CV" Version="3.4.1.2976" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj">
-      <Project>{8B7B7A71-CDE2-4066-8960-C960E374A400}</Project>
-      <Name>H.NET.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ScreenshotNotifier\ScreenshotNotifier.csproj">
-      <Project>{69a68b09-45e9-4ba0-8038-6edf0ffe0959}</Project>
-      <Name>ScreenshotNotifier</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TimerNotifier\TimerNotifier.csproj">
-      <Project>{42C14380-3FFA-4AED-A674-FEDDB8EE0FE6}</Project>
-      <Name>TimerNotifier</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="EMGU.CV">
-      <Version>3.4.1.2976</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -116,13 +116,13 @@ namespace HomeCenter.NET.Utilities.HookModules
             var dx = e.X - StartPoint.X;
             var dy = e.Y - StartPoint.Y;
 
-            var left = StartPoint.X + Math.Min(0, dx);
-            var top = StartPoint.Y + Math.Min(0, dy);
+            var x = StartPoint.X + Math.Min(0, dx);
+            var y = StartPoint.Y + Math.Min(0, dy);
 
             var width = dx > 0 ? dx : -dx;
             var height = dy > 0 ? dy : -dy;
 
-            return new Rectangle(left, top, width, height);
+            return new Rectangle(x, y, width, height);
         }
 
         #endregion

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Caliburn.Micro;
 using H.NET.Core.Managers;
 using H.NET.Core.Recorders;
@@ -119,19 +120,19 @@ namespace HomeCenter.NET.ViewModels
             Manager.ChangeWithTimeout(3000);
         }
 
-        public void ShowCommands()
+        public async Task ShowCommandsAsync()
         {
-            this.ShowWindow<CommandsViewModel>();
+            await this.ShowWindowAsync<CommandsViewModel>();
         }
 
-        public void ShowSettings()
+        public async Task ShowSettings()
         {
-            this.ShowWindow<SettingsViewModel>();
+            await this.ShowWindowAsync<SettingsViewModel>();
         }
 
-        public void BeforeExit()
+        public async Task BeforeExitAsync()
         {
-            PopupViewModel.TryClose();
+            await PopupViewModel.TryCloseAsync();
         }
 
         public void PreviousCommand()
@@ -168,11 +169,11 @@ namespace HomeCenter.NET.ViewModels
             RunnerService.Run("restart");
         }
 
-        public void OnClosing(CancelEventArgs e)
+        public async Task OnClosing(CancelEventArgs e)
         {
             if (UserCanClose)
             {
-                BeforeExit();
+                await BeforeExitAsync();
                 return;
             }
 
@@ -180,14 +181,14 @@ namespace HomeCenter.NET.ViewModels
             e.Cancel = true;
         }
 
-        public void Close()
+        public async Task Close()
         {
             UserCanClose = true;
-            TryClose();
+            await TryCloseAsync();
 
             if (!IsVisible)
             {
-                BeforeExit();
+                await BeforeExitAsync();
             }
         }
 

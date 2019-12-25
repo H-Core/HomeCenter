@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Caliburn.Micro;
 using Action = System.Action;
 
@@ -25,30 +26,30 @@ namespace HomeCenter.NET.ViewModels
 
         #region Public methods
 
-        public void Save()
+        public async Task SaveAsync()
         {
             SaveAction?.Invoke();
             // TODO: alternative solution?
             try
             {
-                TryClose(true);
+                await TryCloseAsync(true);
             }
             catch (Exception)
             {
-                TryClose();
+                await TryCloseAsync();
             }
         }
 
-        public void Cancel()
+        public async Task CancelAsync()
         {
             CancelAction?.Invoke();
             try
             {
-                TryClose(false);
+                await TryCloseAsync(false);
             }
             catch (Exception)
             {
-                TryClose();
+                await TryCloseAsync();
             }
         }
 

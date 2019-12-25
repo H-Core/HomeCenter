@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using H.NET.Core;
@@ -289,12 +290,12 @@ namespace HomeCenter.NET.ViewModels.Settings
             UpdateModules();
         }
 
-        public void RenameInstance(InstanceViewModel viewModel)
+        public async Task RenameInstanceAsync(InstanceViewModel viewModel)
         {
             var oldName = viewModel.Name;
             var renameViewModel = new RenameViewModel(oldName, oldName);
 
-            var result = this.ShowDialog(renameViewModel);
+            var result = await this.ShowDialogAsync(renameViewModel);
             if (result != true)
             {
                 return;
@@ -311,10 +312,10 @@ namespace HomeCenter.NET.ViewModels.Settings
             viewModel.Name = newName;
         }
 
-        public void EditInstance(InstanceViewModel viewModel)
+        public async Task EditInstanceAsync(InstanceViewModel viewModel)
         {
             var moduleSettingsView = new ModuleSettingsViewModel(viewModel.Instance.Value);
-            var result = this.ShowDialog(moduleSettingsView);
+            var result = await this.ShowDialogAsync(moduleSettingsView);
             if (result != true)
             {
                 return;

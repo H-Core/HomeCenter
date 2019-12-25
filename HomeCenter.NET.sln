@@ -9,13 +9,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		.travis.yml = .travis.yml
 		appveyor.yml = appveyor.yml
+		DEVELOPER_README.md = DEVELOPER_README.md
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Tests", "H.NET.Tests\H.NET.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCenter.NET", "HomeCenter.NET\HomeCenter.NET.csproj", "{140E973F-93DC-483F-AA62-046E9A8536B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCenter.NET", "HomeCenter.NET\HomeCenter.NET.csproj", "{140E973F-93DC-483F-AA62-046E9A8536B5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{88551E04-84E4-4902-9FC8-7FA1934C38EC} = {88551E04-84E4-4902-9FC8-7FA1934C38EC}
 		{69A68B09-45E9-4BA0-8038-6EDF0FFE0959} = {69A68B09-45E9-4BA0-8038-6EDF0FFE0959}
@@ -35,11 +36,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeCenter.NET", "HomeCente
 		{AB260CD7-41AF-4EB4-B635-9144C1049177} = {AB260CD7-41AF-4EB4-B635-9144C1049177}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchDeskBand", "SearchDeskBand\SearchDeskBand\SearchDeskBand.csproj", "{B1A02ADB-14C2-4451-93C4-1A7E33D3EB2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SearchDeskBand", "SearchDeskBand\SearchDeskBand\SearchDeskBand.csproj", "{B1A02ADB-14C2-4451-93C4-1A7E33D3EB2D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandsStorage", "Utilities\CommandsStorage\CommandsStorage.csproj", "{9C0197EC-B353-4CDD-ADDC-E23876C7B72F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandsStorage", "Utilities\CommandsStorage\CommandsStorage.csproj", "{9C0197EC-B353-4CDD-ADDC-E23876C7B72F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchDeskBand.TestApp", "SearchDeskBand\SearchDeskBand.TestApp\SearchDeskBand.TestApp.csproj", "{FF391D32-B326-4661-AB2C-4D209E4DADD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SearchDeskBand.TestApp", "SearchDeskBand\SearchDeskBand.TestApp\SearchDeskBand.TestApp.csproj", "{FF391D32-B326-4661-AB2C-4D209E4DADD9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Core", "H.NET.Core\H.NET.Core.csproj", "{E3EE7480-FD57-43E0-B6E1-B69255068DCB}"
 EndProject
@@ -51,7 +52,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebConverters", "Converters
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSynthesizers", "Synthesizers\WebSynthesizers\WebSynthesizers.csproj", "{6ABF69B3-3F17-4D93-B69A-092E3CBD1DBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegramRunner", "Runners\TelegramRunner\TelegramRunner.csproj", "{FAD16B4C-5CED-4799-A4BC-4DC3221314DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramRunner", "Runners\TelegramRunner\TelegramRunner.csproj", "{FAD16B4C-5CED-4799-A4BC-4DC3221314DA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinmmRecorder", "Recorders\WinmmRecorder\WinmmRecorder.csproj", "{1BFB7E2D-E190-4394-8720-FB23D5A4EDBF}"
 EndProject
@@ -61,23 +62,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugins", "Utilities\Plugin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimerNotifier", "Notifiers\TimerNotifier\TimerNotifier.csproj", "{42C14380-3FFA-4AED-A674-FEDDB8EE0FE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScreenshotNotifier", "Notifiers\ScreenshotNotifier\ScreenshotNotifier.csproj", "{69A68B09-45E9-4BA0-8038-6EDF0FFE0959}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScreenshotNotifier", "Notifiers\ScreenshotNotifier\ScreenshotNotifier.csproj", "{69A68B09-45E9-4BA0-8038-6EDF0FFE0959}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaskScreenshotNotifier.Tests", "Notifiers\MaskScreenshotNotifier.Tests\MaskScreenshotNotifier.Tests.csproj", "{AB260CD7-41AF-4EB4-B635-9144C1049177}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaskScreenshotNotifier.Tests", "Notifiers\MaskScreenshotNotifier.Tests\MaskScreenshotNotifier.Tests.csproj", "{AB260CD7-41AF-4EB4-B635-9144C1049177}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaskScreenshotNotifier", "Notifiers\MaskScreenshotNotifier\MaskScreenshotNotifier.csproj", "{B6E41280-0925-4967-BA80-9ECC769E09B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaskScreenshotNotifier", "Notifiers\MaskScreenshotNotifier\MaskScreenshotNotifier.csproj", "{B6E41280-0925-4967-BA80-9ECC769E09B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TorrentRunner", "Runners\TorrentRunner\TorrentRunner.csproj", "{3B631441-A561-4CD5-A61E-6FD02694A00F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TorrentRunner", "Runners\TorrentRunner\TorrentRunner.csproj", "{3B631441-A561-4CD5-A61E-6FD02694A00F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hook", "Utilities\Hook\Hook.csproj", "{440051B2-288D-4B81-AF01-DAB1BD928F52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hook", "Utilities\Hook\Hook.csproj", "{440051B2-288D-4B81-AF01-DAB1BD928F52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Startup", "Utilities\Startup\Startup.csproj", "{96DD6F93-C347-40F7-8DF5-47C66AF46DE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Startup", "Utilities\Startup\Startup.csproj", "{96DD6F93-C347-40F7-8DF5-47C66AF46DE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpRunner", "Runners\CSharpRunner\CSharpRunner.csproj", "{BAF0CA91-5602-4EA6-9293-164C1E5DA704}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpRunner", "Runners\CSharpRunner\CSharpRunner.csproj", "{BAF0CA91-5602-4EA6-9293-164C1E5DA704}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSearchers", "Searchers\WebSearchers\WebSearchers.csproj", "{F4C6E293-72FE-4243-8B79-66824387A09A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSearchers", "Searchers\WebSearchers\WebSearchers.csproj", "{F4C6E293-72FE-4243-8B79-66824387A09A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RssNotifier", "Notifiers\RssNotifier\RssNotifier.csproj", "{68C8D9B7-1722-44F4-A7BD-83167A29495C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RssNotifier", "Notifiers\RssNotifier\RssNotifier.csproj", "{68C8D9B7-1722-44F4-A7BD-83167A29495C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runners", "Runners", "{BD5C6E7C-E921-4665-817F-269259C9DC2F}"
 EndProject
@@ -95,21 +96,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DeskBand", "DeskBand", "{59BC58CE-C9A5-4BF0-9CDA-B3F6CCCDE942}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoUpdater", "Utilities\AutoUpdater\AutoUpdater.csproj", "{B28C8B3C-EBA1-41A7-B6C7-0424412416B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoUpdater", "Utilities\AutoUpdater\AutoUpdater.csproj", "{B28C8B3C-EBA1-41A7-B6C7-0424412416B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Screenshoter", "Utilities\Screenshoter\Screenshoter.csproj", "{C51459AE-0B28-4C6A-847B-11FAE81E0FE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Screenshoter", "Utilities\Screenshoter\Screenshoter.csproj", "{C51459AE-0B28-4C6A-847B-11FAE81E0FE5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TcpPingNotifier", "Notifiers\TcpPingNotifier\TcpPingNotifier.csproj", "{4BB4FB25-6009-4A43-8B97-9850B70D1AE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TcpPingNotifier", "Notifiers\TcpPingNotifier\TcpPingNotifier.csproj", "{4BB4FB25-6009-4A43-8B97-9850B70D1AE7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DLinkRunner", "Runners\DLinkRunner\DLinkRunner.csproj", "{A0282C7F-C5BF-4F86-95BB-C643C68E7D91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsSynthesizer", "Synthesizers\WindowsSynthesizer\WindowsSynthesizer.csproj", "{88551E04-84E4-4902-9FC8-7FA1934C38EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsSynthesizer", "Synthesizers\WindowsSynthesizer\WindowsSynthesizer.csproj", "{88551E04-84E4-4902-9FC8-7FA1934C38EC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NAudioRecorder.IntegrationTests", "Recorders\NAudioRecorder.IntegrationTests\NAudioRecorder.IntegrationTests.csproj", "{75A06FDC-F676-4623-86AA-EA7941B296D4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YandexConverter", "Converters\YandexConverter\YandexConverter.csproj", "{FCDDF38A-FB08-45DE-A190-456707453A3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YandexConverter.IntegrationTests", "Converters\YandexConverter.IntegrationTests\YandexConverter.IntegrationTests\YandexConverter.IntegrationTests.csproj", "{3EA8D0F7-D125-46DA-BCBB-67DE959C18A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugins.Tests", "Utilities\Plugins.Tests\Plugins.Tests.csproj", "{E21C1D4F-F5D1-4ED8-841F-0FC16D1DFFAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -241,10 +242,10 @@ Global
 		{FCDDF38A-FB08-45DE-A190-456707453A3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCDDF38A-FB08-45DE-A190-456707453A3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCDDF38A-FB08-45DE-A190-456707453A3E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3EA8D0F7-D125-46DA-BCBB-67DE959C18A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3EA8D0F7-D125-46DA-BCBB-67DE959C18A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3EA8D0F7-D125-46DA-BCBB-67DE959C18A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3EA8D0F7-D125-46DA-BCBB-67DE959C18A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E21C1D4F-F5D1-4ED8-841F-0FC16D1DFFAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E21C1D4F-F5D1-4ED8-841F-0FC16D1DFFAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E21C1D4F-F5D1-4ED8-841F-0FC16D1DFFAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E21C1D4F-F5D1-4ED8-841F-0FC16D1DFFAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -278,7 +279,7 @@ Global
 		{88551E04-84E4-4902-9FC8-7FA1934C38EC} = {FE398DF2-8118-4148-BE85-B5615DA0A78F}
 		{75A06FDC-F676-4623-86AA-EA7941B296D4} = {0EFAD11E-DAF9-4D33-A235-C4ECE2A221EE}
 		{FCDDF38A-FB08-45DE-A190-456707453A3E} = {54C63C87-427C-4737-9AD6-94217054E8EC}
-		{3EA8D0F7-D125-46DA-BCBB-67DE959C18A2} = {54C63C87-427C-4737-9AD6-94217054E8EC}
+		{E21C1D4F-F5D1-4ED8-841F-0FC16D1DFFAB} = {E14F4C88-C2A8-437F-A924-C47606A0E5D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {03EBDA7B-EC52-413D-B5C5-1CDB93A17ADB}

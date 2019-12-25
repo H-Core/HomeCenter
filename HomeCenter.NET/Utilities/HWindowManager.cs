@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 
@@ -6,9 +7,9 @@ namespace HomeCenter.NET.Utilities
 {
     public class HWindowManager : WindowManager
     {
-        public Window CreateWindow(object rootModel, object context = null, IDictionary<string, object> settings = null)
+        public async Task<Window> CreateWindowAsync(object rootModel, object context = null, IDictionary<string, object> settings = null)
         {
-            return CreateWindow(rootModel, false, context, settings);
+            return await CreateWindowAsync(rootModel, false, context, settings);
         }
     }
 }

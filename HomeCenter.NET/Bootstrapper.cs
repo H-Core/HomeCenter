@@ -117,7 +117,7 @@ namespace HomeCenter.NET
             #endregion
 
             #region Key Triggers
-
+            
             var defaultCreateTrigger = Parser.CreateTrigger;
 
             Parser.CreateTrigger = (target, triggerText) =>
@@ -132,16 +132,16 @@ namespace HomeCenter.NET
                     .Replace("]", string.Empty);
 
                 var splits = triggerDetail.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-
+                
                 switch (splits[0])
                 {
                     case "KeyUp":
                         return KeyUpTrigger.FromText(splits[1]);
                 }
-
+                
                 return defaultCreateTrigger(target, triggerText);
             };
-
+            
             #endregion
         }
 
@@ -169,7 +169,7 @@ namespace HomeCenter.NET
             var instance = Get<PopupViewModel>();
 
             // Create permanent hidden PopupView
-            manager.ShowWindow(instance);
+            await manager.ShowWindowAsync(instance);
             
             var model = Get<MainViewModel>();
             var runnerService = Get<RunnerService>();
@@ -179,7 +179,7 @@ namespace HomeCenter.NET
             var hWindowManager = manager as HWindowManager ?? throw new ArgumentNullException();
 
             // Create hidden window(without moment of show/hide)
-            MainView = hWindowManager.CreateWindow(model) as MainView ?? throw new ArgumentNullException();
+            MainView = await hWindowManager.CreateWindowAsync(model) as MainView ?? throw new ArgumentNullException();
 
             // TODO: custom window manager is required
             model.IsVisible = e.Args.Contains("/restart") || !Settings.Default.IsStartMinimized;
@@ -192,6 +192,14 @@ namespace HomeCenter.NET
 
             InitializeHelper.CheckUpdate(e.Args, runnerService);
             InitializeHelper.CheckRun(e.Args, runnerService);
+        }
+
+        // ReSharper disable once UnusedMember.Global
+        public static string StopMouseHook()
+        {
+            ((HookService)IoC.GetInstance(typeof(HookService), null)).MouseHook.Stop();
+
+            return string.Empty;
         }
 
         protected override void OnExit(object sender, EventArgs e)
