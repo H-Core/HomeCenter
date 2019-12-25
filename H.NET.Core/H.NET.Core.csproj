@@ -6,6 +6,7 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
 	<PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
     <DelaySign>false</DelaySign>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
 
 </Project>

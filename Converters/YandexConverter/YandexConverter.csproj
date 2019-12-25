@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <DisableProtobufDesignTimeBuild>true</DisableProtobufDesignTimeBuild>
     <ProtoOutputDir>generated</ProtoOutputDir>
     <CompileProtoOutputs>false</CompileProtoOutputs>
@@ -12,19 +12,17 @@
     <PackageReference Include="Grpc" Version="2.25.0" />
     <PackageReference Include="Grpc.Tools" Version="2.25.0" PrivateAssets="all" />
     <PackageReference Include="Google.Protobuf" Version="3.11.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Protobuf Include="cloudapi/**/*.proto" ProtoRoot="cloudapi/third_party/googleapis;cloudapi" Access="internal" OutputDir="$(ProtoOutputDir)/%(RelativeDir)" GrpcServices="none" CompileOutputs="$(CompileProtoOutputs)" />
+    <ProjectReference Include="..\..\Recorders\NAudioRecorder\NAudioRecorder.csproj" />
     <Protobuf Update="cloudapi/**/*_service.proto" GrpcServices="Client" CompileOutputs="$(CompileProtoOutputs)" />
   </ItemGroup>
 
   <Target Name="Generate" BeforeTargets="BeforeBuild" Condition="!Exists('$(ProtoOutputDir)')">
-    <MSBuild Projects="$(MSBuildProjectFile)"
-             Properties="DisableProtobufDesignTimeBuild=false"
-             Targets="Protobuf_Compile"
-             UnloadProjectsOnCompletion="true"
-    />
+    <MSBuild Projects="$(MSBuildProjectFile)" Properties="DisableProtobufDesignTimeBuild=false" Targets="Protobuf_Compile" UnloadProjectsOnCompletion="true" />
   </Target>
   <Target Name="CleanGenerated" BeforeTargets="BeforeClean" Condition="Exists('$(ProtoOutputDir)')">
     <RemoveDir Directories="$(ProtoOutputDir)" />

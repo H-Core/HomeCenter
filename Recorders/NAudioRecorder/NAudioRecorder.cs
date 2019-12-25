@@ -21,7 +21,7 @@ namespace H.NET.Recorders
         {
             WaveIn = new WaveInEvent
             {
-                WaveFormat = new WaveFormat(44100, 1)
+                WaveFormat = new WaveFormat(8000, 16, 1)
             };
 
             WaveIn.DataAvailable += (sender, args) =>
