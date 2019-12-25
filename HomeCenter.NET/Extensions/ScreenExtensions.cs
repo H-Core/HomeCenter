@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Caliburn.Micro;
 using HomeCenter.NET.ViewModels.Utilities;
 
@@ -11,7 +12,7 @@ namespace HomeCenter.NET.Extensions
         public static IWindowManager WindowManager => IoC.Get<IWindowManager>();
         public static object GetInstance(Type type) => IoC.GetInstance(type, null);
 
-        public static void ShowWindow<T>(this Screen screen, IDictionary<string, object> settings = null)
+        public static async Task ShowWindowAsync<T>(this Screen screen, IDictionary<string, object> settings = null)
         {
             var instance = GetInstance(typeof(T));
             if (instance == null)
@@ -19,10 +20,10 @@ namespace HomeCenter.NET.Extensions
                 throw new ArgumentException($"Cannot find type: {typeof(T)}");
             }
 
-            WindowManager.ShowWindow(instance, null, settings);
+            await WindowManager.ShowWindowAsync(instance, null, settings);
         }
 
-        public static bool? ShowDialog<T>(this Screen screen, IDictionary<string, object> settings = null)
+        public static async Task<bool?> ShowDialogAsync<T>(this Screen screen, IDictionary<string, object> settings = null)
         {
             var instance = GetInstance(typeof(T));
             if (instance == null)
@@ -30,24 +31,24 @@ namespace HomeCenter.NET.Extensions
                 throw new ArgumentException($"Cannot find type: {typeof(T)}");
             }
 
-            return WindowManager.ShowDialog(instance, null, settings);
+            return await WindowManager.ShowDialogAsync(instance, null, settings);
         }
 
-        public static void ShowWindow(this Screen screen, Screen rootModel, object context = null, IDictionary<string, object> settings = null)
+        public static async Task ShowWindowAsync(this Screen screen, Screen rootModel, object context = null, IDictionary<string, object> settings = null)
         {
-            WindowManager.ShowWindow(rootModel, context, settings);
+            await WindowManager.ShowWindowAsync(rootModel, context, settings);
         }
 
-        public static bool? ShowDialog(this Screen screen, Screen rootModel, object context = null, IDictionary<string, object> settings = null)
+        public static async Task<bool?> ShowDialogAsync(this Screen screen, Screen rootModel, object context = null, IDictionary<string, object> settings = null)
         {
-            return WindowManager.ShowDialog(rootModel, context, settings);
+            return await WindowManager.ShowDialogAsync(rootModel, context, settings);
         }
 
-        public static void ShowMessageBox(this Screen screen, string text, string title = null)
+        public static async Task ShowMessageBoxAsync(this Screen screen, string text, string title = null)
         {
             var model = new MessageBoxViewModel(text, title);
 
-            screen.ShowWindow(model);
+            await screen.ShowWindowAsync(model);
         }
 
     }

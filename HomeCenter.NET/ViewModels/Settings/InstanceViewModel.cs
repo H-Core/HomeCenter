@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Caliburn.Micro;
 using H.NET.Core;
 using H.NET.Core.Extensions;
@@ -82,9 +83,9 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         #region Public methods
 
-        public void ShowDescription()
+        public async Task ShowDescriptionAsync()
         {
-            this.ShowMessageBox(
+            await this.ShowMessageBoxAsync(
                 Instance.Value?.Name ?? Instance.Exception?.ToString() ?? string.Empty,
                 "Description");
         }

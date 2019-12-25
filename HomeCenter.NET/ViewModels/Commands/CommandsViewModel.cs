@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Caliburn.Micro;
 using H.NET.Storages;
 using HomeCenter.NET.Extensions;
@@ -59,14 +60,14 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         #region Public methods
 
-        public void Add()
+        public async Task AddAsync()
         {
             var command = new Command();
             command.Keys.Add(new SingleKey(string.Empty));
             command.Lines.Add(new SingleCommand(string.Empty));
 
             var viewModel = new CommandSettingsViewModel(command, RunnerService, HookService);
-            var result = this.ShowDialog(viewModel);
+            var result = await this.ShowDialogAsync(viewModel);
             if (result != true)
             {
                 return;
@@ -79,14 +80,14 @@ namespace HomeCenter.NET.ViewModels.Commands
             }
         }
 
-        public void EditCommand(CommandViewModel viewModel)
+        public async Task EditCommandAsync(CommandViewModel viewModel)
         {
             switch (viewModel)
             {
                 case UserCommandViewModel userCommandViewModel:
                     var newCommand = (Command)userCommandViewModel.Command.Clone();
                     var dialogViewModel = new CommandSettingsViewModel(newCommand, RunnerService, HookService);
-                    var result = this.ShowDialog(dialogViewModel);
+                    var result = await this.ShowDialogAsync(dialogViewModel);
                     if (result != true)
                     {
                         return;

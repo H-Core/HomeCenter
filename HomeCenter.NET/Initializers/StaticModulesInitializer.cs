@@ -6,7 +6,6 @@ using System.Windows;
 using Caliburn.Micro;
 using H.NET.Core;
 using H.NET.Core.Managers;
-using H.NET.Core.Runners;
 using HomeCenter.NET.Runners;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
@@ -19,7 +18,7 @@ namespace HomeCenter.NET.Initializers
     {
         public StaticModulesInitializer(IWindowManager windowManager, MainViewModel model, RunnerService runnerService, ModuleService moduleService, IpcService ipcService, BaseManager baseManager)
         {
-            void ShowModuleSettings(string name)
+            async Task ShowModuleSettings(string name)
             {
                 if (string.IsNullOrWhiteSpace(name))
                 {
@@ -34,7 +33,7 @@ namespace HomeCenter.NET.Initializers
                     return;
                 }
 
-                windowManager.ShowWindow(new ModuleSettingsViewModel(module));
+                await windowManager.ShowWindowAsync(new ModuleSettingsViewModel(module));
             }
 
             async Task Say(string text)
@@ -63,7 +62,7 @@ namespace HomeCenter.NET.Initializers
                 return await searcher.Search(text);
             }
 
-            Runner.SearchFunc = Search;
+            Module.SearchFunc = Search;
 
             var staticRunners = new List<IRunner>
             {
@@ -72,19 +71,19 @@ namespace HomeCenter.NET.Initializers
                 new WindowsRunner(),
                 new ClipboardRunner
                 {
-                    ClipboardAction = command => Application.Current.Dispatcher.Invoke(() => Clipboard.SetText(command)),
-                    ClipboardFunc = () => Application.Current.Dispatcher.Invoke(Clipboard.GetText)
+                    ClipboardAction = command => Application.Current.Dispatcher?.Invoke(() => Clipboard.SetText(command)),
+                    ClipboardFunc = () => Application.Current.Dispatcher?.Invoke(Clipboard.GetText)
                 },
                 new UiRunner(moduleService, ipcService, runnerService)
                 {
                     // TODO: refactor
-                    RestartAction = command => Application.Current.Dispatcher.Invoke(() => Restart(command)),
-                    UpdateRestartAction = command => Application.Current.Dispatcher.Invoke(() => RestartWithUpdate(command)),
-                    ShowUiAction = () => Application.Current.Dispatcher.Invoke(() => model.IsVisible = !model.IsVisible),
-                    ShowSettingsAction = () => Application.Current.Dispatcher.Invoke(model.ShowSettings),
-                    ShowCommandsAction = () => Application.Current.Dispatcher.Invoke(model.ShowCommands),
-                    ShowModuleSettingsAction = name => Application.Current.Dispatcher.Invoke(() => ShowModuleSettings(name)),
-                    StartRecordAction = () => Application.Current.Dispatcher.Invoke(baseManager.Start)
+                    RestartAction = command => Application.Current.Dispatcher?.Invoke(() => Restart(command)),
+                    UpdateRestartAction = command => Application.Current.Dispatcher?.Invoke(() => RestartWithUpdate(command)),
+                    ShowUiAction = () => Application.Current.Dispatcher?.Invoke(() => model.IsVisible = !model.IsVisible),
+                    ShowSettingsAction = () => Application.Current.Dispatcher?.Invoke(model.ShowSettings),
+                    ShowCommandsAction = () => Application.Current.Dispatcher?.Invoke(model.ShowCommandsAsync),
+                    ShowModuleSettingsAction = name => Application.Current.Dispatcher?.Invoke(async () => await ShowModuleSettings(name)),
+                    StartRecordAction = () => Application.Current.Dispatcher?.Invoke(baseManager.Start)
                 },
                 new InternetRunner()
             };
