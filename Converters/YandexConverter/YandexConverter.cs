@@ -1,148 +1,149 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Net.Http;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using Google.Protobuf;
 using Grpc.Core;
+using H.NET.Core.Converters;
+using Newtonsoft.Json;
 using Yandex.Cloud.Ai.Stt.V2;
+using YandexConverter.Utilities;
+
+#nullable enable
 
 namespace YandexConverter
 {
-    public class YandexConverter : Options
+    public sealed class YandexConverter : Converter
     {
-        public class VoiceStreamArgs : EventArgs
+        #region Properties
+
+        public string Lang { get; set; } = string.Empty;
+        public string Topic { get; set; } = string.Empty;
+        public bool ProfanityFilter { get; set; }
+        public string Format { get; set; } = string.Empty;
+        public int SampleRateHertz { get; set; }
+        public string FolderId { get; set; } = string.Empty;
+        public string OAuthToken { get; set; } = string.Empty;
+
+        public string? IamToken { get; set; }
+
+        #endregion
+
+        #region Constructors
+
+        public YandexConverter()
         {
-            public byte[] Buffer { get; set; }
-            public int BytesRecorded { get; set; }
+            AddSetting(nameof(FolderId), o => FolderId = o, Any, string.Empty);
+            AddSetting(nameof(OAuthToken), o => OAuthToken = o, NoEmpty, string.Empty);
 
-            public VoiceStreamArgs(byte[] buffer, int bytesRecorded)
-            {
-                Buffer = buffer;
-                BytesRecorded = bytesRecorded;
-            }
-        }
-
-        private RecognitionSpec StreamingSpecification { get; set; }
-        private RecognitionConfig StreamingConfig { get; set; }
-        private StreamingRecognitionRequest StreamingRequest { get; set; }
-
-        private AsyncDuplexStreamingCall<StreamingRecognitionRequest, StreamingRecognitionResponse> StreamingCall
-        {
-            get;
-            set;
-        }
-
-        private Task<Task<List<string>>> WorkResult { get; set; }
-        private Metadata MetadataObject { get; set; }
-        private Recorder RecorderObject { get; set; }
-
-        private bool IsWriteActive { get; set; }
-
-        public static event EventHandler<VoiceStreamArgs> OnDataAvailable;
-
-        #region Constructor
-
-        public YandexConverter(Recorder rec)
-        {
-            //ToDo: todo over anonym classes?
-            StreamingSpecification = new RecognitionSpec
-            {
-                LanguageCode = "ru-RU",
-                ProfanityFilter = false,
-                Model = "general",
-                PartialResults = true,
-                AudioEncoding = RecognitionSpec.Types.AudioEncoding.Linear16Pcm,
-                SampleRateHertz = 8000
-            };
-            StreamingConfig = new RecognitionConfig
-            {
-                Specification = StreamingSpecification,
-                FolderId = FOLDER_ID
-            };
-            StreamingRequest = new StreamingRecognitionRequest()
-            {
-                Config = StreamingConfig
-            };
-            MetadataObject = new Metadata
-            {
-                {"authorization", $"Bearer {IAM_TOKEN}"}
-            };
-            RecorderObject = rec;
-        }
-
-        private AsyncDuplexStreamingCall<StreamingRecognitionRequest, StreamingRecognitionResponse>
-            CreateStreamingCall()
-        {
-            var channelCredentials = new SslCredentials();
-            var channel = new Channel("stt.api.cloud.yandex.net", 443, channelCredentials);
-            var client = new SttService.SttServiceClient(channel);
-            return client.StreamingRecognize(MetadataObject);
+            AddEnumerableSetting(nameof(Lang), o => Lang = o, NoEmpty, new[] { "ru-RU", "en-US", "uk-UK", "tr-TR" });
+            AddEnumerableSetting(nameof(Topic), o => Topic = o, NoEmpty, new[] { "general", "maps", "dates", "names", "numbers" });
+            AddEnumerableSetting(nameof(ProfanityFilter), o => ProfanityFilter = o == "true", NoEmpty, new[] { "false", "true" });
+            AddEnumerableSetting(nameof(Format), o => Format = o, NoEmpty, new[] { "lpcm", "oggopus" });
+            AddEnumerableSetting(nameof(SampleRateHertz), o => SampleRateHertz = int.TryParse(o, out var value) ? value : default, NoEmpty, new[] { "8000", "48000", "16000" });
         }
 
         #endregion
 
-        public async Task InitializationTask()
+        #region Public methods
+
+        public async Task<StreamingRecognition> StartStreamingRecognitionAsync(CancellationToken cancellationToken = default)
         {
-            StreamingCall = this.CreateStreamingCall();
+            IamToken ??= await RequestIamTokenByOAuthTokenAsync(OAuthToken, cancellationToken).ConfigureAwait(false);
 
-            await StreamingCall.RequestStream.WriteAsync(StreamingRequest);
-
-            IsWriteActive = true;
-
-            OnDataAvailable += (sender, args) =>
+            var channel = new Channel("stt.api.cloud.yandex.net", 443, new SslCredentials());
+            var client = new SttService.SttServiceClient(channel);
+            var call = client.StreamingRecognize(new Metadata
             {
-                IsWriteActive = true;
-                StreamingCall.RequestStream.WriteAsync(
-                    new StreamingRecognitionRequest()
-                    {
-                        AudioContent = ByteString.CopyFrom(args.Buffer, 0, args.BytesRecorded)
-                    }).Wait();
-                IsWriteActive = false;
-
-            };
-        }
-
-        public void Start()
-        {
-            WorkResult = Task.Run(async () =>
-            {
-                var testList = new List<string>();
-
-                while (await StreamingCall.ResponseStream.MoveNext())
-                {
-                    var note = StreamingCall.ResponseStream.Current;
-                    testList.Add($"{note}");
-                    Debug.WriteLine($"Received {DateTime.Now.ToLongTimeString()}:  {note}");
-                }
-
-                return Task.FromResult(testList);
+                {"authorization", $"Bearer {IamToken}"}
             });
-            RecorderObject.Start();
-        }
 
-        public async Task<List<string>> StopAndGetResponseTask()
-        {
-            RecorderObject.Stop();
-            try
+            await call.RequestStream.WriteAsync(new StreamingRecognitionRequest
             {
-                while (IsWriteActive)
+                Config = new RecognitionConfig
                 {
-                    await Task.Delay(TimeSpan.FromMilliseconds(25));
+                    Specification = new RecognitionSpec
+                    {
+                        LanguageCode = Lang,
+                        ProfanityFilter = ProfanityFilter,
+                        Model = Topic,
+                        AudioEncoding = Format switch
+                        {
+                            "oggopus" => RecognitionSpec.Types.AudioEncoding.OggOpus,
+                            "lpcm" => RecognitionSpec.Types.AudioEncoding.Linear16Pcm,
+                            _ => RecognitionSpec.Types.AudioEncoding.Unspecified,
+                        },
+                        SampleRateHertz = SampleRateHertz,
+                        PartialResults = true,
+                    },
+                    FolderId = FolderId,
                 }
+            }).ConfigureAwait(false);
 
-                await StreamingCall.RequestStream.CompleteAsync();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine($"VoiceStop EXCEPTION : {e}");
-            }
-
-            return await WorkResult.Result;
+            return new YandexStreamingRecognition(call);
         }
 
-        public void ProcessData(byte[] data)
+        public async Task<string> ConvertAsync(byte[] bytes, CancellationToken cancellationToken = default)
         {
-            OnDataAvailable?.Invoke(this, new VoiceStreamArgs(data, data.Length));
+            IamToken ??= await RequestIamTokenByOAuthTokenAsync(OAuthToken, cancellationToken).ConfigureAwait(false);
+
+            using var client = new HttpClient();
+            using var request = new HttpRequestMessage(HttpMethod.Post, new Uri("https://stt.api.cloud.yandex.net/speech/v1/stt:recognize").WithQuery(new Dictionary<string, string?>
+            {
+                { "lang", Lang },
+                { "topic", Topic },
+                { "profanityFilter", ProfanityFilter ? "true" :  "false" },
+                { "format", Format },
+                { "sampleRateHertz", $"{SampleRateHertz}" },
+                { "folderId", FolderId },
+            }))
+            {
+                Headers =
+                {
+                    { "Authorization", $"Bearer {IamToken}" },
+                    //{ "Transfer-Encoding", "chunked" },
+                },
+                Content = new ByteArrayContent(bytes)
+            };
+            using var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);
+           
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+
+            return dictionary.TryGetValue("result", out var value)
+                ? value
+                : throw new InvalidOperationException($"Result is not found: {json}");
         }
+
+        #endregion
+
+        #region Private methods
+
+        private static async Task<string> RequestIamTokenByOAuthTokenAsync(string oAuthToken, CancellationToken cancellationToken = default)
+        {
+            using var client = new HttpClient();
+            using var request = new HttpRequestMessage(HttpMethod.Post, "https://iam.api.cloud.yandex.net/iam/v1/tokens")
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(new 
+                {
+                    yandexPassportOauthToken = oAuthToken,
+                }), Encoding.UTF8, "application/json"),
+            };
+            using var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+
+            return dictionary.TryGetValue("iamToken", out var value)
+                ? value
+                : throw new InvalidOperationException($"Token is not found: {json}");
+        }
+
+        #endregion
     }
 }

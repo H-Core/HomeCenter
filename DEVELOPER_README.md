@@ -21,3 +21,13 @@ Nuget Console to run command available here:  <br/>
 ```
 Install-Package Caliburn.Micro -Version 4.0.104-alpha -Source https://www.myget.org/F/caliburn-micro-builds/api/v3/index.json
 ```
+
+## YandexConverter - How to receive OAuthToken and FolderId
+### OAuthToken
+1. Go to https://cloud.yandex.ru/docs/iam/operations/iam-token/create
+2. Select API
+3. Go to url from second option
+
+### FolderId
+1. Go to https://console.cloud.yandex.ru/
+2. Copy value from "cloud-$USERNAME$"

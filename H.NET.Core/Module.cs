@@ -111,6 +111,7 @@ namespace H.NET.Core
         protected static bool IsNull(string key) => key == null;
         protected static bool NoEmpty(string key) => !string.IsNullOrEmpty(key);
         protected static bool Always<T>(T key) => true;
+        protected static bool Any(object key) => true;
 
         protected static bool IsNull(int key) => key == 0;
         protected static bool Positive(int key) => key > 0;

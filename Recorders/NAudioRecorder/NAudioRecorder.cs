@@ -9,6 +9,10 @@ namespace H.NET.Recorders
 {
     public class NAudioRecorder : Recorder
     {
+        public int Rate { get; set; } = 8000;
+        public int Bits { get; set; } = 16;
+        public int Channels { get; set; } = 1;
+
         public WaveInEvent WaveIn { get; set; }
         public MemoryStream Stream { get; set; }
         public WaveFileWriter WaveFile { get; set; }
@@ -21,7 +25,7 @@ namespace H.NET.Recorders
         {
             WaveIn = new WaveInEvent
             {
-                WaveFormat = new WaveFormat(8000, 16, 1)
+                WaveFormat = new WaveFormat(Rate, Bits, Channels)
             };
 
             WaveIn.DataAvailable += (sender, args) =>

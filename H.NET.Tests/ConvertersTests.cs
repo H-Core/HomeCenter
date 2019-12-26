@@ -1,9 +1,4 @@
-﻿using System.Threading.Tasks;
-using H.NET.Converters;
-using H.NET.Tests.Utilities;
-using Xunit;
-
-namespace H.NET.Tests
+﻿namespace H.NET.Tests
 {
     public class ConvertersTests : BaseTests
     {
@@ -16,16 +11,5 @@ namespace H.NET.Tests
                 Token = "OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS"
             });
         */
-
-        /*
-        [Fact]
-        public async Task YandexConverterTest() => await BaseConverterTest(
-            "проверка", ResourcesUtilities.ReadFileAsBytes("speech1.wav"),
-            new YandexConverter
-            {
-                Key = "1ce29818-0d15-4080-b6a1-ea5267c9fefd",
-                Lang = "ru-RU",
-                Topic = "queries"
-            });*/
     }
 }
