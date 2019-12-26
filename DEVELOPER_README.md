@@ -30,4 +30,4 @@ Install-Package Caliburn.Micro -Version 4.0.104-alpha -Source https://www.myget.
 
 ### FolderId
 1. Go to https://console.cloud.yandex.ru/
-2. Copy value from "cloud-$USERNAME$"
+2. Copy value from "default"

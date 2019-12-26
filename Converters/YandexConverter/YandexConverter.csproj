@@ -3,10 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <DisableProtobufDesignTimeBuild>true</DisableProtobufDesignTimeBuild>
+    <Protobuf_NoWarnMissingExpected>true</Protobuf_NoWarnMissingExpected>
     <ProtoOutputDir>generated</ProtoOutputDir>
     <CompileProtoOutputs>false</CompileProtoOutputs>
     <CompileProtoOutputs Condition="!Exists('$(ProtoOutputDir)')">true</CompileProtoOutputs>
     <LangVersion>8</LangVersion>
+    <RootNamespace>H.NET.Converters</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

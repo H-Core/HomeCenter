@@ -4,7 +4,7 @@ using System.Web;
 
 #nullable enable
 
-namespace YandexConverter.Utilities
+namespace H.NET.Converters.Utilities
 {
     public static class HttpExtensions
     {

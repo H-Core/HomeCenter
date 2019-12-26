@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <IsPackable>false</IsPackable>
+    <RootNamespace>H.NET.Converters.IntegrationTests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

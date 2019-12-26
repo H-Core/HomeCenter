@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>H.NET.Converters.TestApp</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
+    <ProjectReference Include="..\..\Recorders\NAudioRecorder\NAudioRecorder.csproj" />
+    <ProjectReference Include="..\YandexConverter\YandexConverter.csproj" />
+  </ItemGroup>
+
+</Project>

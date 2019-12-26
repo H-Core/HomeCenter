@@ -1,0 +1,39 @@
+﻿<Window x:Class="H.NET.Converters.TestApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70*"></ColumnDefinition>
+            <ColumnDefinition Width="30*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" x:Name="OutputTextBlock"/>
+            <TextBox Grid.Row="1" x:Name="OutputTextBox" TextWrapping="Wrap" AcceptsReturn="True"/>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*"></ColumnDefinition>
+                <ColumnDefinition Width="50*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Content="OAuthToken:"/>
+            <Label Grid.Row="1" Grid.Column="0" Content="FolderId:"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Name="OAuthTokenTextBox"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Name="FolderIdTextBox"/>
+            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Click="Button_Click" Content="Process"/>
+        </Grid>
+    </Grid>
+</Window>

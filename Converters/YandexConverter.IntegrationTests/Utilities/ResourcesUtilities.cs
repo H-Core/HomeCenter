@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace YandexConverter.IntegrationTests.Utilities
+namespace H.NET.Converters.IntegrationTests.Utilities
 {
     public static class ResourcesUtilities
     {

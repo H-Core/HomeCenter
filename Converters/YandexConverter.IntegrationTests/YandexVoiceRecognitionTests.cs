@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using H.NET.Converters.IntegrationTests.Utilities;
 using H.NET.Recorders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using YandexConverter.IntegrationTests.Utilities;
 
-namespace YandexConverter.IntegrationTests
+namespace H.NET.Converters.IntegrationTests
 {
     [TestClass]
     public class YandexVoiceRecognitionTests
