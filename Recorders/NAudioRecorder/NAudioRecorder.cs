@@ -30,8 +30,11 @@ namespace H.NET.Recorders
 
             WaveIn.DataAvailable += (sender, args) =>
             {
-                WaveFile.Write(args.Buffer, 0, args.BytesRecorded);
-                WaveFile.Flush();
+                if (WaveFile != null)
+                {
+                    WaveFile.Write(args.Buffer, 0, args.BytesRecorded);
+                    WaveFile.Flush();
+                }
 
                 Data = Data ?? Array.Empty<byte>();
                 Data = Data.Concat(args.Buffer).ToArray();
@@ -46,12 +49,12 @@ namespace H.NET.Recorders
 
         public override void Start()
         {
-            WaveIn.StartRecording();
-
             WaveFile?.Dispose();
 
             Stream = new MemoryStream();
             WaveFile = new WaveFileWriter(Stream, WaveIn.WaveFormat);
+
+            WaveIn.StartRecording();
 
             base.Start();
         }
