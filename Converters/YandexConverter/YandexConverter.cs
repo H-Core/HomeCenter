@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Grpc.Core;
 using H.NET.Converters.Utilities;
+using H.NET.Core;
 using H.NET.Core.Converters;
 using Newtonsoft.Json;
 using Yandex.Cloud.Ai.Stt.V2;
@@ -48,7 +49,7 @@ namespace H.NET.Converters
 
         #region Public methods
 
-        public async Task<StreamingRecognition> StartStreamingRecognitionAsync(CancellationToken cancellationToken = default)
+        public async Task<IStreamingRecognition> StartStreamingRecognitionAsync(CancellationToken cancellationToken = default)
         {
             IamToken ??= await RequestIamTokenByOAuthTokenAsync(OAuthToken, cancellationToken).ConfigureAwait(false);
 

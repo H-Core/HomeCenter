@@ -23,7 +23,7 @@ namespace H.NET.Converters.IntegrationTests
                 SampleRateHertz = 8000,
             };
 
-            var recognition = await converter.StartStreamingRecognitionAsync();
+            using var recognition = await converter.StartStreamingRecognitionAsync();
             recognition.AfterPartialResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterPartialResults: {args.Text}");
             recognition.AfterFinalResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterFinalResults: {args.Text}");
 
@@ -43,6 +43,9 @@ namespace H.NET.Converters.IntegrationTests
         [TestMethod]
         public async Task StartStreamingRecognitionTest_RealTime()
         {
+            using var recorder = new NAudioRecorder();
+            recorder.Start();
+
             using var converter = new YandexConverter
             {
                 OAuthToken = OAuthToken,
@@ -51,14 +54,14 @@ namespace H.NET.Converters.IntegrationTests
                 SampleRateHertz = 8000,
             };
 
-            var recognition = await converter.StartStreamingRecognitionAsync();
+            using var recognition = await converter.StartStreamingRecognitionAsync();
             recognition.AfterPartialResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterPartialResults: {args.Text}");
             recognition.AfterFinalResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterFinalResults: {args.Text}");
 
-            using var recorder = new NAudioRecorder();
+            await recognition.WriteAsync(recorder.Data);
 
+            // ReSharper disable once AccessToDisposedClosure
             recorder.NewData += async (sender, args) => await recognition.WriteAsync(args.Buffer);
-            recorder.Start();
 
             await Task.Delay(TimeSpan.FromMilliseconds(5000));
 

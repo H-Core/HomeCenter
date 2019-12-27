@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using H.NET.Core.Utilities;
 
 namespace H.NET.Core.Converters
 {
-    public abstract class StreamingRecognition
+    public abstract class StreamingRecognition : DisposableObject, IStreamingRecognition
     {
         #region Events
 

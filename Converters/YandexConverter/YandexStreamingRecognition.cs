@@ -97,11 +97,21 @@ namespace H.NET.Converters
             await ReceiveTask;
         }
 
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            ReceiveTask?.Dispose();
-            WriteTask?.Dispose();
-            Call?.Dispose();
+            if (IsDisposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                ReceiveTask?.Dispose();
+                WriteTask?.Dispose();
+                Call?.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
 
         #endregion
