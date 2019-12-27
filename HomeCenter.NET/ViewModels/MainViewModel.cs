@@ -125,7 +125,7 @@ namespace HomeCenter.NET.ViewModels
             await this.ShowWindowAsync<CommandsViewModel>();
         }
 
-        public async Task ShowSettings()
+        public async Task ShowSettingsAsync()
         {
             await this.ShowWindowAsync<SettingsViewModel>();
         }

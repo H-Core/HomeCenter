@@ -1,17 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <RootNamespace>H.NET.Notifiers</RootNamespace>
     <TargetFramework>net472</TargetFramework>
-    <AssemblyTitle>TcpPingNotifier</AssemblyTitle>
-    <Product>TcpPingNotifier</Product>
-    <Copyright>Copyright ©  2018</Copyright>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <RootNamespace>H.NET.Notifiers</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.Net.Http" />

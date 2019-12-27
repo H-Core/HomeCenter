@@ -1,17 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <RootNamespace>H.NET.Synthesizers</RootNamespace>
     <TargetFramework>net472</TargetFramework>
+    <RootNamespace>H.NET.Synthesizers</RootNamespace>
     <AssemblyTitle>WindowsSynthesizer</AssemblyTitle>
     <Product>WindowsSynthesizer</Product>
-    <Copyright>Copyright ©  2018</Copyright>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
     <COMReference Include="SpeechLib">

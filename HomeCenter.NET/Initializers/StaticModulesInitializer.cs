@@ -80,7 +80,7 @@ namespace HomeCenter.NET.Initializers
                     RestartAction = command => Application.Current.Dispatcher?.Invoke(() => Restart(command)),
                     UpdateRestartAction = command => Application.Current.Dispatcher?.Invoke(() => RestartWithUpdate(command)),
                     ShowUiAction = () => Application.Current.Dispatcher?.Invoke(() => model.IsVisible = !model.IsVisible),
-                    ShowSettingsAction = () => Application.Current.Dispatcher?.Invoke(model.ShowSettings),
+                    ShowSettingsAction = () => Application.Current.Dispatcher?.Invoke(model.ShowSettingsAsync),
                     ShowCommandsAction = () => Application.Current.Dispatcher?.Invoke(model.ShowCommandsAsync),
                     ShowModuleSettingsAction = name => Application.Current.Dispatcher?.Invoke(async () => await ShowModuleSettings(name)),
                     StartRecordAction = () => Application.Current.Dispatcher?.Invoke(baseManager.Start)

@@ -1,17 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
     <RootNamespace>H.NET.Utilities</RootNamespace>
     <AssemblyName>H.NET.Utilities.Hook</AssemblyName>
-    <TargetFramework>net472</TargetFramework>
     <AssemblyTitle>H.NET.Utilities.Hook</AssemblyTitle>
     <Product>H.NET.Utilities.Hook</Product>
-    <Copyright>Copyright ©  2018</Copyright>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
   </PropertyGroup>
 </Project>
