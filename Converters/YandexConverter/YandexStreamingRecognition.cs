@@ -29,7 +29,8 @@ namespace H.NET.Converters
         internal YandexStreamingRecognition(AsyncDuplexStreamingCall<StreamingRecognitionRequest, StreamingRecognitionResponse> call)
         {
             Call = call ?? throw new ArgumentNullException(nameof(call));
-            
+
+            // TODO: Implement exception return
             ReceiveTask = Task.Run(async () =>
             {
                 while (!IsFinished && await Call.ResponseStream.MoveNext().ConfigureAwait(false))
@@ -63,6 +64,7 @@ namespace H.NET.Converters
             {
                 while (!IsFinished)
                 {
+                    // TODO: Combine all accumulated data in the queue into one message
                     if (!WriteQueue.TryDequeue(out var bytes))
                     {
                         await Task.Delay(TimeSpan.FromMilliseconds(1));
