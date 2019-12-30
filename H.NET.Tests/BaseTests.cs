@@ -64,17 +64,6 @@ namespace H.NET.Tests
             Output?.WriteLine($"Recorder: {recorder} is good!");
         }
 
-        protected static async Task BaseConverterTest(string expected, byte[] data, IConverter converter)
-        {
-            Assert.NotNull(expected);
-            Assert.NotNull(data);
-            Assert.NotNull(converter);
-
-            Assert.Equal(expected, await converter.ConvertAsync(data));
-
-            BaseDisposeTest(converter);
-        }
-
         protected static async Task BaseSynthesizerTest(string text, ISynthesizer synthesizer)
         {
             Assert.NotNull(text);

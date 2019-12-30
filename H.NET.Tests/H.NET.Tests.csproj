@@ -16,6 +16,7 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Converters\WitAiConverter\WitAiConverter.csproj" />
     <ProjectReference Include="..\H.NET.Core\H.NET.Core.csproj" />
     <ProjectReference Include="..\Recorders\WinmmRecorder\WinmmRecorder.csproj" />
     <ProjectReference Include="..\Synthesizers\WebSynthesizers\WebSynthesizers.csproj" />

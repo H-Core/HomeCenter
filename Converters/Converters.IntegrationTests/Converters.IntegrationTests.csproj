@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TestFiles\RawSpeech\speech1.wav" />
     <None Remove="TestFiles\RawSpeech\проверка_проверка_8000.wav" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="TestFiles\RawSpeech\speech1.wav" />
     <EmbeddedResource Include="TestFiles\RawSpeech\проверка_проверка_8000.wav" />
   </ItemGroup>
 
@@ -23,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Recorders\NAudioRecorder\NAudioRecorder.csproj" />
+    <ProjectReference Include="..\WitAiConverter\WitAiConverter.csproj" />
     <ProjectReference Include="..\YandexConverter\YandexConverter.csproj" />
   </ItemGroup>
 

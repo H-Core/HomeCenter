@@ -61,6 +61,7 @@ namespace H.NET.Core.Managers
             OnNewText();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
         public async void ProcessSpeech(byte[] bytes)
         {
             if (Converter == null)
@@ -170,7 +171,7 @@ namespace H.NET.Core.Managers
             Data = Recorder.Data;
             OnStopped(CreateArgs());
 
-            ProcessSpeech(Data);
+            ProcessSpeech(Data.ToArray());
         }
 
         #endregion

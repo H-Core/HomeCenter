@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace H.NET.Core.Recorders
 {
@@ -7,7 +8,7 @@ namespace H.NET.Core.Recorders
         #region Properties
 
         public bool IsStarted { get; protected set; }
-        public byte[] Data { get; protected set; }
+        public IReadOnlyCollection<byte> Data { get; protected set; }
 
         #endregion
 
@@ -18,6 +19,9 @@ namespace H.NET.Core.Recorders
 
         public event EventHandler<VoiceActionsEventArgs> Stopped;
         protected void OnStopped(VoiceActionsEventArgs args) => Stopped?.Invoke(this, args);
+
+        public event EventHandler<VoiceActionsEventArgs> NewData;
+        protected void OnNewData(VoiceActionsEventArgs args) => NewData?.Invoke(this, args);
 
         protected virtual VoiceActionsEventArgs CreateArgs() => 
             new VoiceActionsEventArgs { Recorder = this, Data = Data };

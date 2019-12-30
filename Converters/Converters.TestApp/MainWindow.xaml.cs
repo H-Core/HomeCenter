@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using H.NET.Core;
@@ -23,6 +24,7 @@ namespace H.NET.Converters.TestApp
             };
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             ProcessButton.IsEnabled = false;
@@ -34,11 +36,11 @@ namespace H.NET.Converters.TestApp
                 {
                     nameof(WitAiConverter) => new NAudioRecorder
                     {
-                        Channels = 16000,
+                        Rate = 16000,
                     },
                     nameof(YandexConverter) => new NAudioRecorder
                     {
-                        Channels = 8000,
+                        Rate = 8000,
                     },
                     _ => throw new NotImplementedException()
                 }; 
@@ -74,11 +76,11 @@ namespace H.NET.Converters.TestApp
 
                 if (recorder.Data != null)
                 {
-                    await recognition.WriteAsync(recorder.Data);
+                    await recognition.WriteAsync(recorder.Data.ToArray());
                 }
 
                 // ReSharper disable once AccessToDisposedClosure
-                recorder.NewData += async (o, args) => await recognition.WriteAsync(args.Buffer).ConfigureAwait(false);
+                recorder.NewData += async (o, args) => await recognition.WriteAsync(args.Data.ToArray()).ConfigureAwait(false);
 
                 await Task.Delay(TimeSpan.FromMilliseconds(5000)).ConfigureAwait(false);
 

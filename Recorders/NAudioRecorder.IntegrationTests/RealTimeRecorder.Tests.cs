@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NAudio.Wave;
@@ -23,7 +24,7 @@ namespace H.NET.Recorders.IntegrationTests
             output.Init(provider);
             output.Play();
 
-            recorder.NewData += (sender, args) => provider.AddSamples(args.Buffer, 0, args.BytesRecorded);
+            recorder.NewData += (sender, args) => provider.AddSamples(args.Data.ToArray(), 0, args.Data.Count);
             recorder.Start();
             
             await Task.Delay(TimeSpan.FromMilliseconds(5000));

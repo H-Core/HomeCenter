@@ -1,5 +1,4 @@
 ﻿using System;
-using H.NET.Converters;
 using H.NET.Core.Managers;
 using H.NET.Recorders;
 using Nito.AsyncEx;

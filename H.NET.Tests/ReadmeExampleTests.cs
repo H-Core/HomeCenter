@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Threading.Tasks;
 using H.NET.Converters;
 using H.NET.Core.Managers;
-using H.NET.Core.Recorders;
 using H.NET.Recorders;
-using Nito.AsyncEx;
 using Xunit;
 using Xunit.Abstractions;
 

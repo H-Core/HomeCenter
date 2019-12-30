@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using H.NET.Core;
 using H.NET.Core.Recorders;
 using NAudio.Wave;
 
@@ -17,7 +18,6 @@ namespace H.NET.Recorders
         public MemoryStream Stream { get; set; }
         public WaveFileWriter WaveFile { get; set; }
 
-        public event EventHandler<WaveInEventArgs> NewData;
 
         #region Constructors
 
@@ -39,7 +39,7 @@ namespace H.NET.Recorders
                 Data = Data ?? Array.Empty<byte>();
                 Data = Data.Concat(args.Buffer).ToArray();
 
-                NewData?.Invoke(this, args);
+                OnNewData(new VoiceActionsEventArgs{ Data = args.Buffer });
             };
         }
 
