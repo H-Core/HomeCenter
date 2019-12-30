@@ -10,6 +10,7 @@
     <Copyright>Copyright havendv © 2020</Copyright>
     <UseWPF>true</UseWPF>
     <LangVersion>8</LangVersion>
+    <Nullable>Enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Properties\Icons\icon.ico</ApplicationIcon>
