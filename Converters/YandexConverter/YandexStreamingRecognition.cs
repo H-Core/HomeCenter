@@ -44,7 +44,7 @@ namespace H.NET.Converters
                         .FirstOrDefault()?
                         .Text;
 
-                    if (!string.IsNullOrWhiteSpace(text))
+                    if (chunk != null && !string.IsNullOrWhiteSpace(text))
                     {
                         if (chunk.Final)
                         {
@@ -67,7 +67,7 @@ namespace H.NET.Converters
                     // TODO: Combine all accumulated data in the queue into one message
                     if (!WriteQueue.TryDequeue(out var bytes))
                     {
-                        await Task.Delay(TimeSpan.FromMilliseconds(1));
+                        await Task.Delay(TimeSpan.FromMilliseconds(1)).ConfigureAwait(false);
                         continue;
                     }
 
@@ -92,11 +92,11 @@ namespace H.NET.Converters
 
         public override async Task StopAsync(CancellationToken cancellationToken = default)
         {
-            await WriteTask;
+            await WriteTask.ConfigureAwait(false);
 
             await Call.RequestStream.CompleteAsync().ConfigureAwait(false);
 
-            await ReceiveTask;
+            await ReceiveTask.ConfigureAwait(false);
         }
 
         protected override void Dispose(bool disposing)

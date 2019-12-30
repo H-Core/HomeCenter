@@ -8,6 +8,7 @@
     <CompileProtoOutputs>false</CompileProtoOutputs>
     <CompileProtoOutputs Condition="!Exists('$(ProtoOutputDir)')">true</CompileProtoOutputs>
     <LangVersion>8</LangVersion>
+    <Nullable>Enable</Nullable>
     <RootNamespace>H.NET.Converters</RootNamespace>
   </PropertyGroup>
 

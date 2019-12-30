@@ -11,8 +11,6 @@ using H.NET.Core.Converters;
 using Newtonsoft.Json;
 using Yandex.Cloud.Ai.Stt.V2;
 
-#nullable enable
-
 namespace H.NET.Converters
 {
     public sealed class YandexConverter : Converter
@@ -49,7 +47,7 @@ namespace H.NET.Converters
 
         #region Public methods
 
-        public async Task<IStreamingRecognition> StartStreamingRecognitionAsync(CancellationToken cancellationToken = default)
+        public override async Task<IStreamingRecognition> StartStreamingRecognitionAsync(CancellationToken cancellationToken = default)
         {
             IamToken ??= await RequestIamTokenByOAuthTokenAsync(OAuthToken, cancellationToken).ConfigureAwait(false);
 
@@ -85,7 +83,7 @@ namespace H.NET.Converters
             return new YandexStreamingRecognition(call);
         }
 
-        public async Task<string> ConvertAsync(byte[] bytes, CancellationToken cancellationToken = default)
+        public override async Task<string> ConvertAsync(byte[] bytes, CancellationToken cancellationToken = default)
         {
             IamToken ??= await RequestIamTokenByOAuthTokenAsync(OAuthToken, cancellationToken).ConfigureAwait(false);
 
