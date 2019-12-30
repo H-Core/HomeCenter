@@ -28,7 +28,7 @@ namespace HomeCenter.NET.Services
 
         public List<KeyValuePair<string, Command>> GetUniqueCommands() => Storage.UniqueValues(i => i.Value);
 
-        public (string key, Command command) GetCommand(string key)
+        public (string? key, Command? command) GetCommand(string key)
         {
             key = key ?? throw new ArgumentNullException(nameof(key));
 
@@ -85,11 +85,11 @@ namespace HomeCenter.NET.Services
 
         public bool ContainsKey(string key) => Storage.ContainsKey(key);
 
-        public bool TryGetValue(string key, out Command value)
+        public bool TryGetValue(string key, out Command? value)
         {
             if (!ContainsKey(key))
             {
-                value = default(Command);
+                value = default;
                 return false;
             }
 

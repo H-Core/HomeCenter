@@ -9,7 +9,7 @@ using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Services
 {
-    public class HookService : IDisposable
+    public sealed class HookService : IDisposable
     {
         #region Properties
 
@@ -68,11 +68,17 @@ namespace HomeCenter.NET.Services
                 return false;
             }
 
-            RunnerService.Run(command.Keys.FirstOrDefault()?.Text);
+            var key = command.Keys.FirstOrDefault()?.Text;
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return false;
+            }
+
+            RunnerService.Run(key);
             return true;
         }
 
-        public async Task<KeysCombination> CatchKey()
+        public async Task<KeysCombination?> CatchKey()
         {
             if (KeyboardHook == null || MouseHook == null)
             {
@@ -86,10 +92,10 @@ namespace HomeCenter.NET.Services
             KeyboardHook.Start();
             MouseHook.Start();
 
-            KeysCombination combination = null;
+            KeysCombination? combination = null;
             var isCancel = false;
 
-            void OnKeyboardHookOnKeyDown(object sender, KeyboardHookEventArgs args)
+            void OnKeyboardHookOnKeyDown(object? sender, KeyboardHookEventArgs args)
             {
                 args.Handled = true;
                 if (args.Key == Keys.Escape)
@@ -101,7 +107,7 @@ namespace HomeCenter.NET.Services
                 combination = new KeysCombination(args.Key, args.IsCtrlPressed, args.IsShiftPressed, args.IsAltPressed);
             }
 
-            void OnMouseHookOnMouseDown(object sender, MouseEventExtArgs args)
+            void OnMouseHookOnMouseDown(object? sender, MouseEventExtArgs args)
             {
                 if (args.SpecialButton == 0)
                 {
@@ -139,7 +145,12 @@ namespace HomeCenter.NET.Services
                 }
 
                 var process = User32Utilities.GetForegroundProcess();
-                var appExePath = process.MainModule.FileName;
+                var appExePath = process.MainModule?.FileName;
+
+                if (string.IsNullOrWhiteSpace(appExePath))
+                {
+                    return false;
+                }
 
                 //var appProcessName = process.ProcessName;
                 //var appExeName = appExePath.Substring(appExePath.LastIndexOf(@"\") + 1);
@@ -155,10 +166,7 @@ namespace HomeCenter.NET.Services
         public void Dispose()
         {
             KeyboardHook?.Dispose();
-            KeyboardHook = null;
-
             MouseHook?.Dispose();
-            MouseHook = null;
         }
 
         #endregion

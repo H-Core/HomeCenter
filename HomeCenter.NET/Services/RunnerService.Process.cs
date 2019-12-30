@@ -12,12 +12,12 @@ namespace HomeCenter.NET.Services
             public bool IsCompleted { get; set; }
             public bool IsCanceled { get; set; }
             public int Id { get; set; }
-            public string Name { get; set; }
-            public Thread Thread { get; set; }
-            public Task Task { get; set; }
-            public RunInformation Information { get; set; }
+            public string? Name { get; set; }
+            public Thread? Thread { get; set; }
+            public Task? Task { get; set; }
+            public RunInformation? Information { get; set; }
 
-            public Process(string name, Task task, Thread thread)
+            public Process(string? name, Task task, Thread thread)
             {
                 Name = name;
                 Task = task;
@@ -25,7 +25,7 @@ namespace HomeCenter.NET.Services
                 Thread = thread;
             }
 
-            public Process(string name, Exception exception)
+            public Process(string? name, Exception exception)
             {
                 Name = name;
                 Information = new RunInformation(exception);
@@ -36,7 +36,7 @@ namespace HomeCenter.NET.Services
                 IsCanceled = true;
                 IsCompleted = true;
 
-                Thread.Abort();
+                Thread?.Abort();
             }
         }
     }

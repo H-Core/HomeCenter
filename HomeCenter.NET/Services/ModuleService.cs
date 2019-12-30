@@ -17,15 +17,16 @@ namespace HomeCenter.NET.Services
         public Settings Settings { get; }
         public BaseManager Manager { get; }
 
-        public IRecorder Recorder => GetPlugin<IRecorder>(Settings.Recorder)?.Value;
-        public ISearcher Searcher => GetPlugin<ISearcher>(Settings.Searcher)?.Value;
-        public IConverter Converter => GetPlugin<IConverter>(Settings.Converter)?.Value;
+        public IRecorder? Recorder => GetPlugin<IRecorder>(Settings.Recorder)?.Value;
+        public ISearcher? Searcher => GetPlugin<ISearcher>(Settings.Searcher)?.Value;
+        public IConverter? Converter => GetPlugin<IConverter>(Settings.Converter)?.Value;
+        public ISynthesizer? Synthesizer => GetPlugin<ISynthesizer>(Settings.Synthesizer)?.Value;
+
         public List<IConverter> AlternativeConverters => Settings.UseAlternativeConverters
             ? GetEnabledPlugins<IConverter>()
                   .Where(pair => !string.Equals(pair.Key, Settings.Converter))
                   .Select(pair => pair.Value.Value)
                   .ToList() : new List<IConverter>();
-        public ISynthesizer Synthesizer => GetPlugin<ISynthesizer>(Settings.Synthesizer)?.Value;
         public List<IRunner> Runners => GetEnabledPlugins<IRunner>().Select(i => i.Value.Value).ToList();
 
         public List<IModule> Modules => GetEnabledPlugins<IModule>().Select(i => i.Value.Value).ToList();

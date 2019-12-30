@@ -4,7 +4,7 @@ using HomeCenter.NET.Properties;
 
 namespace HomeCenter.NET.Services
 {
-    public class IpcService : IDisposable
+    public sealed class IpcService : IDisposable
     {
         #region Properties
 
@@ -49,7 +49,6 @@ namespace HomeCenter.NET.Services
         public void Dispose()
         {
             IpcServer?.Dispose();
-            IpcServer = null;
         }
 
         #endregion

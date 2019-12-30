@@ -27,13 +27,13 @@ namespace HomeCenter.NET.Services
 
         #region Events
 
-        public event TextDelegate NotHandledText;
+        public event TextDelegate? NotHandledText;
 
-        public event TextDelegate NewOutput;
+        public event TextDelegate? NewOutput;
         private void Print(string text) => NewOutput?.Invoke(text);
 
-        public event EventHandler BeforeRun;
-        public event EventHandler AfterRun;
+        public event EventHandler? BeforeRun;
+        public event EventHandler? AfterRun;
 
         #endregion
 
@@ -76,7 +76,7 @@ namespace HomeCenter.NET.Services
 
         public (IRunner runner, string command)[] GetSupportedCommands() => ModuleService
             .Runners
-            .Select(runner => (runner: runner, commands: runner.GetSupportedCommands()))
+            .Select(runner => (runner, commands: runner.GetSupportedCommands()))
             .SelectMany(i => i.commands, (i, command) => (i.runner, command))
             .ToArray();
 
@@ -87,7 +87,7 @@ namespace HomeCenter.NET.Services
                 .ToArray();
         }
 
-        public IRunner GetRunnerFor(string key, string data)
+        public IRunner? GetRunnerFor(string? key, string? data)
         {
             foreach (var runner in ModuleService.Runners)
             {
@@ -103,10 +103,10 @@ namespace HomeCenter.NET.Services
             return null;
         }
 
-        public object GetVariableValue(string key) =>
+        public object? GetVariableValue(string key) =>
             ModuleService.Modules.FirstOrDefault(i => i.GetSupportedVariables().Contains(key))?.GetModuleVariableValue(key);
 
-        private bool IsInternal(string key, string data) => ModuleService.Runners.Any(i => i.IsInternal(key, data));
+        private bool IsInternal(string? key, string data) => ModuleService.Runners.Any(i => i.IsInternal(key, data));
 
         #endregion
 
@@ -126,6 +126,11 @@ namespace HomeCenter.NET.Services
             }
 
             var (newKey, newCommand) = StorageService.GetCommand(keyOrData);
+            if (newCommand == null)
+            {
+                return;
+            }
+
             var realActionData = newKey ?? newCommand.Lines.FirstOrDefault()?.Text;
             var isInternal = newCommand.Lines.All(i => IsInternal(newKey, i.Text));
             if (show && !isInternal)
@@ -162,18 +167,17 @@ namespace HomeCenter.NET.Services
             }
         }
 
-        private async Task<Process> RunSingleLine(string key, string data)
+        private async Task<Process> RunSingleLine(string? key, string? data)
         {
             var runner = GetRunnerFor(key, data);
-            var isHandled = runner != null;
-            if (!isHandled)
+            if (runner == null)
             {
                 NotHandledText?.Invoke(key);
 
                 return new Process(data ?? key, new Exception($"Runner for command \"{data}\" is not found"));
             }
 
-            Thread thread = null;
+            Thread? thread = null;
             var task = Task.Run(() =>
             {
                 thread = Thread.CurrentThread;
