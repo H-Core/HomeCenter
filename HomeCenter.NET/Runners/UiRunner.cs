@@ -12,13 +12,13 @@ namespace HomeCenter.NET.Runners
 
         public ModuleService ModuleService { get; }
 
-        public Action<string> RestartAction { private get; set; }
-        public Action<string> UpdateRestartAction { private get; set; }
-        public Action ShowUiAction { private get; set; }
-        public Action ShowSettingsAction { private get; set; }
-        public Action ShowCommandsAction { private get; set; }
-        public Action<string> ShowModuleSettingsAction { private get; set; }
-        public Action StartRecordAction { private get; set; }
+        public Action<string>? RestartAction { private get; set; }
+        public Action<string>? UpdateRestartAction { private get; set; }
+        public Action? ShowUiAction { private get; set; }
+        public Action? ShowSettingsAction { private get; set; }
+        public Action? ShowCommandsAction { private get; set; }
+        public Action<string>? ShowModuleSettingsAction { private get; set; }
+        public Action? StartRecordAction { private get; set; }
 
         #endregion
 

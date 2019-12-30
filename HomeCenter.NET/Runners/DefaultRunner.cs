@@ -13,7 +13,7 @@ namespace HomeCenter.NET.Runners
     {
         #region Properties
 
-        private string UserName { get; set; }
+        private string? UserName { get; set; }
         
         #endregion
 
@@ -70,7 +70,7 @@ namespace HomeCenter.NET.Runners
             await Task.Delay(delay);
         }
 
-        private static Process StartCommandInternal(string command)
+        private static Process? StartCommandInternal(string command)
         {
             if (string.IsNullOrWhiteSpace(command))
             {
@@ -91,20 +91,19 @@ namespace HomeCenter.NET.Runners
             try
             {
                 await Task.Delay(1000000);
-                await Task.Run(() => process.WaitForExit());
+                await Task.Run(() => process?.WaitForExit());
             }
             finally
             {
-                process.Close();
+                process?.Close();
             }
         }
 
         private static void Notify(string command)
         {
-            using (var player = new System.Media.SoundPlayer(Resources.beep))
-            {
-                player.Play();
-            }
+            using var player = new System.Media.SoundPlayer(Resources.beep);
+
+            player.Play();
         }
 
         #endregion

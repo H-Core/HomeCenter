@@ -7,8 +7,8 @@ namespace HomeCenter.NET.Runners
     {
         #region Properties
 
-        public Action<string> ClipboardAction { private get; set; }
-        public Func<string> ClipboardFunc { private get; set; }
+        public Action<string>? ClipboardAction { private get; set; }
+        public Func<string>? ClipboardFunc { private get; set; }
 
         #endregion
 

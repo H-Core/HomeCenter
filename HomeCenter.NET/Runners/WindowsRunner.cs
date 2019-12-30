@@ -22,7 +22,7 @@ namespace HomeCenter.NET.Runners
 
         #region Private methods
 
-        private static string NormalizePath(string path) =>
+        private static string? NormalizePath(string? path) =>
             path?.Replace("\\\\", "\\").Replace("//", "\\").Replace("/", "\\");
 
         private void ExplorerCommand(string command) => Run($"start explorer \"{NormalizePath(command)}\"");
