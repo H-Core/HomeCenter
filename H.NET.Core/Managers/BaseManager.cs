@@ -71,7 +71,7 @@ namespace H.NET.Core.Managers
 
             try
             {
-                var text = await Converter.Convert(bytes);
+                var text = await Converter.ConvertAsync(bytes);
                 if (!AlternativeConverters.Any())
                 {
                     //Log("No alternative converters");
@@ -79,7 +79,7 @@ namespace H.NET.Core.Managers
                     return;
                 }
 
-                var alternativeTexts = AlternativeConverters.Select(async i => await i.Convert(bytes)).ToList();
+                var alternativeTexts = AlternativeConverters.Select(async i => await i.ConvertAsync(bytes)).ToList();
                 if (!string.IsNullOrWhiteSpace(text))
                 {
                     //Log("Text is not empty. No alternative converters is uses");

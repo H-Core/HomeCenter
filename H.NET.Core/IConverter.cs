@@ -1,9 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace H.NET.Core
 {
     public interface IConverter : IModule
     {
-        Task<string> Convert(byte[] bytes);
+        bool IsStreamingRecognitionSupported { get; }
+
+        Task<string> ConvertAsync(byte[] bytes, CancellationToken cancellationToken = default);
+        Task<IStreamingRecognition> StartStreamingRecognitionAsync(CancellationToken cancellationToken = default);
     }
 }

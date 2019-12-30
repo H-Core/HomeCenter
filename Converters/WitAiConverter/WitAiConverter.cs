@@ -7,9 +7,11 @@ using H.NET.Core.Converters;
 
 namespace H.NET.Converters
 {
-    public class WitAiConverter : Converter
+    public class WitAiConverter : Converter, IConverter
     {
         #region Properties
+
+        bool IConverter.IsStreamingRecognitionSupported => true;
 
         public string Token { get; set; } = string.Empty;
 

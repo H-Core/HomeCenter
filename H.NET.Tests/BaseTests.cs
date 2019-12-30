@@ -70,7 +70,7 @@ namespace H.NET.Tests
             Assert.NotNull(data);
             Assert.NotNull(converter);
 
-            Assert.Equal(expected, await converter.Convert(data));
+            Assert.Equal(expected, await converter.ConvertAsync(data));
 
             BaseDisposeTest(converter);
         }

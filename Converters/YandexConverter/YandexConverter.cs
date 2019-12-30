@@ -13,9 +13,11 @@ using Yandex.Cloud.Ai.Stt.V2;
 
 namespace H.NET.Converters
 {
-    public sealed class YandexConverter : Converter
+    public sealed class YandexConverter : Converter, IConverter
     {
         #region Properties
+
+        bool IConverter.IsStreamingRecognitionSupported => true;
 
         public string Lang { get; set; } = string.Empty;
         public string Topic { get; set; } = string.Empty;
