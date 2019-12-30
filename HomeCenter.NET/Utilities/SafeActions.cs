@@ -7,9 +7,9 @@ namespace HomeCenter.NET.Utilities
     public static class SafeActions
     {
         public static Action<Exception> DefaultExceptionAction { get; set; } = 
-            e => Console.WriteLine($@"Exception: {e.ToString()}");
+            exception => Console.WriteLine($@"Exception: {exception}");
 
-        public static void Run(Action action, Action<Exception> extencionAction = null)
+        public static void Run(Action action, Action<Exception>? exceptionAction = null)
         {
             try
             {
@@ -17,9 +17,9 @@ namespace HomeCenter.NET.Utilities
             }
             catch (Exception exception)
             {
-                if (extencionAction != null)
+                if (exceptionAction != null)
                 {
-                    extencionAction(exception);
+                    exceptionAction(exception);
                 }
                 else
                 {
@@ -28,7 +28,7 @@ namespace HomeCenter.NET.Utilities
             }
         }
 
-        public static void OnUnhandledException(object exceptionObject, Action<Exception> extencionAction = null)
+        public static void OnUnhandledException(object exceptionObject, Action<Exception>? exceptionAction = null)
         {
             if (!(exceptionObject is Exception exception))
             {
@@ -41,9 +41,9 @@ namespace HomeCenter.NET.Utilities
                 return;
             }
 
-            if (extencionAction != null)
+            if (exceptionAction != null)
             {
-                extencionAction(exception);
+                exceptionAction(exception);
             }
             else
             {
@@ -51,7 +51,7 @@ namespace HomeCenter.NET.Utilities
             }
         }
 
-        public static async Task SafeAction(Func<Task> action, Action<Exception> exceptionAction, Func<bool> check = null, Action finallyAction = null)
+        public static async Task SafeAction(Func<Task> action, Action<Exception> exceptionAction, Func<bool>? check = null, Action? finallyAction = null)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace HomeCenter.NET.Utilities
             }
         }
 
-        public static void SafeAction(Action action, Action<Exception> exceptionAction, Func<bool> check = null, Action finallyAction = null)
+        public static void SafeAction(Action action, Action<Exception> exceptionAction, Func<bool>? check = null, Action? finallyAction = null)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace HomeCenter.NET.Utilities
             }
         }
 
-        public static EventHandler<T> CreateSafeEventHandler<T>(Action<Exception, object, T> exceptionAction, EventHandler<T> action)
+        public static EventHandler<T> CreateSafeEventHandler<T>(Action<Exception, object?, T> exceptionAction, EventHandler<T> action)
         {
             return (sender, args) =>
             {

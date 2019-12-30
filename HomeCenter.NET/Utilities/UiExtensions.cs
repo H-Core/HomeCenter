@@ -30,7 +30,10 @@ namespace HomeCenter.NET.Utilities
 
         public static bool IsModal(this Window window)
         {
-            return (bool)typeof(Window).GetField("_showingAsDialog", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(window);
+            var value = typeof(Window).GetField("_showingAsDialog", BindingFlags.Instance | BindingFlags.NonPublic)?
+                .GetValue(window) ?? throw new InvalidOperationException("Field _showingAsDialog is not found");
+
+            return (bool)value;
         }
 
         public static void SetDialogResult(this Window window, bool? value)
@@ -48,12 +51,6 @@ namespace HomeCenter.NET.Utilities
             {
                 // ignored
             }
-        }
-
-        public static void SetDialogResultAndClose(this Window window, bool? value)
-        {
-            window.SetDialogResult(value);
-            window.Close();
         }
     }
 }

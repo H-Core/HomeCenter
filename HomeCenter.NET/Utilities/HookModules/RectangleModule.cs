@@ -13,7 +13,7 @@ namespace HomeCenter.NET.Utilities.HookModules
     {
         #region Properties
 
-        private RectangleView View { get; set; }
+        private RectangleView? View { get; set; }
         private Point StartPoint { get; set; }
         private bool IsMouseDown { get; set; }
 
@@ -21,7 +21,7 @@ namespace HomeCenter.NET.Utilities.HookModules
 
         #region Events
 
-        public event EventHandler<Rectangle> NewRectangle;
+        public event EventHandler<Rectangle>? NewRectangle;
 
         private void OnNewRectangle(Rectangle rectangle)
         {
@@ -32,7 +32,7 @@ namespace HomeCenter.NET.Utilities.HookModules
 
         #region Constructors
 
-        public RectangleModule(List<Key> keys, List<ModifierKeys> modifiers) : base(keys, modifiers)
+        public RectangleModule(List<Key>? keys, List<ModifierKeys>? modifiers) : base(keys, modifiers)
         {
         }
 
@@ -74,6 +74,7 @@ namespace HomeCenter.NET.Utilities.HookModules
 
             var rectangle = CalculateRectangle(e);
 
+            View = View ?? throw new InvalidOperationException("View is null");
             View.Border.Margin = new Thickness(
                 rectangle.Left - View.Left,
                 rectangle.Top - View.Top,

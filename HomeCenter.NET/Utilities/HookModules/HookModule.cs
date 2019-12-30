@@ -12,7 +12,7 @@ namespace HomeCenter.NET.Utilities.HookModules
         public bool IsHookCombination() =>
             ActivationKeys.All(Keyboard.IsKeyDown) && ActivationModifiers.All(i => (Keyboard.Modifiers & i) == i);
 
-        public HookModule(List<Key> keys, List<ModifierKeys> modifiers)
+        public HookModule(List<Key>? keys, List<ModifierKeys>? modifiers)
         {
             ActivationKeys = keys ?? new List<Key>();
             ActivationModifiers = modifiers ?? new List<ModifierKeys>();

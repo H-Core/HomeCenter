@@ -5,7 +5,7 @@ namespace HomeCenter.NET.Utilities
 {
     public static class WpfSafeActions
     {
-        public static void Initialize(Action<Exception> action = null)
+        public static void Initialize(Action<Exception>? action = null)
         {
             SafeActions.DefaultExceptionAction = action ?? ShowException;
             AppDomain.CurrentDomain.UnhandledException += (o, args) =>

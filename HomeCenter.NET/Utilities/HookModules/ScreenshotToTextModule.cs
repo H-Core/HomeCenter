@@ -9,7 +9,7 @@ namespace HomeCenter.NET.Utilities.HookModules
 {
     public class ScreenshotToTextModule : ScreenshotModule
     {
-        private AdvancedOcr Ocr { get; set; }
+        private AdvancedOcr? Ocr { get; set; }
 
         public ScreenshotToTextModule() : base(new List<Key> { Key.LeftAlt, Key.M }, null)
         {
@@ -17,7 +17,7 @@ namespace HomeCenter.NET.Utilities.HookModules
 
             NewImage += async (obj, image) => await Task.Run(() =>
             {
-                Ocr = Ocr ?? new AdvancedOcr
+                Ocr ??= new AdvancedOcr
                 {
                     //CleanBackgroundNoise = true,
                     //EnhanceContrast = true,

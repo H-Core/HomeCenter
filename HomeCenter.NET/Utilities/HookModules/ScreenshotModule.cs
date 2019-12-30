@@ -16,7 +16,7 @@ namespace HomeCenter.NET.Utilities.HookModules
 
         #region Events
 
-        public event EventHandler<Image> NewImage;
+        public event EventHandler<Image>? NewImage;
 
         private void OnNewImage(Image value)
         {
@@ -27,11 +27,11 @@ namespace HomeCenter.NET.Utilities.HookModules
 
         #region Constructors
 
-        public ScreenshotModule(List<Key> keys, List<ModifierKeys> modifiers) : base(keys, modifiers)
+        public ScreenshotModule(List<Key>? keys, List<ModifierKeys>? modifiers) : base(keys, modifiers)
         {
             NewRectangle += async (obj, rectangle) =>
             {
-                Image image = null;
+                Image? image = null;
                 try
                 {
                     image = await Screenshoter.ShotVirtualDisplayRectangleAsync(rectangle);

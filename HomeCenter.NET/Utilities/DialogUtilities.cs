@@ -5,7 +5,7 @@ namespace HomeCenter.NET.Utilities
 {
     public static class DialogUtilities
     {
-        public static string OpenFileDialog(string path = null, string filter = null)
+        public static string? OpenFileDialog(string? path = null, string? filter = null)
         {
             var dialog = new VistaOpenFileDialog();
             if (!string.IsNullOrWhiteSpace(filter))
@@ -20,7 +20,7 @@ namespace HomeCenter.NET.Utilities
             return dialog.ShowDialog() == true ? dialog.FileName : null;
         }
 
-        public static string OpenFolderDialog(string path = null)
+        public static string? OpenFolderDialog(string? path = null)
         {
             var dialog = new VistaFolderBrowserDialog();
             if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
