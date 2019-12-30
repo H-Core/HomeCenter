@@ -20,7 +20,7 @@ namespace HomeCenter.NET.Views.Settings
 
         #region Properties
 
-        public string Text {
+        public string? Text {
             get => GetValue(TextProperty).ToString();
             set => SetValue(TextProperty, value);
         }
