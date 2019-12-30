@@ -36,7 +36,6 @@
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.104-alpha" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" />
-    <PackageReference Include="InputSimulator" Version="1.0.4" />
     <PackageReference Include="IronOcr" Version="4.4.0" />
     <PackageReference Include="IronOcr.Languages.Russian" Version="4.4.4.1" />
     <PackageReference Include="Ookii.Dialogs" Version="1.0.0" />

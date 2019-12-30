@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using WindowsInput;
-using WindowsInput.Native;
+﻿using System.Windows.Forms;
 using H.NET.Core.Runners;
 
 namespace HomeCenter.NET.Runners
@@ -19,33 +16,6 @@ namespace HomeCenter.NET.Runners
 
         #region Private methods
 
-        private static VirtualKeyCode ToVirtualKey(string key)
-        {
-            string text;
-            if (key.Length == 1)
-            {
-                text = $"VK_{key}";
-            }
-            else if (key.ToLowerInvariant() == "alt")
-            {
-                text = "MENU";
-            }
-            else if (key.ToLowerInvariant() == "ctrl")
-            {
-                text = "CONTROL";
-            }
-            else if (key.ToLowerInvariant() == "enter")
-            {
-                text = "RETURN";
-            }
-            else
-            {
-                text = key;
-            }
-            
-            return (VirtualKeyCode)Enum.Parse(typeof(VirtualKeyCode), text, true);
-        } 
-
         private static void KeyboardCommand(string command)
         {
             if (string.IsNullOrWhiteSpace(command))
@@ -53,11 +23,7 @@ namespace HomeCenter.NET.Runners
                 return;
             }
 
-            var keys = command.Split('+');
-            var mainKey = ToVirtualKey(keys.LastOrDefault());
-            var otherKeys = keys.Take(keys.Length - 1).Select(ToVirtualKey);
-            
-            new InputSimulator().Keyboard.ModifiedKeyStroke(otherKeys, mainKey);
+            SendKeys.Send(command);
         }
 
         #endregion
