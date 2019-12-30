@@ -22,8 +22,8 @@ namespace HomeCenter.NET
 {
     public class Bootstrapper : BootstrapperBase
     {
-        private SimpleContainer Container { get; set; }
-        private MainView MainView { get; set; }
+        private SimpleContainer? Container { get; set; }
+        private MainView? MainView { get; set; }
 
         public Bootstrapper()
         {
@@ -67,7 +67,7 @@ namespace HomeCenter.NET
 
             ConventionManager.AddElementConvention<UIElement>(UIElement.VisibilityProperty, "Visibility", "VisibilityChanged");
 
-            void BindVisibilityProperties(IEnumerable<FrameworkElement> frameWorkElements, Type viewModel)
+            static void BindVisibilityProperties(IEnumerable<FrameworkElement> frameWorkElements, Type viewModel)
             {
                 foreach (var frameworkElement in frameWorkElements)
                 {
@@ -131,15 +131,13 @@ namespace HomeCenter.NET
                     .Replace("[", string.Empty)
                     .Replace("]", string.Empty);
 
-                var splits = triggerDetail.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-                
-                switch (splits[0])
+                var splits = triggerDetail.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
+
+                return splits[0] switch
                 {
-                    case "KeyUp":
-                        return KeyUpTrigger.FromText(splits[1]);
-                }
-                
-                return defaultCreateTrigger(target, triggerText);
+                    "KeyUp" => KeyUpTrigger.FromText(splits[1]),
+                    _ => defaultCreateTrigger(target, triggerText)
+                };
             };
             
             #endregion
@@ -216,16 +214,22 @@ namespace HomeCenter.NET
 
         protected override object GetInstance(Type service, string key)
         {
+            Container = Container ?? throw new InvalidOperationException("Container is null");
+
             return Container.GetInstance(service, key);
         }
 
         protected override IEnumerable<object> GetAllInstances(Type service)
         {
+            Container = Container ?? throw new InvalidOperationException("Container is null");
+
             return Container.GetAllInstances(service);
         }
 
         protected override void BuildUp(object instance)
         {
+            Container = Container ?? throw new InvalidOperationException("Container is null");
+
             Container.BuildUp(instance);
         }
 
