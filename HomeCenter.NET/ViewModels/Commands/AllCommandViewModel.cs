@@ -14,7 +14,7 @@ namespace HomeCenter.NET.ViewModels.Commands
         #region Constructors
 
         public AllCommandViewModel((IRunner, string) tuple) : 
-            base(null, null, editable: true, run: true)
+            base(string.Empty, string.Empty, editable: true, run: true)
         {
             var (runner, command) = tuple;
             var values = command.SplitOnlyFirst(' ');

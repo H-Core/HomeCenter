@@ -9,7 +9,7 @@ namespace HomeCenter.NET.ViewModels.Modules
     {
         public BindableCollection<string> Elements { get; }
 
-        public string SelectedElement {
+        public string? SelectedElement {
             get => Value as string;
             set {
                 Value = value;

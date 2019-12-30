@@ -13,9 +13,9 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         #region Constructors
 
-        public UserCommandViewModel(Command command) : 
-            base(command?.FirstKeyText,
-                command?.FirstDataText,
+        public UserCommandViewModel(Command? command) : 
+            base(command?.FirstKeyText ?? string.Empty,
+                command?.FirstDataText ?? string.Empty,
                 command?.HotKey,
                 run: true, edit: true, delete: true)
         {

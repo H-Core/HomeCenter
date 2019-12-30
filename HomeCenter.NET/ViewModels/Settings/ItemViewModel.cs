@@ -8,7 +8,7 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         public string Name { get; set; }
 
-        private string _description;
+        private string _description = string.Empty;
         public string Description
         {
             get => _description;
@@ -29,10 +29,10 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         #region Constructors
 
-        protected ItemViewModel(string name, string description,
+        protected ItemViewModel(string? name, string description,
             bool update = false, bool edit = false, bool add = false, bool delete = false)
         {
-            Name = name;
+            Name = name ?? string.Empty;
             Description = description;
 
             UpdateIsVisible = update;

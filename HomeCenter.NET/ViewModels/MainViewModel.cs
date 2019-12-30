@@ -24,7 +24,7 @@ namespace HomeCenter.NET.ViewModels
         public PopupViewModel PopupViewModel { get; }
         public BaseManager Manager { get; }
 
-        private string _text;
+        private string _text = string.Empty;
         public string Text {
             get => _text;
             set {
@@ -33,7 +33,7 @@ namespace HomeCenter.NET.ViewModels
             }
         }
 
-        private string _input;
+        private string _input = string.Empty;
         public string Input {
             get => _input;
             set {

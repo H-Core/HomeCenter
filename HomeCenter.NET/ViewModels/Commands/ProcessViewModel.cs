@@ -16,7 +16,7 @@ namespace HomeCenter.NET.ViewModels.Commands
         #region Constructors
 
         public ProcessViewModel(RunnerService.Process process) : 
-            base(null, process?.Name ?? string.Empty,
+            base(string.Empty, process?.Name ?? string.Empty,
                 run: true, delete: !process?.IsCompleted ?? false)
         {
             Process = process ?? throw new ArgumentNullException(nameof(process));

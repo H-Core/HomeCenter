@@ -27,7 +27,7 @@ namespace HomeCenter.NET.ViewModels.Modules
             SaveAction = () => Module.SaveSettings();
         }
 
-        protected SettingViewModel CreateSettingViewModel(Setting setting)
+        protected static SettingViewModel CreateSettingViewModel(Setting setting)
         {
             switch (setting.SettingType)
             {

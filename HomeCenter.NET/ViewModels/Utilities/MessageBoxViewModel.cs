@@ -13,7 +13,7 @@ namespace HomeCenter.NET.ViewModels.Utilities
 
         #region Constructors
 
-        public MessageBoxViewModel(string text, string title = null)
+        public MessageBoxViewModel(string text, string? title = null)
         {
             Text = text ?? string.Empty;
             Title = title ?? string.Empty;

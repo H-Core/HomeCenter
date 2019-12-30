@@ -13,7 +13,7 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         #region Constructors
 
-        public SingleCommandViewModel(SingleCommand command) : base(null, command?.Text, editable: true, run: true, delete: true)
+        public SingleCommandViewModel(SingleCommand command) : base(string.Empty, command?.Text ?? string.Empty, editable: true, run: true, delete: true)
         {
             Command = command ?? throw new ArgumentNullException(nameof(command));
             DescriptionEditAction = d => Command.Text = d;

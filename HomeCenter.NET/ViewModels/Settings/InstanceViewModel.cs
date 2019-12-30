@@ -12,7 +12,7 @@ namespace HomeCenter.NET.ViewModels.Settings
     {
         #region Properties
 
-        private string _name;
+        private string _name = string.Empty;
         public string Name {
             get => _name;
             set {
@@ -21,7 +21,7 @@ namespace HomeCenter.NET.ViewModels.Settings
             }
         }
 
-        private string _description;
+        private string _description = string.Empty;
         public string Description {
             get => _description;
             set {
@@ -67,7 +67,7 @@ namespace HomeCenter.NET.ViewModels.Settings
             var module = Instance.Value;
             var deletingAllowed = Instance.Exception != null || (Instance.Type?.AllowMultipleInstance() ?? false);
 
-            Name = name;
+            Name = name?? string.Empty;
             Description = module?.Name ?? Instance.Exception?.Message ?? string.Empty;
 
             IsValid = module != null;

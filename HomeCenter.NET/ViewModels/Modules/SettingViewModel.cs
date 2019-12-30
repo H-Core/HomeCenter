@@ -3,6 +3,7 @@ using System.Windows;
 using Caliburn.Micro;
 using H.NET.Core.Settings;
 using HomeCenter.NET.Utilities;
+// ReSharper disable UnusedMember.Global
 
 namespace HomeCenter.NET.ViewModels.Modules
 {
@@ -12,7 +13,7 @@ namespace HomeCenter.NET.ViewModels.Modules
 
         public Setting Setting { get; }
 
-        public object Value {
+        public object? Value {
             get => Setting.Value;
             set {
                 SafeActions.Run(() =>

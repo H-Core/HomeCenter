@@ -4,11 +4,11 @@ using Caliburn.Micro;
 
 namespace HomeCenter.NET.ViewModels.Utilities
 {
-    public class PopupViewModel : Screen, IDisposable
+    public sealed class PopupViewModel : Screen, IDisposable
     {
         #region Properties
 
-        private string _text;
+        private string _text = string.Empty;
         public string Text {
             get => _text;
             set
@@ -64,8 +64,7 @@ namespace HomeCenter.NET.ViewModels.Utilities
 
         public void Dispose()
         {
-            Timer?.Dispose();
-            Timer = null;
+            Timer.Dispose();
         }
 
         #endregion

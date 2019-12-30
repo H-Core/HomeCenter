@@ -27,25 +27,25 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         public bool IsStartup { get; set; }
 
-        public BindableCollection<ItemViewModel> IgnoredApplications { get; }
-        public BindableCollection<ItemViewModel> Assemblies { get; set; }
-        public BindableCollection<ItemViewModel> AvailableTypes { get; set; }
+        public BindableCollection<ItemViewModel>? IgnoredApplications { get; }
+        public BindableCollection<ItemViewModel>? Assemblies { get; set; }
+        public BindableCollection<ItemViewModel>? AvailableTypes { get; set; }
 
-        public BindableCollection<InstanceViewModel> Modules { get; set; }
-        public BindableCollection<InstanceViewModel> Recorders { get; set; }
-        public BindableCollection<InstanceViewModel> Converters { get; set; }
-        public BindableCollection<InstanceViewModel> Synthesizers { get; set; }
-        public BindableCollection<InstanceViewModel> Searchers { get; set; }
-        public BindableCollection<InstanceViewModel> Runners { get; set; }
-        public BindableCollection<InstanceViewModel> Notifiers { get; set; }
+        public BindableCollection<InstanceViewModel>? Modules { get; set; }
+        public BindableCollection<InstanceViewModel>? Recorders { get; set; }
+        public BindableCollection<InstanceViewModel>? Converters { get; set; }
+        public BindableCollection<InstanceViewModel>? Synthesizers { get; set; }
+        public BindableCollection<InstanceViewModel>? Searchers { get; set; }
+        public BindableCollection<InstanceViewModel>? Runners { get; set; }
+        public BindableCollection<InstanceViewModel>? Notifiers { get; set; }
 
-        public BindableCollection<string> RecorderElements { get; set; }
-        public BindableCollection<string> ConverterElements { get; set; }
-        public BindableCollection<string> SynthesizerElements { get; set; }
-        public BindableCollection<string> SearcherElements { get; set; }
+        public BindableCollection<string>? RecorderElements { get; set; }
+        public BindableCollection<string>? ConverterElements { get; set; }
+        public BindableCollection<string>? SynthesizerElements { get; set; }
+        public BindableCollection<string>? SearcherElements { get; set; }
 
-        private string _selectedRecorderElement;
-        public string SelectedRecorderElement {
+        private string? _selectedRecorderElement;
+        public string? SelectedRecorderElement {
             get => _selectedRecorderElement;
             set {
                 _selectedRecorderElement = value;
@@ -53,8 +53,8 @@ namespace HomeCenter.NET.ViewModels.Settings
             }
         }
 
-        private string _selectedConverterElement;
-        public string SelectedConverterElement {
+        private string? _selectedConverterElement;
+        public string? SelectedConverterElement {
             get => _selectedConverterElement;
             set {
                 _selectedConverterElement = value;
@@ -62,8 +62,8 @@ namespace HomeCenter.NET.ViewModels.Settings
             }
         }
 
-        private string _selectedSynthesizerElement;
-        public string SelectedSynthesizerElement {
+        private string? _selectedSynthesizerElement;
+        public string? SelectedSynthesizerElement {
             get => _selectedSynthesizerElement;
             set {
                 _selectedSynthesizerElement = value;
@@ -71,8 +71,8 @@ namespace HomeCenter.NET.ViewModels.Settings
             }
         }
 
-        private string _selectedSearcherElement;
-        public string SelectedSearcherElement {
+        private string? _selectedSearcherElement;
+        public string? SelectedSearcherElement {
             get => _selectedSearcherElement;
             set {
                 _selectedSearcherElement = value;
@@ -234,12 +234,12 @@ namespace HomeCenter.NET.ViewModels.Settings
             {
                 case IgnoredApplicationViewModel _:
                     HookService.HookIgnoredApps = HookService.HookIgnoredApps.Except(new[] { viewModel.Description }).ToList();
-                    IgnoredApplications.Remove(viewModel);
+                    IgnoredApplications?.Remove(viewModel);
                     break;
 
                 case AssemblyViewModel _:
                     ModuleService.Uninstall(viewModel.Description);
-                    Assemblies.Remove(viewModel);
+                    Assemblies?.Remove(viewModel);
                     break;
 
                 default:
@@ -342,7 +342,7 @@ namespace HomeCenter.NET.ViewModels.Settings
             }
 
             HookService.HookIgnoredApps = HookService.HookIgnoredApps.Concat(new[] { path }).ToList();
-            IgnoredApplications.Add(new IgnoredApplicationViewModel(path));
+            IgnoredApplications?.Add(new IgnoredApplicationViewModel(path));
         }
 
         #endregion

@@ -9,14 +9,14 @@ namespace HomeCenter.NET.ViewModels
     {
         #region Properties
 
-        protected Action SaveAction { get; set; }
-        protected Action CancelAction { get; set; }
+        protected Action? SaveAction { get; set; }
+        protected Action? CancelAction { get; set; }
 
         #endregion
 
         #region Constructors
 
-        public SaveCancelViewModel(Action saveAction = null, Action cancelAction = null)
+        public SaveCancelViewModel(Action? saveAction = null, Action? cancelAction = null)
         {
             SaveAction = saveAction;
             CancelAction = cancelAction;
@@ -29,6 +29,7 @@ namespace HomeCenter.NET.ViewModels
         public async Task SaveAsync()
         {
             SaveAction?.Invoke();
+
             // TODO: alternative solution?
             try
             {
@@ -43,6 +44,7 @@ namespace HomeCenter.NET.ViewModels
         public async Task CancelAsync()
         {
             CancelAction?.Invoke();
+
             try
             {
                 await TryCloseAsync(false);

@@ -1,6 +1,7 @@
 ﻿using System;
 using H.NET.Core.Settings;
 using HomeCenter.NET.Utilities;
+// ReSharper disable UnusedMember.Global
 
 namespace HomeCenter.NET.ViewModels.Modules
 {
@@ -24,6 +25,11 @@ namespace HomeCenter.NET.ViewModels.Modules
         {
             // TODO: replace with WindowManager
             var text = Value as string;
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                return;
+            }
+
             var path = Setting.SettingType == SettingType.Path
                 ? DialogUtilities.OpenFileDialog(text)
                 : DialogUtilities.OpenFolderDialog(text);

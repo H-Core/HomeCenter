@@ -11,10 +11,10 @@
 
         #region Constructors
 
-        public RenameViewModel(string oldName, string newName = null)
+        public RenameViewModel(string oldName, string? newName = null)
         {
             OldName = oldName;
-            NewName = newName;
+            NewName = newName ?? string.Empty;
         }
 
         #endregion
