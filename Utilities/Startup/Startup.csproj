@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>H.NET.Utilities</RootNamespace>
     <AssemblyName>H.NET.Utilities.Startup</AssemblyName>
     <AssemblyTitle>H.NET.Utilities.Startup</AssemblyTitle>
@@ -9,11 +9,9 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Net.Http" />
+    <None Include="key.snk" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="key.snk" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.7.0" />
   </ItemGroup>
 </Project>
