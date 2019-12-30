@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Ookii.Dialogs.Wpf;
+using System.Windows.Forms;
 
 namespace HomeCenter.NET.Utilities
 {
@@ -7,7 +7,7 @@ namespace HomeCenter.NET.Utilities
     {
         public static string? OpenFileDialog(string? path = null, string? filter = null)
         {
-            var dialog = new VistaOpenFileDialog();
+            var dialog = new OpenFileDialog();
             if (!string.IsNullOrWhiteSpace(filter))
             {
                 dialog.Filter = filter;
@@ -17,18 +17,22 @@ namespace HomeCenter.NET.Utilities
                 dialog.FileName = path;
             }
 
-            return dialog.ShowDialog() == true ? dialog.FileName : null;
+            return dialog.ShowDialog() == DialogResult.OK
+                ? dialog.FileName
+                : null;
         }
 
         public static string? OpenFolderDialog(string? path = null)
         {
-            var dialog = new VistaFolderBrowserDialog();
+            var dialog = new FolderBrowserDialog();
             if (!string.IsNullOrWhiteSpace(path) && Directory.Exists(path))
             {
                 dialog.SelectedPath = path + Path.DirectorySeparatorChar;
             }
 
-            return dialog.ShowDialog() == true ? dialog.SelectedPath : null;
+            return dialog.ShowDialog() == DialogResult.OK
+                ? dialog.SelectedPath
+                : null;
         }
     }
 }
