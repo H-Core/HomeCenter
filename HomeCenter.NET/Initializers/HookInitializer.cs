@@ -12,7 +12,7 @@ namespace HomeCenter.NET.Initializers
     {
         public HookInitializer(BaseManager manager, HookService hookService, MainViewModel model, ScreenshotToClipboardModule screenshotToClipboardModule, ScreenshotToTextModule screenshotToTextModule, Settings settings)
         {
-            void GlobalKeyUp(object sender, KeyboardHookEventArgs e)
+            void GlobalKeyUp(object? sender, KeyboardHookEventArgs e)
             {
                 if (e.Key != Keys.None && e.Key == hookService.RecordKey ||
                     e.IsAltPressed && e.IsCtrlPressed)
@@ -21,7 +21,7 @@ namespace HomeCenter.NET.Initializers
                 }
             }
 
-            void GlobalKeyDown(object sender, KeyboardHookEventArgs e)
+            void GlobalKeyDown(object? sender, KeyboardHookEventArgs e)
             {
                  if (e.Key != Keys.None && e.Key == hookService.RecordKey ||
                     e.Key == Keys.Space && e.IsAltPressed && e.IsCtrlPressed)
@@ -42,7 +42,7 @@ namespace HomeCenter.NET.Initializers
                 }
             }
 
-            void GlobalMouseDown(object sender, MouseEventExtArgs e)
+            void GlobalMouseDown(object? sender, MouseEventExtArgs e)
             {
                 if (e.SpecialButton == 0)
                 {

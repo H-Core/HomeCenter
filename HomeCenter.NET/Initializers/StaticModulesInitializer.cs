@@ -97,7 +97,7 @@ namespace HomeCenter.NET.Initializers
 
         public static void RestartWithUpdate(string command) => Restart(command, "/updating");
 
-        public static void Restart(string command, string additionalArguments = null)
+        public static void Restart(string command, string? additionalArguments = null)
         {
             if (string.IsNullOrWhiteSpace(command))
             {
@@ -109,7 +109,7 @@ namespace HomeCenter.NET.Initializers
             }
         }
 
-        public static void Restart(ICollection<string> commands, string additionalArguments = null)
+        public static void Restart(ICollection<string> commands, string? additionalArguments = null)
         {
             var run = commands.Any() ? $"/run \"{string.Join(";", commands)}\"" : string.Empty;
 

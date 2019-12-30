@@ -40,7 +40,7 @@ namespace HomeCenter.NET.Utilities.HookModules
 
         #region Event Handlers
 
-        public void Global_MouseUp(object sender, MouseEventExtArgs e)
+        public void Global_MouseUp(object? sender, MouseEventExtArgs e)
         {
             IsMouseDown = false;
             if (!IsHookCombination())
@@ -62,7 +62,7 @@ namespace HomeCenter.NET.Utilities.HookModules
             OnNewRectangle(rectangle);
         }
 
-        public void Global_MouseMove(object sender, MouseEventExtArgs e)
+        public void Global_MouseMove(object? sender, MouseEventExtArgs e)
         {
             //if (System.Diagnostics.Debugger.IsAttached)
             if (!IsMouseDown || !IsHookCombination())
@@ -83,7 +83,7 @@ namespace HomeCenter.NET.Utilities.HookModules
 
         }
 
-        public void Global_MouseDown(object sender, MouseEventExtArgs e)
+        public void Global_MouseDown(object? sender, MouseEventExtArgs e)
         {
             IsMouseDown = true;
             if (!IsHookCombination())
