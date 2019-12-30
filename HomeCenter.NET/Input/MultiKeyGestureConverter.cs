@@ -23,12 +23,12 @@ namespace HomeCenter.NET.Input
         /// <summary>
         ///   The inner key converter.
         /// </summary>
-        static readonly KeyConverter keyConverter = new KeyConverter();
+        static readonly KeyConverter _keyConverter = new KeyConverter();
 
         /// <summary>
         ///   The inner modifier key converter.
         /// </summary>
-        static readonly ModifierKeysConverter modifierKeysConverter = new ModifierKeysConverter();
+        static readonly ModifierKeysConverter _modifierKeysConverter = new ModifierKeysConverter();
 
         /// <summary>
         ///   Tries to get the modifier equivalent to the specified string.
@@ -98,9 +98,8 @@ namespace HomeCenter.NET.Input
                     keyStrings = sequence.Split('+');
                     var modifiersCount = 0;
 
-                    ModifierKeys currentModifier;
                     string temp;
-                    while ((temp = keyStrings[modifiersCount]) != null && TryGetModifierKeys(temp.Trim(), out currentModifier))
+                    while ((temp = keyStrings[modifiersCount]) != null && TryGetModifierKeys(temp.Trim(), out var currentModifier))
                     {
                         modifiersCount++;
                         modifier |= currentModifier;
@@ -111,7 +110,8 @@ namespace HomeCenter.NET.Input
                         var keyString = keyStrings[i];
                         if (keyString != null)
                         {
-                            var key = (Key)keyConverter.ConvertFrom(keyString.Trim());
+                            var keyObject = _keyConverter.ConvertFrom(keyString.Trim()) ?? throw new InvalidOperationException("keyObject is null");
+                            var key = (Key)keyObject;
                             keys.Add(key);
                         }
                     }
@@ -141,32 +141,28 @@ namespace HomeCenter.NET.Input
         {
             if (destinationType == typeof(string))
             {
-                var gesture = value as MultiKeyGesture;
-
-                if (gesture != null)
+                if (value is MultiKeyGesture gesture)
                 {
                     var builder = new StringBuilder();
-
-                    KeySequence sequence;
 
                     for (var i = 0; i < gesture.KeySequences.Length; i++)
                     {
                         if (i > 0)
                             builder.Append(", ");
 
-                        sequence = gesture.KeySequences[i];
+                        var sequence = gesture.KeySequences[i];
                         if (sequence.Modifiers != ModifierKeys.None)
                         {
-                            builder.Append((string)modifierKeysConverter.ConvertTo(context, culture, sequence.Modifiers, destinationType));
+                            builder.Append((string)_modifierKeysConverter.ConvertTo(context, culture, sequence.Modifiers, destinationType));
                             builder.Append("+");
                         }
 
-                        builder.Append((string)keyConverter.ConvertTo(context, culture, sequence.Keys[0], destinationType));
+                        builder.Append((string)_keyConverter.ConvertTo(context, culture, sequence.Keys[0], destinationType));
 
                         for (var j = 1; j < sequence.Keys.Length; j++)
                         {
                             builder.Append("+");
-                            builder.Append((string)keyConverter.ConvertTo(context, culture, sequence.Keys[j], destinationType));
+                            builder.Append((string)_keyConverter.ConvertTo(context, culture, sequence.Keys[j], destinationType));
                         }
                     }
 
