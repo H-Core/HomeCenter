@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
     <ProjectReference Include="..\..\Recorders\NAudioRecorder\NAudioRecorder.csproj" />
+    <ProjectReference Include="..\WitAiConverter\WitAiConverter.csproj" />
     <ProjectReference Include="..\YandexConverter\YandexConverter.csproj" />
   </ItemGroup>
 

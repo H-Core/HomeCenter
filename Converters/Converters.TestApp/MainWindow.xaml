@@ -22,6 +22,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="30"></RowDefinition>
             </Grid.RowDefinitions>
@@ -29,11 +30,13 @@
                 <ColumnDefinition Width="30*"></ColumnDefinition>
                 <ColumnDefinition Width="70*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="OAuthToken:"/>
-            <Label Grid.Row="1" Grid.Column="0" Content="FolderId:"/>
-            <TextBox Grid.Row="0" Grid.Column="1" Name="OAuthTokenTextBox"/>
-            <TextBox Grid.Row="1" Grid.Column="1" Name="FolderIdTextBox"/>
-            <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Name="ProcessButton" Click="Button_Click" Content="Process"/>
+            <Label Grid.Row="0" Grid.Column="0" Content="Converter:"/>
+            <ComboBox Grid.Row="0" Grid.Column="1" Name="ConverterComboBox" />
+            <Label Grid.Row="1" Grid.Column="0" Content="OAuthToken:"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Name="OAuthTokenTextBox"/>
+            <Label Grid.Row="2" Grid.Column="0" Content="FolderId:"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Name="FolderIdTextBox"/>
+            <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Name="ProcessButton" Click="Button_Click" Content="Process"/>
         </Grid>
     </Grid>
 </Window>

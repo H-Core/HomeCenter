@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
+using H.NET.Core;
 using H.NET.Recorders;
 
 namespace H.NET.Converters.TestApp
@@ -13,6 +15,12 @@ namespace H.NET.Converters.TestApp
         public MainWindow()
         {
             InitializeComponent();
+
+            ConverterComboBox.ItemsSource = new List<string>
+            {
+                nameof(YandexConverter), 
+                nameof(WitAiConverter)
+            };
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
@@ -22,15 +30,34 @@ namespace H.NET.Converters.TestApp
 
             try
             {
-                using var recorder = new NAudioRecorder();
+                using var recorder = ConverterComboBox.Text switch
+                {
+                    nameof(WitAiConverter) => new NAudioRecorder
+                    {
+                        Channels = 16000,
+                    },
+                    nameof(YandexConverter) => new NAudioRecorder
+                    {
+                        Channels = 8000,
+                    },
+                    _ => throw new NotImplementedException()
+                }; 
                 recorder.Start();
 
-                using var converter = new YandexConverter
+                using var converter = ConverterComboBox.Text switch
                 {
-                    OAuthToken = OAuthTokenTextBox.Text,
-                    FolderId = FolderIdTextBox.Text,
-                    Lang = "ru-RU",
-                    SampleRateHertz = 8000,
+                    nameof(WitAiConverter) => (IConverter)new WitAiConverter
+                    {
+                        Token = "OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS"
+                    },
+                    nameof(YandexConverter) => new YandexConverter
+                    {
+                        OAuthToken = OAuthTokenTextBox.Text,
+                        FolderId = FolderIdTextBox.Text,
+                        Lang = "ru-RU",
+                        SampleRateHertz = 8000,
+                    },
+                    _ => throw new NotImplementedException()
                 };
 
                 using var recognition = await converter.StartStreamingRecognitionAsync().ConfigureAwait(false);
@@ -45,7 +72,10 @@ namespace H.NET.Converters.TestApp
                     OutputTextBlock.Text = $"{DateTime.Now:h:mm:ss.fff} {args.Text}";
                 });
 
-                await recognition.WriteAsync(recorder.Data);
+                if (recorder.Data != null)
+                {
+                    await recognition.WriteAsync(recorder.Data);
+                }
 
                 // ReSharper disable once AccessToDisposedClosure
                 recorder.NewData += async (o, args) => await recognition.WriteAsync(args.Buffer).ConfigureAwait(false);
