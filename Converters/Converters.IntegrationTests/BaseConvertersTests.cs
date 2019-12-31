@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using H.NET.Converters.IntegrationTests.Utilities;
 using H.NET.Core;
-using H.NET.Recorders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace H.NET.Converters.IntegrationTests
