@@ -32,7 +32,7 @@ namespace H.NET.Converters
         {
             Token = token ?? throw new ArgumentNullException(nameof(token));
 
-            HttpWebRequest = WebRequest.Create("https://api.wit.ai/speech") as HttpWebRequest ?? throw new InvalidOperationException("WebRequest is null");
+            HttpWebRequest = WebRequest.Create("https://api.wit.ai/speech?v=20170307") as HttpWebRequest ?? throw new InvalidOperationException("WebRequest is null");
             HttpWebRequest.Method = "POST";
             HttpWebRequest.Headers["Authorization"] = "Bearer " + Token;
             HttpWebRequest.Headers["Transfer-encoding"] = "chunked";
@@ -87,10 +87,26 @@ namespace H.NET.Converters
 
             await WriteTask.ConfigureAwait(false);
 
-            var response = await HttpWebRequest.GetResponseAsync();
-            var stream = response.GetResponseStream() ?? throw new InvalidOperationException("Response stream is null");
-            var reader = new StreamReader(stream);
+            WebResponse response;
+            var isBadRequest = false;
+            try
+            {
+                response = await HttpWebRequest.GetResponseAsync();
+            }
+            catch (WebException exception)
+            {
+                isBadRequest = true;
+                response = exception.Response;
+            }
+
+            using var responseDispose = response;
+            using var stream = response.GetResponseStream() ?? throw new InvalidOperationException("Response stream is null");
+            using var reader = new StreamReader(stream);
             var json = await reader.ReadToEndAsync();
+            if (isBadRequest)
+            {
+                throw new InvalidOperationException($"Invalid response: {json}");
+            }
 
             var obj = JsonConvert.DeserializeObject<WitAiResponse>(json);
 
