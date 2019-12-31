@@ -36,11 +36,10 @@ namespace H.NET.Converters
             HttpClient = new HttpClient();
 
             HttpClient.DefaultRequestHeaders.Authorization = AuthenticationHeaderValue.Parse("Bearer " + Token);
-
+            
             PushStreamContent = new PushStreamContent(async (stream, httpContent, transportContext) =>
             {
                 using var writer = new BinaryWriter(stream);
-
                 while (!IsStopped || !WriteQueue.IsEmpty)
                 {
                     // TODO: Combine all accumulated data in the queue into one message
@@ -52,15 +51,9 @@ namespace H.NET.Converters
 
                     writer.Write(bytes);
                 }
-            })
-            {
-                Headers =
-                {
-                    ContentType = MediaTypeHeaderValue.Parse("audio/wav")
-                }
-            };
+            }, MediaTypeHeaderValue.Parse("audio/wav"));
             
-            PostTask = HttpClient.PostAsync("https://api.wit.ai/speech", PushStreamContent);
+            PostTask = HttpClient.PostAsync("https://api.wit.ai/speech?v=20170307", PushStreamContent);
         }
 
         #endregion
@@ -79,10 +72,13 @@ namespace H.NET.Converters
             IsStopped = true;
 
             var message = await PostTask.ConfigureAwait(false);
-            
-            message.EnsureSuccessStatusCode();
-
             var json = await message.Content.ReadAsStringAsync();
+
+            if (!message.IsSuccessStatusCode)
+            {
+                throw new InvalidOperationException($"Invalid answer: {json}");
+            }
+
 
             var obj = JsonConvert.DeserializeObject<WitAiResponse>(json);
 
