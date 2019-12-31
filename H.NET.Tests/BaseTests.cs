@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using H.NET.Core;
 using H.NET.Core.Managers;
@@ -58,7 +59,7 @@ namespace H.NET.Tests
             recorder.Stop();
             Assert.False(recorder.IsStarted);
 
-            BaseDataTest(recorder.Data);
+            BaseDataTest(recorder.Data.ToArray());
             BaseDisposeTest(recorder);
 
             Output?.WriteLine($"Recorder: {recorder} is good!");
