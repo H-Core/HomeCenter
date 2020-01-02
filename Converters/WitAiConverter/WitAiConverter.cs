@@ -1,7 +1,10 @@
-﻿using System.Threading;
+﻿using System;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using H.NET.Core;
 using H.NET.Core.Converters;
+using Newtonsoft.Json;
 
 #nullable enable
 
@@ -35,7 +38,34 @@ namespace H.NET.Converters
 
         public override async Task<string> ConvertAsync(byte[] bytes, CancellationToken cancellationToken = default)
         {
-            return await ConvertOverStreamingRecognition(bytes, cancellationToken);
+            using var client = new HttpClient();
+            using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.wit.ai/speech?v=20200103")
+            {
+                Headers =
+                {
+                    {"Authorization", $"Bearer {Token}"},
+                    {"Transfer-encoding", "chunked"},
+                },
+                Content = new ByteArrayContent(bytes)
+                {
+                    Headers =
+                    {
+                        {"Content-Type", "audio/wav"},
+                    }
+                },
+            };
+            using var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new InvalidOperationException($"Invalid response: {json}");
+            }
+
+            var obj = JsonConvert.DeserializeObject<WitAiResponse>(json);
+
+            return obj.Text ?? string.Empty;
+            //return await ConvertOverStreamingRecognition(bytes, cancellationToken).ConfigureAwait(false);
         }
 
         #endregion

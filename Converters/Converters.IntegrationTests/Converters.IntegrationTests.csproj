@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="TestFiles\RawSpeech\speech1.wav" />
     <EmbeddedResource Include="TestFiles\RawSpeech\проверка_проверка_8000.wav" />
   </ItemGroup>
 

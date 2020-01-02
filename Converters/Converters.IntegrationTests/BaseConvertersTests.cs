@@ -16,7 +16,8 @@ namespace H.NET.Converters.IntegrationTests
             recognition.AfterFinalResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterFinalResults: {args.Text}");
 
             var bytes = ResourcesUtilities.ReadFileAsBytes(name);
-            for (var i = 0; i < bytes.Length; i += bytesPerWrite)
+            // 44 - is default wav header length
+            for (var i = 44; i < bytes.Length; i += bytesPerWrite)
             {
                 var chunk = new ArraySegment<byte>(bytes, i, i < bytes.Length - bytesPerWrite ? bytesPerWrite : bytes.Length - i).ToArray();
                 await recognition.WriteAsync(chunk);

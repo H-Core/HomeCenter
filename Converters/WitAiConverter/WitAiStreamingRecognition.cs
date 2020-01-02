@@ -77,13 +77,6 @@ namespace H.NET.Converters
 
                     IsFinished = true;
                 }, MediaTypeHeaderValue.Parse("audio/wav")),
-                /*Content = new ByteArrayContent(Array.Empty<byte>())
-                {
-                    Headers =
-                    {
-                        { "Content-Type", "audio/raw;encoding=unsigned-integer;bits=16;rate=8000;endian=little" },
-                    }
-                },*/
             };
             
             SendTask = HttpClient.SendAsync(HttpRequestMessage);
@@ -109,12 +102,12 @@ namespace H.NET.Converters
                 await Task.Delay(TimeSpan.FromMilliseconds(1), cancellationToken).ConfigureAwait(false);
             }
 
-            var message = await SendTask.ConfigureAwait(false);
-            var json = await message.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var response = await SendTask.ConfigureAwait(false);
+            var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            if (!message.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                throw new InvalidOperationException($"Invalid answer: {json}");
+                throw new InvalidOperationException($"Invalid response: {json}");
             }
 
 
