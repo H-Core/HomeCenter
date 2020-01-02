@@ -44,7 +44,7 @@ namespace H.NET.Converters.TestApp
                 {
                     nameof(WitAiConverter) => (IConverter)new WitAiConverter
                     {
-                        Token = "OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS"
+                        Token = !string.IsNullOrWhiteSpace(OAuthTokenTextBox.Text) ? OAuthTokenTextBox.Text : "KATWBG4RQCFNBLQTY6QQUKB2SH6EIELG",
                     },
                     nameof(YandexConverter) => new YandexConverter
                     {
