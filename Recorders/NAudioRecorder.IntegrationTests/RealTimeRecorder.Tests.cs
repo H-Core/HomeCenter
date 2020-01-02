@@ -24,7 +24,7 @@ namespace H.NET.Recorders.IntegrationTests
             output.Init(provider);
             output.Play();
 
-            recorder.NewData += (sender, args) => provider.AddSamples(args.Data.ToArray(), 0, args.Data.Count);
+            recorder.NewRawData += (sender, args) => provider.AddSamples(args.RawData.ToArray(), 0, args.RawData.Count);
             recorder.Start();
             
             await Task.Delay(TimeSpan.FromMilliseconds(5000));

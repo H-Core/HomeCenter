@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using H.NET.Core;
 using H.NET.Core.Recorders;
 using NAudio.Wave;
 
@@ -10,9 +9,9 @@ namespace H.NET.Recorders
 {
     public class NAudioRecorder : Recorder
     {
-        public int Rate { get; set; } = 8000;
-        public int Bits { get; set; } = 16;
-        public int Channels { get; set; } = 1;
+        public int Rate { get; }
+        public int Bits { get; }
+        public int Channels { get; }
 
         public WaveInEvent WaveIn { get; set; }
         public MemoryStream Stream { get; set; }
@@ -21,11 +20,14 @@ namespace H.NET.Recorders
 
         #region Constructors
 
-        public NAudioRecorder()
+        public NAudioRecorder(int rate = 8000, int bits = 16, int channels = 1)
         {
+            Rate = rate;
+            Bits = bits;
+            Channels = channels;
             WaveIn = new WaveInEvent
             {
-                WaveFormat = new WaveFormat(Rate, Bits, Channels)
+                WaveFormat = new WaveFormat(rate, bits, channels)
             };
 
             WaveIn.DataAvailable += (sender, args) =>
@@ -36,10 +38,10 @@ namespace H.NET.Recorders
                     WaveFile.Flush();
                 }
 
-                Data = Data ?? Array.Empty<byte>();
-                Data = Data.Concat(args.Buffer).ToArray();
+                RawData = RawData ?? Array.Empty<byte>();
+                RawData = RawData.Concat(args.Buffer).ToArray();
 
-                OnNewData(new VoiceActionsEventArgs{ Data = args.Buffer });
+                OnNewRawData(args.Buffer);
             };
         }
 
@@ -65,7 +67,7 @@ namespace H.NET.Recorders
 
             Stream.Position = 0;
 
-            Data = Stream.ToArray();
+            WavData = Stream.ToArray();
 
             Stream.Position = 0;
 

@@ -8,13 +8,6 @@
 
         #endregion
 
-        #region Events
-
-        protected override VoiceActionsEventArgs CreateArgs() =>
-            new VoiceActionsEventArgs { Recorder = Recorder, Data = Data };
-
-        #endregion
-
         #region Constructors
 
         #endregion
@@ -52,7 +45,8 @@
             }
 
             Recorder.Stop();
-            Data = Recorder.Data;
+            RawData = Recorder.RawData;
+            WavData = Recorder.WavData;
             base.Stop();
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using H.NET.Core.CustomEventArgs;
 
 namespace H.NET.Core.Recorders
 {
@@ -8,23 +9,28 @@ namespace H.NET.Core.Recorders
         #region Properties
 
         public bool IsStarted { get; protected set; }
-        public IReadOnlyCollection<byte> Data { get; protected set; }
+        public IReadOnlyCollection<byte> RawData { get; protected set; }
+        public IReadOnlyCollection<byte> WavData { get; protected set; }
 
         #endregion
 
         #region Events
 
-        public event EventHandler<VoiceActionsEventArgs> Started;
-        protected void OnStarted(VoiceActionsEventArgs args) => Started?.Invoke(this, args);
+        public event EventHandler Started;
+        protected void OnStarted() => Started?.Invoke(this, EventArgs.Empty);
 
-        public event EventHandler<VoiceActionsEventArgs> Stopped;
-        protected void OnStopped(VoiceActionsEventArgs args) => Stopped?.Invoke(this, args);
 
-        public event EventHandler<VoiceActionsEventArgs> NewData;
-        protected void OnNewData(VoiceActionsEventArgs args) => NewData?.Invoke(this, args);
+        public event EventHandler<RecorderEventArgs> Stopped;
+        protected void OnStopped(RecorderEventArgs args) => Stopped?.Invoke(this, args);
 
-        protected virtual VoiceActionsEventArgs CreateArgs() => 
-            new VoiceActionsEventArgs { Recorder = this, Data = Data };
+        /// <summary>
+        /// When new partial raw data
+        /// </summary>
+        public event EventHandler<RecorderEventArgs> NewRawData;
+        protected void OnNewRawData(IReadOnlyCollection<byte> value) => NewRawData?.Invoke(this, new RecorderEventArgs
+        {
+            RawData = value,
+        });
 
         #endregion
 
@@ -38,8 +44,10 @@ namespace H.NET.Core.Recorders
             }
 
             IsStarted = true;
-            Data = null;
-            OnStarted(CreateArgs());
+            RawData = null;
+            WavData = null;
+
+            OnStarted();
         }
 
         public virtual void Stop()
@@ -50,7 +58,11 @@ namespace H.NET.Core.Recorders
             }
 
             IsStarted = false;
-            OnStopped(CreateArgs());
+            OnStopped(new RecorderEventArgs
+            {
+                RawData = RawData,
+                WavData = WavData,
+            });
         }
 
         #endregion

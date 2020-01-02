@@ -8,13 +8,10 @@ namespace H.NET.Converters.IntegrationTests
     [TestClass]
     public class WitAiConverterTests
     {
-        public static IRecorder CreateRecorder() => new NAudioRecorder
-        {
-            Rate = 16000,
-        };
+        public static IRecorder CreateRecorder() => new NAudioRecorder();
         public static IConverter CreateConverter() => new WitAiConverter
         {
-            Token = "OQTI5VZ6JYDHYXTDKCDIYUODEUKH3ELS"
+            Token = "KATWBG4RQCFNBLQTY6QQUKB2SH6EIELG"
         };
 
         [TestMethod]

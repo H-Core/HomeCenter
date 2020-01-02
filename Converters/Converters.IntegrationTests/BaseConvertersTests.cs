@@ -35,13 +35,13 @@ namespace H.NET.Converters.IntegrationTests
             recognition.AfterPartialResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterPartialResults: {args.Text}");
             recognition.AfterFinalResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterFinalResults: {args.Text}");
 
-            if (recorder.Data != null)
+            if (recorder.RawData != null)
             {
-                await recognition.WriteAsync(recorder.Data.ToArray());
+                await recognition.WriteAsync(recorder.RawData.ToArray());
             }
 
             // ReSharper disable once AccessToDisposedClosure
-            recorder.NewData += async (sender, args) => await recognition.WriteAsync(args.Data.ToArray());
+            recorder.NewRawData += async (sender, args) => await recognition.WriteAsync(args.RawData.ToArray());
 
             await Task.Delay(TimeSpan.FromMilliseconds(5000));
 
@@ -65,7 +65,7 @@ namespace H.NET.Converters.IntegrationTests
 
             recorder.Stop();
 
-            var bytes = recorder.Data;
+            var bytes = recorder.WavData;
 
             var result = await converter.ConvertAsync(bytes.ToArray());
 

@@ -34,14 +34,8 @@ namespace H.NET.Converters.TestApp
             {
                 using var recorder = ConverterComboBox.Text switch
                 {
-                    nameof(WitAiConverter) => new NAudioRecorder
-                    {
-                        Rate = 16000,
-                    },
-                    nameof(YandexConverter) => new NAudioRecorder
-                    {
-                        Rate = 8000,
-                    },
+                    nameof(WitAiConverter) => new NAudioRecorder(),
+                    nameof(YandexConverter) => new NAudioRecorder(),
                     _ => throw new NotImplementedException()
                 }; 
                 recorder.Start();
@@ -74,13 +68,13 @@ namespace H.NET.Converters.TestApp
                     OutputTextBlock.Text = $"{DateTime.Now:h:mm:ss.fff} {args.Text}";
                 });
 
-                if (recorder.Data != null)
+                if (recorder.RawData != null)
                 {
-                    await recognition.WriteAsync(recorder.Data.ToArray());
+                    await recognition.WriteAsync(recorder.RawData.ToArray()).ConfigureAwait(false);
                 }
 
                 // ReSharper disable once AccessToDisposedClosure
-                recorder.NewData += async (o, args) => await recognition.WriteAsync(args.Data.ToArray()).ConfigureAwait(false);
+                recorder.NewRawData += async (o, args) => await recognition.WriteAsync(args.RawData.ToArray()).ConfigureAwait(false);
 
                 await Task.Delay(TimeSpan.FromMilliseconds(5000)).ConfigureAwait(false);
 

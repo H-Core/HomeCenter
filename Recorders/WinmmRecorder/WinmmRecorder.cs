@@ -34,8 +34,14 @@ namespace H.NET.Recorders
 
             if (File.Exists(path))
             {
-                Data = File.ReadAllBytes(path);
-                File.Delete(path);
+                try
+                {
+                    WavData = File.ReadAllBytes(path);
+                }
+                finally
+                {
+                    File.Delete(path);
+                }
             }
 
             base.Stop();

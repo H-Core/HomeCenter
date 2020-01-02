@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using H.NET.Core.CustomEventArgs;
 using H.NET.Core.Recorders;
 
 namespace H.NET.Core.Managers
@@ -38,14 +39,6 @@ namespace H.NET.Core.Managers
 
         public event TextDelegate NewText;
         private void OnNewText() => NewText?.Invoke(Text);
-        
-        protected override VoiceActionsEventArgs CreateArgs() => new VoiceActionsEventArgs
-        {
-            Recorder = Recorder,
-            Converter = Converter,
-            Data = Data,
-            Text = Text
-        };
 
         #endregion
 
@@ -158,7 +151,7 @@ namespace H.NET.Core.Managers
 
         #region Event handlers
 
-        private void OnStoppedRecorder(object sender, VoiceActionsEventArgs args)
+        private void OnStoppedRecorder(object sender, RecorderEventArgs args)
         {
             IsStarted = false;
 
@@ -168,10 +161,15 @@ namespace H.NET.Core.Managers
                 return;
             }
 
-            Data = Recorder.Data;
-            OnStopped(CreateArgs());
+            RawData = Recorder.RawData;
+            WavData = Recorder.RawData;
+            OnStopped(new RecorderEventArgs
+            {
+                RawData = RawData,
+                WavData = WavData,
+            });
 
-            ProcessSpeech(Data.ToArray());
+            ProcessSpeech(WavData.ToArray());
         }
 
         #endregion

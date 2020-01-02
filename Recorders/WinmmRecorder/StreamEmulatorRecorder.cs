@@ -19,7 +19,10 @@ namespace H.NET.Recorders
         #region Events
 
         public event EventHandler<VoiceActionsEventArgs> NewPartialData;
-        private void OnNewPartialData() => NewPartialData?.Invoke(this, CreateArgs());
+        private void OnNewPartialData() => NewPartialData?.Invoke(this, new VoiceActionsEventArgs
+        {
+            Data = RawData ?? WavData,
+        });
 
         #endregion
 
