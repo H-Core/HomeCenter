@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <IsPackable>false</IsPackable>
+    <TargetFrameworks>netcoreapp3.1;net472;</TargetFrameworks>
     <RootNamespace>H.NET.Converters.IntegrationTests</RootNamespace>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Recorders\NAudioRecorder\NAudioRecorder.csproj" />
+    <ProjectReference Include="..\SystemSpeechConverter\SystemSpeechConverter.csproj" Condition="'$(TargetFramework)' == 'net472'" />
     <ProjectReference Include="..\WitAiConverter\WitAiConverter.csproj" />
     <ProjectReference Include="..\YandexConverter\YandexConverter.csproj" />
   </ItemGroup>
