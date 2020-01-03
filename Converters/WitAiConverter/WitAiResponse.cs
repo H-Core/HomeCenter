@@ -2,7 +2,7 @@
 
 namespace H.NET.Converters
 {
-    internal class WitAiResponse
+    internal sealed class WitAiResponse
     {
         [JsonProperty("_text")]
         public string? Text { get; set; }

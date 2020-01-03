@@ -6,11 +6,9 @@ using H.NET.Core;
 using H.NET.Core.Converters;
 using Newtonsoft.Json;
 
-#nullable enable
-
 namespace H.NET.Converters
 {
-    public class WitAiConverter : Converter, IConverter
+    public sealed class WitAiConverter : Converter, IConverter
     {
         #region Properties
 

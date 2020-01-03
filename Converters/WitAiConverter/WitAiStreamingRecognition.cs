@@ -8,8 +8,6 @@ using System.Threading.Tasks;
 using H.NET.Core.Converters;
 using Newtonsoft.Json;
 
-#nullable enable
-
 namespace H.NET.Converters
 {
     public sealed class WitAiStreamingRecognition : StreamingRecognition
