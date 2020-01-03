@@ -9,12 +9,13 @@ namespace H.NET.Core
         bool IsStarted { get; }
         IReadOnlyCollection<byte> RawData { get; }
         IReadOnlyCollection<byte> WavData { get; }
+        IReadOnlyCollection<byte> WavHeader { get; }
 
         void Start();
         void Stop();
 
         event EventHandler Started;
-        event EventHandler<RecorderEventArgs> Stopped; 
+        event EventHandler<RecorderEventArgs> Stopped;
         event EventHandler<RecorderEventArgs> NewRawData;
     }
 }

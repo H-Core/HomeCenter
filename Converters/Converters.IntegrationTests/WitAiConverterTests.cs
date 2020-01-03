@@ -19,7 +19,7 @@ namespace H.NET.Converters.IntegrationTests
         {
             using var converter = CreateConverter();
 
-            await BaseConvertersTests.StartStreamingRecognitionTest(converter, "проверка_проверка_8000.wav");
+            await BaseConvertersTests.StartStreamingRecognitionTest(converter, "проверка_проверка_8000.wav", writeWavHeader: true);
         }
 
         [TestMethod]
@@ -28,7 +28,7 @@ namespace H.NET.Converters.IntegrationTests
             using var recorder = CreateRecorder();
             using var converter = CreateConverter();
 
-            await BaseConvertersTests.StartStreamingRecognitionTest_RealTime(recorder, converter);
+            await BaseConvertersTests.StartStreamingRecognitionTest_RealTime(recorder, converter, true);
         }
 
         [TestMethod]

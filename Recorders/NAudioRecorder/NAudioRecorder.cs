@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using H.NET.Core.Recorders;
 using NAudio.Wave;
 
@@ -43,6 +44,24 @@ namespace H.NET.Recorders
 
                 OnNewRawData(args.Buffer);
             };
+
+            using (var stream = new MemoryStream())
+            using (var writer = new BinaryWriter(stream, Encoding.UTF8))
+            {
+                // Fake Wav header of current format
+                writer.Write(Encoding.UTF8.GetBytes("RIFF"));
+                writer.Write(int.MaxValue);
+                writer.Write(Encoding.UTF8.GetBytes("WAVE"));
+
+                writer.Write(Encoding.UTF8.GetBytes("fmt "));
+                WaveIn.WaveFormat.Serialize(writer);
+
+                writer.Write(Encoding.UTF8.GetBytes("data"));
+                writer.Write(int.MaxValue);
+
+                stream.Position = 0;
+                WavHeader = stream.ToArray();
+            }
         }
 
         #endregion

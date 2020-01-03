@@ -9,7 +9,7 @@ namespace H.NET.Converters.IntegrationTests
 {
     public static class BaseConvertersTests
     {
-        public static async Task StartStreamingRecognitionTest(IConverter converter, string name, int bytesPerWrite = 8000)
+        public static async Task StartStreamingRecognitionTest(IConverter converter, string name, int bytesPerWrite = 8000, bool writeWavHeader = false)
         {
             using var recognition = await converter.StartStreamingRecognitionAsync();
             recognition.AfterPartialResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterPartialResults: {args.Text}");
@@ -17,7 +17,7 @@ namespace H.NET.Converters.IntegrationTests
 
             var bytes = ResourcesUtilities.ReadFileAsBytes(name);
             // 44 - is default wav header length
-            for (var i = 44; i < bytes.Length; i += bytesPerWrite)
+            for (var i = writeWavHeader ? 0 : 44; i < bytes.Length; i += bytesPerWrite)
             {
                 var chunk = new ArraySegment<byte>(bytes, i, i < bytes.Length - bytesPerWrite ? bytesPerWrite : bytes.Length - i).ToArray();
                 await recognition.WriteAsync(chunk);
@@ -28,7 +28,7 @@ namespace H.NET.Converters.IntegrationTests
             await recognition.StopAsync();
         }
 
-        public static async Task StartStreamingRecognitionTest_RealTime(IRecorder recorder, IConverter converter)
+        public static async Task StartStreamingRecognitionTest_RealTime(IRecorder recorder, IConverter converter, bool writeWavHeader = false)
         {
             recorder.Start();
 
@@ -36,6 +36,12 @@ namespace H.NET.Converters.IntegrationTests
             recognition.AfterPartialResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterPartialResults: {args.Text}");
             recognition.AfterFinalResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterFinalResults: {args.Text}");
 
+            if (writeWavHeader)
+            {
+                var wavHeader = recorder.WavHeader?.ToArray() ??
+                                     throw new InvalidOperationException("Recorder Wav Header is null");
+                await recognition.WriteAsync(wavHeader);
+            }
             if (recorder.RawData != null)
             {
                 await recognition.WriteAsync(recorder.RawData.ToArray());

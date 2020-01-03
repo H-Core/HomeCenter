@@ -36,12 +36,8 @@ namespace H.NET.Converters
             HttpWebRequest.Method = "POST";
             HttpWebRequest.Headers["Authorization"] = "Bearer " + Token;
             HttpWebRequest.Headers["Transfer-encoding"] = "chunked";
-            //HttpWebRequest.PreAuthenticate = true;
             HttpWebRequest.SendChunked = true;
-            //HttpWebRequest.AllowWriteStreamBuffering = false;
-            //HttpWebRequest.AllowReadStreamBuffering = false;
             HttpWebRequest.ContentType = "audio/wav";
-            //HttpWebRequest.ContentLength = 6_000_000;
 
             Stream = HttpWebRequest.GetRequestStream();
 
@@ -62,6 +58,8 @@ namespace H.NET.Converters
 
                         writer.Write(bytes);
                     }
+
+                    await Stream.FlushAsync();
                 }
                 finally
                 {
@@ -103,6 +101,7 @@ namespace H.NET.Converters
             using var stream = response.GetResponseStream() ?? throw new InvalidOperationException("Response stream is null");
             using var reader = new StreamReader(stream);
             var json = await reader.ReadToEndAsync();
+
             if (isBadRequest)
             {
                 throw new InvalidOperationException($"Invalid response: {json}");

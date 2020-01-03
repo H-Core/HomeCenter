@@ -3,11 +3,9 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using H.NET.Core.Converters;
-using NAudio.Wave;
 using Newtonsoft.Json;
 
 #nullable enable
@@ -47,18 +45,7 @@ namespace H.NET.Converters
                 Content = new PushStreamContent(async (stream, httpContent, transportContext) =>
                 {
                     {
-                        using var writer = new BinaryWriter(stream, Encoding.UTF8);
-                        
-                        // Fake Wav header of current format
-                        writer.Write(Encoding.UTF8.GetBytes("RIFF"));
-                        writer.Write(int.MaxValue);
-                        writer.Write(Encoding.UTF8.GetBytes("WAVE"));
-
-                        writer.Write(Encoding.UTF8.GetBytes("fmt "));
-                        new WaveFormat(8000, 16, 1).Serialize(writer);
-
-                        writer.Write(Encoding.UTF8.GetBytes("data"));
-                        writer.Write(int.MaxValue);
+                        using var writer = new BinaryWriter(stream);
                         
                         while (!IsStopped || !WriteQueue.IsEmpty)
                         {
@@ -78,7 +65,7 @@ namespace H.NET.Converters
                     IsFinished = true;
                 }, MediaTypeHeaderValue.Parse("audio/wav")),
             };
-            
+
             SendTask = HttpClient.SendAsync(HttpRequestMessage);
         }
 

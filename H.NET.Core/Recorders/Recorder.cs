@@ -11,6 +11,7 @@ namespace H.NET.Core.Recorders
         public bool IsStarted { get; protected set; }
         public IReadOnlyCollection<byte> RawData { get; protected set; }
         public IReadOnlyCollection<byte> WavData { get; protected set; }
+        public IReadOnlyCollection<byte> WavHeader { get; protected set; }
 
         #endregion
 
