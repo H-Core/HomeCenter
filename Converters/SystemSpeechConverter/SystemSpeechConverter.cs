@@ -1,5 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using H.NET.Core;
@@ -12,9 +13,11 @@ namespace H.NET.Converters
     {
         #region Properties
 
-        bool IConverter.IsStreamingRecognitionSupported => false;
+        bool IConverter.IsStreamingRecognitionSupported => true;
 
         private SpeechRecognitionEngine SpeechRecognitionEngine { get; }
+
+        public string Recognizer { get; set; } = string.Empty;
 
         #endregion
 
@@ -22,10 +25,8 @@ namespace H.NET.Converters
 
         public SystemSpeechConverter()
         {
-            foreach (var info in SpeechRecognitionEngine.InstalledRecognizers())
-            {
-                Trace.WriteLine($"Recognizer: Name: {info.Name} Language: {info.Culture.Name}");
-            }
+            AddEnumerableSetting(nameof(Recognizer), o => Recognizer = o, NoEmpty, SpeechRecognitionEngine.InstalledRecognizers().Select(i => i.Name).ToArray());
+
             SpeechRecognitionEngine = new SpeechRecognitionEngine(new CultureInfo("ru-RU"));
             SpeechRecognitionEngine.SetInputToDefaultAudioDevice();
 
@@ -39,19 +40,20 @@ namespace H.NET.Converters
             builder.Append(new Choices("справочник", "отчет"));
 
             SpeechRecognitionEngine.LoadGrammar(new Grammar(builder));
-            SpeechRecognitionEngine.SpeechHypothesized += (sender, args) => Trace.WriteLine($"SpeechHypothesized: {args.Result.Text}");
-            SpeechRecognitionEngine.SpeechRecognized += (sender, args) => Trace.WriteLine($"SpeechRecognized: {args.Result.Text}");
         }
 
         #endregion
 
         #region Public methods
 
+        public override Task<IStreamingRecognition> StartStreamingRecognitionAsync(CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult<IStreamingRecognition>(new SystemSpeechStreamingRecognition(SpeechRecognitionEngine));
+        }
+
         public override Task<string> ConvertAsync(byte[] bytes, CancellationToken cancellationToken = default)
         {
-            SpeechRecognitionEngine.RecognizeAsync(RecognizeMode.Multiple);
-
-            return Task.FromResult(string.Empty);
+            throw new NotImplementedException();
         }
 
         public override void Dispose()

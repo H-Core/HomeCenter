@@ -29,7 +29,7 @@ namespace H.NET.Converters
 
         #region Public methods
 
-        public override Task<IStreamingRecognition> StartStreamingRecognitionAsync(CancellationToken _ = default)
+        public override Task<IStreamingRecognition> StartStreamingRecognitionAsync(CancellationToken cancellationToken = default)
         {
             return Task.FromResult<IStreamingRecognition>(new WitAiStreamingRecognition(Token));
         }

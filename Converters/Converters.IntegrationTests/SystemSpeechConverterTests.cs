@@ -10,13 +10,17 @@ namespace H.NET.Converters.IntegrationTests
     public class SystemSpeechConverterTests
     {
         [TestMethod]
-        public async Task ConvertTest_RealTime()
+        public async Task StartStreamingRecognitionTest_RealTime()
         {
             using var converter = new SystemSpeechConverter();
 
-            await converter.ConvertAsync(Array.Empty<byte>());
+            using var recognition = await converter.StartStreamingRecognitionAsync();
+            recognition.AfterPartialResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterPartialResults: {args.Text}");
+            recognition.AfterFinalResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterFinalResults: {args.Text}");
 
             await Task.Delay(TimeSpan.FromSeconds(5));
+
+            await recognition.StopAsync();
         }
     }
 }
