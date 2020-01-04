@@ -56,7 +56,7 @@ namespace H.NET.SearchDeskBand
             //deskBandControl1.Focus();
         }
 
-        public static async void SendCommand(string message)
+        public static void SendCommand(string message)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace H.NET.SearchDeskBand
                     }
                 }
 
-                await IpcClient.Write(message, Options.IpcPortToHomeCenter);
+                IpcService.SendMessage(message);
             }
             catch (Exception exception)
             {

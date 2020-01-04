@@ -22,7 +22,7 @@
       <IsAdmin>false</IsAdmin>
       <IsAdmin Condition="'$(IsAdminValue)' == '0'">true</IsAdmin>
     </PropertyGroup>
-    <Message Condition="!$(IsAdmin)" Text="You do not have administrator rights. The library will not be registered/unregistered" Importance="high"/>
+    <Message Condition="!$(IsAdmin)" Text="You do not have administrator rights. The library will not be registered/unregistered" Importance="high" />
   </Target>
   <Target Name="Register" BeforeTargets="PostBuildEvent" Condition="$(IsAdmin) AND !Exists('$(ComDir)')">
     <Message Text="Registering COM dlls..." Importance="high" />
@@ -41,8 +41,8 @@
     <Exec Command="SCHTASKS /Create /sc MINUTE /tr &quot;explorer.exe&quot; /tn &quot;Run Explorer&quot;" IgnoreExitCode="true" />
     <Exec Command="SCHTASKS /Run /tn &quot;Run Explorer&quot;" IgnoreExitCode="true" />
     <Exec Command="SCHTASKS /Delete /F /tn &quot;Run Explorer&quot;" IgnoreExitCode="true" />
-    <Message Text="Wait 1 second..." Importance="high" />
-    <Exec Command="ping -n 2 127.0.0.1 &gt; nul" />
+    <Message Text="Wait 3 second..." Importance="high" />
+    <Exec Command="ping -n 4 127.0.0.1 &gt; nul" />
     <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)SharpShell.dll /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
     <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)SharpShell.dll /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
     <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)$(TargetFileName) /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
@@ -79,10 +79,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
     <ProjectReference Include="..\..\Utilities\CommandsStorage\CommandsStorage.csproj" />
-    <ProjectReference Include="..\..\Utilities\IPC\IPC.csproj" />
     <ProjectReference Include="..\..\Utilities\Startup\Startup.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="NamedPipeWrapper.NetStandard.StrongNamed" Version="1.5.0" />
     <PackageReference Include="SharpShell" Version="2.6.0" />
   </ItemGroup>
 </Project>

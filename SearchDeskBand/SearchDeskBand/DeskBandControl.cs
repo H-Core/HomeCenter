@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using H.NET.Core.Utilities;
-using H.NET.Utilities;
 
 namespace H.NET.SearchDeskBand
 {
@@ -12,7 +11,6 @@ namespace H.NET.SearchDeskBand
         #region Properties
 
         private DeskBandWindow Window { get; set; } = new DeskBandWindow();
-        private IpcServer IpcServer { get; set; } = new IpcServer(Options.IpcPortToDeskBand);
         private Dictionary<string, Action<string>> ActionDictionary { get; } = new Dictionary<string, Action<string>>();
 
         #endregion
@@ -28,14 +26,14 @@ namespace H.NET.SearchDeskBand
 
             Window.VisibleChanged += (sender, args) => Label.Visible = !Window.Visible;
 
-            IpcServer.NewMessage += OnNewMessage;
+            IpcService.Message += OnNewMessage;
         }
 
         #endregion
 
         #region Event handlers
 
-        private void OnNewMessage(string message)
+        private void OnNewMessage(object obj, string message)
         {
             var values = message.SplitOnlyFirst(' ');
             if (!ActionDictionary.TryGetValue(values[0], out var action))
@@ -67,9 +65,6 @@ namespace H.NET.SearchDeskBand
 
         public new void Dispose()
         {
-            IpcServer?.Dispose();
-            IpcServer = null;
-
             Window?.Dispose();
             Window = null;
 
@@ -80,7 +75,7 @@ namespace H.NET.SearchDeskBand
 
         #region Private methods
 
-        private static void Run(string command) => DeskBandWindow.SendCommand(command);
+        public void Run(string message) => IpcService.SendMessage(message);
 
         private void AddAction(string key, Action<string> action)
         {
