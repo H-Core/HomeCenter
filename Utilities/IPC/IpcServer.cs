@@ -73,6 +73,7 @@ namespace H.NET.Utilities
         public void Dispose()
         {
             IsDisposed = true;
+
             Listener?.Stop();
             Listener?.Server?.Dispose();
             Listener = null;

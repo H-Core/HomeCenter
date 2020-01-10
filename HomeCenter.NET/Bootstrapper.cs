@@ -44,6 +44,7 @@ namespace HomeCenter.NET
                 .Singleton<ModuleService>()
                 .Singleton<RunnerService>()
                 .Singleton<IpcService>()
+                .Singleton<ExceptionService>()
                 .Singleton<StorageService>()
                 .Singleton<BaseManager>()
                 .Singleton<ScreenshotToClipboardModule>()

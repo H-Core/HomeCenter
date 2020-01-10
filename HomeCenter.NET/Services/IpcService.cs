@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using HomeCenter.NET.Properties;
 using H.Pipes;
 
 namespace HomeCenter.NET.Services
@@ -10,8 +9,8 @@ namespace HomeCenter.NET.Services
     {
         #region Properties
 
-        public RunnerService RunnerService { get; }
-        public Settings Settings { get; }
+        private ExceptionService ExceptionService { get; }
+        private RunnerService RunnerService { get; }
 
         private PipeServer<string> MainApplicationServer { get; } = new PipeServer<string>("H.MainApplication");
 
@@ -19,10 +18,10 @@ namespace HomeCenter.NET.Services
 
         #region Constructors
 
-        public IpcService(RunnerService runnerService, Settings settings)
+        public IpcService(ExceptionService exceptionService, RunnerService runnerService)
         {
+            ExceptionService = exceptionService ?? throw new ArgumentNullException(nameof(exceptionService));
             RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
-            Settings = settings ?? throw new ArgumentNullException(nameof(settings));
 
             MainApplicationServer.MessageReceived += (sender, args) => RunnerService.Run(args.Message);
         }
@@ -39,7 +38,7 @@ namespace HomeCenter.NET.Services
             }
             catch (Exception exception)
             {
-                RunnerService.Run($"print {exception.Message}");
+                await ExceptionService.HandleExceptionAsync(exception, cancellationToken);
             }
         }
 
@@ -51,7 +50,7 @@ namespace HomeCenter.NET.Services
             }
             catch (Exception exception)
             {
-                RunnerService.Run($"print {exception.Message}");
+                await ExceptionService.HandleExceptionAsync(exception, cancellationToken);
             }
         }
 

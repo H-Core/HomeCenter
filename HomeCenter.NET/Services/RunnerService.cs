@@ -112,7 +112,7 @@ namespace HomeCenter.NET.Services
 
         #region Protected methods
 
-        public async Task RunAsync(string keyOrData, bool show = true)
+        public async Task RunAsync(string keyOrData, bool show = true, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(keyOrData))
             {
