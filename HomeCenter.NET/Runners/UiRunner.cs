@@ -37,7 +37,7 @@ namespace HomeCenter.NET.Runners
             AddInternalAction("start-record", command => StartRecordAction?.Invoke());
 
             // TODO: Communication through (IDeskBand)Marshal.GetActiveObject("H.NET.SearchDeskBand") ??
-            AddInternalAction("deskband", ipcService.DeskBandCommand);
+            AddInternalAsyncAction("deskband", async command => await ipcService.SendToProcessesAsync(command));
 
             AddAction("enable-module", name =>
             {

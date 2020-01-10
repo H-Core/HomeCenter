@@ -183,7 +183,7 @@ namespace HomeCenter.NET
             model.IsVisible = e.Args.Contains("/restart") || !Settings.Default.IsStartMinimized;
 
             Get<StaticModulesInitializer>();
-            
+
             await InitializeHelper.InitializeDynamicModules(runnerService, hookService, moduleService, model);
 
             Get<HookInitializer>();

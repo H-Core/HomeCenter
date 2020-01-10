@@ -1,31 +1,50 @@
 ﻿using System;
-using NamedPipeWrapper;
+using System.Threading;
+using System.Threading.Tasks;
+using H.Pipes;
 
 namespace H.NET.SearchDeskBand
 {
-    public static class IpcService
+    public class IpcService
     {
-        private static NamedPipeServer<string> NamedPipeServer { get; } = new NamedPipeServer<string>("H.NET.DeskBand");
-        private static NamedPipeClient<string> NamedPipeClient { get; } = new NamedPipeClient<string>("H.NET.MainApplication");
+        #region Properties
 
-        static IpcService()
+        private PipeClient<string> PipeClient { get; } = new PipeClient<string>("H.MainApplication");
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler<string> MessageReceived;
+
+        private void OnMessageReceived(string message)
         {
-            NamedPipeServer.ClientMessage += OnNewMessage;
-
-            NamedPipeServer.Start();
-            NamedPipeClient.Start();
+            MessageReceived?.Invoke(null, message);
         }
 
-        private static void OnNewMessage(NamedPipeConnection<string, string> connection, string message)
+        #endregion
+
+        #region Constructors
+
+        public IpcService()
         {
-            Message?.Invoke(null, message);
+            PipeClient.MessageReceived += (sender, args) => OnMessageReceived(args.Message);
         }
 
-        public static void SendMessage(string message)
+        #endregion
+
+        #region Public methods
+
+        public async Task ConnectAsync(CancellationToken cancellationToken = default)
         {
-            NamedPipeClient.PushMessage(message);
+            await PipeClient.ConnectAsync(cancellationToken);
         }
 
-        public static event EventHandler<string> Message;
+        public async Task WriteAsync(string message, CancellationToken cancellationToken = default)
+        {
+            await PipeClient.WriteAsync(message, cancellationToken);
+        }
+
+        #endregion
     }
 }

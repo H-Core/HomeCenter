@@ -1,6 +1,8 @@
 ﻿using System;
-using H.NET.Utilities;
+using System.Threading;
+using System.Threading.Tasks;
 using HomeCenter.NET.Properties;
+using H.Pipes;
 
 namespace HomeCenter.NET.Services
 {
@@ -11,7 +13,7 @@ namespace HomeCenter.NET.Services
         public RunnerService RunnerService { get; }
         public Settings Settings { get; }
 
-        public IpcServer IpcServer { get; set; }
+        private PipeServer<string> MainApplicationServer { get; } = new PipeServer<string>("H.MainApplication");
 
         #endregion
 
@@ -22,19 +24,30 @@ namespace HomeCenter.NET.Services
             RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
 
-            IpcServer = new IpcServer(Settings.InputIpcPort);
-            IpcServer.NewMessage += RunnerService.Run;
+            MainApplicationServer.MessageReceived += (sender, args) => RunnerService.Run(args.Message);
         }
 
         #endregion
 
         #region Public methods
 
-        public async void DeskBandCommand(string command)
+        public async Task StartAsync(CancellationToken cancellationToken = default)
         {
             try
             {
-                await IpcClient.Write(command, Settings.OutputIpcPort);
+                await MainApplicationServer.StartAsync(cancellationToken: cancellationToken);
+            }
+            catch (Exception exception)
+            {
+                RunnerService.Run($"print {exception.Message}");
+            }
+        }
+
+        public async Task SendToProcessesAsync(string command, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await MainApplicationServer.WriteAsync(command, cancellationToken: cancellationToken);
             }
             catch (Exception exception)
             {
@@ -48,7 +61,6 @@ namespace HomeCenter.NET.Services
 
         public void Dispose()
         {
-            IpcServer?.Dispose();
         }
 
         #endregion

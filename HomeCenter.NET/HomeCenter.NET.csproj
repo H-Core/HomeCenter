@@ -29,12 +29,12 @@
     <ProjectReference Include="..\Utilities\Plugins\Plugins.csproj" />
     <ProjectReference Include="..\Utilities\CommandsStorage\CommandsStorage.csproj" />
     <ProjectReference Include="..\Utilities\Hook\Hook.csproj" />
-    <ProjectReference Include="..\Utilities\IPC\IPC.csproj" />
     <ProjectReference Include="..\Utilities\Screenshoter\Screenshoter.csproj" />
     <ProjectReference Include="..\Utilities\Startup\Startup.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.104-alpha" />
+    <PackageReference Include="H.Pipes" Version="1.0.3" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf.NetCore" Version="1.0.10" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
   </ItemGroup>

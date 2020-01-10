@@ -18,14 +18,14 @@ namespace H.NET.SearchDeskBand
         protected override BandOptions GetBandOptions()
         {
             return new BandOptions
-                   {
-                       HasVariableHeight = false,
-                       IsSunken = false,
-                       ShowTitle = true,
-                       Title = "Home Center Search",
-                       UseBackgroundColour = false,
-                       AlwaysShowGripper = true
-                   };
+            {
+                HasVariableHeight = false,
+                IsSunken = false,
+                ShowTitle = true,
+                Title = "Home Center Search",
+                UseBackgroundColour = false,
+                AlwaysShowGripper = true
+            };
         }
     }
 }

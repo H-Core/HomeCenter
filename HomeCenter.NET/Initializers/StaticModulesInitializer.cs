@@ -18,6 +18,8 @@ namespace HomeCenter.NET.Initializers
     {
         public StaticModulesInitializer(IWindowManager windowManager, MainViewModel model, RunnerService runnerService, ModuleService moduleService, IpcService ipcService, BaseManager baseManager)
         {
+            var _ = ipcService.StartAsync();
+
             async Task ShowModuleSettings(string name)
             {
                 if (string.IsNullOrWhiteSpace(name))
