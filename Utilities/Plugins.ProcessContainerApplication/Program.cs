@@ -14,7 +14,7 @@ namespace Plugins.ProcessContainerApplication
         private static async Task Main(string[] arguments)
         {
             var name = arguments.FirstOrDefault() ?? "H.MainApplication";
-            var client = new PipeClient<string>(name);
+            await using var client = new PipeClient<string>(name);
             client.MessageReceived += (sender, args) =>
             {
                 OnMessageReceived(args.Message);

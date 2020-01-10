@@ -37,17 +37,17 @@ namespace H.NET.SearchDeskBand
 
         public async Task ConnectAsync(CancellationToken cancellationToken = default)
         {
-            await PipeClient.ConnectAsync(cancellationToken);
+            await PipeClient.ConnectAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public async Task WriteAsync(string message, CancellationToken cancellationToken = default)
         {
-            await PipeClient.WriteAsync(message, cancellationToken);
+            await PipeClient.WriteAsync(message, cancellationToken).ConfigureAwait(false);
         }
 
         public async ValueTask DisposeAsync()
         {
-            await PipeClient.DisposeAsync();
+            await PipeClient.DisposeAsync().ConfigureAwait(false);
         }
 
         #endregion

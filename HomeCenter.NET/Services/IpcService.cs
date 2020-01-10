@@ -6,7 +6,7 @@ using H.Pipes;
 
 namespace HomeCenter.NET.Services
 {
-    public sealed class IpcService : IDisposable
+    public sealed class IpcService : IDisposable, IAsyncDisposable
     {
         #region Properties
 
@@ -35,7 +35,7 @@ namespace HomeCenter.NET.Services
         {
             try
             {
-                await MainApplicationServer.StartAsync(cancellationToken: cancellationToken);
+                await MainApplicationServer.StartAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
             }
             catch (Exception exception)
             {
@@ -47,7 +47,7 @@ namespace HomeCenter.NET.Services
         {
             try
             {
-                await MainApplicationServer.WriteAsync(command, cancellationToken: cancellationToken);
+                await MainApplicationServer.WriteAsync(command, cancellationToken: cancellationToken).ConfigureAwait(false);
             }
             catch (Exception exception)
             {
@@ -57,10 +57,15 @@ namespace HomeCenter.NET.Services
 
         #endregion
 
-        #region Dispose
+        #region IDisposable
 
         public void Dispose()
         {
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            await MainApplicationServer.DisposeAsync().ConfigureAwait(false);
         }
 
         #endregion

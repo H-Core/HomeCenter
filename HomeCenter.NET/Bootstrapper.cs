@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Caliburn.Micro;
@@ -150,6 +151,13 @@ namespace HomeCenter.NET
             obj.Dispose();
         }
 
+        private static async ValueTask DisposeAsyncObject<T>() where T : class, IAsyncDisposable
+        {
+            var obj = IoC.GetInstance(typeof(T), null) as T ?? throw new ArgumentNullException();
+
+            await obj.DisposeAsync().ConfigureAwait(false);
+        }
+
         private static T Get<T>() where T : class 
         {
             return IoC.GetInstance(typeof(T), null) as T ?? throw new ArgumentNullException();
@@ -200,7 +208,7 @@ namespace HomeCenter.NET
             return string.Empty;
         }
 
-        protected override void OnExit(object sender, EventArgs e)
+        protected override async void OnExit(object sender, EventArgs e)
         {
             MainView?.Dispose();
 
@@ -208,6 +216,8 @@ namespace HomeCenter.NET
             DisposeObject<HookService>();
             DisposeObject<ModuleService>();
             DisposeObject<IpcService>();
+
+            await DisposeAsyncObject<IpcService>();
 
             Application.Shutdown();
         }
