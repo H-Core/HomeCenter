@@ -42,6 +42,6 @@
     <None Include="Resources\beep.wav" />
   </ItemGroup>
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="taskkill /f /fi &quot;imagename eq $(TargetFileName)&quot;&#xD;&#xA;exit 0" />
+    <Exec Command="taskkill /f /t /fi &quot;imagename eq $(TargetName).exe&quot;&#xD;&#xA;exit 0" />
   </Target>
 </Project>
