@@ -30,7 +30,7 @@ namespace H.NET.Converters
         {
             Token = token ?? throw new ArgumentNullException(nameof(token));
 
-            HttpWebRequest = WebRequest.Create("https://api.wit.ai/speech?v=20170307") as HttpWebRequest ?? throw new InvalidOperationException("WebRequest is null");
+            HttpWebRequest = WebRequest.Create("https://api.wit.ai/speech") as HttpWebRequest ?? throw new InvalidOperationException("WebRequest is null");
             HttpWebRequest.Method = "POST";
             HttpWebRequest.Headers["Authorization"] = "Bearer " + Token;
             HttpWebRequest.Headers["Transfer-encoding"] = "chunked";

@@ -33,7 +33,7 @@ namespace H.NET.Converters
             Token = token ?? throw new ArgumentNullException(nameof(token));
 
             HttpClient = new HttpClient();
-            HttpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "https://api.wit.ai/speech?v=20200103")
+            HttpRequestMessage = new HttpRequestMessage(HttpMethod.Post, "https://api.wit.ai/speech")
             {
                 Headers =
                 {
@@ -61,7 +61,7 @@ namespace H.NET.Converters
                     }
 
                     IsFinished = true;
-                }, MediaTypeHeaderValue.Parse("audio/wav")),
+                }, MediaTypeHeaderValue.Parse("audio/raw;encoding=signed-integer;bits=16;rate=8000;endian=little")),
             };
 
             SendTask = HttpClient.SendAsync(HttpRequestMessage);

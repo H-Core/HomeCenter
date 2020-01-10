@@ -37,7 +37,7 @@ namespace H.NET.Converters
         public override async Task<string> ConvertAsync(byte[] bytes, CancellationToken cancellationToken = default)
         {
             using var client = new HttpClient();
-            using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.wit.ai/speech?v=20200103")
+            using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.wit.ai/speech")
             {
                 Headers =
                 {

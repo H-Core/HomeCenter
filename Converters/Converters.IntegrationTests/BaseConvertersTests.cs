@@ -9,15 +9,20 @@ namespace H.NET.Converters.IntegrationTests
 {
     public static class BaseConvertersTests
     {
-        public static async Task StartStreamingRecognitionTest(IConverter converter, string name, int bytesPerWrite = 8000, bool writeWavHeader = false)
+        public static async Task StartStreamingRecognitionTest(IConverter converter, string name, string expected, int bytesPerWrite = 8000)
         {
             using var recognition = await converter.StartStreamingRecognitionAsync();
             recognition.AfterPartialResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterPartialResults: {args.Text}");
-            recognition.AfterFinalResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterFinalResults: {args.Text}");
+            recognition.AfterFinalResults += (sender, args) =>
+            {
+                Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterFinalResults: {args.Text}");
+
+                Assert.AreEqual(expected, args.Text);
+            };
 
             var bytes = ResourcesUtilities.ReadFileAsBytes(name);
             // 44 - is default wav header length
-            for (var i = writeWavHeader ? 0 : 44; i < bytes.Length; i += bytesPerWrite)
+            for (var i = 44; i < bytes.Length; i += bytesPerWrite)
             {
                 var chunk = new ArraySegment<byte>(bytes, i, i < bytes.Length - bytesPerWrite ? bytesPerWrite : bytes.Length - i).ToArray();
                 await recognition.WriteAsync(chunk);
