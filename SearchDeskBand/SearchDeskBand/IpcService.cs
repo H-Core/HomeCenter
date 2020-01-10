@@ -5,7 +5,7 @@ using H.Pipes;
 
 namespace H.NET.SearchDeskBand
 {
-    public class IpcService
+    public class IpcService : IAsyncDisposable
     {
         #region Properties
 
@@ -43,6 +43,11 @@ namespace H.NET.SearchDeskBand
         public async Task WriteAsync(string message, CancellationToken cancellationToken = default)
         {
             await PipeClient.WriteAsync(message, cancellationToken);
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            await PipeClient.DisposeAsync();
         }
 
         #endregion

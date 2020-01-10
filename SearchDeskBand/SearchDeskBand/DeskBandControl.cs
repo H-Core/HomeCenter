@@ -171,6 +171,8 @@ namespace H.NET.SearchDeskBand
             Window?.Dispose();
             Window = null;
 
+            IpcService.DisposeAsync().AsTask().Wait();
+
             base.Dispose();
         }
 

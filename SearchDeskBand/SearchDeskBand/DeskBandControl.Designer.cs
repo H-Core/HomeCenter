@@ -143,6 +143,7 @@
             this.Padding = new System.Windows.Forms.Padding(6);
             this.Size = new System.Drawing.Size(316, 38);
             this.Click += new System.EventHandler(this.OnClick);
+            this.Load += new System.EventHandler(this.DeskBandControl_Load);
             this.ResumeLayout(false);
 
         }
