@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using H.NET.Storages;
 using H.NET.Utilities;
@@ -78,7 +79,7 @@ namespace HomeCenter.NET.Services
             return true;
         }
 
-        public async Task<KeysCombination?> CatchKey()
+        public async Task<KeysCombination?> CatchKeyAsync(CancellationToken cancellationToken = default)
         {
             if (KeyboardHook == null || MouseHook == null)
             {
@@ -121,16 +122,21 @@ namespace HomeCenter.NET.Services
             KeyboardHook.KeyDown += OnKeyboardHookOnKeyDown;
             MouseHook.MouseDown += OnMouseHookOnMouseDown;
 
-            while (!isCancel && (combination == null || combination.IsEmpty))
+            try
             {
-                await Task.Delay(1);
+                while (!isCancel && (combination == null || combination.IsEmpty))
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(1), cancellationToken).ConfigureAwait(false);
+                }
             }
+            finally
+            {
+                KeyboardHook.KeyDown -= OnKeyboardHookOnKeyDown;
+                MouseHook.MouseDown -= OnMouseHookOnMouseDown;
 
-            KeyboardHook.KeyDown -= OnKeyboardHookOnKeyDown;
-            MouseHook.MouseDown -= OnMouseHookOnMouseDown;
-
-            KeyboardHook.SetEnabled(keyboardHookState);
-            MouseHook.SetEnabled(mouseHookState);
+                KeyboardHook.SetEnabled(keyboardHookState);
+                MouseHook.SetEnabled(mouseHookState);
+            }
 
             return isCancel ? null : combination;
         }

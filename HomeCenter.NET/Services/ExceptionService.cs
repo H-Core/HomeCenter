@@ -40,7 +40,7 @@ namespace HomeCenter.NET.Services
         {
             try
             {
-                await RunnerService.RunAsync($"print {exception.Message}", cancellationToken: cancellationToken);
+                await RunnerService.RunAsync($"print {exception.Message}", cancellationToken: cancellationToken).ConfigureAwait(false);
             }
             catch (OperationCanceledException)
             {

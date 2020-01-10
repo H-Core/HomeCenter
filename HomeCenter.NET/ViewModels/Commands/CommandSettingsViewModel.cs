@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Caliburn.Micro;
 using H.NET.Storages;
 using HomeCenter.NET.Services;
@@ -9,7 +11,7 @@ using HomeCenter.NET.Services;
 namespace HomeCenter.NET.ViewModels.Commands
 {
     // TODO: EditCommandViewModel ?
-    public class CommandSettingsViewModel : SaveCancelViewModel
+    public sealed class CommandSettingsViewModel : SaveCancelViewModel, IDisposable
     {
         #region Properties
 
@@ -18,6 +20,8 @@ namespace HomeCenter.NET.ViewModels.Commands
         public HookService HookService { get; }
         public BindableCollection<SingleKeyViewModel> Keys { get; }
         public BindableCollection<SingleCommandViewModel> Commands { get; }
+
+        private CancellationTokenSource CancellationTokenSource { get; } = new CancellationTokenSource();
 
         public string HotKey
         {
@@ -51,6 +55,13 @@ namespace HomeCenter.NET.ViewModels.Commands
             Keys = new BindableCollection<SingleKeyViewModel>(Command.Keys.Select(i => new SingleKeyViewModel(i)));
             Commands = new BindableCollection<SingleCommandViewModel>(Command.Lines.Select(i => new SingleCommandViewModel(i)));
             HotKey = Command.HotKey;
+
+            Deactivated += (sender, args) =>
+            {
+                CancellationTokenSource.Cancel();
+
+                Dispose();
+            };
         }
 
         #endregion
@@ -112,17 +123,34 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         #region HotKey methods
 
-        public async void EditHotKey()
+        public async Task EditHotKeyAsync()
         {
-            EditHotKeyIsEnabled = false;
+            try
+            {
+                EditHotKeyIsEnabled = false;
 
-            var combination = await HookService.CatchKey();
-            HotKey = combination?.ToString() ?? string.Empty;
-
-            EditHotKeyIsEnabled = true;
+                var combination = await HookService.CatchKeyAsync(CancellationTokenSource.Token).ConfigureAwait(false);
+                HotKey = combination?.ToString() ?? string.Empty;
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            finally
+            {
+                EditHotKeyIsEnabled = true;
+            }
         }
 
         #endregion
+
+        #endregion
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            CancellationTokenSource.Dispose();
+        }
 
         #endregion
 

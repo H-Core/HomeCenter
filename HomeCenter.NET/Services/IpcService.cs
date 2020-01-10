@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using H.Pipes;
+using H.Pipes.Args;
 
 namespace HomeCenter.NET.Services
 {
@@ -23,7 +24,23 @@ namespace HomeCenter.NET.Services
             ExceptionService = exceptionService ?? throw new ArgumentNullException(nameof(exceptionService));
             RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
 
-            MainApplicationServer.MessageReceived += (sender, args) => RunnerService.Run(args.Message);
+            MainApplicationServer.MessageReceived += MainApplicationServer_OnMessageReceived;
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        private async void MainApplicationServer_OnMessageReceived(object? sender, ConnectionMessageEventArgs<string> args)
+        {
+            try
+            {
+                await RunnerService.RunAsync(args.Message).ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                await ExceptionService.HandleExceptionAsync(exception).ConfigureAwait(false);
+            }
         }
 
         #endregion
@@ -38,7 +55,7 @@ namespace HomeCenter.NET.Services
             }
             catch (Exception exception)
             {
-                await ExceptionService.HandleExceptionAsync(exception, cancellationToken);
+                await ExceptionService.HandleExceptionAsync(exception, cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -50,7 +67,7 @@ namespace HomeCenter.NET.Services
             }
             catch (Exception exception)
             {
-                await ExceptionService.HandleExceptionAsync(exception, cancellationToken);
+                await ExceptionService.HandleExceptionAsync(exception, cancellationToken).ConfigureAwait(false);
             }
         }
 
