@@ -44,6 +44,7 @@ namespace H.NET.SearchDeskBand
 
             IpcService = new IpcService();
             IpcService.MessageReceived += (sender, text) => OnMessageReceived(text);
+            IpcService.ExceptionOccurred += (sender, exception) => OnExceptionOccurred(exception);
         }
 
         #endregion
