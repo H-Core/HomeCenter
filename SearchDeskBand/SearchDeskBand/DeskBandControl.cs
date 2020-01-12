@@ -200,10 +200,13 @@ namespace H.NET.SearchDeskBand
                 if (!Process.GetProcessesByName(ApplicationName).Any())
                 {
                     var path = Startup.GetFilePath($"{ApplicationName}.exe");
-                    if (!string.IsNullOrWhiteSpace(path) && File.Exists(path))
+                    if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
                     {
-                        Process.Start(path);
+                        MessageBox.Show(@"H.Control application is not running and it was not found in startup.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
                     }
+
+                    Process.Start(path);
 
                     await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
                 }
