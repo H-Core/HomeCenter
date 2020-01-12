@@ -17,7 +17,7 @@ namespace HomeCenter.NET.Services
         private ExceptionService ExceptionService { get; }
         private RunnerService RunnerService { get; }
 
-        private PipeServer<string> PipeServer { get; } = new PipeServer<string>("H.MainApplication");
+        private PipeServer<string> PipeServer { get; } = new PipeServer<string>("H.Control");
 
         #endregion
 

@@ -26,7 +26,9 @@ namespace HomeCenter.NET.Services
             ? GetEnabledPlugins<IConverter>()
                   .Where(pair => !string.Equals(pair.Key, Settings.Converter))
                   .Select(pair => pair.Value.Value)
-                  .ToList() : new List<IConverter>();
+                  .ToList() 
+            : new List<IConverter>();
+
         public List<IRunner> Runners => GetEnabledPlugins<IRunner>().Select(i => i.Value.Value).ToList();
 
         public List<IModule> Modules => GetEnabledPlugins<IModule>().Select(i => i.Value.Value).ToList();
