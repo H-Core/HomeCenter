@@ -1,7 +1,11 @@
 ﻿using System;
+using System.IO.Pipes;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using H.Pipes;
+using H.Pipes.AccessControl;
 using H.Pipes.Args;
 
 namespace HomeCenter.NET.Services
@@ -13,7 +17,7 @@ namespace HomeCenter.NET.Services
         private ExceptionService ExceptionService { get; }
         private RunnerService RunnerService { get; }
 
-        private PipeServer<string> MainApplicationServer { get; } = new PipeServer<string>("H.MainApplication");
+        private PipeServer<string> PipeServer { get; } = new PipeServer<string>("H.MainApplication");
 
         #endregion
 
@@ -24,14 +28,42 @@ namespace HomeCenter.NET.Services
             ExceptionService = exceptionService ?? throw new ArgumentNullException(nameof(exceptionService));
             RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
 
-            MainApplicationServer.MessageReceived += MainApplicationServer_OnMessageReceived;
+            PipeServer.AddAccessRules(new PipeAccessRule(new SecurityIdentifier(WellKnownSidType.BuiltinUsersSid, null), PipeAccessRights.ReadWrite, AccessControlType.Allow));
+            PipeServer.MessageReceived += PipeServer_OnMessageReceived;
+            PipeServer.ExceptionOccurred += PipeServer_OnExceptionOccurred;
+            PipeServer.ClientConnected += PipeServer_OnClientConnected;
+            PipeServer.ClientDisconnected += PipeServer_OnClientDisconnected;
         }
 
         #endregion
 
         #region Event Handlers
 
-        private async void MainApplicationServer_OnMessageReceived(object? sender, ConnectionMessageEventArgs<string> args)
+        private async void PipeServer_OnClientConnected(object? sender, ConnectionEventArgs<string> e)
+        {
+            try
+            {
+                await RunnerService.RunAsync("print PipeServer: Client connected").ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                await ExceptionService.HandleExceptionAsync(exception).ConfigureAwait(false);
+            }
+        }
+
+        private async void PipeServer_OnClientDisconnected(object? sender, ConnectionEventArgs<string> e)
+        {
+            try
+            {
+                await RunnerService.RunAsync("print PipeServer: Client disconnected").ConfigureAwait(false);
+            }
+            catch (Exception exception)
+            {
+                await ExceptionService.HandleExceptionAsync(exception).ConfigureAwait(false);
+            }
+        }
+
+        private async void PipeServer_OnMessageReceived(object? sender, ConnectionMessageEventArgs<string> args)
         {
             try
             {
@@ -43,6 +75,11 @@ namespace HomeCenter.NET.Services
             }
         }
 
+        private async void PipeServer_OnExceptionOccurred(object? sender, ExceptionEventArgs args)
+        {
+            await ExceptionService.HandleExceptionAsync(args.Exception).ConfigureAwait(false);
+        }
+
         #endregion
 
         #region Public methods
@@ -51,7 +88,7 @@ namespace HomeCenter.NET.Services
         {
             try
             {
-                await MainApplicationServer.StartAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+                await PipeServer.StartAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
             }
             catch (Exception exception)
             {
@@ -63,7 +100,7 @@ namespace HomeCenter.NET.Services
         {
             try
             {
-                await MainApplicationServer.WriteAsync(command, cancellationToken: cancellationToken).ConfigureAwait(false);
+                await PipeServer.WriteAsync(command, cancellationToken: cancellationToken).ConfigureAwait(false);
             }
             catch (Exception exception)
             {
@@ -81,7 +118,7 @@ namespace HomeCenter.NET.Services
 
         public async ValueTask DisposeAsync()
         {
-            await MainApplicationServer.DisposeAsync().ConfigureAwait(false);
+            await PipeServer.DisposeAsync().ConfigureAwait(false);
         }
 
         #endregion
