@@ -73,11 +73,13 @@ namespace H.NET.SearchDeskBand
         private void IpcService_OnConnected(object sender, EventArgs e)
         {
             Label.ForeColor = Color.RoyalBlue;
+            RecordButton.BackColor = Color.White;
         }
 
         private void IpcService_OnDisconnected(object sender, EventArgs e)
         {
             Label.ForeColor = Color.Gray;
+            RecordButton.BackColor = Color.White;
         }
 
         private void IpcService_OnMessageReceived(string message)
