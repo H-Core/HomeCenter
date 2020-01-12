@@ -5,7 +5,7 @@ using H.Pipes;
 
 namespace H.NET.SearchDeskBand
 {
-    public class IpcService : IAsyncDisposable
+    public sealed class IpcService : IAsyncDisposable
     {
         #region Properties
 

@@ -7,7 +7,7 @@ using H.NET.Storages;
 
 namespace H.NET.SearchDeskBand
 {
-    public partial class DeskBandWindow : Form
+    public sealed partial class DeskBandWindow : Form
     {
         #region Constants
 

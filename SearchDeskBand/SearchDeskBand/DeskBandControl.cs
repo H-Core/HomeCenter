@@ -12,7 +12,7 @@ using H.NET.Utilities;
 
 namespace H.NET.SearchDeskBand
 {
-    public partial class DeskBandControl : UserControl, IDisposable
+    public sealed partial class DeskBandControl : UserControl, IDisposable
     {
         #region Constants
 
