@@ -9,7 +9,7 @@ namespace H.NET.SearchDeskBand
     {
         #region Properties
 
-        private PipeClient<string> PipeClient { get; } = new PipeClient<string>("H.MainApplication");
+        private PipeClient<string> PipeClient { get; } = new PipeClient<string>("H.Control");
 
         #endregion
 
