@@ -42,7 +42,7 @@
             // 
             this.Label.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Label.Font = new System.Drawing.Font("Calibri", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Label.ForeColor = System.Drawing.Color.RoyalBlue;
+            this.Label.ForeColor = System.Drawing.Color.Gray;
             this.Label.Location = new System.Drawing.Point(6, 6);
             this.Label.Name = "Label";
             this.Label.Size = new System.Drawing.Size(304, 26);
