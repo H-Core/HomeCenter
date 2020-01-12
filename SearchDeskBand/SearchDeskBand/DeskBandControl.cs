@@ -43,7 +43,9 @@ namespace H.NET.SearchDeskBand
             Window.VisibleChanged += (sender, args) => Label.Visible = !Window.Visible;
 
             IpcService = new IpcService();
-            IpcService.MessageReceived += (sender, text) => OnMessageReceived(text);
+            IpcService.Connected += IpcService_OnConnected;
+            IpcService.Disconnected += IpcService_OnDisconnected;
+            IpcService.MessageReceived += (sender, text) => IpcService_OnMessageReceived(text);
             IpcService.ExceptionOccurred += (sender, exception) => OnExceptionOccurred(exception);
         }
 
@@ -68,7 +70,17 @@ namespace H.NET.SearchDeskBand
             }
         }
 
-        private void OnMessageReceived(string message)
+        private void IpcService_OnConnected(object sender, EventArgs e)
+        {
+            Label.ForeColor = Color.RoyalBlue;
+        }
+
+        private void IpcService_OnDisconnected(object sender, EventArgs e)
+        {
+            Label.ForeColor = Color.Gray;
+        }
+
+        private void IpcService_OnMessageReceived(string message)
         {
             try
             {

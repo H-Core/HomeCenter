@@ -15,8 +15,20 @@ namespace H.NET.SearchDeskBand
 
         #region Events
 
+        public event EventHandler Connected;
+        public event EventHandler Disconnected;
         public event EventHandler<string> MessageReceived;
         public event EventHandler<Exception> ExceptionOccurred;
+
+        private void OnConnected()
+        {
+            Connected?.Invoke(null, EventArgs.Empty);
+        }
+
+        private void OnDisconnected()
+        {
+            Disconnected?.Invoke(null, EventArgs.Empty);
+        }
 
         private void OnMessageReceived(string message)
         {
@@ -34,6 +46,8 @@ namespace H.NET.SearchDeskBand
 
         public IpcService()
         {
+            PipeClient.Connected += (sender, args) => OnConnected();
+            PipeClient.Disconnected += (sender, args) => OnDisconnected();
             PipeClient.MessageReceived += (sender, args) => OnMessageReceived(args.Message);
             PipeClient.ExceptionOccurred += (sender, args) => OnExceptionOccurred(args.Exception);
         }
