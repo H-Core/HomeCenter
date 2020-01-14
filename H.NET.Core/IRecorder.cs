@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using H.NET.Core.CustomEventArgs;
 
 namespace H.NET.Core
@@ -11,6 +13,7 @@ namespace H.NET.Core
         IReadOnlyCollection<byte> WavData { get; }
         IReadOnlyCollection<byte> WavHeader { get; }
 
+        Task InitializeAsync(CancellationToken cancellationToken = default);
         void Start();
         void Stop();
 

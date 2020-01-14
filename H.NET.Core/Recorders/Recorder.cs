@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using H.NET.Core.CustomEventArgs;
 
 namespace H.NET.Core.Recorders
@@ -36,6 +38,11 @@ namespace H.NET.Core.Recorders
         #endregion
 
         #region Public methods
+
+        public virtual async Task InitializeAsync(CancellationToken cancellationToken = default)
+        {
+            await Task.Delay(0, cancellationToken);
+        }
 
         public virtual void Start()
         {

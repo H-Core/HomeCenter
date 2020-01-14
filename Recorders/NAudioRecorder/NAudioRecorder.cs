@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using H.NET.Core.Recorders;
 using NAudio.Wave;
 
@@ -10,25 +12,34 @@ namespace H.NET.Recorders
 {
     public class NAudioRecorder : Recorder
     {
-        public int Rate { get; }
-        public int Bits { get; }
-        public int Channels { get; }
+        public int Rate { get; set; } = 8000;
+        public int Bits { get; set; } = 16;
+        public int Channels { get; set; } = 1;
 
-        public WaveInEvent WaveIn { get; set; }
-        public MemoryStream Stream { get; set; }
-        public WaveFileWriter WaveFile { get; set; }
+        private WaveInEvent? WaveIn { get; set; }
+        private MemoryStream? Stream { get; set; }
+        private WaveFileWriter? WaveFile { get; set; }
 
 
         #region Constructors
 
-        public NAudioRecorder(int rate = 8000, int bits = 16, int channels = 1)
+        public NAudioRecorder()
         {
-            Rate = rate;
-            Bits = bits;
-            Channels = channels;
-            WaveIn = new WaveInEvent
+            AddSetting(nameof(Rate), o => Rate = o, NotNegative, 8000);
+            AddSetting(nameof(Bits), o => Bits = o, NotNegative, 16);
+            AddSetting(nameof(Channels), o => Channels = o, NotNegative, 1);
+        }
+
+        #endregion
+
+        #region Public methods
+
+        // ReSharper disable AccessToDisposedClosure
+        public override Task InitializeAsync(CancellationToken cancellationToken = default)
+        {
+            WaveIn ??= new WaveInEvent
             {
-                WaveFormat = new WaveFormat(rate, bits, channels)
+                WaveFormat = new WaveFormat(Rate, Bits, Channels)
             };
 
             WaveIn.DataAvailable += (sender, args) =>
@@ -39,15 +50,16 @@ namespace H.NET.Recorders
                     WaveFile.Flush();
                 }
 
-                RawData = RawData ?? Array.Empty<byte>();
+                RawData ??= Array.Empty<byte>();
                 RawData = RawData.Concat(args.Buffer).ToArray();
 
                 OnNewRawData(args.Buffer);
             };
 
             using (var stream = new MemoryStream())
-            using (var writer = new BinaryWriter(stream, Encoding.UTF8))
             {
+                using var writer = new BinaryWriter(stream, Encoding.UTF8);
+
                 // Fake Wav header of current format
                 writer.Write(Encoding.UTF8.GetBytes("RIFF"));
                 writer.Write(int.MaxValue);
@@ -62,12 +74,11 @@ namespace H.NET.Recorders
                 stream.Position = 0;
                 WavHeader = stream.ToArray();
             }
+
+            return Task.CompletedTask;
         }
 
-        #endregion
-
-        #region Public methods
-
+        // ReSharper disable AccessToDisposedClosure
         public override void Start()
         {
             WaveFile?.Dispose();
@@ -126,7 +137,7 @@ namespace H.NET.Recorders
 
     public class DeviceInfo
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public int Channels { get; set; }
     }
 }
