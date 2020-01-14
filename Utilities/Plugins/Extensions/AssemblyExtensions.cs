@@ -26,11 +26,13 @@ namespace H.NET.Utilities.Plugins.Extensions
             var list = new List<string> { assembly.Location };
 
             var folder = assembly.GetFolder();
-            var references = assembly.GetReferencedAssemblies()
-                .Select(i => i.CodeBase?.Replace(@"file:///", string.Empty) ?? Path.Combine(folder, i.Name + ".dll"))
+            var assemblyNames = assembly.GetReferencedAssemblies();
+            var references = assemblyNames
+                .Select(assemblyName => assemblyName.CodeBase?.Replace(@"file:///", string.Empty) ?? Path.Combine(folder, assemblyName.Name + ".dll"))
                 .Where(i => !Path.GetFileName(i).StartsWith("System.") &&
                             !Path.GetFileName(i).StartsWith("mscorlib") &&
                             !Path.GetFileName(i).StartsWith("netstandard"))
+                .Where(File.Exists)
                 .ToArray();
             
             list.AddRange(references);
