@@ -35,6 +35,7 @@ namespace H.NET.Converters.IntegrationTests
 
         public static async Task StartStreamingRecognitionTest_RealTime(IRecorder recorder, IConverter converter, bool writeWavHeader = false)
         {
+            await recorder.InitializeAsync();
             recorder.Start();
 
             using var recognition = await converter.StartStreamingRecognitionAsync();
@@ -71,6 +72,7 @@ namespace H.NET.Converters.IntegrationTests
 
         public static async Task ConvertTest_RealTime(IRecorder recorder, IConverter converter)
         {
+            await recorder.InitializeAsync();
             recorder.Start();
 
             await Task.Delay(TimeSpan.FromMilliseconds(5000));
