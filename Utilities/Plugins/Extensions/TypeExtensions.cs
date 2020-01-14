@@ -9,8 +9,9 @@ namespace H.NET.Utilities.Plugins.Extensions
         {
             return type
                 .GetConstructors()
-                .Any(c => c.IsPublic && 
-                          c.GetParameters().Length == 0);
+                .Any(constructorInfo => 
+                    constructorInfo.IsPublic && 
+                    !constructorInfo.GetParameters().Any());
         }
     }
 }
