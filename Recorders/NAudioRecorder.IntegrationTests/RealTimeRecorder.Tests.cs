@@ -19,7 +19,9 @@ namespace H.NET.Recorders.IntegrationTests
             }
 
             using var recorder = new NAudioRecorder();
-            var provider = new BufferedWaveProvider(recorder.WaveIn.WaveFormat);
+            await recorder.InitializeAsync();
+
+            var provider = new BufferedWaveProvider(new WaveFormat(recorder.Rate, recorder.Bits, recorder.Channels));
             using var output = new WaveOutEvent();
             output.Init(provider);
             output.Play();
@@ -30,7 +32,6 @@ namespace H.NET.Recorders.IntegrationTests
             await Task.Delay(TimeSpan.FromMilliseconds(5000));
 
             recorder.Stop();
-
         }
     }
 }
