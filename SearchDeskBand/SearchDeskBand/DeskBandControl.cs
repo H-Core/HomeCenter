@@ -22,6 +22,8 @@ namespace H.NET.SearchDeskBand
 
         #region Properties
 
+        public bool IsDarkTheme { get; set; } = true;
+
         private IpcService IpcService { get; }
         private DeskBandWindow Window { get; set; }
         private Dictionary<string, Action<string>> ActionDictionary { get; } = new Dictionary<string, Action<string>>();
@@ -35,7 +37,7 @@ namespace H.NET.SearchDeskBand
             InitializeComponent();
 
             AddAction("start", message => RecordButton.BackColor = Color.RoyalBlue);
-            AddAction("stop", message => RecordButton.BackColor = Color.White);
+            AddAction("stop", message => RecordButton.BackColor = IsDarkTheme ? Color.Black : Color.White);
 
             Window = new DeskBandWindow();
             Window.ExceptionOccurred += (sender, exception) => OnExceptionOccurred(exception);
@@ -72,14 +74,14 @@ namespace H.NET.SearchDeskBand
 
         private void IpcService_OnConnected(object sender, EventArgs e)
         {
-            Label.ForeColor = Color.RoyalBlue;
-            RecordButton.BackColor = Color.White;
+            Label.ForeColor = IsDarkTheme ? Color.White : Color.RoyalBlue;
+            RecordButton.BackColor = IsDarkTheme ? Color.Black : Color.White;
         }
 
         private void IpcService_OnDisconnected(object sender, EventArgs e)
         {
             Label.ForeColor = Color.Gray;
-            RecordButton.BackColor = Color.White;
+            RecordButton.BackColor = IsDarkTheme ? Color.Black : Color.White;
         }
 
         private void IpcService_OnMessageReceived(string message)
@@ -119,6 +121,13 @@ namespace H.NET.SearchDeskBand
 
         private async void DeskBandControl_Load(object sender, EventArgs e)
         {
+            if (IsDarkTheme)
+            {
+                RecordButton.BackColor = Color.Black;
+                BackColor = Color.Black;
+                ForeColor = Color.White;
+            }
+
             try
             {
                 await IpcService.ConnectAsync();
