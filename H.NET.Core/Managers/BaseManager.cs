@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using H.NET.Core.CustomEventArgs;
 using H.NET.Core.Recorders;
@@ -108,7 +109,7 @@ namespace H.NET.Core.Managers
             }
         }
 
-        public override void Start()
+        public override async Task StartAsync(CancellationToken cancellationToken = default)
         {
             if (IsStarted)
             {
@@ -116,10 +117,10 @@ namespace H.NET.Core.Managers
             }
 
             Text = null;
-            base.Start();
+            await base.StartAsync(cancellationToken);
         }
 
-        public override void Stop()
+        public override async Task StopAsync(CancellationToken cancellationToken = default)
         {
             if (!IsStarted)
             {
@@ -132,18 +133,18 @@ namespace H.NET.Core.Managers
                 return;
             }
 
-            Recorder.Stop();
+            await Recorder.StopAsync(cancellationToken);
         }
 
-        public void Change()
+        public async Task ChangeAsync(CancellationToken cancellationToken = default)
         {
             if (!IsStarted)
             {
-                Start();
+                await StartAsync(cancellationToken);
             }
             else
             {
-                Stop();
+                await StopAsync(cancellationToken);
             }
         }
 

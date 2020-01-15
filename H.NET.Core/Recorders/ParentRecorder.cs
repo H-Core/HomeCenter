@@ -1,4 +1,7 @@
-﻿namespace H.NET.Core.Recorders
+﻿using System.Threading;
+using System.Threading.Tasks;
+
+namespace H.NET.Core.Recorders
 {
     public class ParentRecorder : Recorder
     {
@@ -14,7 +17,12 @@
 
         #region Public methods
 
-        public override void Start()
+        public override async Task InitializeAsync(CancellationToken cancellationToken = default)
+        {
+            await Recorder.InitializeAsync(cancellationToken);
+        }
+
+        public override async Task StartAsync(CancellationToken cancellationToken = default)
         {
             if (IsStarted)
             {
@@ -27,11 +35,11 @@
                 return;
             }
 
-            Recorder.Start();
-            base.Start();
+            await Recorder.StartAsync(cancellationToken);
+            await base.StartAsync(cancellationToken);
         }
 
-        public override void Stop()
+        public override async Task StopAsync(CancellationToken cancellationToken = default)
         {
             if (!IsStarted)
             {
@@ -44,10 +52,12 @@
                 return;
             }
 
-            Recorder.Stop();
+            await Recorder.StopAsync(cancellationToken);
+
             RawData = Recorder.RawData;
             WavData = Recorder.WavData;
-            base.Stop();
+
+            await base.StopAsync(cancellationToken);
         }
 
         #endregion

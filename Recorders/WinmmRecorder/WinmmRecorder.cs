@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using H.NET.Core.Recorders;
 
 namespace H.NET.Recorders
@@ -18,15 +20,15 @@ namespace H.NET.Recorders
 
         #region Public methods
 
-        public override void Start()
+        public override async Task StartAsync(CancellationToken cancellationToken = default)
         {
             MciSendString("open new Type waveaudio Alias recsound");
             MciSendString("record recsound");
 
-            base.Start();
+            await base.StartAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public override void Stop()
+        public override async Task StopAsync(CancellationToken cancellationToken = default)
         {
             var path = Path.GetTempFileName();
             MciSendString("save recsound " + path);
@@ -44,7 +46,7 @@ namespace H.NET.Recorders
                 }
             }
 
-            base.Stop();
+            await base.StopAsync(cancellationToken).ConfigureAwait(false);
         }
 
         #endregion

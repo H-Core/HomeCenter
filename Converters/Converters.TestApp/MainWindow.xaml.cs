@@ -37,8 +37,9 @@ namespace H.NET.Converters.TestApp
                     nameof(WitAiConverter) => new NAudioRecorder(),
                     nameof(YandexConverter) => new NAudioRecorder(),
                     _ => throw new NotImplementedException()
-                }; 
-                recorder.Start();
+                };
+                await recorder.InitializeAsync();
+                await recorder.StartAsync();
 
                 using var converter = ConverterComboBox.Text switch
                 {
@@ -74,11 +75,11 @@ namespace H.NET.Converters.TestApp
                 }
 
                 // ReSharper disable once AccessToDisposedClosure
-                recorder.NewRawData += async (o, args) => await recognition.WriteAsync(args.RawData.ToArray()).ConfigureAwait(false);
+                recorder.RawDataReceived += async (o, args) => await recognition.WriteAsync(args.RawData.ToArray()).ConfigureAwait(false);
 
                 await Task.Delay(TimeSpan.FromMilliseconds(5000)).ConfigureAwait(false);
 
-                recorder.Stop();
+                await recorder.StopAsync();
                 await recognition.StopAsync().ConfigureAwait(false);
             }
             catch (Exception exception)

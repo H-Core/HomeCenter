@@ -26,12 +26,12 @@ namespace H.NET.Recorders.IntegrationTests
             output.Init(provider);
             output.Play();
 
-            recorder.NewRawData += (sender, args) => provider.AddSamples(args.RawData.ToArray(), 0, args.RawData.Count);
-            recorder.Start();
+            recorder.RawDataReceived += (sender, args) => provider.AddSamples(args.RawData.ToArray(), 0, args.RawData.Count);
+            await recorder.StartAsync();
             
             await Task.Delay(TimeSpan.FromMilliseconds(5000));
 
-            recorder.Stop();
+            await recorder.StopAsync();
         }
     }
 }

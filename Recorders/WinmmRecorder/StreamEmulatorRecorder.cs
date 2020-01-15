@@ -40,17 +40,17 @@ namespace H.NET.Recorders
 
         #region Event handlers
 
-        private void OnTimer(object sender)
+        private async void OnTimer(object sender)
         {
             if (!IsStarted)
             {
                 return;
             } 
 
-            Stop();
+            await StopAsync();
             OnNewPartialData();
             //File.WriteAllBytes($"D:/voice_{new Random().Next()}.wav", Data);
-            Start();
+            await StartAsync();
         }
 
         #endregion

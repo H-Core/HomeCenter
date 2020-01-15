@@ -51,12 +51,12 @@ namespace H.NET.Tests
             }
 
             Assert.False(recorder.IsStarted);
-            recorder.Start();
+            await recorder.StartAsync();
             Assert.True(recorder.IsStarted);
 
             await Task.Delay(timeout);
 
-            recorder.Stop();
+            await recorder.StopAsync();
             Assert.False(recorder.IsStarted);
 
             BaseDataTest(recorder.WavData.ToArray());
@@ -118,21 +118,21 @@ namespace H.NET.Tests
                 }
             };
 
-            manager.Change();
+            await manager.ChangeAsync();
             await Task.Delay(timeout);
-            manager.Change();
+            await manager.ChangeAsync();
 
-            manager.ChangeWithTimeout(timeout);
+            await manager.ChangeWithTimeoutAsync(timeout);
             await Task.Delay(timeout);
-            manager.ChangeWithTimeout(timeout);
+            await manager.ChangeWithTimeoutAsync(timeout);
 
-            manager.StartWithTimeout(timeout);
+            await manager.StartWithTimeoutAsync(timeout);
             await Task.Delay(timeout);
-            manager.Stop();
+            await manager.StopAsync();
 
-            manager.Start();
+            await manager.StartAsync();
             await Task.Delay(timeout);
-            manager.Stop();
+            await manager.StopAsync();
             manager.ProcessSpeech(TestUtilities.GetRawSpeech("speech1.wav"));
 
             await startedEvent.WaitAsync();

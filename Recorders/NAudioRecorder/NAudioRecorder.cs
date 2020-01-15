@@ -53,7 +53,7 @@ namespace H.NET.Recorders
                 RawData ??= Array.Empty<byte>();
                 RawData = RawData.Concat(args.Buffer).ToArray();
 
-                OnNewRawData(args.Buffer);
+                OnRawDataReceived(args.Buffer);
             };
 
             using (var stream = new MemoryStream())
@@ -79,7 +79,7 @@ namespace H.NET.Recorders
         }
 
         // ReSharper disable AccessToDisposedClosure
-        public override void Start()
+        public override async Task StartAsync(CancellationToken cancellationToken = default)
         {
             WaveFile?.Dispose();
 
@@ -88,10 +88,10 @@ namespace H.NET.Recorders
 
             WaveIn.StartRecording();
 
-            base.Start();
+            await base.StartAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public override void Stop()
+        public override async Task StopAsync(CancellationToken cancellationToken = default)
         {
             WaveIn.StopRecording();
 
@@ -101,7 +101,7 @@ namespace H.NET.Recorders
 
             Stream.Position = 0;
 
-            base.Stop();
+            await base.StopAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public static List<DeviceInfo> GetAvailableDevices()

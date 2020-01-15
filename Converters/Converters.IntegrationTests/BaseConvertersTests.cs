@@ -36,7 +36,7 @@ namespace H.NET.Converters.IntegrationTests
         public static async Task StartStreamingRecognitionTest_RealTime(IRecorder recorder, IConverter converter, bool writeWavHeader = false)
         {
             await recorder.InitializeAsync();
-            recorder.Start();
+            await recorder.StartAsync();
 
             using var recognition = await converter.StartStreamingRecognitionAsync();
             recognition.AfterPartialResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterPartialResults: {args.Text}");
@@ -54,11 +54,11 @@ namespace H.NET.Converters.IntegrationTests
             }
 
             // ReSharper disable once AccessToDisposedClosure
-            recorder.NewRawData += async (sender, args) => await recognition.WriteAsync(args.RawData.ToArray());
+            recorder.RawDataReceived += async (sender, args) => await recognition.WriteAsync(args.RawData.ToArray());
 
             await Task.Delay(TimeSpan.FromMilliseconds(5000));
 
-            recorder.Stop();
+            await recorder.StopAsync();
             await recognition.StopAsync();
         }
 
@@ -73,11 +73,11 @@ namespace H.NET.Converters.IntegrationTests
         public static async Task ConvertTest_RealTime(IRecorder recorder, IConverter converter)
         {
             await recorder.InitializeAsync();
-            recorder.Start();
+            await recorder.StartAsync();
 
             await Task.Delay(TimeSpan.FromMilliseconds(5000));
 
-            recorder.Stop();
+            await recorder.StopAsync();
 
             var bytes = recorder.WavData;
 

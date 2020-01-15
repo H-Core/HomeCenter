@@ -12,21 +12,21 @@ namespace HomeCenter.NET.Initializers
     {
         public HookInitializer(BaseManager manager, HookService hookService, MainViewModel model, ScreenshotToClipboardModule screenshotToClipboardModule, ScreenshotToTextModule screenshotToTextModule, Settings settings)
         {
-            void GlobalKeyUp(object? sender, KeyboardHookEventArgs e)
+            async void GlobalKeyUp(object? sender, KeyboardHookEventArgs e)
             {
                 if (e.Key != Keys.None && e.Key == hookService.RecordKey ||
                     e.IsAltPressed && e.IsCtrlPressed)
                 {
-                    manager.Stop();
+                    await manager.StopAsync();
                 }
             }
 
-            void GlobalKeyDown(object? sender, KeyboardHookEventArgs e)
+            async void GlobalKeyDown(object? sender, KeyboardHookEventArgs e)
             {
                  if (e.Key != Keys.None && e.Key == hookService.RecordKey ||
                     e.Key == Keys.Space && e.IsAltPressed && e.IsCtrlPressed)
                 {
-                    manager.Start();
+                    await manager.StartAsync();
                 }
 
                 if (hookService.IsIgnoredApplication())

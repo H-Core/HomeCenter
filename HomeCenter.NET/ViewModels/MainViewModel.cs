@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using H.NET.Core.Managers;
@@ -10,6 +11,7 @@ using HomeCenter.NET.Services;
 using HomeCenter.NET.ViewModels.Commands;
 using HomeCenter.NET.ViewModels.Settings;
 using HomeCenter.NET.ViewModels.Utilities;
+// ReSharper disable UnusedMember.Global
 
 namespace HomeCenter.NET.ViewModels
 {
@@ -115,9 +117,9 @@ namespace HomeCenter.NET.ViewModels
             ShowMessage(text, true);
         }
 
-        public void Record()
+        public async Task RecordAsync(CancellationToken cancellationToken = default)
         {
-            Manager.ChangeWithTimeout(3000);
+            await Manager.ChangeWithTimeoutAsync(3000, cancellationToken);
         }
 
         public async Task ShowCommandsAsync()

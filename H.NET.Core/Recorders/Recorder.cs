@@ -20,20 +20,32 @@ namespace H.NET.Core.Recorders
         #region Events
 
         public event EventHandler Started;
-        protected void OnStarted() => Started?.Invoke(this, EventArgs.Empty);
-
 
         public event EventHandler<RecorderEventArgs> Stopped;
-        protected void OnStopped(RecorderEventArgs args) => Stopped?.Invoke(this, args);
 
         /// <summary>
         /// When new partial raw data
         /// </summary>
-        public event EventHandler<RecorderEventArgs> NewRawData;
-        protected void OnNewRawData(IReadOnlyCollection<byte> value) => NewRawData?.Invoke(this, new RecorderEventArgs
+        public event EventHandler<RecorderEventArgs> RawDataReceived;
+
+        protected void OnStarted()
         {
-            RawData = value,
-        });
+            Started?.Invoke(this, EventArgs.Empty);
+        }
+
+
+        protected void OnStopped(RecorderEventArgs args)
+        {
+            Stopped?.Invoke(this, args);
+        }
+
+        protected void OnRawDataReceived(IReadOnlyCollection<byte> value)
+        {
+            RawDataReceived?.Invoke(this, new RecorderEventArgs
+            {
+                RawData = value,
+            });
+        }
 
         #endregion
 
@@ -44,7 +56,7 @@ namespace H.NET.Core.Recorders
             await Task.Delay(0, cancellationToken);
         }
 
-        public virtual void Start()
+        public virtual async Task StartAsync(CancellationToken cancellationToken = default)
         {
             if (IsStarted)
             {
@@ -56,9 +68,10 @@ namespace H.NET.Core.Recorders
             WavData = null;
 
             OnStarted();
+            await Task.Delay(0, cancellationToken);
         }
 
-        public virtual void Stop()
+        public virtual async Task StopAsync(CancellationToken cancellationToken = default)
         {
             if (!IsStarted)
             {
@@ -71,6 +84,7 @@ namespace H.NET.Core.Recorders
                 RawData = RawData,
                 WavData = WavData,
             });
+            await Task.Delay(0, cancellationToken);
         }
 
         #endregion

@@ -1,27 +1,28 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace H.NET.Core.Recorders
 {
     public static class RecorderExtensions
     {
-        public static async void StartWithTimeout(this IRecorder recorder, int millisecondsTimeout)
+        public static async Task StartWithTimeoutAsync(this IRecorder recorder, int millisecondsTimeout, CancellationToken cancellationToken = default)
         {
-            recorder.Start();
+            await recorder.StartAsync(cancellationToken);
 
-            await Task.Delay(millisecondsTimeout);
+            await Task.Delay(millisecondsTimeout, cancellationToken);
 
-            recorder.Stop();
+            await recorder.StopAsync(cancellationToken);
         }
 
-        public static void ChangeWithTimeout(this IRecorder recorder, int millisecondsTimeout)
+        public static async Task ChangeWithTimeoutAsync(this IRecorder recorder, int millisecondsTimeout, CancellationToken cancellationToken = default)
         {
             if (!recorder.IsStarted)
             {
-                recorder.StartWithTimeout(millisecondsTimeout);
+                await recorder.StartWithTimeoutAsync(millisecondsTimeout, cancellationToken);
             }
             else
             {
-                recorder.Stop();
+                await recorder.StopAsync(cancellationToken);
             }
         }
     }
