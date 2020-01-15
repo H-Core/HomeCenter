@@ -1,19 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="CheckAdmin">
+
   <PropertyGroup>
     <RootNamespace>H.NET.SearchDeskBand</RootNamespace>
     <AssemblyName>H.NET.SearchDeskBand</AssemblyName>
     <TargetFramework>net472</TargetFramework>
-    <AssemblyTitle>SearchDeskBand</AssemblyTitle>
-    <Product>SearchDeskBand</Product>
     <RegisterForComInterop>false</RegisterForComInterop>
     <ComDir>com\</ComDir>
-  </PropertyGroup>
-  <PropertyGroup>
     <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+
   <Target Name="CheckAdmin">
     <Exec Command="NET SESSION &gt;nul 2&gt;&amp;1&#xD;&#xA;" IgnoreExitCode="true">
       <Output TaskParameter="ExitCode" PropertyName="IsAdminValue" />
@@ -24,6 +20,7 @@
     </PropertyGroup>
     <Message Condition="!$(IsAdmin)" Text="You do not have administrator rights. The library will not be registered/unregistered" Importance="high" />
   </Target>
+
   <Target Name="Register" BeforeTargets="PostBuildEvent" Condition="$(IsAdmin) AND !Exists('$(ComDir)')">
     <Message Text="Registering COM dlls..." Importance="high" />
     <MakeDir Directories="$(ComDir)" />
@@ -34,55 +31,45 @@
     <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)SharpShell.dll /tlb /codebase /nologo" />
     <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)$(TargetFileName) /tlb /codebase /nologo" />
   </Target>
-  <Target Name="Unregister" BeforeTargets="BeforeClean" Condition="$(IsAdmin) AND Exists('$(ComDir)')">
+
+  <Target Name="Unregister" BeforeTargets="Unregister_Step_2" Condition="$(IsAdmin) AND Exists('$(ComDir)')">
+    <Message Text="Unregistering COM dlls... Killing explorer.exe..." Importance="high" />
+    <Exec Command="taskkill /f /im explorer.exe" IgnoreExitCode="true" />
+    <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)SharpShell.dll /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
+    <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)SharpShell.dll /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
+    <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)$(TargetFileName) /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
+    <Message Text="Wait 1 second..." Importance="high" />
+    <Exec Command="ping -n 2 127.0.0.1 &gt; nul" />
+  </Target>
+
+  <Target Name="Unregister_Step_2" BeforeTargets="BeforeClean" Condition="$(IsAdmin) AND Exists('$(ComDir)')">
     <Message Text="Unregistering COM dlls... Killing explorer.exe..." Importance="high" />
     <Exec Command="taskkill /f /im explorer.exe" IgnoreExitCode="true" />
     <Message Text="Running x86/x64 explorer.exe(MSBuild is x86 process)..." Importance="high" />
     <Exec Command="SCHTASKS /Create /sc MINUTE /tr &quot;explorer.exe&quot; /tn &quot;Run Explorer&quot;" IgnoreExitCode="true" />
     <Exec Command="SCHTASKS /Run /tn &quot;Run Explorer&quot;" IgnoreExitCode="true" />
     <Exec Command="SCHTASKS /Delete /F /tn &quot;Run Explorer&quot;" IgnoreExitCode="true" />
-    <Message Text="Wait 3 second..." Importance="high" />
-    <Exec Command="ping -n 4 127.0.0.1 &gt; nul" />
+    <Message Text="Wait 1 second..." Importance="high" />
+    <Exec Command="ping -n 2 127.0.0.1 &gt; nul" />
     <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)SharpShell.dll /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
     <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)SharpShell.dll /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
     <Exec Command="%25SystemRoot%25\Microsoft.NET\Framework64\v4.0.30319\regasm.exe  $(ComDir)$(TargetFileName) /tlb /codebase /unregister /nologo /silent" IgnoreExitCode="true" />
     <RemoveDir Directories="$(ComDir)" />
   </Target>
+
   <ItemGroup>
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Update="DeskBandControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Update="DeskBandControl.Designer.cs">
-      <DependentUpon>DeskBandControl.cs</DependentUpon>
-    </Compile>
-    <Compile Update="DeskBandWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="DeskBandWindow.Designer.cs">
-      <DependentUpon>DeskBandWindow.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="DeskBandControl.resx">
-      <DependentUpon>DeskBandControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="DeskBandWindow.resx">
-      <DependentUpon>DeskBandWindow.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="key.snk" />
-  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
     <ProjectReference Include="..\..\Utilities\CommandsStorage\CommandsStorage.csproj" />
     <ProjectReference Include="..\..\Utilities\Startup\Startup.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="H.Pipes" Version="1.0.7" />
     <PackageReference Include="SharpShell" Version="2.7.2" />
   </ItemGroup>
+
 </Project>
