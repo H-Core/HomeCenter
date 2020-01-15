@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="NuGet.PackageManagement.NetStandard" Version="4.7.0" />
-    <PackageReference Include="NuGet.Packaging" Version="4.8.0" />
   </ItemGroup>
 
 </Project>
