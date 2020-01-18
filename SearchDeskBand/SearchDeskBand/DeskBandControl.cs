@@ -21,8 +21,26 @@ namespace H.NET.SearchDeskBand
         #endregion
 
         #region Properties
+        
+        public static ColorTheme DarkTheme { get; } = new ColorTheme
+        {
+            TextColor = Color.White,
+            BackgroundColor = Color.Black,
+            ActiveColor = Color.White,
+            InactiveColor = Color.Gray,
+            MouseOverColor = Color.White,
+        };
 
-        public bool IsDarkTheme { get; set; } = true;
+        public static ColorTheme LightTheme { get; } = new ColorTheme
+        {
+            TextColor = Color.Black,
+            BackgroundColor = Color.White,
+            ActiveColor = Color.RoyalBlue,
+            InactiveColor = Color.Gray,
+            MouseOverColor = Color.PowderBlue,
+        };
+
+        public ColorTheme ColorTheme { get; } = DarkTheme;
 
         private IpcService IpcService { get; }
         private DeskBandWindow Window { get; set; }
@@ -36,8 +54,8 @@ namespace H.NET.SearchDeskBand
         {
             InitializeComponent();
 
-            AddAction("start", message => RecordButton.BackColor = Color.RoyalBlue);
-            AddAction("stop", message => RecordButton.BackColor = IsDarkTheme ? Color.Black : Color.White);
+            AddAction("start", message => RecordButton.BackColor = ColorTheme.ActiveColor);
+            AddAction("stop", message => RecordButton.BackColor = ColorTheme.BackgroundColor);
 
             Window = new DeskBandWindow();
             Window.ExceptionOccurred += (sender, exception) => OnExceptionOccurred(exception);
@@ -74,14 +92,14 @@ namespace H.NET.SearchDeskBand
 
         private void IpcService_OnConnected(object sender, EventArgs e)
         {
-            Label.ForeColor = IsDarkTheme ? Color.White : Color.RoyalBlue;
-            RecordButton.BackColor = IsDarkTheme ? Color.Black : Color.White;
+            Label.ForeColor = ColorTheme.ActiveColor;
+            RecordButton.BackColor = ColorTheme.BackgroundColor;
         }
 
         private void IpcService_OnDisconnected(object sender, EventArgs e)
         {
-            Label.ForeColor = Color.Gray;
-            RecordButton.BackColor = IsDarkTheme ? Color.Black : Color.White;
+            Label.ForeColor = ColorTheme.ActiveColor;
+            RecordButton.BackColor = ColorTheme.BackgroundColor;
         }
 
         private void IpcService_OnMessageReceived(string message)
@@ -111,7 +129,9 @@ namespace H.NET.SearchDeskBand
                 Window.Location = location;
                 Window.Top -= Window.Height;
                 Window.Top += Height;
-                Window.Left -= 1; // border
+
+                // Bottom border
+                Window.Top -= 2;
             }
             catch (Exception exception)
             {
@@ -121,12 +141,7 @@ namespace H.NET.SearchDeskBand
 
         private async void DeskBandControl_Load(object sender, EventArgs e)
         {
-            if (IsDarkTheme)
-            {
-                RecordButton.BackColor = Color.Black;
-                BackColor = Color.Black;
-                ForeColor = Color.White;
-            }
+            ApplyTheme(ColorTheme);
 
             try
             {
@@ -203,6 +218,25 @@ namespace H.NET.SearchDeskBand
         #endregion
 
         #region Private methods
+
+        private void ApplyTheme(ColorTheme theme)
+        {
+            Window.ApplyTheme(ColorTheme);
+
+            RecordButton.BackColor = theme.BackgroundColor;
+            BackColor = theme.BackgroundColor;
+            ForeColor = theme.TextColor;
+
+            RecordButton.FlatAppearance.MouseDownBackColor = theme.ActiveColor;
+            MenuButton.FlatAppearance.MouseDownBackColor = theme.ActiveColor;
+            SettingsButton.FlatAppearance.MouseDownBackColor = theme.ActiveColor;
+            ShowMainApplicationButton.FlatAppearance.MouseDownBackColor = theme.ActiveColor;
+
+            RecordButton.FlatAppearance.MouseOverBackColor = theme.MouseOverColor;
+            MenuButton.FlatAppearance.MouseOverBackColor = theme.MouseOverColor;
+            SettingsButton.FlatAppearance.MouseOverBackColor = theme.MouseOverColor;
+            ShowMainApplicationButton.FlatAppearance.MouseOverBackColor = theme.MouseOverColor;
+        }
 
         private async Task RunAsync(string command, CancellationToken cancellationToken = default)
         {

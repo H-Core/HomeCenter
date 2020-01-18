@@ -45,11 +45,34 @@ namespace H.NET.SearchDeskBand
 
             var collection = new AutoCompleteStringCollection();
             collection.AddRange(storage.Select(i => i.Key).ToArray());
-            TextBox.AutoCompleteCustomSource = collection;
+            InputTextBox.AutoCompleteCustomSource = collection;
 
             #endregion
 
             UpdateHistory();
+        }
+
+        #endregion
+
+        #region Public methods
+
+        public void ApplyTheme(ColorTheme theme)
+        {
+            InputPanel.BackColor = theme.BackgroundColor;
+            InputTextBox.BackColor = theme.BackgroundColor;
+            InputTextBox.ForeColor = theme.TextColor;
+
+            foreach (TabPage page in TabControl.TabPages)
+            {
+                page.BackColor = theme.BackgroundColor;
+                page.ForeColor = theme.TextColor;
+
+                foreach (Control control in page.Controls)
+                {
+                    control.BackColor = theme.BackgroundColor;
+                    control.ForeColor = theme.TextColor;
+                }
+            }
         }
 
         #endregion
@@ -60,12 +83,12 @@ namespace H.NET.SearchDeskBand
         {
             try
             {
-                historyListBox.Items.Clear();
+                HistoryListBox.Items.Clear();
 
                 var history = new CommandsHistory(CompanyName).Load();
                 foreach (var command in history)
                 {
-                    historyListBox.Items.Add(command);
+                    HistoryListBox.Items.Add(command);
                 }
             }
             catch (Exception exception)
@@ -92,7 +115,7 @@ namespace H.NET.SearchDeskBand
             {
                 UpdateHistory();
 
-                TextBox.Focus();
+                InputTextBox.Focus();
                 //deskBandControl1.Focus();
             }
             catch (Exception exception)
@@ -127,9 +150,9 @@ namespace H.NET.SearchDeskBand
                     return;
                 }
 
-                var command = TextBox.Text;
+                var command = InputTextBox.Text;
 
-                TextBox.Clear();
+                InputTextBox.Clear();
 
                 await RunAsync(command);
             }
@@ -143,7 +166,7 @@ namespace H.NET.SearchDeskBand
         {
             try
             {
-                TextBox.Focus();
+                InputTextBox.Focus();
             }
             catch (Exception exception)
             {
@@ -155,7 +178,7 @@ namespace H.NET.SearchDeskBand
         {
             try
             {
-                var item = historyListBox.SelectedItem as string;
+                var item = HistoryListBox.SelectedItem as string;
 
                 await RunAsync(item);
             }
