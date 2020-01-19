@@ -1,11 +1,12 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace H.NET.Core.Recorders
 {
     public static class RecorderExtensions
     {
-        public static async Task StartWithTimeoutAsync(this IRecorder recorder, int millisecondsTimeout, CancellationToken cancellationToken = default)
+        public static async Task StartWithTimeoutAsync(this IRecorder recorder, TimeSpan timeout, CancellationToken cancellationToken = default)
         {
             if (!recorder.IsInitialized)
             {
@@ -14,12 +15,12 @@ namespace H.NET.Core.Recorders
 
             await recorder.StartAsync(cancellationToken);
 
-            await Task.Delay(millisecondsTimeout, cancellationToken);
+            await Task.Delay(timeout, cancellationToken);
 
             await recorder.StopAsync(cancellationToken);
         }
 
-        public static async Task ChangeWithTimeoutAsync(this IRecorder recorder, int millisecondsTimeout, CancellationToken cancellationToken = default)
+        public static async Task ChangeWithTimeoutAsync(this IRecorder recorder, TimeSpan timeout, CancellationToken cancellationToken = default)
         {
             if (!recorder.IsInitialized)
             {
@@ -28,7 +29,7 @@ namespace H.NET.Core.Recorders
 
             if (!recorder.IsStarted)
             {
-                await recorder.StartWithTimeoutAsync(millisecondsTimeout, cancellationToken);
+                await recorder.StartWithTimeoutAsync(timeout, cancellationToken);
             }
             else
             {

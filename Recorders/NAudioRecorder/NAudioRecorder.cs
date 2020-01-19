@@ -12,6 +12,8 @@ namespace H.NET.Recorders
 {
     public class NAudioRecorder : Recorder
     {
+        #region Properties
+
         public int Rate { get; set; } = 8000;
         public int Bits { get; set; } = 16;
         public int Channels { get; set; } = 1;
@@ -20,6 +22,7 @@ namespace H.NET.Recorders
         private MemoryStream? Stream { get; set; }
         private WaveFileWriter? WaveFile { get; set; }
 
+        #endregion
 
         #region Constructors
 
@@ -37,6 +40,11 @@ namespace H.NET.Recorders
         // ReSharper disable AccessToDisposedClosure
         public override Task InitializeAsync(CancellationToken cancellationToken = default)
         {
+            if (IsInitialized)
+            {
+                throw new InvalidOperationException("Already initialized");
+            }
+
             WaveIn ??= new WaveInEvent
             {
                 WaveFormat = new WaveFormat(Rate, Bits, Channels)
@@ -83,7 +91,14 @@ namespace H.NET.Recorders
         // ReSharper disable AccessToDisposedClosure
         public override async Task StartAsync(CancellationToken cancellationToken = default)
         {
+            if (WaveIn == null || 
+                !IsInitialized)
+            {
+                throw new InvalidOperationException("Is not initialized");
+            }
+
             WaveFile?.Dispose();
+            Stream?.Dispose();
 
             Stream = new MemoryStream();
             WaveFile = new WaveFileWriter(Stream, WaveIn.WaveFormat);
@@ -95,13 +110,14 @@ namespace H.NET.Recorders
 
         public override async Task StopAsync(CancellationToken cancellationToken = default)
         {
-            WaveIn.StopRecording();
+            WaveIn?.StopRecording();
 
-            Stream.Position = 0;
+            if (Stream != null)
+            {
+                Stream.Position = 0;
 
-            WavData = Stream.ToArray();
-
-            Stream.Position = 0;
+                WavData = Stream.ToArray();
+            }
 
             await base.StopAsync(cancellationToken).ConfigureAwait(false);
         }
@@ -129,6 +145,9 @@ namespace H.NET.Recorders
 
             WaveFile?.Dispose();
             WaveFile = null;
+
+            Stream?.Dispose();
+            Stream = null;
 
             WaveIn?.Dispose();
             WaveIn = null;

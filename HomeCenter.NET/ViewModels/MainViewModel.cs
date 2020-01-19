@@ -118,7 +118,7 @@ namespace HomeCenter.NET.ViewModels
 
         public async Task RecordAsync(CancellationToken cancellationToken = default)
         {
-            await Manager.ChangeWithTimeoutAsync(3000, cancellationToken);
+            await Manager.ChangeWithTimeoutAsync(TimeSpan.FromSeconds(5), cancellationToken);
         }
 
         public async Task ShowCommandsAsync()

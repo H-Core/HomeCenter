@@ -17,14 +17,14 @@ namespace H.NET.Core.Managers
             set {
                 if (value == null && base.Recorder != null)
                 {
-                    base.Recorder.Stopped -= OnStoppedRecorder;
+                    base.Recorder.Stopped -= Recorder_OnStopped;
                 }
 
                 base.Recorder = value;
 
                 if (base.Recorder != null)
                 {
-                    base.Recorder.Stopped += OnStoppedRecorder;
+                    base.Recorder.Stopped += Recorder_OnStopped;
                 }
             }
         }
@@ -152,7 +152,7 @@ namespace H.NET.Core.Managers
 
         #region Event handlers
 
-        private void OnStoppedRecorder(object sender, RecorderEventArgs args)
+        private void Recorder_OnStopped(object sender, RecorderEventArgs args)
         {
             IsStarted = false;
 

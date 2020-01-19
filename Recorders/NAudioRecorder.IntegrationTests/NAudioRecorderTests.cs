@@ -1,13 +1,15 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using H.NET.Core.Managers;
+using H.NET.Core.Recorders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NAudio.Wave;
 
 namespace H.NET.Recorders.IntegrationTests
 {
     [TestClass]
-    public class RealTimeRecorder
+    public class NAudioRecorderTests
     {
         [TestMethod]
         public async Task RealTimePlayRecordTest()
@@ -32,6 +34,18 @@ namespace H.NET.Recorders.IntegrationTests
             await Task.Delay(TimeSpan.FromMilliseconds(5000));
 
             await recorder.StopAsync();
+        }
+
+        [TestMethod]
+        public async Task ManagerTest()
+        {
+            using var recorder = new NAudioRecorder();
+            using var manager = new BaseManager
+            {
+                Recorder = recorder
+            };
+
+            await manager.ChangeWithTimeoutAsync(TimeSpan.FromSeconds(5));
         }
     }
 }

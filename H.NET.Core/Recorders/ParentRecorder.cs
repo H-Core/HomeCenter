@@ -19,6 +19,11 @@ namespace H.NET.Core.Recorders
 
         public override async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
+            if (Recorder.IsInitialized)
+            {
+                return;
+            }
+
             await Recorder.InitializeAsync(cancellationToken);
         }
 

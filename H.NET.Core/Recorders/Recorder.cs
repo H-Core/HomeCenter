@@ -63,7 +63,7 @@ namespace H.NET.Core.Recorders
         {
             if (IsStarted)
             {
-                return;
+                throw new InvalidOperationException("Already started");
             }
 
             IsStarted = true;
@@ -71,7 +71,8 @@ namespace H.NET.Core.Recorders
             WavData = null;
 
             OnStarted();
-            await Task.Delay(0, cancellationToken);
+
+            await Task.Delay(0, cancellationToken).ConfigureAwait(false);
         }
 
         public virtual async Task StopAsync(CancellationToken cancellationToken = default)
@@ -87,7 +88,8 @@ namespace H.NET.Core.Recorders
                 RawData = RawData,
                 WavData = WavData,
             });
-            await Task.Delay(0, cancellationToken);
+
+            await Task.Delay(0, cancellationToken).ConfigureAwait(false);
         }
 
         #endregion
