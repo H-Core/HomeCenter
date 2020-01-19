@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using H.Dependencies;
 
 namespace H.NET.Utilities.Plugins.Extensions
 {
@@ -21,9 +22,17 @@ namespace H.NET.Utilities.Plugins.Extensions
 
         public static string GetSimpleName(this Assembly assembly) => assembly.GetName().Name;
 
-        public static string[] GetDllPaths(this Assembly assembly, int level = 0)
+        public static IList<string> GetDllPaths(this Assembly assembly, int level = 0)
         {
             var list = new List<string> { assembly.Location };
+
+            var depsJsonPath = $"{assembly.Location.Substring(0, assembly.Location.Length - 4)}.deps.json";
+            if (File.Exists(depsJsonPath))
+            {
+                var json = File.ReadAllText(depsJsonPath);
+
+                return DepsJsonDependenciesSearcher.Search(json);
+            }
 
             var folder = assembly.GetFolder();
             var assemblyNames = assembly.GetReferencedAssemblies();
@@ -50,7 +59,7 @@ namespace H.NET.Utilities.Plugins.Extensions
 
             list = list.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
 
-            return list.ToArray();
+            return list;
         }
 
         private static string[] GetFilesIfExists(string folder) =>

@@ -123,7 +123,7 @@ namespace H.NET.Utilities.Plugins
                     name = Path.Combine(directory, name);
                 }
 
-                var fromPath = Path.Combine(fromFolder, name);
+                var fromPath = File.Exists(path) ? path : Path.Combine(fromFolder, name);
                 var toPath = Path.Combine(toFolder, name);
 
                 Directory.CreateDirectory(Path.GetDirectoryName(toPath) ?? "");
