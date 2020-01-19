@@ -239,6 +239,7 @@ namespace HomeCenter.NET.ViewModels.Settings
 
                 case AssemblyViewModel _:
                     ModuleService.Uninstall(viewModel.Description);
+                    ModuleService.UpdateActiveModules();
                     Assemblies?.Remove(viewModel);
                     break;
 
