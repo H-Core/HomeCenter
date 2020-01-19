@@ -75,6 +75,8 @@ namespace H.NET.Recorders
                 WavHeader = stream.ToArray();
             }
 
+            IsInitialized = true;
+
             return Task.CompletedTask;
         }
 

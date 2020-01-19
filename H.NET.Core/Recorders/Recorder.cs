@@ -10,6 +10,7 @@ namespace H.NET.Core.Recorders
     {
         #region Properties
 
+        public bool IsInitialized { get; protected set; }
         public bool IsStarted { get; protected set; }
         public IReadOnlyCollection<byte> RawData { get; protected set; }
         public IReadOnlyCollection<byte> WavData { get; protected set; }
@@ -53,6 +54,8 @@ namespace H.NET.Core.Recorders
 
         public virtual async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
+            IsInitialized = true;
+
             await Task.Delay(0, cancellationToken);
         }
 

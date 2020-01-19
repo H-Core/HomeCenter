@@ -10,6 +10,7 @@ namespace H.NET.Core
     {
         #region Properties
 
+        bool IsInitialized { get; }
         bool IsStarted { get; }
         IReadOnlyCollection<byte> RawData { get; }
         IReadOnlyCollection<byte> WavData { get; }

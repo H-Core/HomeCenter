@@ -7,6 +7,11 @@ namespace H.NET.Core.Recorders
     {
         public static async Task StartWithTimeoutAsync(this IRecorder recorder, int millisecondsTimeout, CancellationToken cancellationToken = default)
         {
+            if (!recorder.IsInitialized)
+            {
+                await recorder.InitializeAsync(cancellationToken);
+            }
+
             await recorder.StartAsync(cancellationToken);
 
             await Task.Delay(millisecondsTimeout, cancellationToken);
@@ -16,6 +21,11 @@ namespace H.NET.Core.Recorders
 
         public static async Task ChangeWithTimeoutAsync(this IRecorder recorder, int millisecondsTimeout, CancellationToken cancellationToken = default)
         {
+            if (!recorder.IsInitialized)
+            {
+                await recorder.InitializeAsync(cancellationToken);
+            }
+
             if (!recorder.IsStarted)
             {
                 await recorder.StartWithTimeoutAsync(millisecondsTimeout, cancellationToken);
