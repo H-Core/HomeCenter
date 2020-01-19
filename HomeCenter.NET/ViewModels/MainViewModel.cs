@@ -107,7 +107,6 @@ namespace HomeCenter.NET.ViewModels
         public void Print(string text)
         {
             ShowMessage(text, false);
-
         }
 
         public void Warning(string text)

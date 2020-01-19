@@ -4,7 +4,7 @@
     {
         #region Constructors
 
-        public AssemblyViewModel(string name, bool update) : base(name, delete: true, update: update)
+        public AssemblyViewModel(string name, bool update) : base(name, name, delete: true, update: update)
         {
         }
 
