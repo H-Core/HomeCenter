@@ -18,10 +18,10 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Label Grid.Column="0" x:Name="InstanceName" Content="{Binding Name}" Width="100"/>
-        <Button Grid.Column="1" x:Name="Description" cal:Message.Attach="ShowDescription()" Background="Transparent" HorizontalContentAlignment="Left" Margin="3"/>
-        <Button Grid.Column="2" x:Name="Enable" Content="{Binding IsEnabled, Converter={StaticResource BooleanToOnOffConverter}}" Width="25" cal:Message.Attach="EnableInstance($dataContext)" Background="{Binding IsEnabled, Converter={StaticResource BooleanToGreenBisqueConverter}}"/>
-        <Button Grid.Column="3" x:Name="Rename" Content="❏" Width="25" cal:Message.Attach="RenameInstance($dataContext)"/>
-        <Button Grid.Column="4" x:Name="Edit" Content="⚙" Width="25" cal:Message.Attach="EditInstance($dataContext)"/>
-        <Button Grid.Column="5" x:Name="Delete" Content="✖" Width="25" cal:Message.Attach="DeleteInstance($dataContext)"/>
+        <Button Grid.Column="1" x:Name="Description" cal:Message.Attach="ShowDescriptionAsync()" Background="Transparent" HorizontalContentAlignment="Left" Margin="3"/>
+        <Button Grid.Column="2" x:Name="Enable" Content="{Binding IsEnabled, Converter={StaticResource BooleanToOnOffConverter}}" Width="25" cal:Message.Attach="EnableInstanceAsync($dataContext)" Background="{Binding IsEnabled, Converter={StaticResource BooleanToGreenBisqueConverter}}"/>
+        <Button Grid.Column="3" x:Name="Rename" Content="❏" Width="25" cal:Message.Attach="RenameInstanceAsync($dataContext)"/>
+        <Button Grid.Column="4" x:Name="Edit" Content="⚙" Width="25" cal:Message.Attach="EditInstanceAsync($dataContext)"/>
+        <Button Grid.Column="5" x:Name="Delete" Content="✖" Width="25" cal:Message.Attach="DeleteInstanceAsync($dataContext)"/>
     </Grid>
 </UserControl>
