@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace H.NET.Utilities.Plugins
 {
@@ -78,7 +79,14 @@ namespace H.NET.Utilities.Plugins
         {
             if (_value is IDisposable disposable)
             {
-                disposable.Dispose();
+                try
+                {
+                    disposable.Dispose();
+                }
+                catch (FileNotFoundException)
+                {
+                    // ignore
+                }
             }
 
             _value = null;

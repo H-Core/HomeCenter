@@ -186,7 +186,8 @@ namespace H.NET.Utilities.Plugins
             foreach (var type in types)
             {
                 if (type.HasParameterlessConstructor() &&
-                    filter?.Invoke(type) != false)
+                    filter?.Invoke(type) != false &&
+                    !Instances.Contains(type.Name))
                 {
                     AddInstance(type.Name, type, true);
                 }
