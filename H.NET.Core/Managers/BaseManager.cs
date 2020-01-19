@@ -163,7 +163,7 @@ namespace H.NET.Core.Managers
             }
 
             RawData = Recorder.RawData;
-            WavData = Recorder.RawData;
+            WavData = Recorder.WavData;
             OnStopped(new RecorderEventArgs
             {
                 RawData = RawData,
