@@ -56,6 +56,8 @@ namespace H.NET.SearchDeskBand
 
             AddAction("start", message => RecordButton.BackColor = ColorTheme.ActiveColor);
             AddAction("stop", message => RecordButton.BackColor = ColorTheme.BackgroundColor);
+            AddAction("preview", message => Label.Text = message);
+            AddAction("clear-preview", message => Label.Text = @"Enter Command Here");
 
             Window = new DeskBandWindow();
             Window.ExceptionOccurred += (sender, exception) => OnExceptionOccurred(exception);
