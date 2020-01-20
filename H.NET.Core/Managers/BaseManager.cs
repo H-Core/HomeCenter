@@ -17,6 +17,7 @@ namespace H.NET.Core.Managers
             set {
                 if (value == null && base.Recorder != null)
                 {
+                    base.Recorder.Started -= Recorder_OnStarted;
                     base.Recorder.Stopped -= Recorder_OnStopped;
                 }
 
@@ -24,6 +25,7 @@ namespace H.NET.Core.Managers
 
                 if (base.Recorder != null)
                 {
+                    base.Recorder.Started += Recorder_OnStarted;
                     base.Recorder.Stopped += Recorder_OnStopped;
                 }
             }
@@ -56,7 +58,7 @@ namespace H.NET.Core.Managers
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
-        public async void ProcessSpeech(byte[] bytes)
+        public async Task ProcessSpeechAsync(byte[] bytes, CancellationToken cancellationToken = default)
         {
             if (Converter == null)
             {
@@ -66,7 +68,12 @@ namespace H.NET.Core.Managers
 
             try
             {
-                var text = await Converter.ConvertAsync(bytes);
+                if (Converter.IsStreamingRecognitionSupported)
+                {
+                    return;
+                }
+
+                var text = await Converter.ConvertAsync(bytes, cancellationToken);
                 if (!AlternativeConverters.Any())
                 {
                     //Log("No alternative converters");
@@ -74,7 +81,7 @@ namespace H.NET.Core.Managers
                     return;
                 }
 
-                var alternativeTexts = AlternativeConverters.Select(async i => await i.ConvertAsync(bytes)).ToList();
+                var alternativeTexts = AlternativeConverters.Select(async i => await i.ConvertAsync(bytes, cancellationToken)).ToList();
                 if (!string.IsNullOrWhiteSpace(text))
                 {
                     //Log("Text is not empty. No alternative converters is uses");
@@ -152,7 +159,57 @@ namespace H.NET.Core.Managers
 
         #region Event handlers
 
-        private void Recorder_OnStopped(object sender, RecorderEventArgs args)
+        private async void Recorder_OnStarted(object sender, EventArgs args)
+        {
+            if (Recorder == null)
+            {
+                Log("Recorder is not found");
+                return;
+            }
+
+            if (Converter == null ||
+                !Converter.IsStreamingRecognitionSupported)
+            {
+                return;
+            }
+
+            using var recognition = await Converter.StartStreamingRecognitionAsync();
+            recognition.AfterPartialResults += (o, e) => ProcessText($"deskband preview {e.Text}");
+            recognition.AfterFinalResults += (o, e) =>
+            {
+                ProcessText("deskband clear-preview");
+                ProcessText(e.Text);
+            };
+
+            if (Recorder.RawData != null)
+            {
+                await recognition.WriteAsync(Recorder.RawData.ToArray());
+            }
+
+            // ReSharper disable once AccessToDisposedClosure
+            async void RecorderOnRawDataReceived(object o, RecorderEventArgs e)
+            {
+                await recognition.WriteAsync(e.RawData.ToArray());
+            }
+
+            try
+            {
+                Recorder.RawDataReceived += RecorderOnRawDataReceived;
+
+                while (IsStarted)
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(1));
+                }
+
+                await recognition.StopAsync();
+            }
+            finally
+            {
+                Recorder.RawDataReceived -= RecorderOnRawDataReceived;
+            }
+        }
+
+        private async void Recorder_OnStopped(object sender, RecorderEventArgs args)
         {
             IsStarted = false;
 
@@ -170,7 +227,7 @@ namespace H.NET.Core.Managers
                 WavData = WavData,
             });
 
-            ProcessSpeech(WavData.ToArray());
+            await ProcessSpeechAsync(WavData.ToArray());
         }
 
         #endregion

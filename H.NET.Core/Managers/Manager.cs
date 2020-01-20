@@ -39,11 +39,11 @@ namespace H.NET.Core.Managers
             if (string.IsNullOrWhiteSpace(text) ||
                 !Storage.ContainsKey(text))
             {
-                NotHandledText?.Invoke(Text);
+                NotHandledText?.Invoke(text);
                 return;
             }
 
-            HandledText?.Invoke(Text);
+            HandledText?.Invoke(text);
 
             var value = Storage[text];
             NewValue?.Invoke(text, value);
