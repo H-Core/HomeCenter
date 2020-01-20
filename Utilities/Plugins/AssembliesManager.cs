@@ -113,6 +113,13 @@ namespace H.NET.Utilities.Plugins
 
             foreach (var path in paths)
             {
+                if (Directory.Exists(path))
+                {
+                    var directoryName = Path.GetFileName(path);
+                    DirectoryUtilities.Copy(path, Path.Combine(toFolder, directoryName));
+                    continue;
+                }
+
                 var directory = Path.GetFileName(Path.GetDirectoryName(path));
                 var name = Path.GetFileName(path) ?? throw new Exception("Invalid file name");
 
