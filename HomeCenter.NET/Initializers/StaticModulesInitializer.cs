@@ -47,7 +47,7 @@ namespace HomeCenter.NET.Initializers
                     return;
                 }
 
-                var bytes = await synthesizer.Convert(text);
+                var bytes = await synthesizer.ConvertAsync(text);
 
                 await bytes.PlayAsync();
             }

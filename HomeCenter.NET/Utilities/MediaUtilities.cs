@@ -15,12 +15,10 @@ namespace HomeCenter.NET.Utilities
                 return;
             }
 
+            using var stream = new MemoryStream(bytes);
+            using var player = new SoundPlayer(stream);
 
-            using (var stream = new MemoryStream(bytes))
-            using (var player = new SoundPlayer(stream))
-            {
-                player.PlaySync();
-            }
+            player.PlaySync();
         }
 
         public static async Task PlayAsync(this byte[] bytes) => await Task.Run(() => bytes?.Play());

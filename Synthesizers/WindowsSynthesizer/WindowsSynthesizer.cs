@@ -1,19 +1,24 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using H.NET.Core;
 using H.NET.Core.Synthesizers;
 using SpeechLib;
 
 namespace H.NET.Synthesizers
 {
-    public class WindowsSynthesizer : Synthesizer
+    /// <summary>
+    /// TODO: DISPOSE PROBLEMS
+    /// </summary>
+    public class WindowsSynthesizer : Synthesizer, ISynthesizer
     {
         #region Properties
 
         public string Speaker { get; set; } 
         public string Speed { get; set; }
 
-        private SpVoice Voice { get; } = new SpVoice();
+        private SpVoice SpVoice { get; } = new SpVoice();
 
         #endregion
 
@@ -21,7 +26,7 @@ namespace H.NET.Synthesizers
 
         public WindowsSynthesizer()
         {
-            var voices = Voice.GetVoices().OfType<ISpeechObjectToken>().Select(i => i.GetDescription()).ToArray();
+            var voices = SpVoice.GetVoices().OfType<ISpeechObjectToken>().Select(i => i.GetDescription()).ToArray();
             AddEnumerableSetting(nameof(Speaker), o => Speaker = o, NoEmpty, voices);
 
             AddEnumerableSetting(nameof(Speed), o => Speed = o, NoEmpty, new[] { "1.0", "0.1", "0.25", "0.5", "0.75", "1.25", "1.5", "2.0", "3.0" });
@@ -31,34 +36,21 @@ namespace H.NET.Synthesizers
 
         #region Protected methods
 
-        protected override async Task<byte[]> InternalConvert(string text)
+        public Task<byte[]> ConvertAsync(string text, CancellationToken cancellationToken = default)
         {
             try
             {
-                Voice.Voice = Voice.GetVoices().OfType<SpObjectToken>().FirstOrDefault(i => i.GetDescription() == Speaker) ?? Voice.Voice;
-                Voice.Rate = (int)(double.TryParse(Speed, out var result) ? result : 1);
+                SpVoice.Voice = SpVoice.GetVoices().OfType<SpObjectToken>().FirstOrDefault(i => i.GetDescription() == Speaker) ?? SpVoice.Voice;
+                SpVoice.Rate = (int)(double.TryParse(Speed, out var result) ? result : 1);
 
-                Voice.Speak(text);
+                SpVoice.Speak(text);
 
-                return await Task.FromResult(new byte[0]);
+                return Task.FromResult<byte[]>(null);
             }
             catch (Exception exception)
             {
-                Exception = exception;
-                return null;
+                return Task.FromException<byte[]>(exception);
             }
-        }
-
-        private static string TextToLang(ref string text)
-        {
-            if (text.TrimStart().StartsWith("[EN]"))
-            {
-                text = text.TrimStart().Replace("[EN]", string.Empty);
-
-                return "en-US";
-            }
-
-            return null;
         }
 
         #endregion

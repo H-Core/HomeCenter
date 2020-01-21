@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using H.NET.Core;
 using H.NET.Core.Synthesizers;
 
 namespace H.NET.Synthesizers
 {
-    public class CacheableSynthesizer : Synthesizer
+    public abstract class CachedSynthesizer : Synthesizer, ISynthesizer
     {
         #region Properties
 
@@ -13,7 +15,7 @@ namespace H.NET.Synthesizers
 
         #region Constructors
 
-        protected CacheableSynthesizer()
+        protected CachedSynthesizer()
         {
             UseCache = true;
             Cache = new ByteArrayCache(GetType());
@@ -23,7 +25,7 @@ namespace H.NET.Synthesizers
 
         #region ISynthesizer
 
-        public new async Task<byte[]> Convert(string text)
+        public async Task<byte[]> ConvertAsync(string text, CancellationToken cancellationToken = default)
         {
             var key = TextToKey(text);
             if (UseCache && Cache.Contains(key))
@@ -31,12 +33,14 @@ namespace H.NET.Synthesizers
                 return Cache[key];
             }
 
-            var bytes = await InternalConvert(text);
+            var bytes = await InternalConvertAsync(text, cancellationToken);
             Cache[key] = bytes;
             return bytes;
         }
 
-        protected virtual string TextToKey(string text) => text;
+        protected abstract Task<byte[]> InternalConvertAsync(string text, CancellationToken cancellationToken = default);
+
+        protected abstract string TextToKey(string text);
 
         #endregion
     }

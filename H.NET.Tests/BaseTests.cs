@@ -70,7 +70,7 @@ namespace H.NET.Tests
             Assert.NotNull(text);
             Assert.NotNull(synthesizer);
 
-            var bytes = await synthesizer.Convert(text);
+            var bytes = await synthesizer.ConvertAsync(text);
 
             BaseDataTest(bytes);
             BaseDisposeTest(synthesizer);
@@ -84,8 +84,10 @@ namespace H.NET.Tests
             Assert.Equal(manager.Text, args.Text);
         }
 
-        protected async Task BaseManagerTest(BaseManager manager, PlatformID? platformId = null, int timeout = 1000, int waitEventTimeout = 20000)
+        protected async Task BaseManagerTest(BaseManager manager, PlatformID? platformId = null, TimeSpan? timeout = default, int waitEventTimeout = 20000)
         {
+            timeout ??= TimeSpan.FromSeconds(1);
+
             Assert.NotNull(manager);
             if (!CheckPlatform(platformId))
             {
@@ -119,21 +121,22 @@ namespace H.NET.Tests
             };
 
             await manager.ChangeAsync();
-            await Task.Delay(timeout);
+            await Task.Delay(timeout.Value);
             await manager.ChangeAsync();
 
-            await manager.ChangeWithTimeoutAsync(timeout);
-            await Task.Delay(timeout);
-            await manager.ChangeWithTimeoutAsync(timeout);
+            await manager.ChangeWithTimeoutAsync(timeout.Value);
+            await Task.Delay(timeout.Value);
+            await manager.ChangeWithTimeoutAsync(timeout.Value);
 
-            await manager.StartWithTimeoutAsync(timeout);
-            await Task.Delay(timeout);
+            await manager.StartWithTimeoutAsync(timeout.Value);
+            await Task.Delay(timeout.Value);
             await manager.StopAsync();
 
             await manager.StartAsync();
-            await Task.Delay(timeout);
+            await Task.Delay(timeout.Value);
             await manager.StopAsync();
-            manager.ProcessSpeech(TestUtilities.GetRawSpeech("speech1.wav"));
+
+            await manager.ProcessSpeechAsync(TestUtilities.GetRawSpeech("speech1.wav"));
 
             await startedEvent.WaitAsync();
             await stoppedEvent.WaitAsync();

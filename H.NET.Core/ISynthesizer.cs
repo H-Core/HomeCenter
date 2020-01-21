@@ -1,13 +1,12 @@
-﻿using System;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace H.NET.Core
 {
     public interface ISynthesizer : IModule
     {
-        Exception Exception { get; }
         bool UseCache { get; set; }
 
-        Task<byte[]> Convert(string text);
+        Task<byte[]> ConvertAsync(string text, CancellationToken cancellationToken = default);
     }
 }

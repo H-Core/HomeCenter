@@ -1,10 +1,10 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace H.NET.Synthesizers
 {
-    public class YandexSynthesizer : CacheableSynthesizer
+    public class YandexSynthesizer : CachedSynthesizer
     {
         #region Properties
 
@@ -35,21 +35,14 @@ namespace H.NET.Synthesizers
 
         #region Protected methods
 
-        protected override async Task<byte[]> InternalConvert(string text)
+        protected override async Task<byte[]> InternalConvertAsync(string text, CancellationToken cancellationToken = default)
         {
-            try
+            var lang = TextToLang(ref text) ?? Lang;
+
+            using (var client = new HttpClient())
             {
-                var lang = TextToLang(ref text) ?? Lang;
-                using (var client = new HttpClient())
-                {
-                    return await client.GetByteArrayAsync(
-                        $"https://tts.voicetech.yandex.net/generate?text={text}&format={Format}&lang={lang}&speaker={Speaker}&emotion={Emotion}&key={Key}&quality={Quality}&speed={Speed}");
-                }
-            }
-            catch (Exception exception)
-            {
-                Exception = exception;
-                return null;
+                return await client.GetByteArrayAsync(
+                    $"https://tts.voicetech.yandex.net/generate?text={text}&format={Format}&lang={lang}&speaker={Speaker}&emotion={Emotion}&key={Key}&quality={Quality}&speed={Speed}");
             }
         }
 
