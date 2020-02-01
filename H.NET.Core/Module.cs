@@ -80,6 +80,21 @@ namespace H.NET.Core
 
         #region Settings
 
+        public ICollection<string> GetAvailableSettings()
+        {
+            return Settings.Keys;
+        }
+
+        public void SetSetting(string key, object value)
+        {
+            Settings.Set(key, value);
+        }
+
+        public object GetSetting(string key)
+        {
+            return Settings[key].Value;
+        }
+
         protected void AddSetting<T>(string key, Action<T> setAction, Func<T, bool> checkFunc, T defaultValue, SettingType type = SettingType.Default)
         {
             key = key ?? throw new ArgumentNullException(nameof(key));

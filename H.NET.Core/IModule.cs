@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using H.NET.Core.Utilities;
 
 namespace H.NET.Core
@@ -12,6 +13,9 @@ namespace H.NET.Core
         string Description { get; }
 
         ISettingsStorage Settings { get; }
+        ICollection<string> GetAvailableSettings();
+        void SetSetting(string key, object value);
+        object GetSetting(string key);
         bool IsValid();
 
         event EventHandler<string> NewCommand;
