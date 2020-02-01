@@ -84,7 +84,7 @@ namespace HomeCenter.NET.Services
 
                 module.IsRegistered = true;
                 module.UniqueName = name;
-                module.NewCommand += runnerService.Run;
+                module.NewCommand += (sender, command) => runnerService.Run(command);
                 module.NewCommandAsync += async (sender, args) =>
                 {
                     if (args == null)
@@ -98,7 +98,7 @@ namespace HomeCenter.NET.Services
                     }
                 };
 
-                module.SettingsSaved += o => SavePluginSettings(o.ShortName, o);
+                module.SettingsSaved += (sender, value) => SavePluginSettings(value.ShortName, value);
             }
         });
     }

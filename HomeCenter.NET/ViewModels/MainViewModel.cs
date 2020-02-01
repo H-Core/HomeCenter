@@ -77,7 +77,7 @@ namespace HomeCenter.NET.ViewModels
             HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
             Manager = manager ?? throw new ArgumentNullException(nameof(manager));
 
-            RunnerService.NewOutput += Print;
+            RunnerService.NewOutput += (sender, text) => Print(text);
             Manager.Started += (sender, args) =>
             {
                 IsRecord = true;

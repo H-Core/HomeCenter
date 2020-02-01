@@ -34,7 +34,7 @@ namespace H.NET.Tests
             // when you say "open file explorer" the manager runs the explorer.exe with the "C:/" base folder
             manager.Storage["open file explorer"] = () => Process.Start("explorer.exe", "C:/");
             // when you say any text(include empty text) the manager runs your custom action
-            manager.NewText += text => Console.WriteLine($"You say: {text}");
+            manager.NewText += (sender, text) => Console.WriteLine($"You say: {text}");
 
             Assert.Single(manager.Storage);
             Assert.True(manager.Storage.ContainsKey("open file explorer"));

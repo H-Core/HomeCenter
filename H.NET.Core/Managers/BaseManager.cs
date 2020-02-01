@@ -40,8 +40,8 @@ namespace H.NET.Core.Managers
 
         #region Events
 
-        public event TextDelegate NewText;
-        private void OnNewText() => NewText?.Invoke(Text);
+        public event EventHandler<string> NewText;
+        private void OnNewText() => NewText?.Invoke(this, Text);
 
         #endregion
 

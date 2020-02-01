@@ -14,16 +14,13 @@ namespace H.NET.Core
         ISettingsStorage Settings { get; }
         bool IsValid();
 
-        event TextDelegate NewCommand;
+        event EventHandler<string> NewCommand;
         event EventHandler<TextDeferredEventArgs> NewCommandAsync;
-        event ModuleDelegate SettingsSaved;
+        event EventHandler<IModule> SettingsSaved;
 
         void SaveSettings();
 
         string[] GetSupportedVariables();
         object GetModuleVariableValue(string name);
     }
-
-    public delegate void TextDelegate(string text);
-    public delegate void ModuleDelegate(IModule module);
 }

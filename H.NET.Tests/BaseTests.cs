@@ -109,7 +109,7 @@ namespace H.NET.Tests
                 stoppedEvent.Set();
                 //BaseArgsTest(manager, e);
             };
-            manager.NewText += text =>
+            manager.NewText += (sender, text) =>
             {
                 newTextEvent.Set();
                 Assert.Equal(manager.Text, text);

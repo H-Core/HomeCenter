@@ -1,4 +1,5 @@
-﻿using H.NET.Core.Storages;
+﻿using System;
+using H.NET.Core.Storages;
 
 namespace H.NET.Core.Managers
 {
@@ -12,8 +13,8 @@ namespace H.NET.Core.Managers
 
         #region Events
 
-        public event TextDelegate NotHandledText;
-        public event TextDelegate HandledText;
+        public event EventHandler<string> NotHandledText;
+        public event EventHandler<string> HandledText;
 
         public delegate void ValueDelegate(string key, T value);
         public event ValueDelegate NewValue;
@@ -34,16 +35,16 @@ namespace H.NET.Core.Managers
 
         #region Event handlers
 
-        private void OnNewText(string text)
+        private void OnNewText(object sender, string text)
         {
             if (string.IsNullOrWhiteSpace(text) ||
                 !Storage.ContainsKey(text))
             {
-                NotHandledText?.Invoke(text);
+                NotHandledText?.Invoke(this, text);
                 return;
             }
 
-            HandledText?.Invoke(text);
+            HandledText?.Invoke(this, text);
 
             var value = Storage[text];
             NewValue?.Invoke(text, value);

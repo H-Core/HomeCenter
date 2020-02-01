@@ -27,10 +27,10 @@ namespace HomeCenter.NET.Services
 
         #region Events
 
-        public event TextDelegate? NotHandledText;
+        public event EventHandler<string?>? NotHandledText;
 
-        public event TextDelegate? NewOutput;
-        private void Print(string text) => NewOutput?.Invoke(text);
+        public event EventHandler<string>? NewOutput;
+        private void Print(string text) => NewOutput?.Invoke(this, text);
 
         public event EventHandler? BeforeRun;
         public event EventHandler? AfterRun;
@@ -47,7 +47,7 @@ namespace HomeCenter.NET.Services
 
             Module.GetVariableValueGlobalFunc = GetVariableValue;
 
-            Manager.NewText += text =>
+            Manager.NewText += (sender, text) =>
             {
                 if (Runner.IsWaitCommand)
                 {
@@ -172,7 +172,7 @@ namespace HomeCenter.NET.Services
             var runner = GetRunnerFor(key, data);
             if (runner == null)
             {
-                NotHandledText?.Invoke(key);
+                NotHandledText?.Invoke(this, key);
 
                 return new Process(data ?? key, new Exception($"Runner for command \"{data}\" is not found"));
             }

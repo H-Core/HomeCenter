@@ -31,9 +31,9 @@ namespace H.NET.Core
 
         #region Events
 
-        public event TextDelegate NewCommand;
+        public event EventHandler<string> NewCommand;
         public event EventHandler<TextDeferredEventArgs> NewCommandAsync;
-        public event ModuleDelegate SettingsSaved;
+        public event EventHandler<IModule> SettingsSaved;
         
         #endregion
 
@@ -59,7 +59,7 @@ namespace H.NET.Core
 
         #region Main Methods
 
-        public void Run(string text) => NewCommand?.Invoke(text);
+        public void Run(string text) => NewCommand?.Invoke(this, text);
 
         public void Say(string text) => Run($"say {text}");
         public void Print(string text) => Run($"print {text}");
@@ -72,7 +72,7 @@ namespace H.NET.Core
         public void Enable() => Run($"enable-module {UniqueName}");
         public void Disable() => Run($"disable-module {UniqueName}");
 
-        public void SaveSettings() => SettingsSaved?.Invoke(this);
+        public void SaveSettings() => SettingsSaved?.Invoke(this, this);
 
         #endregion
 
