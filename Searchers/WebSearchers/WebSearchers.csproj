@@ -7,9 +7,9 @@
     <Product>H.NET.Searchers.WebSearchers</Product>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.8.5" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.8.5" />
+    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
   </ItemGroup>
 </Project>

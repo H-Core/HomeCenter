@@ -16,9 +16,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.7.4" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.7.4" />
+    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
   </ItemGroup>
 </Project>

@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>H.NET.Notifiers.TimerNotifier</AssemblyName>
-    <RootNamespace>H.NET.Notifiers</RootNamespace>
+    <RootNamespace>H.Notifiers</RootNamespace>
+    <AssemblyName>H.Notifiers.TimerNotifier</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />

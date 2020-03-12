@@ -1,10 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>H.NET.Notifiers</RootNamespace>
-    <AssemblyName>H.NET.Notifiers.RssNotifier</AssemblyName>
-    <AssemblyTitle>H.NET.Notifiers.RssNotifier</AssemblyTitle>
-    <Product>H.NET.Notifiers.RssNotifier</Product>
+    <RootNamespace>H.Notifiers</RootNamespace>
+    <AssemblyName>H.Notifiers.RssNotifier</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
