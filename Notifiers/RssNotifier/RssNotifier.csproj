@@ -1,26 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>H.NET.Notifiers</RootNamespace>
     <AssemblyName>H.NET.Notifiers.RssNotifier</AssemblyName>
     <AssemblyTitle>H.NET.Notifiers.RssNotifier</AssemblyTitle>
     <Product>H.NET.Notifiers.RssNotifier</Product>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.ServiceModel" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
     <ProjectReference Include="..\TimerNotifier\TimerNotifier.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\beep.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.ServiceModel.Syndication" Version="4.7.0" />
   </ItemGroup>
 </Project>
