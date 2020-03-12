@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Timers;
-using H.NET.Core.Notifiers;
 
-namespace H.NET.Notifiers
+namespace H.Notifiers
 {
     public class TimerNotifier : Notifier
     {
@@ -91,15 +90,17 @@ namespace H.NET.Notifiers
                     return;
                 }
 
-                OnEvent();
+                OnEventOccurred();
                 LastEventTime = DateTime.Now;
                 CurrentCount = 0;
             }
             catch (Exception exception)
             {
                 Log($"Exception: {exception}");
-                Log($"Disabling module: {Name}");
 
+                OnExceptionOccurred(exception);
+
+                Log($"Disabling module: {Name}");
                 Disable();
 
                 CurrentCount = 0;

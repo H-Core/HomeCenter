@@ -4,6 +4,6 @@ namespace H.NET.Core
 {
     public interface INotifier : IModule
     {
-        event EventHandler AfterEvent;
+        event EventHandler EventOccurred;
     }
 }

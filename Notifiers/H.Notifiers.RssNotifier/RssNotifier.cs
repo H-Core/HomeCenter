@@ -4,7 +4,6 @@ using System.Net;
 using System.ServiceModel.Syndication;
 using System.Xml;
 using H.NET.Core.Settings;
-using H.NET.Notifiers;
 
 namespace H.Notifiers
 {

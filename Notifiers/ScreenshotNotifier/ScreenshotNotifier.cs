@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using H.NET.Utilities;
 
-namespace H.NET.Notifiers
+namespace H.Notifiers
 {
     public abstract class ScreenshotNotifier : TimerNotifier
     {

@@ -1,7 +1,8 @@
 ﻿using System;
+using H.NET.Core;
 using H.NET.Core.Attributes;
 
-namespace H.NET.Core.Notifiers
+namespace H.Notifiers
 {
     [AllowMultipleInstance(false)]
     public class Notifier : Module, INotifier
@@ -14,9 +15,13 @@ namespace H.NET.Core.Notifiers
 
         #region Events
 
-        public event EventHandler AfterEvent;
-        protected void OnEvent() => AfterEvent?.Invoke(this, EventArgs.Empty);
-         
+        public event EventHandler EventOccurred;
+
+        protected void OnEventOccurred()
+        {
+            EventOccurred?.Invoke(this, EventArgs.Empty);
+        }
+
         #endregion
 
         #region Constructors
@@ -25,7 +30,7 @@ namespace H.NET.Core.Notifiers
         {
             AddSetting(nameof(Command), o => Command = o, o => true, string.Empty);
 
-            AfterEvent += (sender, args) =>
+            EventOccurred += (sender, args) =>
             {
                 Log($"{Name} AfterEvent");
                 try

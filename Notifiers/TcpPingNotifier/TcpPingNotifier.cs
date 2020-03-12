@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 
-namespace H.NET.Notifiers
+namespace H.Notifiers
 {
     public class TcpPingNotifier : TimerNotifier
     {
@@ -28,7 +28,7 @@ namespace H.NET.Notifiers
 
         protected override bool OnResult()
         {
-            var isAvailableNetworkActive = GetVariable<bool>("$internet$", true);
+            var isAvailableNetworkActive = GetVariable("$internet$", true);
             if (OnlyIfNetworkActive && !isAvailableNetworkActive)
             {
                 return false;

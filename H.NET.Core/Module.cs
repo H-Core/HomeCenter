@@ -34,7 +34,13 @@ namespace H.NET.Core
         public event EventHandler<string> NewCommand;
         public event EventHandler<TextDeferredEventArgs> NewCommandAsync;
         public event EventHandler<IModule> SettingsSaved;
-        
+        public event EventHandler<Exception> ExceptionOccurred;
+
+        protected void OnExceptionOccurred(Exception value)
+        {
+            ExceptionOccurred?.Invoke(this, value);
+        }
+
         #endregion
 
 
