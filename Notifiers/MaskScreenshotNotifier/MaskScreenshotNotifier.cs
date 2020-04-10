@@ -4,6 +4,7 @@ using Emgu.CV;
 using H.NET.Core.Settings;
 using H.NET.Notifiers.Extensions;
 using H.NET.Notifiers.Utilities;
+using H.Notifiers;
 
 namespace H.NET.Notifiers
 {

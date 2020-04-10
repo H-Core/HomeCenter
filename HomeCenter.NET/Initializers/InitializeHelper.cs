@@ -22,7 +22,7 @@ namespace HomeCenter.NET.Initializers
             model.Print("Loading modules...");
             try
             {
-                await Task.Run(() => moduleService.Load());
+                await Task.Run(moduleService.Load);
 
                 moduleService.AddUniqueInstancesIfNeed();
                 moduleService.RegisterHandlers(runnerService);
