@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using H.NET.Core;
 using H.NET.Core.Extensions;
 using H.NET.Core.Managers;
@@ -10,54 +11,62 @@ using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Services
 {
-    public class ModuleService : PluginsManager<IModule>
+    public class ModuleService : IDisposable
     {
         #region Properties
 
-        public Settings Settings { get; }
-        public BaseManager Manager { get; }
+        private Settings Settings { get; }
+        private BaseManager Manager { get; }
 
-        public IRecorder? Recorder => GetPlugin<IRecorder>(Settings.Recorder)?.Value;
-        public ISearcher? Searcher => GetPlugin<ISearcher>(Settings.Searcher)?.Value;
-        public IConverter? Converter => GetPlugin<IConverter>(Settings.Converter)?.Value;
-        public ISynthesizer? Synthesizer => GetPlugin<ISynthesizer>(Settings.Synthesizer)?.Value;
+        private PluginsManager<IModule> PluginsManager { get; }
+
+        public IRecorder? Recorder => PluginsManager.GetPlugin<IRecorder>(Settings.Recorder)?.Value;
+        public ISearcher? Searcher => PluginsManager.GetPlugin<ISearcher>(Settings.Searcher)?.Value;
+        public IConverter? Converter => PluginsManager.GetPlugin<IConverter>(Settings.Converter)?.Value;
+        public ISynthesizer? Synthesizer => PluginsManager.GetPlugin<ISynthesizer>(Settings.Synthesizer)?.Value;
 
         public List<IConverter> AlternativeConverters => Settings.UseAlternativeConverters
-            ? GetEnabledPlugins<IConverter>()
+            ? PluginsManager.GetEnabledPlugins<IConverter>()
                   .Where(pair => !string.Equals(pair.Key, Settings.Converter))
                   .Select(pair => pair.Value.Value)
                   .ToList() 
             : new List<IConverter>();
 
-        public List<IRunner> Runners => GetEnabledPlugins<IRunner>().Select(i => i.Value.Value).ToList();
+        public List<IRunner> Runners => PluginsManager.GetEnabledPlugins<IRunner>().Select(i => i.Value.Value).ToList();
 
-        public List<IModule> Modules => GetEnabledPlugins<IModule>().Select(i => i.Value.Value).ToList();
+        public List<IModule> Modules => PluginsManager.GetEnabledPlugins<IModule>().Select(i => i.Value.Value).ToList();
+
+        public List<Type> AvailableTypes => PluginsManager.AvailableTypes;
+        public Dictionary<string, Assembly> ActiveAssemblies => PluginsManager.ActiveAssemblies;
+        public Instances<IModule> Instances => PluginsManager.Instances;
+        public SettingsFile<AssemblySettings> AssembliesSettingsFile => PluginsManager.AssembliesSettingsFile;
 
         #endregion
 
-        public ModuleService(Settings settings, BaseManager manager) : base(
-            Options.CompanyName,
-            (module, list) =>
-            {
-                foreach (var pair in list)
-                {
-                    module.Settings.Set(pair.Key, pair.Value);
-                }
-            }, 
-            module => module.Settings.Select(pair => new SettingItem(pair.Key, pair.Value.Value)))
+        public ModuleService(Settings settings, BaseManager manager)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
             Manager = manager ?? throw new ArgumentNullException(nameof(manager));
+
+            PluginsManager = new PluginsManager<IModule>(Options.CompanyName,
+                (module, list) =>
+                {
+                    foreach (var pair in list)
+                    {
+                        module.Settings.Set(pair.Key, pair.Value);
+                    }
+                },
+                module => module.Settings.Select(pair => new SettingItem(pair.Key, pair.Value.Value)));
         }
 
         public void AddUniqueInstancesIfNeed() => SafeActions.Run(() =>
         {
-            foreach (var type in AvailableTypes)
+            foreach (var type in PluginsManager.AvailableTypes)
             {
                 if (!type.AllowMultipleInstance() &&
-                    !Instances.Objects.ContainsKey(type.Name))
+                    !PluginsManager.Instances.Objects.ContainsKey(type.Name))
                 {
-                    AddInstance(type.Name, type, true);
+                    PluginsManager.AddInstance(type.Name, type, true);
                 }
             }
         });
@@ -71,7 +80,7 @@ namespace HomeCenter.NET.Services
 
         public void RegisterHandlers(RunnerService runnerService) => SafeActions.Run(() =>
         {
-            var instances = Instances.Objects;
+            var instances = PluginsManager.Instances.Objects;
 
             foreach (var instance in instances)
             {
@@ -98,8 +107,97 @@ namespace HomeCenter.NET.Services
                     }
                 };
 
-                module.SettingsSaved += (sender, value) => SavePluginSettings(value.ShortName, value);
+                module.SettingsSaved += (sender, value) => PluginsManager.SavePluginSettings(value.ShortName, value);
             }
         });
+
+        public void AddInstancesFromAssembly(string path, Type interfaceType, Predicate<Type>? filter = null)
+        {
+            PluginsManager.AddInstancesFromAssembly(path, interfaceType, filter);
+        }
+
+        public Assembly Install(string originalPath)
+        {
+            return PluginsManager.Install(originalPath);
+        }
+
+        public void Uninstall(string name)
+        {
+            PluginsManager.Uninstall(name);
+        }
+
+        public void Update(string name)
+        {
+            PluginsManager.Update(name);
+        }
+
+        public void AddInstance(string name, Type type, bool isEnabled)
+        {
+            PluginsManager.AddInstance(name, type, isEnabled);
+        }
+
+        public void DeleteInstance(string name)
+        {
+            PluginsManager.DeleteInstance(name);
+        }
+
+        public void RenameInstance(string name, string newName)
+        {
+            PluginsManager.RenameInstance(name, newName);
+        }
+
+        public void SetInstanceIsEnabled(string name, bool value)
+        {
+            PluginsManager.SetInstanceIsEnabled(name, value);
+        }
+
+        public bool UpdatingIsNeed(string name)
+        {
+            return PluginsManager.UpdatingIsNeed(name);
+        }
+
+        public string[] GetCanBeUpdatedAssemblies() =>
+            PluginsManager.AssembliesSettings.Keys.Where(UpdatingIsNeed).ToArray();
+
+        public void Save()
+        {
+            PluginsManager.Save();
+        }
+
+        public void Load()
+        {
+            PluginsManager.Load();
+        }
+
+        public List<KeyValuePair<string, RuntimeObject<T>>> GetPlugins<T>() where T : class, IModule
+        {
+            return PluginsManager.GetPlugins<T>();
+        }
+
+
+        public List<KeyValuePair<string, RuntimeObject<IModule>>> GetBasePlugins<T>() where T : class, IModule
+        {
+            return PluginsManager.GetBasePlugins<T>();
+        }
+
+        public List<KeyValuePair<string, RuntimeObject<T>>> GetEnabledPlugins<T>() where T : class, IModule
+        {
+            return PluginsManager.GetEnabledPlugins<T>();
+        }
+
+        public RuntimeObject<T> GetPlugin<T>(string name) where T : class, IModule
+        {
+            return PluginsManager.GetPlugin<T>(name);
+        }
+
+        public void AddStaticInstance(string name, IModule obj)
+        {
+            PluginsManager.AddStaticInstance(name, obj);
+        }
+
+        public void Dispose()
+        {
+            PluginsManager.Dispose();
+        }
     }
 }

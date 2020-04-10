@@ -68,7 +68,7 @@ namespace HomeCenter.NET.Runners
             AddInternalAction("update-assembly", command => this.CheckPathAndRun(command, moduleService.Update), "name");
             AddInternalAction("check-assemblies-updates", command =>
             {
-                var names = GetCanBeUpdatedAssemblies();
+                var names = ModuleService.GetCanBeUpdatedAssemblies();
                 if (!names.Any())
                 {
                     Print("All modules already updated");
@@ -83,7 +83,7 @@ namespace HomeCenter.NET.Runners
             AddInternalAction("update-assemblies", command =>
             {
                 Print("Checking updates...");
-                var names = GetCanBeUpdatedAssemblies();
+                var names = ModuleService.GetCanBeUpdatedAssemblies();
                 if (!names.Any())
                 {
                     Print("All modules already updated");
@@ -110,13 +110,6 @@ namespace HomeCenter.NET.Runners
                 Run($"update-restart {arguments}");
             });
         }
-
-        #endregion
-
-        #region Private methods
-
-        private string[] GetCanBeUpdatedAssemblies() =>
-            ModuleService.AssembliesSettings.Keys.Where(ModuleService.UpdatingIsNeed).ToArray();
 
         #endregion
     }
