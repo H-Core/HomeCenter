@@ -34,7 +34,7 @@ namespace H.NET.Core.Utilities
         {
             lock (_eventDeferralLock)
             {
-                return _eventDeferral ?? (_eventDeferral = new EventDeferral());
+                return _eventDeferral ??= new EventDeferral();
             }
         }
 
