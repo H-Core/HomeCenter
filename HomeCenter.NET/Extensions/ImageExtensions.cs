@@ -17,10 +17,10 @@ namespace HomeCenter.NET.Extensions
             return bitmapImage;
         }
 
-        public static MemoryStream ToMemoryStream(this Image image)
+        public static MemoryStream ToMemoryStream(this Image image, ImageFormat? format = default)
         {
             var stream = new MemoryStream();
-            image.Save(stream, ImageFormat.Bmp);
+            image.Save(stream, format ?? ImageFormat.Bmp);
             stream.Seek(0, SeekOrigin.Begin);
 
             return stream;
