@@ -18,9 +18,9 @@ namespace H.NET.Recorders
         public int Bits { get; set; } = 16;
         public int Channels { get; set; } = 1;
 
-        private WaveInEvent? WaveIn { get; set; }
+        private IWaveIn? WaveIn { get; set; }
         private MemoryStream? Stream { get; set; }
-        private WaveFileWriter? WaveFile { get; set; }
+        private WaveFileWriter? WaveFileWriter { get; set; }
 
         #endregion
 
@@ -52,10 +52,10 @@ namespace H.NET.Recorders
 
             WaveIn.DataAvailable += (sender, args) =>
             {
-                if (WaveFile != null)
+                if (WaveFileWriter != null)
                 {
-                    WaveFile.Write(args.Buffer, 0, args.BytesRecorded);
-                    WaveFile.Flush();
+                    WaveFileWriter.Write(args.Buffer, 0, args.BytesRecorded);
+                    WaveFileWriter.Flush();
                 }
 
                 RawData ??= Array.Empty<byte>();
@@ -97,11 +97,11 @@ namespace H.NET.Recorders
                 throw new InvalidOperationException("Is not initialized");
             }
 
-            WaveFile?.Dispose();
+            WaveFileWriter?.Dispose();
             Stream?.Dispose();
 
             Stream = new MemoryStream();
-            WaveFile = new WaveFileWriter(Stream, WaveIn.WaveFormat);
+            WaveFileWriter = new WaveFileWriter(Stream, WaveIn.WaveFormat);
 
             WaveIn.StartRecording();
 
@@ -143,8 +143,8 @@ namespace H.NET.Recorders
         {
             base.Dispose();
 
-            WaveFile?.Dispose();
-            WaveFile = null;
+            WaveFileWriter?.Dispose();
+            WaveFileWriter = null;
 
             Stream?.Dispose();
             Stream = null;
