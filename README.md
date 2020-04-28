@@ -8,11 +8,17 @@
 This application allows you to assign any actions performed on the voice command.
 
 Available recorders:
-+ Windows Multimedia API(winmm.dll)
+- Windows Multimedia API(winmm.dll)
+- NAudio
 
 Available voice to text converters:
-+ Wit.ai
-+ Yandex SpeechKit
+- Wit.ai(Supports streaming)
+- Yandex.Cloud.Ai.Stt.V2(Supports streaming)
+- Microsoft.Speech.Recognition(Supports streaming)
+
+Available synthesizers:
+- tts.voicetech.yandex.net
+- Microsoft SpeechLib
 
 ## Branches
 
