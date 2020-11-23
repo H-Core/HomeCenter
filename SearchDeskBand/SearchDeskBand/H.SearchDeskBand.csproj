@@ -1,13 +1,20 @@
-﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="CheckAdmin">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop" InitialTargets="CheckAdmin">
 
   <PropertyGroup>
-    <RootNamespace>H.NET.SearchDeskBand</RootNamespace>
-    <AssemblyName>H.NET.SearchDeskBand</AssemblyName>
-    <TargetFramework>net472</TargetFramework>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <ComDir>com\</ComDir>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Signing">
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <PropertyGroup Label="COM">
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <ComDir>com\</ComDir>
   </PropertyGroup>
 
   <Target Name="CheckAdmin">
@@ -58,17 +65,13 @@
   </Target>
 
   <ItemGroup>
-    <Reference Include="System.Windows.Forms" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
     <ProjectReference Include="..\..\Utilities\CommandsStorage\CommandsStorage.csproj" />
     <ProjectReference Include="..\..\Utilities\Startup\Startup.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="H.Pipes" Version="1.0.7" />
+    <PackageReference Include="H.Pipes" Version="1.14.4" />
     <PackageReference Include="SharpShell" Version="2.7.2" />
   </ItemGroup>
 
