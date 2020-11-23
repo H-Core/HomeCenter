@@ -1,8 +1,6 @@
-﻿using H.NET.SearchDeskBand;
-
-namespace H.NET.SearchDeskBand.TestApp
+﻿namespace H.SearchDeskBand.TestApp
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +28,7 @@ namespace H.NET.SearchDeskBand.TestApp
         /// </summary>
         private void InitializeComponent()
         {
-            this.deskBandControl1 = new H.NET.SearchDeskBand.DeskBandControl();
+            this.deskBandControl1 = new DeskBandControl();
             this.SuspendLayout();
             // 
             // deskBandControl1

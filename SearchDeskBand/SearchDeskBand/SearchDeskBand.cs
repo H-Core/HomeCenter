@@ -2,7 +2,7 @@
 using SharpShell.Attributes;
 using SharpShell.SharpDeskBand;
 
-namespace H.NET.SearchDeskBand
+namespace H.SearchDeskBand
 {
     [ComVisible(true)]
     [DisplayName("Home Center Search")]
@@ -17,7 +17,7 @@ namespace H.NET.SearchDeskBand
 
         protected override BandOptions GetBandOptions()
         {
-            return new BandOptions
+            return new()
             {
                 HasVariableHeight = false,
                 IsSunken = false,

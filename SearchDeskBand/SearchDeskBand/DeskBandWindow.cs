@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using H.NET.Storages;
 
-namespace H.NET.SearchDeskBand
+namespace H.SearchDeskBand
 {
     public sealed partial class DeskBandWindow : Form
     {
@@ -17,8 +17,8 @@ namespace H.NET.SearchDeskBand
 
         #region Events
 
-        public event EventHandler<Exception> ExceptionOccurred;
-        public event EventHandler<string> CommandSent;
+        public event EventHandler<Exception>? ExceptionOccurred;
+        public event EventHandler<string>? CommandSent;
 
         private void OnExceptionOccurred(Exception exception)
         {
@@ -178,7 +178,10 @@ namespace H.NET.SearchDeskBand
         {
             try
             {
-                var item = HistoryListBox.SelectedItem as string;
+                if (!(HistoryListBox.SelectedItem is string item))
+                {
+                    return;
+                }
 
                 await RunAsync(item);
             }

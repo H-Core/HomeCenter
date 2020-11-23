@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using H.NET.Core.Utilities;
 using H.NET.Utilities;
 
-namespace H.NET.SearchDeskBand
+namespace H.SearchDeskBand
 {
     public sealed partial class DeskBandControl : UserControl, IDisposable
     {
@@ -22,7 +22,7 @@ namespace H.NET.SearchDeskBand
 
         #region Properties
         
-        public static ColorTheme DarkTheme { get; } = new ColorTheme
+        public static ColorTheme DarkTheme { get; } = new()
         {
             TextColor = Color.White,
             BackgroundColor = Color.Black,
@@ -31,7 +31,7 @@ namespace H.NET.SearchDeskBand
             MouseOverColor = Color.White,
         };
 
-        public static ColorTheme LightTheme { get; } = new ColorTheme
+        public static ColorTheme LightTheme { get; } = new()
         {
             TextColor = Color.Black,
             BackgroundColor = Color.White,
@@ -43,8 +43,8 @@ namespace H.NET.SearchDeskBand
         public ColorTheme ColorTheme { get; } = DarkTheme;
 
         private IpcService IpcService { get; }
-        private DeskBandWindow Window { get; set; }
-        private Dictionary<string, Action<string>> ActionDictionary { get; } = new Dictionary<string, Action<string>>();
+        private DeskBandWindow Window { get; }
+        private Dictionary<string, Action<string>> ActionDictionary { get; } = new ();
 
         #endregion
 
@@ -54,21 +54,21 @@ namespace H.NET.SearchDeskBand
         {
             InitializeComponent();
 
-            AddAction("start", message => RecordButton.BackColor = ColorTheme.ActiveColor);
-            AddAction("stop", message => RecordButton.BackColor = ColorTheme.BackgroundColor);
+            AddAction("start", _ => RecordButton.BackColor = ColorTheme.ActiveColor);
+            AddAction("stop", _ => RecordButton.BackColor = ColorTheme.BackgroundColor);
             AddAction("preview", message => Label.Text = message);
-            AddAction("clear-preview", message => Label.Text = @"Enter Command Here");
+            AddAction("clear-preview", _ => Label.Text = @"Enter Command Here");
 
             Window = new DeskBandWindow();
-            Window.ExceptionOccurred += (sender, exception) => OnExceptionOccurred(exception);
+            Window.ExceptionOccurred += (_, exception) => OnExceptionOccurred(exception);
             Window.CommandSent += Window_OnCommandSent;
-            Window.VisibleChanged += (sender, args) => Label.Visible = !Window.Visible;
+            Window.VisibleChanged += (_, _) => Label.Visible = !Window.Visible;
 
             IpcService = new IpcService();
             IpcService.Connected += IpcService_OnConnected;
             IpcService.Disconnected += IpcService_OnDisconnected;
-            IpcService.MessageReceived += (sender, text) => IpcService_OnMessageReceived(text);
-            IpcService.ExceptionOccurred += (sender, exception) => OnExceptionOccurred(exception);
+            IpcService.MessageReceived += (_, text) => IpcService_OnMessageReceived(text);
+            IpcService.ExceptionOccurred += (_, exception) => OnExceptionOccurred(exception);
         }
 
         #endregion
@@ -209,8 +209,7 @@ namespace H.NET.SearchDeskBand
 
         public new void Dispose()
         {
-            Window?.Dispose();
-            Window = null;
+            Window.Dispose();
 
             IpcService.DisposeAsync().AsTask().Wait();
 

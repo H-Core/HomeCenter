@@ -1,10 +1,10 @@
 ﻿using System.Windows.Forms;
 
-namespace H.NET.SearchDeskBand.TestApp
+namespace H.SearchDeskBand.TestApp
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
         }

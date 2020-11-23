@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace H.NET.SearchDeskBand
+namespace H.SearchDeskBand
 {
     public sealed class ColorTheme
     {

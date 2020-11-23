@@ -3,22 +3,22 @@ using System.Threading;
 using System.Threading.Tasks;
 using H.Pipes;
 
-namespace H.NET.SearchDeskBand
+namespace H.SearchDeskBand
 {
     public sealed class IpcService : IAsyncDisposable
     {
         #region Properties
 
-        private PipeClient<string> PipeClient { get; } = new PipeClient<string>("H.Control");
+        private PipeClient<string> PipeClient { get; } = new ("H.Control");
 
         #endregion
 
         #region Events
 
-        public event EventHandler Connected;
-        public event EventHandler Disconnected;
-        public event EventHandler<string> MessageReceived;
-        public event EventHandler<Exception> ExceptionOccurred;
+        public event EventHandler? Connected;
+        public event EventHandler? Disconnected;
+        public event EventHandler<string>? MessageReceived;
+        public event EventHandler<Exception>? ExceptionOccurred;
 
         private void OnConnected()
         {
@@ -46,10 +46,10 @@ namespace H.NET.SearchDeskBand
 
         public IpcService()
         {
-            PipeClient.Connected += (sender, args) => OnConnected();
-            PipeClient.Disconnected += (sender, args) => OnDisconnected();
-            PipeClient.MessageReceived += (sender, args) => OnMessageReceived(args.Message);
-            PipeClient.ExceptionOccurred += (sender, args) => OnExceptionOccurred(args.Exception);
+            PipeClient.Connected += (_, _) => OnConnected();
+            PipeClient.Disconnected += (_, _) => OnDisconnected();
+            PipeClient.MessageReceived += (_, args) => OnMessageReceived(args.Message);
+            PipeClient.ExceptionOccurred += (_, args) => OnExceptionOccurred(args.Exception);
         }
 
         #endregion
