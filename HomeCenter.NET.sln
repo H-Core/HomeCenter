@@ -15,9 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Core.Tests", "H.NET.Tests\H.NET.Core.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Core.Tests", "src\H.NET.Tests\H.NET.Core.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCenter.NET", "HomeCenter.NET\HomeCenter.NET.csproj", "{140E973F-93DC-483F-AA62-046E9A8536B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCenter.NET", "src\HomeCenter.NET\HomeCenter.NET.csproj", "{140E973F-93DC-483F-AA62-046E9A8536B5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{88551E04-84E4-4902-9FC8-7FA1934C38EC} = {88551E04-84E4-4902-9FC8-7FA1934C38EC}
 		{69A68B09-45E9-4BA0-8038-6EDF0FFE0959} = {69A68B09-45E9-4BA0-8038-6EDF0FFE0959}
@@ -35,45 +35,45 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCenter.NET", "HomeCente
 		{AB260CD7-41AF-4EB4-B635-9144C1049177} = {AB260CD7-41AF-4EB4-B635-9144C1049177}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.SearchDeskBand", "SearchDeskBand\SearchDeskBand\H.SearchDeskBand.csproj", "{B1A02ADB-14C2-4451-93C4-1A7E33D3EB2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.SearchDeskBand", "src\SearchDeskBand\SearchDeskBand\H.SearchDeskBand.csproj", "{B1A02ADB-14C2-4451-93C4-1A7E33D3EB2D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandsStorage", "Utilities\CommandsStorage\CommandsStorage.csproj", "{9C0197EC-B353-4CDD-ADDC-E23876C7B72F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandsStorage", "src\Utilities\CommandsStorage\CommandsStorage.csproj", "{9C0197EC-B353-4CDD-ADDC-E23876C7B72F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.SearchDeskBand.TestApp", "SearchDeskBand\SearchDeskBand.TestApp\H.SearchDeskBand.TestApp.csproj", "{FF391D32-B326-4661-AB2C-4D209E4DADD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.SearchDeskBand.TestApp", "src\SearchDeskBand\SearchDeskBand.TestApp\H.SearchDeskBand.TestApp.csproj", "{FF391D32-B326-4661-AB2C-4D209E4DADD9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Core", "H.NET.Core\H.NET.Core.csproj", "{E3EE7480-FD57-43E0-B6E1-B69255068DCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Core", "src\H.NET.Core\H.NET.Core.csproj", "{E3EE7480-FD57-43E0-B6E1-B69255068DCB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IPC", "Utilities\IPC\IPC.csproj", "{A2CB840C-0158-4227-BD1E-6B03B098D5E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IPC", "src\Utilities\IPC\IPC.csproj", "{A2CB840C-0158-4227-BD1E-6B03B098D5E6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecialFolder", "Utilities\SpecialFolder\SpecialFolder.csproj", "{235EB5F6-DFAE-44A8-9F8B-3273FD6A858B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecialFolder", "src\Utilities\SpecialFolder\SpecialFolder.csproj", "{235EB5F6-DFAE-44A8-9F8B-3273FD6A858B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSynthesizers", "Synthesizers\WebSynthesizers\WebSynthesizers.csproj", "{6ABF69B3-3F17-4D93-B69A-092E3CBD1DBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSynthesizers", "src\Synthesizers\WebSynthesizers\WebSynthesizers.csproj", "{6ABF69B3-3F17-4D93-B69A-092E3CBD1DBF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramRunner", "Runners\TelegramRunner\TelegramRunner.csproj", "{FAD16B4C-5CED-4799-A4BC-4DC3221314DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramRunner", "src\Runners\TelegramRunner\TelegramRunner.csproj", "{FAD16B4C-5CED-4799-A4BC-4DC3221314DA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinmmRecorder", "Recorders\WinmmRecorder\WinmmRecorder.csproj", "{1BFB7E2D-E190-4394-8720-FB23D5A4EDBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinmmRecorder", "src\Recorders\WinmmRecorder\WinmmRecorder.csproj", "{1BFB7E2D-E190-4394-8720-FB23D5A4EDBF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NAudioRecorder", "Recorders\NAudioRecorder\NAudioRecorder.csproj", "{1134240E-B221-4411-A236-C5371D7DA160}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NAudioRecorder", "src\Recorders\NAudioRecorder\NAudioRecorder.csproj", "{1134240E-B221-4411-A236-C5371D7DA160}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugins", "Utilities\Plugins\Plugins.csproj", "{72121390-8576-4234-94FD-ECBFF98DABB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugins", "src\Utilities\Plugins\Plugins.csproj", "{72121390-8576-4234-94FD-ECBFF98DABB4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimerNotifier", "Notifiers\TimerNotifier\TimerNotifier.csproj", "{42C14380-3FFA-4AED-A674-FEDDB8EE0FE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimerNotifier", "src\Notifiers\TimerNotifier\TimerNotifier.csproj", "{42C14380-3FFA-4AED-A674-FEDDB8EE0FE6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScreenshotNotifier", "Notifiers\ScreenshotNotifier\ScreenshotNotifier.csproj", "{69A68B09-45E9-4BA0-8038-6EDF0FFE0959}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScreenshotNotifier", "src\Notifiers\ScreenshotNotifier\ScreenshotNotifier.csproj", "{69A68B09-45E9-4BA0-8038-6EDF0FFE0959}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaskScreenshotNotifier.Tests", "Notifiers\MaskScreenshotNotifier.Tests\MaskScreenshotNotifier.Tests.csproj", "{AB260CD7-41AF-4EB4-B635-9144C1049177}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaskScreenshotNotifier.Tests", "src\Notifiers\MaskScreenshotNotifier.Tests\MaskScreenshotNotifier.Tests.csproj", "{AB260CD7-41AF-4EB4-B635-9144C1049177}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaskScreenshotNotifier", "Notifiers\MaskScreenshotNotifier\MaskScreenshotNotifier.csproj", "{B6E41280-0925-4967-BA80-9ECC769E09B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaskScreenshotNotifier", "src\Notifiers\MaskScreenshotNotifier\MaskScreenshotNotifier.csproj", "{B6E41280-0925-4967-BA80-9ECC769E09B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TorrentRunner", "Runners\TorrentRunner\TorrentRunner.csproj", "{3B631441-A561-4CD5-A61E-6FD02694A00F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TorrentRunner", "src\Runners\TorrentRunner\TorrentRunner.csproj", "{3B631441-A561-4CD5-A61E-6FD02694A00F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hook", "Utilities\Hook\Hook.csproj", "{440051B2-288D-4B81-AF01-DAB1BD928F52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hook", "src\Utilities\Hook\Hook.csproj", "{440051B2-288D-4B81-AF01-DAB1BD928F52}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Startup", "Utilities\Startup\Startup.csproj", "{96DD6F93-C347-40F7-8DF5-47C66AF46DE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Startup", "src\Utilities\Startup\Startup.csproj", "{96DD6F93-C347-40F7-8DF5-47C66AF46DE5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpRunner", "Runners\CSharpRunner\CSharpRunner.csproj", "{BAF0CA91-5602-4EA6-9293-164C1E5DA704}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpRunner", "src\Runners\CSharpRunner\CSharpRunner.csproj", "{BAF0CA91-5602-4EA6-9293-164C1E5DA704}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSearchers", "Searchers\WebSearchers\WebSearchers.csproj", "{F4C6E293-72FE-4243-8B79-66824387A09A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSearchers", "src\Searchers\WebSearchers\WebSearchers.csproj", "{F4C6E293-72FE-4243-8B79-66824387A09A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runners", "Runners", "{BD5C6E7C-E921-4665-817F-269259C9DC2F}"
 EndProject
@@ -91,34 +91,34 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DeskBand", "DeskBand", "{59BC58CE-C9A5-4BF0-9CDA-B3F6CCCDE942}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoUpdater", "Utilities\AutoUpdater\AutoUpdater.csproj", "{B28C8B3C-EBA1-41A7-B6C7-0424412416B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoUpdater", "src\Utilities\AutoUpdater\AutoUpdater.csproj", "{B28C8B3C-EBA1-41A7-B6C7-0424412416B1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Screenshoter", "Utilities\Screenshoter\Screenshoter.csproj", "{C51459AE-0B28-4C6A-847B-11FAE81E0FE5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Screenshoter", "src\Utilities\Screenshoter\Screenshoter.csproj", "{C51459AE-0B28-4C6A-847B-11FAE81E0FE5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TcpPingNotifier", "Notifiers\TcpPingNotifier\TcpPingNotifier.csproj", "{4BB4FB25-6009-4A43-8B97-9850B70D1AE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TcpPingNotifier", "src\Notifiers\TcpPingNotifier\TcpPingNotifier.csproj", "{4BB4FB25-6009-4A43-8B97-9850B70D1AE7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DLinkRunner", "Runners\DLinkRunner\DLinkRunner.csproj", "{A0282C7F-C5BF-4F86-95BB-C643C68E7D91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DLinkRunner", "src\Runners\DLinkRunner\DLinkRunner.csproj", "{A0282C7F-C5BF-4F86-95BB-C643C68E7D91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsSynthesizer", "Synthesizers\WindowsSynthesizer\WindowsSynthesizer.csproj", "{88551E04-84E4-4902-9FC8-7FA1934C38EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsSynthesizer", "src\Synthesizers\WindowsSynthesizer\WindowsSynthesizer.csproj", "{88551E04-84E4-4902-9FC8-7FA1934C38EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NAudioRecorder.IntegrationTests", "Recorders\NAudioRecorder.IntegrationTests\NAudioRecorder.IntegrationTests.csproj", "{75A06FDC-F676-4623-86AA-EA7941B296D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NAudioRecorder.IntegrationTests", "src\Recorders\NAudioRecorder.IntegrationTests\NAudioRecorder.IntegrationTests.csproj", "{75A06FDC-F676-4623-86AA-EA7941B296D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YandexConverter", "Converters\YandexConverter\YandexConverter.csproj", "{FCDDF38A-FB08-45DE-A190-456707453A3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YandexConverter", "src\Converters\YandexConverter\YandexConverter.csproj", "{FCDDF38A-FB08-45DE-A190-456707453A3E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WitAiConverter", "Converters\WitAiConverter\WitAiConverter.csproj", "{7D587661-7BF5-4B6B-BF8B-79088243D0D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WitAiConverter", "src\Converters\WitAiConverter\WitAiConverter.csproj", "{7D587661-7BF5-4B6B-BF8B-79088243D0D2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Converters.IntegrationTests", "Converters\Converters.IntegrationTests\Converters.IntegrationTests.csproj", "{C97D84C6-6F28-45E0-A566-4086ACAFD18B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Converters.IntegrationTests", "src\Converters\Converters.IntegrationTests\Converters.IntegrationTests.csproj", "{C97D84C6-6F28-45E0-A566-4086ACAFD18B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E56246A1-0AF1-4963-97F6-06D934544448} = {E56246A1-0AF1-4963-97F6-06D934544448}
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Converters.TestApp", "Converters\Converters.TestApp\Converters.TestApp.csproj", "{E17F2A0C-0DE7-43D7-9B6D-476D62FB44B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Converters.TestApp", "src\Converters\Converters.TestApp\Converters.TestApp.csproj", "{E17F2A0C-0DE7-43D7-9B6D-476D62FB44B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemSpeechConverter", "Converters\SystemSpeechConverter\SystemSpeechConverter.csproj", "{E56246A1-0AF1-4963-97F6-06D934544448}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SystemSpeechConverter", "src\Converters\SystemSpeechConverter\SystemSpeechConverter.csproj", "{E56246A1-0AF1-4963-97F6-06D934544448}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Notifiers.RssNotifier", "Notifiers\H.Notifiers.RssNotifier\H.Notifiers.RssNotifier.csproj", "{16B83384-8918-4403-9685-54FFD7A18A43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Notifiers.RssNotifier", "src\Notifiers\H.Notifiers.RssNotifier\H.Notifiers.RssNotifier.csproj", "{16B83384-8918-4403-9685-54FFD7A18A43}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Notifiers.RssNotifier.IntegrationTests", "Notifiers\H.Notifiers.RssNotifier.IntegrationTests\H.Notifiers.RssNotifier.IntegrationTests.csproj", "{7D8F85B9-AC98-4FDB-9492-BA88DA289900}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Notifiers.RssNotifier.IntegrationTests", "src\Notifiers\H.Notifiers.RssNotifier.IntegrationTests\H.Notifiers.RssNotifier.IntegrationTests.csproj", "{7D8F85B9-AC98-4FDB-9492-BA88DA289900}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
