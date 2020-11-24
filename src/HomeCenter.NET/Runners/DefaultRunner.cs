@@ -78,9 +78,12 @@ namespace HomeCenter.NET.Runners
             }
 
             var values = command.SplitOnlyFirstIgnoreQuote(' ');
-
             var path = values[0].Trim('\"', '\\').Replace("\\\"", "\"").Replace("\\\\", "\\").Replace("\\", "/");
-            return Process.Start(path, values[1]);
+
+            return Process.Start(new ProcessStartInfo(path, values[1])
+            {
+                UseShellExecute = true,
+            });
         }
 
         private static void StartCommand(string command) => StartCommandInternal(command);
