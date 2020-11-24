@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using H.NET.Core;
@@ -41,15 +42,15 @@ namespace H.NET.Converters
             {
                 Headers =
                 {
-                    {"Authorization", $"Bearer {Token}"},
-                    {"Transfer-encoding", "chunked"},
+                    Authorization = AuthenticationHeaderValue.Parse($"Bearer {Token}"),
+                    TransferEncodingChunked = true,
                 },
                 Content = new ByteArrayContent(bytes)
                 {
                     Headers =
                     {
-                        {"Content-Type", "audio/wav"},
-                    }
+                        ContentType = MediaTypeHeaderValue.Parse("audio/wav"),
+                    },
                 },
             };
             using var response = await client.SendAsync(request, cancellationToken).ConfigureAwait(false);

@@ -4,13 +4,7 @@ namespace H.NET.Converters
 {
     internal sealed class WitAiResponse
     {
-        [JsonProperty("_text")]
+        [JsonProperty("text")]
         public string? Text { get; set; }
-
-        [JsonProperty("entities")]
-        public object? Entities { get; set; }
-
-        [JsonProperty("msg_id")]
-        public string? MsgId { get; set; }
     }
 }

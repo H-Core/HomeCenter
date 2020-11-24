@@ -11,7 +11,7 @@ namespace H.NET.Converters.IntegrationTests
         public static IRecorder CreateRecorder() => new NAudioRecorder();
         public static IConverter CreateConverter() => new WitAiConverter
         {
-            Token = "KATWBG4RQCFNBLQTY6QQUKB2SH6EIELG"
+            Token = "XZS4M3BUYV5LBMEWJKAGJ6HCPWZ5IDGY"
         };
 
         [TestMethod]
