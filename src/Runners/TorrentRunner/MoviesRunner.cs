@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 using H.NET.Core.Runners;
 using H.NET.Core.Settings;
 
-namespace H.NET.Runners
+namespace H.Runners
 {
     public class MoviesRunner : Runner
     {
         #region Properties
 
-        private string Folder { get; set; }
-        private string Folder2 { get; set; }
-        private string Folder3 { get; set; }
-        private string MoviesExtensions { get; set; }
-        private int MaximumDistance { get; set; }
+        private string Folder { get; set; } = string.Empty;
+        private string Folder2 { get; set; } = string.Empty;
+        private string Folder3 { get; set; } = string.Empty;
+        private string MoviesExtensions { get; set; } = "avi;mkv;mp4";
+        private int MaximumDistance { get; set; } = 2;
         private bool AutoTorrent { get; set; }
 
         #endregion
@@ -25,12 +25,12 @@ namespace H.NET.Runners
 
         public MoviesRunner()
         {
-            AddSetting(nameof(Folder), o => Folder = o, NoEmpty, string.Empty, SettingType.Folder);
-            AddSetting(nameof(Folder2), o => Folder2 = o, NoEmpty, string.Empty, SettingType.Folder);
-            AddSetting(nameof(Folder3), o => Folder3 = o, NoEmpty, string.Empty, SettingType.Folder);
-            AddSetting(nameof(MoviesExtensions), o => MoviesExtensions = o, NoEmpty, "avi;mkv;mp4");
-            AddSetting(nameof(MaximumDistance), o => MaximumDistance = o, Positive, 2);
-            AddSetting(nameof(AutoTorrent), o => AutoTorrent = o, Always, false);
+            AddSetting(nameof(Folder), o => Folder = o, NoEmpty, Folder, SettingType.Folder);
+            AddSetting(nameof(Folder2), o => Folder2 = o, NoEmpty, Folder2, SettingType.Folder);
+            AddSetting(nameof(Folder3), o => Folder3 = o, NoEmpty, Folder3, SettingType.Folder);
+            AddSetting(nameof(MoviesExtensions), o => MoviesExtensions = o, NoEmpty, MoviesExtensions);
+            AddSetting(nameof(MaximumDistance), o => MaximumDistance = o, Positive, MaximumDistance);
+            AddSetting(nameof(AutoTorrent), o => AutoTorrent = o, Always, AutoTorrent);
 
             AddAsyncAction("find-movie", FindMovieCommand, "name");
         }

@@ -1,11 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <RootNamespace>H.NET.Runners</RootNamespace>
-    <AssemblyName>H.NET.Runners.TorrentRunner</AssemblyName>
-    <AssemblyTitle>H.NET.Runners.TorrentRunner</AssemblyTitle>
-    <Product>H.NET.Runners.TorrentRunner</Product>
+    <TargetFramework>net4.8</TargetFramework>
+    <RootNamespace>H.Runners</RootNamespace>
   </PropertyGroup>
+
   <ItemGroup>
     <Reference Include="MonoTorrent, Version=0.80.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>libraries\MonoTorrent.dll</HintPath>
@@ -15,10 +14,13 @@
       <HintPath>libraries\MonoTorrent.Dht.dll</HintPath>
     </Reference>
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.7.4" />
   </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
   </ItemGroup>
+
 </Project>

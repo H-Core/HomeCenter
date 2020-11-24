@@ -12,8 +12,8 @@ namespace H.NET.Runners
         #region Properties
 
         public int UserId { get; set; }
-        public string Token { get; set; }
-        public string ProxyIp { get; set; }
+        public string Token { get; set; } = string.Empty;
+        public string ProxyIp { get; set; } = string.Empty;
         public int ProxyPort { get; set; }
 
         #endregion

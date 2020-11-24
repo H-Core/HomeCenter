@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace H.NET.Runners
+namespace H.Runners
 {
     public static class Transliterator
     {

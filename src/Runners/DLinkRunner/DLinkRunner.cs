@@ -4,16 +4,16 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using H.NET.Core.Runners;
 
-namespace DLinkRunner
+namespace H.Runners
 {
     // ReSharper disable once UnusedMember.Global
     public class DLinkRunner : Runner
     {
         #region Properties
 
-        public string Url { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
+        public string Url { get; set; } = "http://192.168.0.1/";
+        public string Login { get; set; } = "admin";
+        public string Password { get; set; } = string.Empty;
 
         #endregion
 
@@ -21,9 +21,9 @@ namespace DLinkRunner
 
         public DLinkRunner()
         {
-            AddSetting(nameof(Url), o => Url = o, null, "http://192.168.0.1/");
-            AddSetting(nameof(Login), o => Login = o, null, "admin");
-            AddSetting(nameof(Password), o => Password = o, null, string.Empty);
+            AddSetting(nameof(Url), o => Url = o, null, Url);
+            AddSetting(nameof(Login), o => Login = o, null, Login);
+            AddSetting(nameof(Password), o => Password = o, null, Password);
 
             AddAsyncAction("reload-router", ReloadRouter);
         }
@@ -43,28 +43,26 @@ namespace DLinkRunner
             cookieContainer.Add(uri, new Cookie("client_login", Login));
             cookieContainer.Add(uri, new Cookie("client_password", Password));
 
-            using (var client = new HttpClient(new HttpClientHandler
+            using var client = new HttpClient(new HttpClientHandler
             {
                 CookieContainer = cookieContainer
             })
             {
                 BaseAddress = uri
-            })
-            using (var request = new HttpRequestMessage
+            };
+            using var request = new HttpRequestMessage
             {
                 RequestUri = new Uri("index.cgi?res_cmd=6&res_buf=null&res_cmd_type=nbl&v2=y&rq=y&proxy=y&_=1542876693187", UriKind.Relative),
                 Method = HttpMethod.Get
-            })
-            using (var response = await client.SendAsync(request))
+            };
+            using var response = await client.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
             {
-                if (!response.IsSuccessStatusCode)
-                {
-                    Print($"Bad Response: {response}");
-                    return;
-                }
-
-                Print("Reloading in process");
+                Print($"Bad Response: {response}");
+                return;
             }
+
+            Print("Reloading in process");
         }
 
         #endregion

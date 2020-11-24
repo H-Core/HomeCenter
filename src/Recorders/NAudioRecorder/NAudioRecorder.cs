@@ -50,7 +50,7 @@ namespace H.NET.Recorders
                 WaveFormat = new WaveFormat(Rate, Bits, Channels)
             };
 
-            WaveIn.DataAvailable += (sender, args) =>
+            WaveIn.DataAvailable += (_, args) =>
             {
                 if (WaveFileWriter != null)
                 {

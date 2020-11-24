@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net4.8</TargetFrameworks>
+    <RootNamespace>H.Runners</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CS-Script" Version="3.30.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
+  </ItemGroup>
+
+</Project>

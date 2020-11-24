@@ -2,7 +2,7 @@
 using CSScriptLibrary;
 using H.NET.Core.Runners;
 
-namespace H.NET.Runners
+namespace H.Runners
 {
     public class CSharpRunner : Runner
     {

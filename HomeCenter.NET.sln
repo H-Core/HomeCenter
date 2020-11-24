@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpecialFolder", "src\Utilit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSynthesizers", "src\Synthesizers\WebSynthesizers\WebSynthesizers.csproj", "{6ABF69B3-3F17-4D93-B69A-092E3CBD1DBF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegramRunner", "src\Runners\TelegramRunner\TelegramRunner.csproj", "{FAD16B4C-5CED-4799-A4BC-4DC3221314DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Runners.TelegramRunner", "src\Runners\TelegramRunner\H.Runners.TelegramRunner.csproj", "{FAD16B4C-5CED-4799-A4BC-4DC3221314DA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WinmmRecorder", "src\Recorders\WinmmRecorder\WinmmRecorder.csproj", "{1BFB7E2D-E190-4394-8720-FB23D5A4EDBF}"
 EndProject
@@ -63,13 +63,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaskScreenshotNotifier.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MaskScreenshotNotifier", "src\Notifiers\MaskScreenshotNotifier\MaskScreenshotNotifier.csproj", "{B6E41280-0925-4967-BA80-9ECC769E09B6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TorrentRunner", "src\Runners\TorrentRunner\TorrentRunner.csproj", "{3B631441-A561-4CD5-A61E-6FD02694A00F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Runners.TorrentRunner", "src\Runners\TorrentRunner\H.Runners.TorrentRunner.csproj", "{3B631441-A561-4CD5-A61E-6FD02694A00F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hook", "src\Utilities\Hook\Hook.csproj", "{440051B2-288D-4B81-AF01-DAB1BD928F52}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Startup", "src\Utilities\Startup\Startup.csproj", "{96DD6F93-C347-40F7-8DF5-47C66AF46DE5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpRunner", "src\Runners\CSharpRunner\CSharpRunner.csproj", "{BAF0CA91-5602-4EA6-9293-164C1E5DA704}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Runners.CSharpRunner", "src\Runners\CSharpRunner\H.Runners.CSharpRunner.csproj", "{BAF0CA91-5602-4EA6-9293-164C1E5DA704}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSearchers", "src\Searchers\WebSearchers\WebSearchers.csproj", "{F4C6E293-72FE-4243-8B79-66824387A09A}"
 EndProject
@@ -95,7 +95,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Screenshoter", "src\Utiliti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TcpPingNotifier", "src\Notifiers\TcpPingNotifier\TcpPingNotifier.csproj", "{4BB4FB25-6009-4A43-8B97-9850B70D1AE7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DLinkRunner", "src\Runners\DLinkRunner\DLinkRunner.csproj", "{A0282C7F-C5BF-4F86-95BB-C643C68E7D91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Runners.DLinkRunner", "src\Runners\DLinkRunner\H.Runners.DLinkRunner.csproj", "{A0282C7F-C5BF-4F86-95BB-C643C68E7D91}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsSynthesizer", "src\Synthesizers\WindowsSynthesizer\WindowsSynthesizer.csproj", "{88551E04-84E4-4902-9FC8-7FA1934C38EC}"
 EndProject

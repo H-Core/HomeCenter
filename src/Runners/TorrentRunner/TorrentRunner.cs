@@ -12,22 +12,22 @@ using H.NET.Core.Settings;
 using HtmlAgilityPack;
 using MonoTorrent.Common;
 
-namespace H.NET.Runners
+namespace H.Runners
 {
     public class TorrentRunner : Runner
     {
         #region Properties
 
-        private string SaveTo { get; set; }
-        private string QBitTorrentPath { get; set; }
-        private string MpcPath { get; set; }
-        private string SearchPattern { get; set; }
-        private int MaxDelaySeconds { get; set; }
-        private double MinSizeGb { get; set; }
-        private double MaxSizeGb { get; set; }
-        private string Extension { get; set; }
-        private double StartSizeMb { get; set; }
-        private int MaxSearchResults { get; set; }
+        private string SaveTo { get; set; } = string.Empty;
+        private string QBitTorrentPath { get; set; } = string.Empty;
+        private string MpcPath { get; set; } = @"C:\Program Files (x86)\K-Lite Codec Pack\MPC-HC64\mpc-hc64_nvo.exe";
+        private int MaxDelaySeconds { get; set; } = 60;
+        private string SearchPattern { get; set; } = "download torrent *";
+        private double MinSizeGb { get; set; } = 1.0;
+        private double MaxSizeGb { get; set; } = 4.0;
+        private string Extension { get; set; } = string.Empty;
+        private double StartSizeMb { get; set; } = 20.0;
+        private int MaxSearchResults { get; set; } = 3;
 
         private string TorrentsFolder => Path.Combine(SaveTo, "Torrents");
         private string DownloadsFolder => Path.Combine(SaveTo, "Downloads");
@@ -38,20 +38,20 @@ namespace H.NET.Runners
 
         public TorrentRunner()
         {
-            AddSetting(nameof(SaveTo), o => SaveTo = o, NoEmpty, string.Empty, SettingType.Folder);
-            AddSetting(nameof(QBitTorrentPath), o => QBitTorrentPath = o, FileExists, string.Empty, SettingType.Path);
-            AddSetting(nameof(MpcPath), o => MpcPath = o, FileExists, "C:\\Program Files (x86)\\K-Lite Codec Pack\\MPC-HC64\\mpc-hc64_nvo.exe", SettingType.Path);
-            AddSetting(nameof(MaxDelaySeconds), o => MaxDelaySeconds = o, null, 60);
-            AddSetting(nameof(SearchPattern), o => SearchPattern = o, NoEmpty, "download torrent *");
-            AddSetting(nameof(MinSizeGb), o => MinSizeGb = o, null, 1.0);
-            AddSetting(nameof(MaxSizeGb), o => MaxSizeGb = o, null, 4.0);
-            AddSetting(nameof(Extension), o => Extension = o, null, string.Empty);
-            AddSetting(nameof(StartSizeMb), o => StartSizeMb = o, null, 20.0);
-            AddSetting(nameof(MaxSearchResults), o => MaxSearchResults = o, null, 3);
+            AddSetting(nameof(SaveTo), o => SaveTo = o, NoEmpty, SaveTo, SettingType.Folder);
+            AddSetting(nameof(QBitTorrentPath), o => QBitTorrentPath = o, FileExists, QBitTorrentPath, SettingType.Path);
+            AddSetting(nameof(MpcPath), o => MpcPath = o, FileExists, MpcPath, SettingType.Path);
+            AddSetting(nameof(MaxDelaySeconds), o => MaxDelaySeconds = o, null, MaxDelaySeconds);
+            AddSetting(nameof(SearchPattern), o => SearchPattern = o, NoEmpty, SearchPattern);
+            AddSetting(nameof(MinSizeGb), o => MinSizeGb = o, null, MinSizeGb);
+            AddSetting(nameof(MaxSizeGb), o => MaxSizeGb = o, null, MaxSizeGb);
+            AddSetting(nameof(Extension), o => Extension = o, null, Extension);
+            AddSetting(nameof(StartSizeMb), o => StartSizeMb = o, null, StartSizeMb);
+            AddSetting(nameof(MaxSearchResults), o => MaxSearchResults = o, null, MaxSearchResults);
 
             AddAsyncAction("torrent", TorrentCommand, "text");
 
-            Settings.PropertyChanged += (sender, args) =>
+            Settings.PropertyChanged += (_, _) =>
             {
                 if (string.IsNullOrWhiteSpace(SaveTo))
                 {
@@ -149,7 +149,7 @@ namespace H.NET.Runners
             return array.SelectMany(i => i).ToArray();
         }
 
-        private string FindBestTorrent(ICollection<string> files)
+        private string? FindBestTorrent(ICollection<string> files)
         {
             var torrents = files
                 .Select(i => Torrent.TryLoad(i, out var torrent) ? torrent : null)
@@ -157,15 +157,15 @@ namespace H.NET.Runners
                 .ToArray();
 
             var goodTorrents = torrents
-                .Where(torrent => torrent.Files.Length == 1 && torrent.Files.Any(IsGoodFile))
-                .OrderByDescending(i => i.AnnounceUrls.Count)
+                .Where(torrent => torrent?.Files.Length == 1 && torrent.Files.Any(IsGoodFile))
+                .OrderByDescending(torrent => torrent?.AnnounceUrls.Count)
                 .ToArray();
 
             if (!goodTorrents.Any())
             {
                 goodTorrents = torrents
-                    .Where(torrent => torrent.Files.Any(IsGoodFile))
-                    .OrderByDescending(i => i.AnnounceUrls.Count)
+                    .Where(torrent => torrent?.Files?.Any(IsGoodFile) == true)
+                    .OrderByDescending(torrent => torrent?.AnnounceUrls.Count)
                     .ToArray();
             }
 
@@ -286,7 +286,7 @@ namespace H.NET.Runners
             [Out, MarshalAs(UnmanagedType.U4)] out uint lpFileSizeHigh);
 
         [DllImport("kernel32.dll", SetLastError = true, PreserveSig = true)]
-        private static extern int GetDiskFreeSpaceW([In, MarshalAs(UnmanagedType.LPWStr)] string lpRootPathName,
+        private static extern int GetDiskFreeSpaceW([In, MarshalAs(UnmanagedType.LPWStr)] string? lpRootPathName,
             out uint lpSectorsPerCluster, out uint lpBytesPerSector, out uint lpNumberOfFreeClusters,
             out uint lpTotalNumberOfClusters);
 
