@@ -1,7 +1,7 @@
-# ![Logo](images/icon.png) [HomeCenter.NET](https://github.com/HavenDV/HomeCenter.NET) 
+# ![Logo](docs/images/icon.png) [HomeCenter.NET](https://github.com/HavenDV/HomeCenter.NET) 
 [![Language](https://img.shields.io/badge/language-C%23-blue.svg?style=flat-square)](https://github.com/HavenDV/HomeCenter.NET/search?l=C%23&o=desc&s=&type=Code) 
 [![License](https://img.shields.io/github/license/HavenDV/HomeCenter.NET.svg?label=License&maxAge=86400)](LICENSE.md) 
-[![Requirements](https://img.shields.io/badge/Requirements-Visual%20Studio%202019%2016.5-blue.svg)](https://visualstudio.microsoft.com/ru/vs/community/)
+[![Requirements](https://img.shields.io/badge/Requirements-Visual%20Studio%202019%2016.8-blue.svg)](https://visualstudio.microsoft.com/en/vs/community/)
 
 This application allows you to assign any actions performed on the voice command.
 
