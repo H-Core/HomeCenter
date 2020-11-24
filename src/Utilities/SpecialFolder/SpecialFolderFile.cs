@@ -11,7 +11,7 @@ namespace H.NET.Utilities
         public string FileName { get; }
         public string FullPath => Path.Combine(Folder, FileName);
 
-        public string FileData
+        public string? FileData
         {
             get => File.Exists(FullPath) ? File.ReadAllText(FullPath) : null;
             set => File.WriteAllText(FullPath, value);

@@ -8,7 +8,7 @@ namespace H.NET.Utilities
     {
         private static string KeyName { get; } = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
 
-        public static void Set(string fileName, bool autoStart, string arguments = null)
+        public static void Set(string fileName, bool autoStart, string? arguments = null)
         {
             var name = ToName(fileName);
 
@@ -32,20 +32,19 @@ namespace H.NET.Utilities
             }
         }
 
-        public static string GetFilePath(string fileName)
+        public static string? GetFilePath(string fileName)
         {
             var name = ToName(fileName);
 
-            using (var mainKey = Registry.CurrentUser)
-            using (var key = mainKey.OpenSubKey(KeyName))
-            {
-                if (!(key?.GetValue(name) is string value))
-                {
-                    return null;
-                }
+            using var mainKey = Registry.CurrentUser;
+            using var key = mainKey.OpenSubKey(KeyName);
 
-                return ToFilePath(value);
+            if (!(key?.GetValue(name) is string value))
+            {
+                return null;
             }
+
+            return ToFilePath(value);
         }
 
         public static bool IsStartup(string path)
@@ -73,9 +72,9 @@ namespace H.NET.Utilities
             return name;
         }
 
-        private static string ToValue(string fileName, string arguments) => $"\"{fileName}\" {arguments}".Trim();
+        private static string ToValue(string fileName, string? arguments) => $"\"{fileName}\" {arguments}".Trim();
 
-        private static string ToFilePath(string value)
+        private static string? ToFilePath(string value)
         {
             if (string.IsNullOrWhiteSpace(value))
             {
@@ -87,7 +86,7 @@ namespace H.NET.Utilities
             return values.Length > 0 ? values[0] : null;
         }
 
-        private static bool Compare(string first, string second) => 
+        private static bool Compare(string? first, string? second) => 
             string.Equals(first?.Trim(' ', '\"'), second?.Trim(' ', '\"'), StringComparison.OrdinalIgnoreCase);
 
         #endregion

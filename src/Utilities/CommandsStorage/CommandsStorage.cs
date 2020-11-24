@@ -49,7 +49,7 @@ namespace H.NET.Storages
             Clear();
 
             var text = AppDataFile.FileData;
-            if (string.IsNullOrWhiteSpace(text))
+            if (text == null || string.IsNullOrWhiteSpace(text))
             {
                 return;
             }

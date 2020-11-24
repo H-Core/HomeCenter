@@ -15,6 +15,12 @@ namespace H.NET.Utilities
 
         #endregion
 
+        #region Events
+
+        public event EventHandler<string>? NewMessage;
+
+        #endregion
+
         #region Constructors
 
         public IpcServer(int port)
@@ -35,13 +41,6 @@ namespace H.NET.Utilities
 
         #endregion
 
-        #region Events
-
-        public delegate void MessageDelegate(string message);
-        public event MessageDelegate NewMessage;
-
-        #endregion
-
         private void OnClientAccepted(IAsyncResult result)
         {
             if (!(result.AsyncState is TcpListener listener))
@@ -56,11 +55,10 @@ namespace H.NET.Utilities
             
             try
             {
-                using (var client = listener.EndAcceptTcpClient(result))
-                using (var reader = new StreamReader(client.GetStream()))
-                {
-                    NewMessage?.Invoke(reader.ReadToEnd());
-                }
+                using var client = listener.EndAcceptTcpClient(result);
+                using var reader = new StreamReader(client.GetStream());
+
+                NewMessage?.Invoke(this, reader.ReadToEnd());
             }
             finally
             {
@@ -74,9 +72,8 @@ namespace H.NET.Utilities
         {
             IsDisposed = true;
 
-            Listener?.Stop();
-            Listener?.Server?.Dispose();
-            Listener = null;
+            Listener.Stop();
+            Listener.Server?.Dispose();
         }
 
         #endregion
