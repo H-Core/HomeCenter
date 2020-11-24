@@ -196,7 +196,7 @@ namespace H.NET.Core.Managers
             {
                 Recorder.RawDataReceived += RecorderOnRawDataReceived;
 
-                while (IsStarted)
+                while (Recorder.IsStarted)
                 {
                     await Task.Delay(TimeSpan.FromMilliseconds(1));
                 }

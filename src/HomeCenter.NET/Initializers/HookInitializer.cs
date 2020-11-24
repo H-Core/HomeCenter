@@ -12,10 +12,15 @@ namespace HomeCenter.NET.Initializers
     {
         public HookInitializer(BaseManager manager, HookService hookService, MainViewModel model, ScreenshotToClipboardModule screenshotToClipboardModule, ScreenshotToTextModule screenshotToTextModule, Settings settings)
         {
+            bool CheckArgs(KeyboardHookEventArgs args)
+            {
+                return args.Key != Keys.None && args.Key == hookService.RecordKey ||
+                       args.IsAltPressed && args.IsCtrlPressed;
+            }
+
             async void GlobalKeyUp(object? sender, KeyboardHookEventArgs e)
             {
-                if (e.Key != Keys.None && e.Key == hookService.RecordKey ||
-                    e.IsAltPressed && e.IsCtrlPressed)
+                if (CheckArgs(e))
                 {
                     await manager.StopAsync();
                 }
@@ -23,8 +28,7 @@ namespace HomeCenter.NET.Initializers
 
             async void GlobalKeyDown(object? sender, KeyboardHookEventArgs e)
             {
-                 if (e.Key != Keys.None && e.Key == hookService.RecordKey ||
-                    e.Key == Keys.Space && e.IsAltPressed && e.IsCtrlPressed)
+                if (CheckArgs(e))
                 {
                     await manager.StartAsync();
                 }
@@ -34,7 +38,6 @@ namespace HomeCenter.NET.Initializers
                     return;
                 }
 
-                //Print($"{e.Key:G}");
                 var combination = new KeysCombination(e.Key, e.IsCtrlPressed, e.IsShiftPressed, e.IsAltPressed);
                 if (hookService.RunCombination(combination))
                 {

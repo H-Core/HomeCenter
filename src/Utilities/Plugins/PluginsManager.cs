@@ -94,13 +94,13 @@ namespace H.NET.Utilities.Plugins
 
         public List<KeyValuePair<string, RuntimeObject<T1>>> GetPlugins<T1>() where T1 : class, T => Instances
             .Objects
-            .Where(i => i.Value.Exception == null && typeof(T1).IsAssignableFrom(i.Value.Type))
-            .Select(i => new KeyValuePair<string, RuntimeObject<T1>>(i.Key, new RuntimeObject<T1>(i.Value.Value as T1, i.Value.Exception)))
+            .Where(i => i.Value?.Exception == null && typeof(T1).IsAssignableFrom(i.Value?.Type))
+            .Select(i => new KeyValuePair<string, RuntimeObject<T1>>(i.Key, new RuntimeObject<T1>(i.Value?.Value as T1, i.Value?.Exception)))
             .ToList();
 
         public List<KeyValuePair<string, RuntimeObject<T>>> GetBasePlugins<T1>() where T1 : class, T => Instances
             .Objects
-            .Where(i => i.Value.Exception == null && typeof(T1).IsAssignableFrom(i.Value.Type))
+            .Where(i => i.Value?.Exception == null && typeof(T1).IsAssignableFrom(i.Value?.Type))
             .Select(i => new KeyValuePair<string, RuntimeObject<T>>(i.Key, new RuntimeObject<T>(i.Value.Value, i.Value.Exception)))
             .ToList();
 

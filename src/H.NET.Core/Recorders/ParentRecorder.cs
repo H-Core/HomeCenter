@@ -19,7 +19,7 @@ namespace H.NET.Core.Recorders
 
         public override async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
-            if (Recorder.IsInitialized)
+            if (Recorder == null || Recorder.IsInitialized)
             {
                 return;
             }
@@ -38,6 +38,11 @@ namespace H.NET.Core.Recorders
             {
                 Log("Recorder is not found");
                 return;
+            }
+
+            if (!Recorder.IsInitialized)
+            {
+                await Recorder.InitializeAsync(cancellationToken);
             }
 
             await Recorder.StartAsync(cancellationToken);
