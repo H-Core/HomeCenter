@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>net5.0-windows;net4.8</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <RootNamespace>H.NET.Converters.TestApp</RootNamespace>
   </PropertyGroup>

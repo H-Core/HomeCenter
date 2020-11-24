@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net472;</TargetFrameworks>
+    <TargetFrameworks>net5.0;net4.8</TargetFrameworks>
     <RootNamespace>H.NET.Converters.IntegrationTests</RootNamespace>
-    <LangVersion>8</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,15 +15,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="1.4.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
-    <PackageReference Include="coverlet.collector" Version="1.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.0-preview-20201123-03" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Recorders\NAudioRecorder\NAudioRecorder.csproj" />
-    <ProjectReference Include="..\SystemSpeechConverter\SystemSpeechConverter.csproj" Condition="'$(TargetFramework)' == 'net472'" />
+    <ProjectReference Include="..\SystemSpeechConverter\SystemSpeechConverter.csproj" />
     <ProjectReference Include="..\WitAiConverter\WitAiConverter.csproj" />
     <ProjectReference Include="..\YandexConverter\YandexConverter.csproj" />
   </ItemGroup>

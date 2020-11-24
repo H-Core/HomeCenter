@@ -108,9 +108,9 @@ namespace H.NET.Converters
 
             if (disposing)
             {
-                ReceiveTask?.Dispose();
-                WriteTask?.Dispose();
-                Call?.Dispose();
+                ReceiveTask.Dispose();
+                WriteTask.Dispose();
+                Call.Dispose();
             }
 
             base.Dispose(disposing);

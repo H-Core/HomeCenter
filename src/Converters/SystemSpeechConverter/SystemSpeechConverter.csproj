@@ -1,16 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net4.6</TargetFrameworks>
     <RootNamespace>H.NET.Converters</RootNamespace>
-    <LangVersion>8</LangVersion>
-    <Nullable>Enable</Nullable>
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <Reference Include="Microsoft.Speech">
       <HintPath>Dependencies\Microsoft.Speech.dll</HintPath>
     </Reference>
   </ItemGroup>
+
 </Project>

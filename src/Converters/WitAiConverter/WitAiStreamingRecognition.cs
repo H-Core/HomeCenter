@@ -40,7 +40,7 @@ namespace H.NET.Converters
                     { "Authorization", $"Bearer {Token}" },
                     { "Transfer-encoding", "chunked" },
                 },
-                Content = new PushStreamContent(async (stream, httpContent, transportContext) =>
+                Content = new PushStreamContent(async (stream, _, _) =>
                 {
                     {
                         using var writer = new BinaryWriter(stream);

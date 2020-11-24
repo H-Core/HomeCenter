@@ -8,9 +8,6 @@ using H.NET.Recorders;
 
 namespace H.NET.Converters.TestApp
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow
     {
         public MainWindow()
@@ -24,7 +21,6 @@ namespace H.NET.Converters.TestApp
             };
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
         private async void Button_Click(object sender, RoutedEventArgs e)
         {
             ProcessButton.IsEnabled = false;
@@ -54,16 +50,16 @@ namespace H.NET.Converters.TestApp
                         Lang = "ru-RU",
                         SampleRateHertz = 8000,
                     },
-                    _ => throw new NotImplementedException()
+                    _ => throw new NotImplementedException(),
                 };
 
                 using var recognition = await converter.StartStreamingRecognitionAsync().ConfigureAwait(false);
-                recognition.AfterPartialResults += (o, args) => Dispatcher?.Invoke(() =>
+                recognition.AfterPartialResults += (_, args) => Dispatcher?.Invoke(() =>
                 {
                     OutputTextBox.Text += $"{DateTime.Now:h:mm:ss.fff} {args.Text}{Environment.NewLine}";
                     OutputTextBlock.Text = $"{DateTime.Now:h:mm:ss.fff} {args.Text}";
                 });
-                recognition.AfterFinalResults += (o, args) => Dispatcher?.Invoke(() =>
+                recognition.AfterFinalResults += (_, args) => Dispatcher?.Invoke(() =>
                 {
                     OutputTextBox.Text += $"{DateTime.Now:h:mm:ss.fff} {args.Text}{Environment.NewLine}";
                     OutputTextBlock.Text = $"{DateTime.Now:h:mm:ss.fff} {args.Text}";
@@ -75,7 +71,7 @@ namespace H.NET.Converters.TestApp
                 }
 
                 // ReSharper disable once AccessToDisposedClosure
-                recorder.RawDataReceived += async (o, args) => await recognition.WriteAsync(args.RawData.ToArray()).ConfigureAwait(false);
+                recorder.RawDataReceived += async (_, args) => await recognition.WriteAsync(args.RawData.ToArray()).ConfigureAwait(false);
 
                 await Task.Delay(TimeSpan.FromMilliseconds(5000)).ConfigureAwait(false);
 

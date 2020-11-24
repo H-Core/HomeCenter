@@ -19,7 +19,7 @@ namespace H.NET.Converters
         private Stream Stream { get; }
         private Task WriteTask { get; }
 
-        private ConcurrentQueue<byte[]> WriteQueue { get; } = new ConcurrentQueue<byte[]>();
+        private ConcurrentQueue<byte[]> WriteQueue { get; } = new ();
         private bool IsStopped { get; set; }
 
         #endregion

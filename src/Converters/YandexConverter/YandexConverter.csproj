@@ -1,15 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net4.6</TargetFrameworks>
+    <RootNamespace>H.NET.Converters</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Protobuf Generation">
     <DisableProtobufDesignTimeBuild>true</DisableProtobufDesignTimeBuild>
     <Protobuf_NoWarnMissingExpected>true</Protobuf_NoWarnMissingExpected>
     <ProtoOutputDir>generated</ProtoOutputDir>
     <CompileProtoOutputs>false</CompileProtoOutputs>
     <CompileProtoOutputs Condition="!Exists('$(ProtoOutputDir)')">true</CompileProtoOutputs>
-    <LangVersion>8</LangVersion>
-    <Nullable>Enable</Nullable>
-    <RootNamespace>H.NET.Converters</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,14 +21,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="cloudapi/**/*.proto" ProtoRoot="cloudapi/third_party/googleapis;cloudapi" Access="internal" OutputDir="$(ProtoOutputDir)/%(RelativeDir)" GrpcServices="none" CompileOutputs="$(CompileProtoOutputs)" />
     <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net4.6' ">
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="cloudapi/**/*.proto" ProtoRoot="cloudapi/third_party/googleapis;cloudapi" Access="internal" OutputDir="$(ProtoOutputDir)/%(RelativeDir)" GrpcServices="none" CompileOutputs="$(CompileProtoOutputs)" />
     <Protobuf Update="cloudapi/**/*_service.proto" GrpcServices="Client" CompileOutputs="$(CompileProtoOutputs)" />
   </ItemGroup>
 
   <Target Name="Generate" BeforeTargets="BeforeBuild" Condition="!Exists('$(ProtoOutputDir)')">
     <MSBuild Projects="$(MSBuildProjectFile)" Properties="DisableProtobufDesignTimeBuild=false" Targets="Protobuf_Compile" UnloadProjectsOnCompletion="true" />
   </Target>
+
   <Target Name="CleanGenerated" BeforeTargets="BeforeClean" Condition="Exists('$(ProtoOutputDir)')">
     <RemoveDir Directories="$(ProtoOutputDir)" />
   </Target>
