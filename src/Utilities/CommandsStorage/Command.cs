@@ -7,9 +7,9 @@ namespace H.NET.Storages
     {
         #region Properties
 
-        public List<SingleCommand> Lines { get; set; } = new List<SingleCommand>();
-        public List<SingleKey> Keys { get; set; } = new List<SingleKey>();
-        public string HotKey { get; set; }
+        public List<SingleCommand> Lines { get; set; } = new ();
+        public List<SingleKey> Keys { get; set; } = new ();
+        public string? HotKey { get; set; } = string.Empty;
 
         public string FirstKeyText => Keys.FirstOrDefault()?.Text ?? string.Empty;
         public string FirstDataText => Lines.FirstOrDefault()?.Text ?? string.Empty;
@@ -27,7 +27,7 @@ namespace H.NET.Storages
             Keys = keys.Select(text => new SingleKey(text)).ToList();
         }
 
-        public Command(List<string> keys, List<string> dataLines, string hotKey = null) : this(keys)
+        public Command(List<string> keys, List<string> dataLines, string? hotKey = null) : this(keys)
         {
             Lines = dataLines.Select(text => new SingleCommand(text)).ToList();
             HotKey = hotKey;
@@ -37,7 +37,7 @@ namespace H.NET.Storages
         {
         }
 
-        public Command(string key, string data, string hotKey = null) : this(key)
+        public Command(string key, string data, string? hotKey = null) : this(key)
         {
             Lines.Add(new SingleCommand(data));
             HotKey = hotKey;
