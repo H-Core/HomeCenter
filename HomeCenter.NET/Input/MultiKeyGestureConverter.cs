@@ -83,7 +83,7 @@ namespace HomeCenter.NET.Input
         {
             var str = (value as string);
 
-            if (!string.IsNullOrEmpty(str))
+            if (str != null && !string.IsNullOrEmpty(str))
             {
                 var sequences = str.Split(',');
                 string[] keyStrings;

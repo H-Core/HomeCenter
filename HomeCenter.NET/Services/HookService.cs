@@ -70,7 +70,7 @@ namespace HomeCenter.NET.Services
             }
 
             var key = command.Keys.FirstOrDefault()?.Text;
-            if (string.IsNullOrWhiteSpace(key))
+            if (key == null || string.IsNullOrWhiteSpace(key))
             {
                 return false;
             }
@@ -153,7 +153,7 @@ namespace HomeCenter.NET.Services
                 var process = User32Utilities.GetForegroundProcess();
                 var appExePath = process.MainModule?.FileName;
 
-                if (string.IsNullOrWhiteSpace(appExePath))
+                if (appExePath == null || string.IsNullOrWhiteSpace(appExePath))
                 {
                     return false;
                 }

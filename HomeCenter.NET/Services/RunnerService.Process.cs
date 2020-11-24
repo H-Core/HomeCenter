@@ -36,7 +36,17 @@ namespace HomeCenter.NET.Services
                 IsCanceled = true;
                 IsCompleted = true;
 
-                Thread?.Abort();
+                try
+                {
+#pragma warning disable 618
+#pragma warning disable SYSLIB0006 // Type or member is obsolete
+                    Thread?.Abort();
+#pragma warning restore SYSLIB0006 // Type or member is obsolete
+#pragma warning restore 618
+                }
+                catch (PlatformNotSupportedException)
+                {
+                }
             }
         }
     }

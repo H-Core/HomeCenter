@@ -12,7 +12,6 @@
         Height="600" 
         Width="500" 
         WindowStartupLocation="CenterScreen"
-        Icon="../Properties/Icons/icon.ico"
         cal:Message.Attach="[Event Closing] = [Action OnClosing($eventArgs)]; [KeyUp Ctrl+R] = [Restart]"
         Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"
         >

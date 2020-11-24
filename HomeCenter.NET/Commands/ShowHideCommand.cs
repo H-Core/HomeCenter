@@ -6,11 +6,11 @@ namespace HomeCenter.NET.Commands
 {
     public class ShowHideCommand : ICommand
     {
-        public void Execute(object windowObject)
+        public void Execute(object? parameter)
         {
-            if (!(windowObject is Window window))
+            if (!(parameter is Window window))
             {
-                throw new ArgumentException(@"Window object is not window", nameof(windowObject));
+                throw new ArgumentException(@"Window object is not window", nameof(parameter));
             }
 
             if (window.Visibility == Visibility.Visible)
@@ -23,11 +23,11 @@ namespace HomeCenter.NET.Commands
             }
         }
 
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? parameter)
         {
             return true;
         }
 
-        public event EventHandler CanExecuteChanged { add { } remove { } }
+        public event EventHandler? CanExecuteChanged { add { } remove { } }
     }
 }

@@ -214,7 +214,7 @@ namespace HomeCenter.NET.ViewModels.Settings
         {
             // TODO: Window manager
             var path = DialogUtilities.OpenFileDialog(filter: @"DLL files (*.dll) |*.dll");
-            if (string.IsNullOrWhiteSpace(path))
+            if (path == null || string.IsNullOrWhiteSpace(path))
             {
                 return;
             }
@@ -337,7 +337,7 @@ namespace HomeCenter.NET.ViewModels.Settings
         public void AddIgnoredApplication()
         {
             var path = DialogUtilities.OpenFileDialog(filter: @"EXE files (*.exe) |*.exe");
-            if (string.IsNullOrWhiteSpace(path))
+            if (path == null || string.IsNullOrWhiteSpace(path))
             {
                 return;
             }

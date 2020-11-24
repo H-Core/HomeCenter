@@ -27,7 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Resources\beep.wav" />
+    <Resource Include="Resources\beep.wav" />
+    <Resource Include="Properties\Icons\icon.ico" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
