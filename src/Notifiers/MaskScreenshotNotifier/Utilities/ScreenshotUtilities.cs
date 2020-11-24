@@ -7,7 +7,7 @@ namespace H.NET.Notifiers.Utilities
     {
         private static double Epsilon { get; } = 0.05;
 
-        public static double GetDifference(Mat mat1, Mat mat2, Mat mask = null)
+        public static double GetDifference(Mat mat1, Mat mat2, Mat? mask = null)
         {
             if (mask != null && !mask.IsEmpty)
             {
@@ -27,6 +27,6 @@ namespace H.NET.Notifiers.Utilities
         }
 
         public static bool IsEquals(double difference) => Math.Abs(difference) < Epsilon;
-        public static bool IsEquals(Mat mat1, Mat mat2, Mat mask = null) => IsEquals(GetDifference(mat1, mat2, mask));
+        public static bool IsEquals(Mat mat1, Mat mat2, Mat? mask = null) => IsEquals(GetDifference(mat1, mat2, mask));
     }
 }

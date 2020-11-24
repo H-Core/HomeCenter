@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <RootNamespace>H.NET.Synthesizers</RootNamespace>
-    <AssemblyTitle>WindowsSynthesizer</AssemblyTitle>
-    <Product>WindowsSynthesizer</Product>
+    <TargetFramework>net4.8</TargetFramework>
+    <RootNamespace>H.Synthesizers</RootNamespace>
   </PropertyGroup>
+
   <ItemGroup>
     <COMReference Include="SpeechLib">
       <Guid>{C866CA3A-32F7-11D2-9602-00C04F8EE628}</Guid>
@@ -16,7 +16,9 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
+    <PackageReference Include="H.Core" Version="0.9.1" />
   </ItemGroup>
+
 </Project>

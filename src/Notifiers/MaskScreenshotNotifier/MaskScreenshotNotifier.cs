@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.IO;
 using Emgu.CV;
-using H.NET.Core.Settings;
+using H.Core.Settings;
 using H.NET.Notifiers.Extensions;
 using H.NET.Notifiers.Utilities;
 using H.Notifiers;
@@ -12,15 +12,15 @@ namespace H.NET.Notifiers
     {
         #region Properties
 
-        private string _maskPath;
-        public string MaskPath
+        private string? _maskPath;
+        public string? MaskPath
         {
             get => _maskPath;
             set
             {
                 _maskPath = value;
 
-                if (!PathIsValid(value))
+                if (value == null || !PathIsValid(value))
                 {
                     Mask?.Dispose();
                     Mask = null;
@@ -31,7 +31,7 @@ namespace H.NET.Notifiers
             }
         }
 
-        private Mat Mask { get; set; }
+        private Mat? Mask { get; set; }
 
         #endregion
 
@@ -57,11 +57,10 @@ namespace H.NET.Notifiers
                 return false;
             }
 
-            using (var mat = bitmap.ToMat())
-            using (var grayMat = mat.ToGray())
-            {
-                return ScreenshotUtilities.IsEquals(grayMat, Mask, Mask);
-            }
+            using var mat = bitmap.ToMat();
+            using var grayMat = mat.ToGray();
+
+            return ScreenshotUtilities.IsEquals(grayMat, Mask, Mask);
         }
 
         #endregion

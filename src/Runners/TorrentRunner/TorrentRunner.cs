@@ -7,8 +7,9 @@ using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using H.NET.Core.Runners;
-using H.NET.Core.Settings;
+using H.Core;
+using H.Core.Runners;
+using H.Core.Settings;
 using HtmlAgilityPack;
 using MonoTorrent.Common;
 
@@ -41,13 +42,13 @@ namespace H.Runners
             AddSetting(nameof(SaveTo), o => SaveTo = o, NoEmpty, SaveTo, SettingType.Folder);
             AddSetting(nameof(QBitTorrentPath), o => QBitTorrentPath = o, FileExists, QBitTorrentPath, SettingType.Path);
             AddSetting(nameof(MpcPath), o => MpcPath = o, FileExists, MpcPath, SettingType.Path);
-            AddSetting(nameof(MaxDelaySeconds), o => MaxDelaySeconds = o, null, MaxDelaySeconds);
+            AddSetting(nameof(MaxDelaySeconds), o => MaxDelaySeconds = o, Always, MaxDelaySeconds);
             AddSetting(nameof(SearchPattern), o => SearchPattern = o, NoEmpty, SearchPattern);
-            AddSetting(nameof(MinSizeGb), o => MinSizeGb = o, null, MinSizeGb);
-            AddSetting(nameof(MaxSizeGb), o => MaxSizeGb = o, null, MaxSizeGb);
-            AddSetting(nameof(Extension), o => Extension = o, null, Extension);
-            AddSetting(nameof(StartSizeMb), o => StartSizeMb = o, null, StartSizeMb);
-            AddSetting(nameof(MaxSearchResults), o => MaxSearchResults = o, null, MaxSearchResults);
+            AddSetting(nameof(MinSizeGb), o => MinSizeGb = o, Always, MinSizeGb);
+            AddSetting(nameof(MaxSizeGb), o => MaxSizeGb = o, Always, MaxSizeGb);
+            AddSetting(nameof(Extension), o => Extension = o, Always, Extension);
+            AddSetting(nameof(StartSizeMb), o => StartSizeMb = o, Always, StartSizeMb);
+            AddSetting(nameof(MaxSearchResults), o => MaxSearchResults = o, Always, MaxSearchResults);
 
             AddAsyncAction("torrent", TorrentCommand, "text");
 
@@ -174,7 +175,7 @@ namespace H.Runners
             return bestTorrent?.TorrentPath;
         }
 
-        private async Task TorrentCommand(string text)
+        private async Task TorrentCommand(string? text)
         {
             Say($"Ищу торрент {text}");
 

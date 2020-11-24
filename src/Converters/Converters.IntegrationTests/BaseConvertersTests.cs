@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using H.NET.Converters.IntegrationTests.Utilities;
-using H.NET.Core;
+using H.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace H.NET.Converters.IntegrationTests
@@ -12,8 +12,8 @@ namespace H.NET.Converters.IntegrationTests
         public static async Task StartStreamingRecognitionTest(IConverter converter, string name, string expected, int bytesPerWrite = 8000)
         {
             using var recognition = await converter.StartStreamingRecognitionAsync();
-            recognition.AfterPartialResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterPartialResults: {args.Text}");
-            recognition.AfterFinalResults += (sender, args) =>
+            recognition.AfterPartialResults += (_, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterPartialResults: {args.Text}");
+            recognition.AfterFinalResults += (_, args) =>
             {
                 Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterFinalResults: {args.Text}");
 
@@ -39,8 +39,8 @@ namespace H.NET.Converters.IntegrationTests
             await recorder.StartAsync();
 
             using var recognition = await converter.StartStreamingRecognitionAsync();
-            recognition.AfterPartialResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterPartialResults: {args.Text}");
-            recognition.AfterFinalResults += (sender, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterFinalResults: {args.Text}");
+            recognition.AfterPartialResults += (_, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterPartialResults: {args.Text}");
+            recognition.AfterFinalResults += (_, args) => Console.WriteLine($"{DateTime.Now:h:mm:ss.fff} AfterFinalResults: {args.Text}");
 
             if (writeWavHeader)
             {
@@ -54,7 +54,15 @@ namespace H.NET.Converters.IntegrationTests
             }
 
             // ReSharper disable once AccessToDisposedClosure
-            recorder.RawDataReceived += async (sender, args) => await recognition.WriteAsync(args.RawData.ToArray());
+            recorder.RawDataReceived += async (_, args) =>
+            {
+                if (args.RawData == null)
+                {
+                    return;
+                }
+
+                await recognition.WriteAsync(args.RawData.ToArray());
+            };
 
             await Task.Delay(TimeSpan.FromMilliseconds(5000));
 
@@ -80,6 +88,11 @@ namespace H.NET.Converters.IntegrationTests
             await recorder.StopAsync();
 
             var bytes = recorder.WavData;
+            Assert.IsNotNull(bytes, $"{nameof(bytes)} == null");
+            if (bytes == null)
+            {
+                return;
+            }
 
             var result = await converter.ConvertAsync(bytes.ToArray());
 

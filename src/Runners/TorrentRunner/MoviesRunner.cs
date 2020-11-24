@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using H.NET.Core.Runners;
-using H.NET.Core.Settings;
+using H.Core.Runners;
+using H.Core.Settings;
 
 namespace H.Runners
 {
@@ -39,8 +39,13 @@ namespace H.Runners
 
         #region Private methods
 
-        private async Task FindMovieCommand(string text)
+        private async Task FindMovieCommand(string? text)
         {
+            if (text == null)
+            {
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(Folder) || 
                 !Directory.Exists(Folder))
             {

@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Core.Tests", "src\H.NET.Tests\H.NET.Core.Tests.csproj", "{8EDF4429-251A-416D-BB68-93F227191BCF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCenter.NET", "src\HomeCenter.NET\HomeCenter.NET.csproj", "{140E973F-93DC-483F-AA62-046E9A8536B5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{88551E04-84E4-4902-9FC8-7FA1934C38EC} = {88551E04-84E4-4902-9FC8-7FA1934C38EC}
@@ -38,8 +36,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandsStorage", "src\Utilities\CommandsStorage\CommandsStorage.csproj", "{9C0197EC-B353-4CDD-ADDC-E23876C7B72F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.SearchDeskBand.TestApp", "src\SearchDeskBand\SearchDeskBand.TestApp\H.SearchDeskBand.TestApp.csproj", "{FF391D32-B326-4661-AB2C-4D209E4DADD9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.NET.Core", "src\H.NET.Core\H.NET.Core.csproj", "{E3EE7480-FD57-43E0-B6E1-B69255068DCB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IPC", "src\Utilities\IPC\IPC.csproj", "{A2CB840C-0158-4227-BD1E-6B03B098D5E6}"
 EndProject
@@ -71,7 +67,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Startup", "src\Utilities\St
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Runners.CSharpRunner", "src\Runners\CSharpRunner\H.Runners.CSharpRunner.csproj", "{BAF0CA91-5602-4EA6-9293-164C1E5DA704}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSearchers", "src\Searchers\WebSearchers\WebSearchers.csproj", "{F4C6E293-72FE-4243-8B79-66824387A09A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "H.Searchers.WebSearchers", "src\Searchers\WebSearchers\H.Searchers.WebSearchers.csproj", "{F4C6E293-72FE-4243-8B79-66824387A09A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runners", "Runners", "{BD5C6E7C-E921-4665-817F-269259C9DC2F}"
 EndProject
@@ -124,10 +120,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8EDF4429-251A-416D-BB68-93F227191BCF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{140E973F-93DC-483F-AA62-046E9A8536B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{140E973F-93DC-483F-AA62-046E9A8536B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{140E973F-93DC-483F-AA62-046E9A8536B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -144,10 +136,6 @@ Global
 		{FF391D32-B326-4661-AB2C-4D209E4DADD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF391D32-B326-4661-AB2C-4D209E4DADD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF391D32-B326-4661-AB2C-4D209E4DADD9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E3EE7480-FD57-43E0-B6E1-B69255068DCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E3EE7480-FD57-43E0-B6E1-B69255068DCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E3EE7480-FD57-43E0-B6E1-B69255068DCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E3EE7480-FD57-43E0-B6E1-B69255068DCB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A2CB840C-0158-4227-BD1E-6B03B098D5E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A2CB840C-0158-4227-BD1E-6B03B098D5E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2CB840C-0158-4227-BD1E-6B03B098D5E6}.Release|Any CPU.ActiveCfg = Release|Any CPU

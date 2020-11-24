@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net4.5</TargetFrameworks>
-    <RootNamespace>H.NET.Recorders</RootNamespace>
+    <RootNamespace>H.Recorders</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
+    <PackageReference Include="H.Core" Version="0.9.1" />
   </ItemGroup>
 
 </Project>

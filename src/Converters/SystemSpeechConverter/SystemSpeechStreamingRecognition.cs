@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using H.NET.Core.Converters;
+using H.Core.Converters;
 using Microsoft.Speech.Recognition;
 
 namespace H.NET.Converters
@@ -20,8 +20,8 @@ namespace H.NET.Converters
         {
             SpeechRecognitionEngine = speechRecognitionEngine ?? throw new ArgumentNullException(nameof(speechRecognitionEngine));
 
-            SpeechRecognitionEngine.SpeechHypothesized += (sender, args) => OnAfterPartialResults(args.Result.Text);
-            SpeechRecognitionEngine.SpeechRecognized += (sender, args) => OnAfterFinalResults(args.Result.Text);
+            SpeechRecognitionEngine.SpeechHypothesized += (_, args) => OnAfterPartialResults(args.Result.Text);
+            SpeechRecognitionEngine.SpeechRecognized += (_, args) => OnAfterFinalResults(args.Result.Text);
 
             SpeechRecognitionEngine.RecognizeAsync(RecognizeMode.Multiple);
         }

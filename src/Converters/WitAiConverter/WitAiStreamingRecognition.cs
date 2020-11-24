@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
-using H.NET.Core.Converters;
+using H.Core.Converters;
 using Newtonsoft.Json;
 
 namespace H.NET.Converters
@@ -98,7 +98,7 @@ namespace H.NET.Converters
 
             var obj = JsonConvert.DeserializeObject<WitAiResponse>(json);
 
-            OnAfterFinalResults(obj.Text);
+            OnAfterFinalResults(obj.Text ?? string.Empty);
         }
 
         protected override void Dispose(bool disposing)

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using H.NET.Core;
-using H.NET.Recorders;
+using H.Core;
+using H.Recorders;
 
 namespace H.NET.Converters.TestApp
 {
@@ -71,7 +71,15 @@ namespace H.NET.Converters.TestApp
                 }
 
                 // ReSharper disable once AccessToDisposedClosure
-                recorder.RawDataReceived += async (_, args) => await recognition.WriteAsync(args.RawData.ToArray()).ConfigureAwait(false);
+                recorder.RawDataReceived += async (_, args) =>
+                {
+                    if (args.RawData == null)
+                    {
+                        return;
+                    }
+
+                    await recognition.WriteAsync(args.RawData.ToArray()).ConfigureAwait(false);
+                };
 
                 await Task.Delay(TimeSpan.FromMilliseconds(5000)).ConfigureAwait(false);
 

@@ -3,8 +3,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using H.NET.Core;
-using H.NET.Core.Converters;
+using H.Core;
+using H.Core.Converters;
 using Microsoft.Speech.Recognition;
 
 namespace H.NET.Converters

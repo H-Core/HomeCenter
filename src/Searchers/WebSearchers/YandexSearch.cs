@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using H.NET.Core;
+using H.Core;
 using HtmlAgilityPack;
 
-namespace H.NET.Searchers
+namespace H.Searchers
 {
     public class YandexSearcher : Module, ISearcher
     {

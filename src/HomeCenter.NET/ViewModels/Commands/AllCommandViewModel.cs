@@ -1,5 +1,5 @@
-﻿using H.NET.Core;
-using H.NET.Core.Utilities;
+﻿using H.Core;
+using H.Core.Utilities;
 
 namespace HomeCenter.NET.ViewModels.Commands
 {

@@ -3,7 +3,7 @@ using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
 using System.Xml;
-using H.NET.Core.Settings;
+using H.Core.Settings;
 
 namespace H.Notifiers
 {
@@ -12,9 +12,9 @@ namespace H.Notifiers
     {
         #region Properties
 
-        private string Url { get; set; }
+        private string Url { get; set; } = string.Empty;
 
-        private string LastTitle { get; set; }
+        private string LastTitle { get; set; } = string.Empty;
 
         #endregion
 
@@ -22,7 +22,7 @@ namespace H.Notifiers
 
         public RssNotifier()
         {
-            AddSetting(nameof(Url), o => Url = o, o => true, string.Empty, SettingType.Path);
+            AddSetting(nameof(Url), o => Url = o, o => true, Url, SettingType.Path);
 
             AddVariable("$rss_last_title$", () => LastTitle);
         }

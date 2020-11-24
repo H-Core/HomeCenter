@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using H.NET.Core.Runners;
-using H.NET.Core.Utilities;
+using H.Core.Runners;
+using H.Core.Utilities;
 using HomeCenter.NET.Properties;
 
 namespace HomeCenter.NET.Runners

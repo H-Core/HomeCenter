@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Caliburn.Micro;
-using H.NET.Core;
-using H.NET.Core.Extensions;
+using H.Core;
+using H.Core.Extensions;
 using H.NET.Utilities.Plugins;
 using HomeCenter.NET.Extensions;
 

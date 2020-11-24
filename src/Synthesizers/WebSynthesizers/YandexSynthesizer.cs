@@ -2,19 +2,19 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace H.NET.Synthesizers
+namespace H.Synthesizers
 {
     public class YandexSynthesizer : CachedSynthesizer
     {
         #region Properties
 
-        public string Key { get; set; }
-        public string Lang { get; set; }
-        public string Format { get; set; }
-        public string Speaker { get; set; } 
-        public string Emotion { get; set; }
-        public string Quality { get; set; }
-        public string Speed { get; set; }
+        public string Key { get; set; } = string.Empty;
+        public string Lang { get; set; } = string.Empty;
+        public string Format { get; set; } = string.Empty;
+        public string Speaker { get; set; } = string.Empty;
+        public string Emotion { get; set; } = string.Empty;
+        public string Quality { get; set; } = string.Empty;
+        public string Speed { get; set; } = string.Empty;
 
         #endregion
 
@@ -39,16 +39,15 @@ namespace H.NET.Synthesizers
         {
             var lang = TextToLang(ref text) ?? Lang;
 
-            using (var client = new HttpClient())
-            {
-                return await client.GetByteArrayAsync(
-                    $"https://tts.voicetech.yandex.net/generate?text={text}&format={Format}&lang={lang}&speaker={Speaker}&emotion={Emotion}&key={Key}&quality={Quality}&speed={Speed}");
-            }
+            using var client = new HttpClient();
+
+            return await client.GetByteArrayAsync(
+                $"https://tts.voicetech.yandex.net/generate?text={text}&format={Format}&lang={lang}&speaker={Speaker}&emotion={Emotion}&key={Key}&quality={Quality}&speed={Speed}");
         }
 
         protected override string TextToKey(string text) => $"{text}_{Speaker}_{Lang}_{Emotion}_{Speed}_{Format}_{Quality}";
 
-        private static string TextToLang(ref string text)
+        private static string? TextToLang(ref string text)
         {
             if (text.Contains("[EN]"))
             {

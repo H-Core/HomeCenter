@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using H.NET.Core.Runners;
+using H.Core.Runners;
 using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Services;
 

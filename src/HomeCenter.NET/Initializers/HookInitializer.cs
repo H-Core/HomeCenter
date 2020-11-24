@@ -1,5 +1,5 @@
 ﻿using System;
-using H.NET.Core.Managers;
+using H.Core.Managers;
 using H.NET.Utilities;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Services;

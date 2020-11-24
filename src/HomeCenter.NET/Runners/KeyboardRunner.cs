@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-using H.NET.Core.Runners;
+using H.Core.Runners;
 
 namespace HomeCenter.NET.Runners
 {

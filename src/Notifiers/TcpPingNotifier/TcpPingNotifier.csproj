@@ -1,13 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <RootNamespace>H.NET.Notifiers</RootNamespace>
+    <TargetFramework>net4.8</TargetFramework>
+    <RootNamespace>H.Notifiers</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="H.Core" Version="0.9.1" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="System.Net.Http" />
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
     <ProjectReference Include="..\TimerNotifier\TimerNotifier.csproj" />
   </ItemGroup>
+
 </Project>

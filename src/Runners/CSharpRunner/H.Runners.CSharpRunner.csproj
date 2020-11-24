@@ -7,10 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="CS-Script" Version="3.30.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
+    <PackageReference Include="H.Core" Version="0.9.1" />
   </ItemGroup>
 
 </Project>

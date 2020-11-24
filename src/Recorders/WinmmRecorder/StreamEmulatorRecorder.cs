@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
-using H.NET.Core;
-using H.NET.Core.Attributes;
-using H.NET.Core.Recorders;
+using H.Core;
+using H.Core.Attributes;
+using H.Core.Recorders;
 
-namespace H.NET.Recorders
+namespace H.Recorders
 {
     [AllowMultipleInstance(false)]
     public class StreamEmulatorRecorder : ParentRecorder

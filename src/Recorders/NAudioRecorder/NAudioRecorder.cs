@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using H.NET.Core.Recorders;
+using H.Core.Recorders;
 using NAudio.Wave;
 
-namespace H.NET.Recorders
+namespace H.Recorders
 {
     public class NAudioRecorder : Recorder
     {

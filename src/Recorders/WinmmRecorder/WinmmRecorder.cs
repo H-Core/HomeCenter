@@ -2,9 +2,9 @@
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using H.NET.Core.Recorders;
+using H.Core.Recorders;
 
-namespace H.NET.Recorders
+namespace H.Recorders
 {
     public class WinmmRecorder : Recorder
     {

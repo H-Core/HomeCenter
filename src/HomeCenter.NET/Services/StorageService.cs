@@ -72,7 +72,7 @@ namespace HomeCenter.NET.Services
                 }
             }
 
-            return (null, new Command(null, key));
+            return (null, new Command(string.Empty, key));
         }
 
         public void Save() => Storage.Save();

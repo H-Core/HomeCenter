@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Net.NetworkInformation;
-using H.NET.Core.Runners;
+using H.Core.Runners;
 
 namespace HomeCenter.NET.Runners
 {

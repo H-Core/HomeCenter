@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Timers;
+using H.Core.Notifiers;
 
 namespace H.Notifiers
 {
@@ -29,7 +30,7 @@ namespace H.Notifiers
         public int Frequency { get; set; }
         public int RequiredCount { get; set; }
 
-        private Timer Timer { get; set; }
+        private Timer? Timer { get; set; }
 
         private int CurrentCount { get; set; }
         private DateTime LastEventTime { get; set; }

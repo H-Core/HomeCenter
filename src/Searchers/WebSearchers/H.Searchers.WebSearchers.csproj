@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>H.Synthesizers</RootNamespace>
+
+    <TargetFramework>net4.8</TargetFramework>
+    <RootNamespace>H.Searchers</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="H.Core" Version="0.9.1" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.28" />
   </ItemGroup>
 
 </Project>

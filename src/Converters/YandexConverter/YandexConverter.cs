@@ -6,8 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Grpc.Core;
 using H.NET.Converters.Utilities;
-using H.NET.Core;
-using H.NET.Core.Converters;
+using H.Core;
+using H.Core.Converters;
 using Newtonsoft.Json;
 using Yandex.Cloud.Ai.Stt.V2;
 

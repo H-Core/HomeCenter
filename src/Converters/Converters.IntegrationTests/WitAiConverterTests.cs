@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using H.NET.Core;
-using H.NET.Recorders;
+using H.Core;
+using H.Recorders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace H.NET.Converters.IntegrationTests

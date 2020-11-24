@@ -1,9 +1,10 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
-using H.NET.Core;
-using H.NET.Core.Synthesizers;
+using H.Core;
+using H.Core.Synthesizers;
 
-namespace H.NET.Synthesizers
+namespace H.Synthesizers
 {
     public abstract class CachedSynthesizer : Synthesizer, ISynthesizer
     {
@@ -30,7 +31,7 @@ namespace H.NET.Synthesizers
             var key = TextToKey(text);
             if (UseCache && Cache.Contains(key))
             {
-                return Cache[key];
+                return Cache[key] ?? Array.Empty<byte>();
             }
 
             var bytes = await InternalConvertAsync(text, cancellationToken);

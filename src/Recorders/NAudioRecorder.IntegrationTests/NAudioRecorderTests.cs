@@ -1,12 +1,12 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using H.NET.Core.Managers;
-using H.NET.Core.Recorders;
+using H.Core.Managers;
+using H.Core.Recorders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NAudio.Wave;
 
-namespace H.NET.Recorders.IntegrationTests
+namespace H.Recorders.IntegrationTests
 {
     [TestClass]
     public class NAudioRecorderTests
@@ -28,7 +28,15 @@ namespace H.NET.Recorders.IntegrationTests
             output.Init(provider);
             output.Play();
 
-            recorder.RawDataReceived += (sender, args) => provider.AddSamples(args.RawData.ToArray(), 0, args.RawData.Count);
+            recorder.RawDataReceived += (_, args) =>
+            {
+                if (args.RawData == null)
+                {
+                    return;
+                }
+
+                provider.AddSamples(args.RawData.ToArray(), 0, args.RawData.Count);
+            };
             await recorder.StartAsync();
             
             await Task.Delay(TimeSpan.FromMilliseconds(5000));

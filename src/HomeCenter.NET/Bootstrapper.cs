@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Caliburn.Micro;
-using H.NET.Core.Managers;
+using H.Core.Managers;
 using HomeCenter.NET.Initializers;
 using HomeCenter.NET.Input;
 using HomeCenter.NET.Properties;

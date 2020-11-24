@@ -52,6 +52,11 @@ namespace HomeCenter.NET.Services
             {
                 var command = pair.Value;
                 var hotKey = command.HotKey;
+                if (hotKey == null)
+                {
+                    continue;
+                }
+
                 var combination = KeysCombination.FromString(hotKey);
                 if (combination.IsEmpty)
                 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using H.NET.Core.Extensions;
+using H.Core.Extensions;
 
 namespace HomeCenter.NET.ViewModels.Settings
 {

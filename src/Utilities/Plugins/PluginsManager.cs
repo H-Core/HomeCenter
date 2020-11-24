@@ -179,7 +179,7 @@ namespace H.NET.Utilities.Plugins
 
         public void AddInstance(string name, Type type, bool isEnabled) => AddInstance(name, type.FullName, isEnabled);
 
-        public void AddInstancesFromAssembly(string path, Type interfaceType, Predicate<Type> filter = null)
+        public void AddInstancesFromAssembly(string path, Type interfaceType, Predicate<Type>? filter = null)
         {
             var assembly = Install(path);
             var types = assembly.GetTypesOfInterface(interfaceType);

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using H.NET.Core.Runners;
+using H.Core.Runners;
 
 namespace HomeCenter.NET.Services
 {

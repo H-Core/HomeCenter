@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using H.NET.Core.Utilities;
+using H.Core.Utilities;
 using H.NET.Utilities;
 
 namespace H.SearchDeskBand
@@ -44,7 +44,7 @@ namespace H.SearchDeskBand
 
         private IpcService IpcService { get; }
         private DeskBandWindow Window { get; }
-        private Dictionary<string, Action<string>> ActionDictionary { get; } = new ();
+        private Dictionary<string, Action<string?>> ActionDictionary { get; } = new ();
 
         #endregion
 
@@ -109,7 +109,8 @@ namespace H.SearchDeskBand
             try
             {
                 var values = message.SplitOnlyFirst(' ');
-                if (!ActionDictionary.TryGetValue(values[0], out var action))
+                var key = values[0];
+                if (key == null || !ActionDictionary.TryGetValue(key, out var action))
                 {
                     return;
                 }
@@ -246,7 +247,7 @@ namespace H.SearchDeskBand
                 if (!Process.GetProcessesByName(ApplicationName).Any())
                 {
                     var path = Startup.GetFilePath($"{ApplicationName}.exe");
-                    if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+                    if (path == null || string.IsNullOrWhiteSpace(path) || !File.Exists(path))
                     {
                         MessageBox.Show(@"H.Control application is not running and it was not found in startup.", @"Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
@@ -265,7 +266,7 @@ namespace H.SearchDeskBand
             }
         }
 
-        private void AddAction(string key, Action<string> action)
+        private void AddAction(string key, Action<string?> action)
         {
             try
             {

@@ -1,6 +1,6 @@
 ﻿using System;
 using CSScriptLibrary;
-using H.NET.Core.Runners;
+using H.Core.Runners;
 
 namespace H.Runners
 {
@@ -18,10 +18,10 @@ namespace H.Runners
 
         #region Private methods
 
-        private void CSharpCommand(string text)
+        private void CSharpCommand(string? text)
         {
             var action = CSScript.Evaluator
-                .LoadDelegate<Action<Action<string>, Action<string>, Action<string>, Func<string, object>>>($@"
+                .LoadDelegate<Action<Action<string>, Action<string>, Action<string>, Func<string, object?>>>($@"
 using System;
 using System.IO;
 using System.Xml;

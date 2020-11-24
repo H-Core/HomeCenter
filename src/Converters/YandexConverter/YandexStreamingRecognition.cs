@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Grpc.Core;
-using H.NET.Core.Converters;
+using H.Core.Converters;
 using Yandex.Cloud.Ai.Stt.V2;
 
 namespace H.NET.Converters
@@ -44,7 +44,7 @@ namespace H.NET.Converters
                         .FirstOrDefault()?
                         .Text;
 
-                    if (chunk != null && !string.IsNullOrWhiteSpace(text))
+                    if (chunk != null && text != null && !string.IsNullOrWhiteSpace(text))
                     {
                         if (chunk.Final)
                         {

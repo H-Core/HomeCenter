@@ -7,9 +7,9 @@ namespace H.Notifiers
     {
         #region Properties
 
-        private string Ip { get; set; }
+        private string Ip { get; set; } = string.Empty;
         private int Port { get; set; }
-        private bool OnlyIfNetworkActive { get; set; }
+        private bool OnlyIfNetworkActive { get; set; } = true;
 
         #endregion
 
@@ -17,9 +17,9 @@ namespace H.Notifiers
 
         public TcpPingNotifier()
         {
-            AddSetting(nameof(Ip), o => Ip = o, o => true, string.Empty);
-            AddSetting(nameof(Port), o => Port = o, o => true, 0);
-            AddSetting(nameof(OnlyIfNetworkActive), o => OnlyIfNetworkActive = o, o => true, true);
+            AddSetting(nameof(Ip), o => Ip = o, _ => true, Ip);
+            AddSetting(nameof(Port), o => Port = o, _ => true, Port);
+            AddSetting(nameof(OnlyIfNetworkActive), o => OnlyIfNetworkActive = o, _ => true, OnlyIfNetworkActive);
         }
 
         #endregion

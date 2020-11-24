@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using H.NET.Core;
-using H.NET.Core.Managers;
-using H.NET.Core.Runners;
+using H.Core;
+using H.Core.Managers;
+using H.Core.Runners;
 using H.NET.Storages;
 using HomeCenter.NET.Utilities;
 
@@ -158,7 +158,7 @@ namespace HomeCenter.NET.Services
             {
                 try
                 {
-                    new CommandsHistory(Options.CompanyName).Add(realActionData);
+                    new CommandsHistory(Options.CompanyName).Add(realActionData ?? string.Empty);
                 }
                 catch (Exception)
                 {

@@ -4,13 +4,13 @@
     <RootNamespace>H.Notifiers</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
     <ProjectReference Include="..\TimerNotifier\TimerNotifier.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\beep.wav" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="H.Core" Version="0.9.1" />
     <PackageReference Include="System.ServiceModel.Syndication" Version="4.7.0" />
   </ItemGroup>
 </Project>

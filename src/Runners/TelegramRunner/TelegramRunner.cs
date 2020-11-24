@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using H.NET.Core.Runners;
+using H.Core.Runners;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace H.NET.Runners
+namespace H.Runners
 {
     public class TelegramRunner : Runner
     {
@@ -24,8 +24,8 @@ namespace H.NET.Runners
         {
             AddSetting(nameof(Token), o => Token = o, TokenIsValid, string.Empty);
             AddSetting(nameof(UserId), o => UserId = o, UsedIdIsValid, 0);
-            AddSetting(nameof(ProxyIp), o => ProxyIp = o, null, string.Empty);
-            AddSetting(nameof(ProxyPort), o => ProxyPort = o, null, 0);
+            AddSetting(nameof(ProxyIp), o => ProxyIp = o, Always, string.Empty);
+            AddSetting(nameof(ProxyPort), o => ProxyPort = o, Always, 0);
                                                                   
             AddAsyncAction("telegram", SendMessage, "text");
         }
@@ -55,7 +55,7 @@ namespace H.NET.Runners
 
         #region Private methods
 
-        private async Task SendMessage(string text)
+        private async Task SendMessage(string? text)
         {
             var isProxy = !string.IsNullOrWhiteSpace(ProxyIp) && Positive(ProxyPort);
             var client = isProxy

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using H.NET.Core.Runners;
+using H.Core.Runners;
 using HomeCenter.NET.Utilities;
 
 namespace HomeCenter.NET.Runners

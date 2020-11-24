@@ -23,7 +23,7 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         private CancellationTokenSource CancellationTokenSource { get; } = new CancellationTokenSource();
 
-        public string HotKey
+        public string? HotKey
         {
             get => Command.HotKey;
             set

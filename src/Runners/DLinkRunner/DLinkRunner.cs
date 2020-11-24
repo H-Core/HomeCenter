@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using H.NET.Core.Runners;
+using H.Core.Runners;
 
 namespace H.Runners
 {
@@ -21,9 +21,9 @@ namespace H.Runners
 
         public DLinkRunner()
         {
-            AddSetting(nameof(Url), o => Url = o, null, Url);
-            AddSetting(nameof(Login), o => Login = o, null, Login);
-            AddSetting(nameof(Password), o => Password = o, null, Password);
+            AddSetting(nameof(Url), o => Url = o, Always, Url);
+            AddSetting(nameof(Login), o => Login = o, Always, Login);
+            AddSetting(nameof(Password), o => Password = o, Always, Password);
 
             AddAsyncAction("reload-router", ReloadRouter);
         }
@@ -32,7 +32,7 @@ namespace H.Runners
 
         #region Private methods
 
-        private async Task ReloadRouter(string text)
+        private async Task ReloadRouter(string? text)
         {
             var uri = new Uri(Url);
 

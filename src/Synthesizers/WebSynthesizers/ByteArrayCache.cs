@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace H.NET.Synthesizers
+namespace H.Synthesizers
 {
     public class ByteArrayCache
     {
@@ -34,7 +34,7 @@ namespace H.NET.Synthesizers
 
         public bool Contains(string text) => File.Exists(GetPath(text));
 
-        public byte[] this[string text] {
+        public byte[]? this[string text] {
             get {
                 var path = GetPath(text);
                 if (!File.Exists(path))
@@ -44,7 +44,7 @@ namespace H.NET.Synthesizers
 
                 return File.ReadAllBytes(path);
             }
-            set => File.WriteAllBytes(GetPath(text), value);
+            set => File.WriteAllBytes(GetPath(text), value ?? Array.Empty<byte>());
         }
 
         public void Clear() => Directory.EnumerateFiles(Folder).ToList().ForEach(File.Delete);

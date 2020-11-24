@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using H.NET.Core;
-using H.NET.Core.Extensions;
-using H.NET.Core.Managers;
+using H.Core;
+using H.Core.Extensions;
+using H.Core.Managers;
 using H.NET.Utilities.Plugins;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Utilities;

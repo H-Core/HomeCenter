@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using H.NET.Core;
-using H.NET.Core.Synthesizers;
+using H.Core;
+using H.Core.Synthesizers;
 using SpeechLib;
 
 namespace H.NET.Synthesizers
@@ -15,10 +15,10 @@ namespace H.NET.Synthesizers
     {
         #region Properties
 
-        public string Speaker { get; set; } 
-        public string Speed { get; set; }
+        public string Speaker { get; set; } = string.Empty;
+        public string Speed { get; set; } = string.Empty;
 
-        private SpVoice SpVoice { get; } = new SpVoice();
+        private SpVoice SpVoice { get; } = new ();
 
         #endregion
 
@@ -45,7 +45,7 @@ namespace H.NET.Synthesizers
 
                 SpVoice.Speak(text);
 
-                return Task.FromResult<byte[]>(null);
+                return Task.FromResult(Array.Empty<byte>());
             }
             catch (Exception exception)
             {

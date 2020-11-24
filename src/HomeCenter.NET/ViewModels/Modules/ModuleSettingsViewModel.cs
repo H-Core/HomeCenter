@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Caliburn.Micro;
-using H.NET.Core;
-using H.NET.Core.Settings;
+using H.Core;
+using H.Core.Settings;
 
 namespace HomeCenter.NET.ViewModels.Modules
 {

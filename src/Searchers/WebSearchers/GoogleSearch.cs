@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using H.NET.Core;
+using H.Core;
 
-namespace H.NET.Searchers
+namespace H.Searchers
 {
     public class GoogleSearcher : Module, ISearcher
     {

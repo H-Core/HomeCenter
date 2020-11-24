@@ -7,11 +7,11 @@
     <Product>H.NET.Notifiers.MaskScreenshotNotifier</Product>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
     <ProjectReference Include="..\ScreenshotNotifier\ScreenshotNotifier.csproj" />
     <ProjectReference Include="..\TimerNotifier\TimerNotifier.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EMGU.CV" Version="3.4.1.2976" />
+    <PackageReference Include="H.Core" Version="0.9.1" />
   </ItemGroup>
 </Project>

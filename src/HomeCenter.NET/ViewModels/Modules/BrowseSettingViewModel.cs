@@ -1,5 +1,5 @@
 ﻿using System;
-using H.NET.Core.Settings;
+using H.Core.Settings;
 using HomeCenter.NET.Utilities;
 // ReSharper disable UnusedMember.Global
 

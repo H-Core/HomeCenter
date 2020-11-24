@@ -5,6 +5,6 @@
     <AssemblyName>H.Notifiers.TimerNotifier</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\H.NET.Core\H.NET.Core.csproj" />
+    <PackageReference Include="H.Core" Version="0.9.1" />
   </ItemGroup>
 </Project>
