@@ -1,29 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>net4.8;net5.0-windows</TargetFrameworks>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <AssemblyTitle>HomeCenter.NET</AssemblyTitle>
-    <Product>HomeCenter.NET</Product>
-    <Copyright>Copyright havendv © 2020</Copyright>
-    <UseWPF>true</UseWPF>
-    <LangVersion>8</LangVersion>
-    <Nullable>Enable</Nullable>
-  </PropertyGroup>
-  <PropertyGroup>
+    <UseWindowsForms>true</UseWindowsForms>
     <ApplicationIcon>Properties\Icons\icon.ico</ApplicationIcon>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Properties\Icons\icon.ico" />
-  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\H.NET.Core\H.NET.Core.csproj" />
     <ProjectReference Include="..\Utilities\Plugins\Plugins.csproj" />
@@ -32,16 +18,20 @@
     <ProjectReference Include="..\Utilities\Screenshoter\Screenshoter.csproj" />
     <ProjectReference Include="..\Utilities\Startup\Startup.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Caliburn.Micro" Version="4.0.104-alpha" />
-    <PackageReference Include="H.Pipes.AccessControl" Version="1.0.7.1" />
-    <PackageReference Include="Hardcodet.NotifyIcon.Wpf.NetCore" Version="1.0.10" />
-    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
+    <PackageReference Include="Caliburn.Micro" Version="4.0.153-rc" />
+    <PackageReference Include="H.Pipes.AccessControl" Version="1.14.4" />
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf.NetCore" Version="1.0.14" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
   </ItemGroup>
+
   <ItemGroup>
     <None Include="Resources\beep.wav" />
   </ItemGroup>
+
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Exec Command="taskkill /f /t /fi &quot;imagename eq $(TargetName).exe&quot;&#xD;&#xA;exit 0" />
   </Target>
+
 </Project>

@@ -56,11 +56,13 @@ namespace HomeCenter.NET.ViewModels.Commands
             Commands = new BindableCollection<SingleCommandViewModel>(Command.Lines.Select(i => new SingleCommandViewModel(i)));
             HotKey = Command.HotKey;
 
-            Deactivated += (sender, args) =>
+            Deactivated += (_, _) =>
             {
                 CancellationTokenSource.Cancel();
 
                 Dispose();
+
+                return Task.CompletedTask;
             };
         }
 
