@@ -11,14 +11,14 @@ namespace H.NET.Recorders
     {
         #region Properties
 
-        public int Interval { get; private set; }
-        public Timer Timer { get; private set; }
+        public int Interval { get; }
+        public Timer Timer { get; }
 
         #endregion
 
         #region Events
 
-        public event EventHandler<VoiceActionsEventArgs> NewPartialData;
+        public event EventHandler<VoiceActionsEventArgs>? NewPartialData;
         private void OnNewPartialData() => NewPartialData?.Invoke(this, new VoiceActionsEventArgs
         {
             Data = RawData ?? WavData,
@@ -59,8 +59,7 @@ namespace H.NET.Recorders
 
         public override void Dispose()
         {
-            Timer?.Dispose();
-            Timer = null;
+            Timer.Dispose();
 
             base.Dispose();
         }

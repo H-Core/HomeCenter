@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFrameworks>net4.8;net5.0</TargetFrameworks>
-    <LangVersion>preview</LangVersion>
-    <Nullable>enable</Nullable>
     <RootNamespace>H.Recorders.IntegrationTests</RootNamespace>
   </PropertyGroup>
 
