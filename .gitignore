@@ -261,5 +261,4 @@ __pycache__/
 *.pyc
 /MigrationBackup/
 
-/src/Converters/YandexConverter/generated/
 /src/SearchDeskBand/SearchDeskBand/com
