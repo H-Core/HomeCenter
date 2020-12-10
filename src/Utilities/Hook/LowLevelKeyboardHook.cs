@@ -8,14 +8,14 @@ namespace H.NET.Utilities
 
         public bool OneUpEvent { get; set; } = true;
 
-        private Tuple<int, int> LastState { get; set; }
+        private Tuple<int, int>? LastState { get; set; }
 
         #endregion
 
         #region Events
 
-        public event EventHandler<KeyboardHookEventArgs> KeyDown;
-        public event EventHandler<KeyboardHookEventArgs> KeyUp;
+        public event EventHandler<KeyboardHookEventArgs>? KeyDown;
+        public event EventHandler<KeyboardHookEventArgs>? KeyUp;
 
         #endregion
 

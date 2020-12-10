@@ -6,13 +6,13 @@ namespace H.NET.Utilities
     {
         #region Events
 
-        public event EventHandler<MouseEventExtArgs> MouseUp;
-        public event EventHandler<MouseEventExtArgs> MouseDown;
-        public event EventHandler<MouseEventExtArgs> MouseClick;
-        public event EventHandler<MouseEventExtArgs> MouseClickExt;
-        public event EventHandler<MouseEventExtArgs> MouseDoubleClick;
-        public event EventHandler<MouseEventExtArgs> MouseWheel;
-        public event EventHandler<MouseEventExtArgs> MouseMove;
+        public event EventHandler<MouseEventExtArgs>? MouseUp;
+        public event EventHandler<MouseEventExtArgs>? MouseDown;
+        public event EventHandler<MouseEventExtArgs>? MouseClick;
+        public event EventHandler<MouseEventExtArgs>? MouseClickExt;
+        public event EventHandler<MouseEventExtArgs>? MouseDoubleClick;
+        public event EventHandler<MouseEventExtArgs>? MouseWheel;
+        public event EventHandler<MouseEventExtArgs>? MouseMove;
 
         #endregion
 

@@ -17,13 +17,13 @@ namespace H.NET.Utilities
 
         private int HookId { get; }
         private IntPtr HookHandle { get; set; }
-        private Win32.HookProc _hookAction;
+        private Win32.HookProc? HookAction { get; set; }
 
         #endregion
 
         #region Events
 
-        public event EventHandler<UnhandledExceptionEventArgs> UnhandledException;
+        public event EventHandler<UnhandledExceptionEventArgs>? UnhandledException;
 
         #endregion
 
@@ -52,10 +52,10 @@ namespace H.NET.Utilities
 
             Trace.WriteLine($"Starting hook '{Name}'...", $"Hook.StartHook [{Thread.CurrentThread.Name}]");
 
-            _hookAction = Callback;
+            HookAction = Callback;
             var moduleHandle = Win32.GetModuleHandle(Process.GetCurrentProcess().MainModule.ModuleName);
 
-            HookHandle = Win32.SetWindowsHookEx(HookId, _hookAction, moduleHandle, 0);
+            HookHandle = Win32.SetWindowsHookEx(HookId, HookAction, moduleHandle, 0);
             if (HookHandle == null || HookHandle == IntPtr.Zero)
             {
                 throw new Win32Exception(Marshal.GetLastWin32Error());
