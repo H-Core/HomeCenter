@@ -16,7 +16,7 @@ namespace HomeCenter.NET.Runners
 
         #region Private methods
 
-        private static void KeyboardCommand(string command)
+        private static void KeyboardCommand(string? command)
         {
             if (string.IsNullOrWhiteSpace(command))
             {

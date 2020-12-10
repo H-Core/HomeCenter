@@ -18,7 +18,7 @@ namespace HomeCenter.NET.ViewModels.Modules
             set {
                 SafeActions.Run(() =>
                 {
-                    Setting.Value = Convert.ChangeType(value, Setting.Type);
+                    Setting.Value = Convert.ChangeType(value, Setting.Type ?? throw new InvalidOperationException("Type is null."));
                     NotifyOfPropertyChange(nameof(Value));
                 });
 

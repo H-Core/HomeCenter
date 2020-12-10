@@ -3,8 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using H.Core;
+using H.Core.Converters;
 using H.Core.Extensions;
 using H.Core.Managers;
+using H.Core.Recorders;
+using H.Core.Runners;
+using H.Core.Searchers;
+using H.Core.Synthesizers;
 using H.NET.Utilities.Plugins;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Utilities;
@@ -53,7 +58,7 @@ namespace HomeCenter.NET.Services
                 {
                     foreach (var pair in list)
                     {
-                        module.Settings.Set(pair.Key, pair.Value);
+                        module.Settings.Set(pair.Key, pair.Value ?? throw new InvalidOperationException("pair.Value is null"));
                     }
                 },
                 module => module.Settings.Select(pair => new SettingItem(pair.Key, pair.Value.Value)));
@@ -75,7 +80,8 @@ namespace HomeCenter.NET.Services
         {
             Manager.Recorder = Recorder;
             Manager.Converter = Converter;
-            Manager.AlternativeConverters = AlternativeConverters;
+            Manager.AlternativeConverters.Clear();
+            Manager.AlternativeConverters.AddRange(AlternativeConverters);
         }
 
         public void RegisterHandlers(RunnerService runnerService) => SafeActions.Run(() =>

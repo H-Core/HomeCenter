@@ -8,14 +8,14 @@ namespace HomeCenter.NET.Extensions
     {
         #region CheckPathAndRun
 
-        public static void CheckPathAndRun<T>(this Runner runner, string path, Func<string, T> action)
+        public static void CheckPathAndRun<T>(this Runner runner, string? path, Func<string, T> action)
         {
-            runner.CheckPathAndRun(path, o => { action?.Invoke(o); });
+            runner.CheckPathAndRun(path, o => { action(o); });
         }
 
-        public static void CheckPathAndRun(this Runner runner, string path, Action<string> action)
+        public static void CheckPathAndRun(this Runner runner, string? path, Action<string> action)
         {
-            if (string.IsNullOrWhiteSpace(path))
+            if (path == null || string.IsNullOrWhiteSpace(path))
             {
                 runner.Print(@"Path is empty"); //TODO: may be need to use Module.Log?
                 return;
@@ -26,7 +26,7 @@ namespace HomeCenter.NET.Extensions
                 return;
             }
 
-            action?.Invoke(path);
+            action(path);
         }
 
         #endregion

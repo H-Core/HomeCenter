@@ -47,8 +47,13 @@ namespace HomeCenter.NET.Services
 
             Module.GetVariableValueGlobalFunc = GetVariableValue;
 
-            Manager.NewText += (sender, text) =>
+            Manager.NewText += (_, text) =>
             {
+                if (text == null)
+                {
+                    return;
+                }
+                
                 if (Runner.IsWaitCommand)
                 {
                     Runner.StopWaitCommand(text);
@@ -87,7 +92,7 @@ namespace HomeCenter.NET.Services
                 .ToArray();
         }
 
-        public IRunner? GetRunnerFor(string? key, string? data)
+        public IRunner? GetRunnerFor(string key, string data)
         {
             foreach (var runner in ModuleService.Runners)
             {
@@ -103,10 +108,11 @@ namespace HomeCenter.NET.Services
             return null;
         }
 
-        public object? GetVariableValue(string key) =>
-            ModuleService.Modules.FirstOrDefault(i => i.GetSupportedVariables().Contains(key))?.GetModuleVariableValue(key);
+        public object GetVariableValue(string key) =>
+            ModuleService.Modules.FirstOrDefault(i => i.GetSupportedVariables().Contains(key))?.GetModuleVariableValue(key)
+            ?? throw new InvalidOperationException("Variable not found.");
 
-        private bool IsInternal(string? key, string data) => ModuleService.Runners.Any(i => i.IsInternal(key, data));
+        private bool IsInternal(string? key, string data) => ModuleService.Runners.Any(i => i.IsInternal(key ?? string.Empty, data));
 
         #endregion
 
@@ -139,7 +145,7 @@ namespace HomeCenter.NET.Services
             }
             foreach (var line in newCommand.Lines)
             {
-                var process = await RunSingleLine(newKey, line.Text);
+                var process = await RunSingleLine(newKey ?? string.Empty, line.Text);
                 var exception = process.Information?.Exception;
                 if (exception != null)
                 {
@@ -167,7 +173,7 @@ namespace HomeCenter.NET.Services
             }
         }
 
-        private async Task<Process> RunSingleLine(string? key, string? data)
+        private async Task<Process> RunSingleLine(string key, string data)
         {
             var runner = GetRunnerFor(key, data);
             if (runner == null)

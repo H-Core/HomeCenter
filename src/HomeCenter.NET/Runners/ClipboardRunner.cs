@@ -20,16 +20,16 @@ namespace HomeCenter.NET.Runners
             AddAction("paste", PasteCommand, "text");
             AddAction("clipboard", ClipboardCommand, "text");
 
-            AddVariable("$clipboard$", () => ClipboardFunc?.Invoke());
+            AddVariable("$clipboard$", () => ClipboardFunc?.Invoke() ?? string.Empty);
         }
 
         #endregion
 
         #region Private methods
 
-        private void ClipboardCommand(string command)
+        private void ClipboardCommand(string? command)
         {
-            if (string.IsNullOrWhiteSpace(command))
+            if (command == null || string.IsNullOrWhiteSpace(command))
             {
                 return;
             }
@@ -38,7 +38,7 @@ namespace HomeCenter.NET.Runners
             ClipboardAction?.Invoke(command);
         }
         
-        private void CopyCommand(string command)
+        private void CopyCommand(string? command)
         {
             Run("keyboard Control+C");
             Run("sleep 5");
@@ -46,7 +46,7 @@ namespace HomeCenter.NET.Runners
             //await Task.Delay(5);
         }
 
-        private void PasteCommand(string command)
+        private void PasteCommand(string? command)
         {
             if (string.IsNullOrWhiteSpace(command))
             {

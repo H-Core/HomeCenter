@@ -17,7 +17,7 @@ namespace HomeCenter.NET.Initializers
         public static async Task InitializeDynamicModules(RunnerService runnerService, HookService hookService, ModuleService moduleService, MainViewModel model)
         {
             AssembliesManager.LogAction = model.Print;
-            Module.LogAction = model.Print;
+            //Module.LogAction = model.Print;
 
             model.Print("Loading modules...");
             try

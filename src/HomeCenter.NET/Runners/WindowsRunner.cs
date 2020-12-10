@@ -25,9 +25,9 @@ namespace HomeCenter.NET.Runners
         private static string? NormalizePath(string? path) =>
             path?.Replace("\\\\", "\\").Replace("//", "\\").Replace("/", "\\");
 
-        private void ExplorerCommand(string command) => Run($"start explorer \"{NormalizePath(command)}\"");
+        private void ExplorerCommand(string? command) => Run($"start explorer \"{NormalizePath(command)}\"");
 
-        private void ShowProcessNames(string command)
+        private void ShowProcessNames(string? command)
         {
             Print(@"Current process names:");
             var processes = Process
@@ -40,7 +40,7 @@ namespace HomeCenter.NET.Runners
             }
         }
 
-        private void ShowWindowCommand(string command)
+        private void ShowWindowCommand(string? command)
         {
             var processes = Process
                 .GetProcessesByName(command)

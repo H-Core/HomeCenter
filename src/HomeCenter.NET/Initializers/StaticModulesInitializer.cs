@@ -6,6 +6,7 @@ using System.Windows;
 using Caliburn.Micro;
 using H.Core;
 using H.Core.Managers;
+using H.Core.Runners;
 using HomeCenter.NET.Runners;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
@@ -20,9 +21,9 @@ namespace HomeCenter.NET.Initializers
         {
             var _ = ipcService.StartAsync();
 
-            async Task ShowModuleSettings(string name)
+            async Task ShowModuleSettings(string? name)
             {
-                if (string.IsNullOrWhiteSpace(name))
+                if (name == null || string.IsNullOrWhiteSpace(name))
                 {
                     model.Print("ShowModuleSettings: Module name is empty");
                     return;
@@ -38,7 +39,7 @@ namespace HomeCenter.NET.Initializers
                 await windowManager.ShowWindowAsync(new ModuleSettingsViewModel(module));
             }
 
-            async Task Say(string text)
+            async Task Say(string? text)
             {
                 var synthesizer = moduleService.Synthesizer;
                 if (synthesizer == null)
@@ -47,12 +48,12 @@ namespace HomeCenter.NET.Initializers
                     return;
                 }
 
-                var bytes = await synthesizer.ConvertAsync(text);
+                var bytes = await synthesizer.ConvertAsync(text ?? string.Empty);
 
                 await bytes.PlayAsync();
             }
 
-            async Task<List<string>> Search(string text)
+            async Task<List<string>> Search(string? text)
             {
                 var searcher = moduleService.Searcher;
                 if (searcher == null)
@@ -61,7 +62,7 @@ namespace HomeCenter.NET.Initializers
                     return new List<string>();
                 }
 
-                return await searcher.Search(text);
+                return await searcher.Search(text ?? string.Empty);
             }
 
             Module.SearchFunc = Search;
@@ -97,11 +98,11 @@ namespace HomeCenter.NET.Initializers
 
         #region Restart
 
-        public static void RestartWithUpdate(string command) => Restart(command, "/updating");
+        public static void RestartWithUpdate(string? command) => Restart(command, "/updating");
 
-        public static void Restart(string command, string? additionalArguments = null)
+        public static void Restart(string? command, string? additionalArguments = null)
         {
-            if (string.IsNullOrWhiteSpace(command))
+            if (command == null || string.IsNullOrWhiteSpace(command))
             {
                 Restart(new List<string>(), additionalArguments);
             }

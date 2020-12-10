@@ -1,4 +1,5 @@
 ﻿using H.Core;
+using H.Core.Runners;
 using H.Core.Utilities;
 
 namespace HomeCenter.NET.ViewModels.Commands
@@ -20,8 +21,8 @@ namespace HomeCenter.NET.ViewModels.Commands
             var values = command.SplitOnlyFirst(' ');
 
             Name = $"{runner.GetType().Name}: {values[0]}";
-            Prefix = values[0];
-            Description = values[1];
+            Prefix = values[0] ?? string.Empty;
+            Description = values[1] ?? string.Empty;
         }
 
         #endregion

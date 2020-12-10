@@ -3,9 +3,9 @@
     public class SettingItem
     {
         public string Key { get; }
-        public object Value { get; }
+        public object? Value { get; }
 
-        public SettingItem(string key, object value)
+        public SettingItem(string key, object? value)
         {
             Key = key;
             Value = value;

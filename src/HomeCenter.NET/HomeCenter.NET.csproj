@@ -18,8 +18,8 @@
 
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.153-rc" />
-    <PackageReference Include="H.Core" Version="0.9.1" />
-    <PackageReference Include="H.Pipes.AccessControl" Version="1.14.4" />
+    <PackageReference Include="H.Core" Version="0.9.5.3" />
+    <PackageReference Include="H.Pipes.AccessControl" Version="1.14.6" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf.NetCore" Version="1.0.14" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
   </ItemGroup>

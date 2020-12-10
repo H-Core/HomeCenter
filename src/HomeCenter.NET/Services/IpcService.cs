@@ -63,10 +63,15 @@ namespace HomeCenter.NET.Services
             }
         }
 
-        private async void PipeServer_OnMessageReceived(object? sender, ConnectionMessageEventArgs<string> args)
+        private async void PipeServer_OnMessageReceived(object? sender, ConnectionMessageEventArgs<string?> args)
         {
             try
             {
+                if (args.Message == null)
+                {
+                    return;
+                }
+                
                 await RunnerService.RunAsync(args.Message).ConfigureAwait(false);
             }
             catch (Exception exception)
@@ -88,7 +93,7 @@ namespace HomeCenter.NET.Services
         {
             try
             {
-                await PipeServer.StartAsync(cancellationToken: cancellationToken).ConfigureAwait(false);
+                await PipeServer.StartAsync(cancellationToken).ConfigureAwait(false);
             }
             catch (Exception exception)
             {
@@ -96,11 +101,16 @@ namespace HomeCenter.NET.Services
             }
         }
 
-        public async Task SendToProcessesAsync(string command, CancellationToken cancellationToken = default)
+        public async Task SendToProcessesAsync(string? command, CancellationToken cancellationToken = default)
         {
             try
             {
-                await PipeServer.WriteAsync(command, cancellationToken: cancellationToken).ConfigureAwait(false);
+                if (command == null)
+                {
+                    return;
+                }
+                
+                await PipeServer.WriteAsync(command, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception exception)
             {

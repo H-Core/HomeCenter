@@ -12,12 +12,12 @@ namespace HomeCenter.NET.Runners
 
         public ModuleService ModuleService { get; }
 
-        public Action<string>? RestartAction { private get; set; }
-        public Action<string>? UpdateRestartAction { private get; set; }
+        public Action<string?>? RestartAction { private get; set; }
+        public Action<string?>? UpdateRestartAction { private get; set; }
         public Action? ShowUiAction { private get; set; }
         public Action? ShowSettingsAction { private get; set; }
         public Action? ShowCommandsAction { private get; set; }
-        public Action<string>? ShowModuleSettingsAction { private get; set; }
+        public Action<string?>? ShowModuleSettingsAction { private get; set; }
         public Action? StartRecordAction { private get; set; }
 
         #endregion
@@ -30,17 +30,22 @@ namespace HomeCenter.NET.Runners
 
             AddInternalAction("restart", command => RestartAction?.Invoke(command));
             AddInternalAction("update-restart", command => UpdateRestartAction?.Invoke(command));
-            AddInternalAction("show-ui", command => ShowUiAction?.Invoke());
-            AddInternalAction("show-settings", command => ShowSettingsAction?.Invoke());
-            AddInternalAction("show-commands", command => ShowCommandsAction?.Invoke());
+            AddInternalAction("show-ui", _ => ShowUiAction?.Invoke());
+            AddInternalAction("show-settings", _ => ShowSettingsAction?.Invoke());
+            AddInternalAction("show-commands", _ => ShowCommandsAction?.Invoke());
             AddInternalAction("show-module-settings", command => ShowModuleSettingsAction?.Invoke(command), "name");
-            AddInternalAction("start-record", command => StartRecordAction?.Invoke());
+            AddInternalAction("start-record", _ => StartRecordAction?.Invoke());
 
             // TODO: Communication through (IDeskBand)Marshal.GetActiveObject("H.NET.SearchDeskBand") ??
             AddInternalAsyncAction("deskband", async command => await ipcService.SendToProcessesAsync(command));
 
             AddAction("enable-module", name =>
             {
+                if (name == null)
+                {
+                    return;
+                }
+                
                 moduleService.SetInstanceIsEnabled(name, true);
                 var obj = moduleService.Instances.GetObject(name);
                 if (obj.Exception != null)
@@ -52,6 +57,11 @@ namespace HomeCenter.NET.Runners
             }, "name");
             AddAction("disable-module", name =>
             {
+                if (name == null)
+                {
+                    return;
+                }
+                
                 moduleService.SetInstanceIsEnabled(name, false);
                 var obj = moduleService.Instances.GetObject(name);
                 if (obj.Exception != null)

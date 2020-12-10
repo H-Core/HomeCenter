@@ -29,7 +29,7 @@ namespace H.NET.Utilities.Plugins
             }
         }
 
-        public Exception Exception
+        public Exception? Exception
         {
             get => _exception;
             set {

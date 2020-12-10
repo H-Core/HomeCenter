@@ -94,22 +94,22 @@ namespace HomeCenter.NET.ViewModels
 
         #region Public methods
 
-        public void ShowMessage(string text, bool isWarning)
+        public void ShowMessage(string? text, bool isWarning)
         {
             Text += $"{DateTime.Now:T}: {text}{Environment.NewLine}";
 
             if (Settings.EnablePopUpMessages)
             {
-                PopupViewModel.Show(text, 5000, isWarning);
+                PopupViewModel.Show(text ?? string.Empty, 5000, isWarning);
             }
         }
 
-        public void Print(string text)
+        public void Print(string? text)
         {
-            ShowMessage(text, false);
+            ShowMessage(text ?? string.Empty, false);
         }
 
-        public void Warning(string text)
+        public void Warning(string? text)
         {
             RunnerService.Run($"say {text}");
 
