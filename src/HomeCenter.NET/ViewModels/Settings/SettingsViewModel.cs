@@ -29,7 +29,7 @@ namespace HomeCenter.NET.ViewModels.Settings
         public Properties.Settings Settings { get; }
         public HookService HookService { get; }
         public RunnerService RunnerService { get; }
-        //public ModuleService ModuleService { get; }
+        public ModuleService ModuleService { get; }
 
         public bool IsStartup { get; set; }
 
@@ -90,12 +90,12 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         #region Constructors
 
-        public SettingsViewModel(Properties.Settings settings, HookService hookService, RunnerService runnerService)
+        public SettingsViewModel(Properties.Settings settings, HookService hookService, RunnerService runnerService, ModuleService moduleService)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
             HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
             RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
-            //ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
+            ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
 
             IgnoredApplications = new BindableCollection<ItemViewModel>(
                 HookService.HookIgnoredApps.Select(i => new IgnoredApplicationViewModel(i)));
@@ -108,7 +108,7 @@ namespace HomeCenter.NET.ViewModels.Settings
             IsStartup = Startup.IsStartup(Options.FilePath);
             SaveAction = () =>
             {
-                //ModuleService.Save();
+                ModuleService.Save();
 
                 HookService.KeyboardHook.SetEnabled(Settings.EnableKeyboardHook);
                 HookService.MouseHook.SetEnabled(Settings.EnableMouseHook);
@@ -120,7 +120,7 @@ namespace HomeCenter.NET.ViewModels.Settings
                 Settings.Save();
                 Startup.Set(Options.FilePath, IsStartup);
 
-                //ModuleService.UpdateActiveModules();
+                ModuleService.UpdateActiveModules();
             };
         }
 
@@ -130,8 +130,8 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         public void UpdateAssemblies(bool notify = true)
         {
-            Assemblies = new BindableCollection<ItemViewModel>();
-                //ModuleService.ActiveAssemblies.Select(i => new AssemblyViewModel(i.Key, ModuleService.UpdatingIsNeed(i.Key))));
+            Assemblies = new BindableCollection<ItemViewModel>(
+                ModuleService.ActiveAssemblies.Select(i => new AssemblyViewModel(i.Key, ModuleService.UpdatingIsNeed(i.Key))));
 
             if (notify)
             {
@@ -141,8 +141,8 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         public void UpdateAvailableTypes(bool notify = true)
         {
-            AvailableTypes = new BindableCollection<ItemViewModel>();
-                //ModuleService.AvailableTypes.Select(i => new AvailableTypeViewModel(i)));
+            AvailableTypes = new BindableCollection<ItemViewModel>(
+                ModuleService.AvailableTypes.Select(i => new AvailableTypeViewModel(i)));
 
             if (notify)
             {
@@ -152,28 +152,28 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         private BindableCollection<InstanceViewModel> CreateModuleCollection<T>() where T : class, IModule
         {
-            return new BindableCollection<InstanceViewModel>();
-            //ModuleService.GetBasePlugins<T>().Select(i => new InstanceViewModel(i.Key, i.Value)));
+            return new BindableCollection<InstanceViewModel>(
+                ModuleService.GetBasePlugins<T>().Select(i => new InstanceViewModel(i.Key, i.Value)));
         }
 
         private void SetComboBox<T>(string value, Action<BindableCollection<string>> setElementsAction, Action<string> setSelectedAction)
             where T : class, IModule
         {
-            //var plugins = ModuleService.GetEnabledPlugins<T>().Select(i => i.Key).ToList();
-            //if (!string.IsNullOrWhiteSpace(value) && !plugins.Contains(value))
+            var plugins = ModuleService.GetEnabledPlugins<T>().Select(i => i.Key).ToList();
+            if (!string.IsNullOrWhiteSpace(value) && !plugins.Contains(value))
             {
-                //plugins.Add(value);
+                plugins.Add(value);
 
             }
 
-            //setElementsAction?.Invoke(new BindableCollection<string>(plugins));
-            //setSelectedAction?.Invoke(value);
+            setElementsAction?.Invoke(new BindableCollection<string>(plugins));
+            setSelectedAction?.Invoke(value);
         }
 
         public void UpdateModules(bool notify = true)
         {
-            Modules = new BindableCollection<InstanceViewModel>();
-                //ModuleService.Instances.Objects.Select(i => new InstanceViewModel(i.Key, i.Value)));
+            Modules = new BindableCollection<InstanceViewModel>(
+                ModuleService.Instances.Objects.Select(i => new InstanceViewModel(i.Key, i.Value)));
             Recorders = CreateModuleCollection<IRecorder>();
             Converters = CreateModuleCollection<IConverter>();
             Synthesizers = CreateModuleCollection<ISynthesizer>();
@@ -227,8 +227,8 @@ namespace HomeCenter.NET.ViewModels.Settings
 
             SafeActions.Run(() =>
             {
-                //ModuleService.AddInstancesFromAssembly(path, typeof(IModule),
-                //    type => type.AutoCreateInstance());
+                ModuleService.AddInstancesFromAssembly(path, typeof(IModule),
+                    type => type.AutoCreateInstance());
 
                 UpdateAssemblies();
             });
@@ -244,8 +244,8 @@ namespace HomeCenter.NET.ViewModels.Settings
                     break;
 
                 case AssemblyViewModel _:
-                    //ModuleService.Uninstall(viewModel.Description);
-                    //ModuleService.UpdateActiveModules();
+                    ModuleService.Uninstall(viewModel.Description);
+                    ModuleService.UpdateActiveModules();
                     Assemblies?.Remove(viewModel);
                     break;
 
@@ -259,7 +259,7 @@ namespace HomeCenter.NET.ViewModels.Settings
             switch (viewModel)
             {
                 case AssemblyViewModel _:
-                    //ModuleService.Update(viewModel.Description);
+                    ModuleService.Update(viewModel.Description);
                     break;
 
                 default:
@@ -272,7 +272,7 @@ namespace HomeCenter.NET.ViewModels.Settings
             switch (viewModel)
             {
                 case AvailableTypeViewModel availableTypeViewModel:
-                    //ModuleService.AddInstance($"{viewModel.Name}_{new Random().Next()}", availableTypeViewModel.Type, false);
+                    ModuleService.AddInstance($"{viewModel.Name}_{new Random().Next()}", availableTypeViewModel.Type, false);
                     UpdateModules();
                     // TODO: Focus to Modules tab?
                     break;
@@ -293,7 +293,7 @@ namespace HomeCenter.NET.ViewModels.Settings
                 return;
             }
 
-            //ModuleService.DeleteInstance(viewModel.Name);
+            ModuleService.DeleteInstance(viewModel.Name);
             UpdateModules();
         }
 
@@ -315,27 +315,27 @@ namespace HomeCenter.NET.ViewModels.Settings
                 return;
             }
 
-            //ModuleService.RenameInstance(oldName, newName);
+            ModuleService.RenameInstance(oldName, newName);
             viewModel.Name = newName;
         }
 
-        public Task EditInstanceAsync(InstanceViewModel viewModel)
+        public async Task EditInstanceAsync(InstanceViewModel viewModel)
         {
-            //var moduleSettingsView = new ModuleSettingsViewModel(viewModel.Instance.Value);
-            //var result = await this.ShowDialogAsync(moduleSettingsView);
-            //if (result != true)
+            var moduleSettingsView = new ModuleSettingsViewModel(viewModel.Instance.Value);
+            var result = await this.ShowDialogAsync(moduleSettingsView);
+            if (result != true)
             {
-               return Task.CompletedTask;
+                return;
             }
 
-            //UpdateModules(); // TODO: update single item??
+            UpdateModules(); // TODO: update single item??
         }
 
         public void EnableInstance(InstanceViewModel viewModel)
         {
             viewModel.IsEnabled = !viewModel.IsEnabled;
-            //ModuleService.SetInstanceIsEnabled(viewModel.Name, viewModel.IsEnabled);
-            //ModuleService.RegisterHandlers(RunnerService);
+            ModuleService.SetInstanceIsEnabled(viewModel.Name, viewModel.IsEnabled);
+            ModuleService.RegisterHandlers(RunnerService);
 
             UpdateModules(); // TODO: update single item??
         }

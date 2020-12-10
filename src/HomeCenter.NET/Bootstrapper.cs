@@ -41,7 +41,7 @@ namespace HomeCenter.NET
                 .Singleton<IWindowManager, HWindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<HookService>()
-                //.Singleton<ModuleService>()
+                .Singleton<ModuleService>()
                 .Singleton<RunnerService>()
                 .Singleton<IpcService>()
                 .Singleton<ExceptionService>()
@@ -181,7 +181,7 @@ namespace HomeCenter.NET
             var model = Get<MainViewModel>();
             var runnerService = Get<RunnerService>();
             var hookService = Get<HookService>();
-            //var moduleService = Get<ModuleService>();
+            var moduleService = Get<ModuleService>();
 
             var hWindowManager = manager as HWindowManager ?? throw new ArgumentNullException();
 
@@ -193,7 +193,7 @@ namespace HomeCenter.NET
 
             Get<StaticModulesInitializer>();
 
-            await InitializeHelper.InitializeDynamicModules(runnerService, hookService, model);
+            await InitializeHelper.InitializeDynamicModules(runnerService, hookService, moduleService, model);
 
             Get<HookInitializer>();
 
@@ -215,7 +215,7 @@ namespace HomeCenter.NET
 
             DisposeObject<BaseManager>();
             DisposeObject<HookService>();
-            //DisposeObject<ModuleService>();
+            DisposeObject<ModuleService>();
             DisposeObject<IpcService>();
 
             await DisposeAsyncObject<IpcService>();

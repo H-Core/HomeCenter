@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using H.Core;
-//using H.NET.Utilities.Plugins;
+using H.NET.Utilities.Plugins;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
@@ -14,19 +14,19 @@ namespace HomeCenter.NET.Initializers
 {
     public static class InitializeHelper
     {
-        public static Task InitializeDynamicModules(RunnerService runnerService, HookService hookService, MainViewModel model)
+        public static async Task InitializeDynamicModules(RunnerService runnerService, HookService hookService, ModuleService moduleService, MainViewModel model)
         {
-            //AssembliesManager.LogAction = model.Print;
+            AssembliesManager.LogAction = model.Print;
             //Module.LogAction = model.Print;
 
             model.Print("Loading modules...");
             try
             {
-                //await Task.Run(moduleService.Load);
+                await Task.Run(moduleService.Load);
 
-                //moduleService.AddUniqueInstancesIfNeed();
-                //moduleService.RegisterHandlers(runnerService);
-                //moduleService.UpdateActiveModules();
+                moduleService.AddUniqueInstancesIfNeed();
+                moduleService.RegisterHandlers(runnerService);
+                moduleService.UpdateActiveModules();
 
                 hookService.UpdateCombinations();
 
@@ -36,8 +36,6 @@ namespace HomeCenter.NET.Initializers
             {
                 model.Print(exception.ToString());
             }
-            
-            return Task.CompletedTask;
         }
 
         public static void CheckKillAll(string[] args)

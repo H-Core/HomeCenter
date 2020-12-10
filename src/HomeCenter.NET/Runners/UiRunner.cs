@@ -10,7 +10,7 @@ namespace HomeCenter.NET.Runners
     {
         #region Properties
 
-        //public ModuleService ModuleService { get; }
+        public ModuleService ModuleService { get; }
 
         public Action<string?>? RestartAction { private get; set; }
         public Action<string?>? UpdateRestartAction { private get; set; }
@@ -24,9 +24,9 @@ namespace HomeCenter.NET.Runners
 
         #region Constructors
 
-        public UiRunner(IpcService ipcService, RunnerService runnerService)
+        public UiRunner(ModuleService moduleService, IpcService ipcService, RunnerService runnerService)
         {
-            //ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
+            ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
 
             AddInternalAction("restart", command => RestartAction?.Invoke(command));
             AddInternalAction("update-restart", command => UpdateRestartAction?.Invoke(command));
@@ -46,7 +46,6 @@ namespace HomeCenter.NET.Runners
                     return;
                 }
                 
-                /*
                 moduleService.SetInstanceIsEnabled(name, true);
                 var obj = moduleService.Instances.GetObject(name);
                 if (obj.Exception != null)
@@ -54,11 +53,10 @@ namespace HomeCenter.NET.Runners
                     throw obj.Exception;
                 }
 
-                moduleService.RegisterHandlers(runnerService);*/
+                moduleService.RegisterHandlers(runnerService);
             }, "name");
             AddAction("disable-module", name =>
             {
-                /*
                 if (name == null)
                 {
                     return;
@@ -70,48 +68,48 @@ namespace HomeCenter.NET.Runners
                 {
                     throw obj.Exception;
                 }
-                */
+
                 // TODO: it's required?
                 //moduleService.RegisterHandlers();
             }, "name");
 
-            //AddInternalAction("install-assembly", command => this.CheckPathAndRun(command, moduleService.Install), "path");
-            //AddInternalAction("uninstall-assembly", command => this.CheckPathAndRun(command, moduleService.Uninstall), "name");
-            //AddInternalAction("update-assembly", command => this.CheckPathAndRun(command, moduleService.Update), "name");
+            AddInternalAction("install-assembly", command => this.CheckPathAndRun(command, moduleService.Install), "path");
+            AddInternalAction("uninstall-assembly", command => this.CheckPathAndRun(command, moduleService.Uninstall), "name");
+            AddInternalAction("update-assembly", command => this.CheckPathAndRun(command, moduleService.Update), "name");
             AddInternalAction("check-assemblies-updates", command =>
             {
-                //var names = ModuleService.GetCanBeUpdatedAssemblies();
-                //if (!names.Any())
+                var names = ModuleService.GetCanBeUpdatedAssemblies();
+                if (!names.Any())
                 {
                     Print("All modules already updated");
-                //    return;
+                    return;
                 }
 
-                //foreach (var name in names)
-                //{
-                //    Print($"Assembly {name} can be updated");
-                //}
+                foreach (var name in names)
+                {
+                    Print($"Assembly {name} can be updated");
+                }
             });
             AddInternalAction("update-assemblies", command =>
             {
-                //Print("Checking updates...");
-                //var names = ModuleService.GetCanBeUpdatedAssemblies();
-                //if (!names.Any())
+                Print("Checking updates...");
+                var names = ModuleService.GetCanBeUpdatedAssemblies();
+                if (!names.Any())
                 {
-                    //Print("All modules already updated");
-                    //return;
+                    Print("All modules already updated");
+                    return;
                 }
 
-                //var arguments = string.Join(";", 
-                //    names.Select(name => $"install-assembly {moduleService.AssembliesSettingsFile.Get(name).OriginalPath}"));
-                //arguments += ";update-restart print All modules have been updated";
+                var arguments = string.Join(";", 
+                    names.Select(name => $"install-assembly {moduleService.AssembliesSettingsFile.Get(name).OriginalPath}"));
+                arguments += ";update-restart print All modules have been updated";
 
-                //foreach (var name in names)
+                foreach (var name in names)
                 {
-                    //Print($"Updating {name}...");
+                    Print($"Updating {name}...");
                     try
                     {
-                        //moduleService.Update(name);
+                        moduleService.Update(name);
                     }
                     catch (Exception)
                     {
@@ -119,7 +117,7 @@ namespace HomeCenter.NET.Runners
                     }
                 }
 
-                //Run($"update-restart {arguments}");
+                Run($"update-restart {arguments}");
             });
         }
 
