@@ -16,7 +16,7 @@ namespace HomeCenter.NET.Services
     {
         #region Properties
 
-        public ModuleService ModuleService { get; }
+        //public ModuleService ModuleService { get; }
         public StorageService StorageService { get; }
         public BaseManager Manager { get; }
 
@@ -39,9 +39,9 @@ namespace HomeCenter.NET.Services
 
         #region Constructors
 
-        public RunnerService(ModuleService moduleService, StorageService storageService, BaseManager manager)
+        public RunnerService(StorageService storageService, BaseManager manager)
         {
-            ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
+            //ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
             StorageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
             Manager = manager ?? throw new ArgumentNullException(nameof(manager));
 
@@ -79,27 +79,28 @@ namespace HomeCenter.NET.Services
 
         #region Public methods
 
-        public (IRunner runner, string command)[] GetSupportedCommands() => ModuleService
-            .Runners
-            .Select(runner => (runner, commands: runner.GetSupportedCommands()))
-            .SelectMany(i => i.commands, (i, command) => (i.runner, command))
-            .ToArray();
+        public (IRunner runner, string command)[] GetSupportedCommands() => new (IRunner runner, string command)[0];
+            //ModuleService
+            //.Runners
+            //.Select(runner => (runner, commands: runner.GetSupportedCommands()))
+            //.SelectMany(i => i.commands, (i, command) => (i.runner, command))
+            //.ToArray();
 
         public string[] GetSupportedVariables()
         {
-            return ModuleService.Modules
-                .SelectMany(i => i.GetSupportedVariables())
-                .ToArray();
+            return new string[0]; //ModuleService.Modules
+            //.SelectMany(i => i.GetSupportedVariables())
+            //.ToArray();
         }
 
         public IRunner? GetRunnerFor(string key, string data)
         {
-            foreach (var runner in ModuleService.Runners)
+            //foreach (var runner in ModuleService.Runners)
             {
-                if (runner.IsSupport(key, data))
+                //if (runner.IsSupport(key, data))
                 {
                     //Log($"Runner: {runner.Name} supported command with {key}{command?.Data}");
-                    return runner;
+                    //return runner;
                 }
 
                 //Log($"Runner: {runner.Name} is not supported command with {key}{command?.Data}");
@@ -109,10 +110,10 @@ namespace HomeCenter.NET.Services
         }
 
         public object GetVariableValue(string key) =>
-            ModuleService.Modules.FirstOrDefault(i => i.GetSupportedVariables().Contains(key))?.GetModuleVariableValue(key)
-            ?? throw new InvalidOperationException("Variable not found.");
+            //ModuleService.Modules.FirstOrDefault(i => i.GetSupportedVariables().Contains(key))?.GetModuleVariableValue(key)
+            throw new InvalidOperationException("Variable not found.");
 
-        private bool IsInternal(string? key, string data) => ModuleService.Runners.Any(i => i.IsInternal(key ?? string.Empty, data));
+        private bool IsInternal(string? key, string data) => false;//ModuleService.Runners.Any(i => i.IsInternal(key ?? string.Empty, data));
 
         #endregion
 
