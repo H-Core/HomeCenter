@@ -17,52 +17,52 @@ namespace HomeCenter.NET.Initializers
 {
     public class StaticModulesInitializer
     {
-        public StaticModulesInitializer(IWindowManager windowManager, MainViewModel model, RunnerService runnerService, ModuleService moduleService, IpcService ipcService, BaseManager baseManager)
+        public StaticModulesInitializer(IWindowManager windowManager, MainViewModel model, RunnerService runnerService, IpcService ipcService, BaseManager baseManager)
         {
             var _ = ipcService.StartAsync();
 
-            async Task ShowModuleSettings(string? name)
+            Task ShowModuleSettings(string? name)
             {
                 if (name == null || string.IsNullOrWhiteSpace(name))
                 {
                     model.Print("ShowModuleSettings: Module name is empty");
-                    return;
+                    return Task.CompletedTask;
                 }
 
-                var module = moduleService.GetPlugin<IModule>(name)?.Value;
-                if (module == null)
+                //var module = moduleService.GetPlugin<IModule>(name)?.Value;
+                //if (module == null)
                 {
                     model.Print($"ShowModuleSettings: Module {name} is not found");
-                    return;
+                    return Task.CompletedTask;
                 }
 
-                await windowManager.ShowWindowAsync(new ModuleSettingsViewModel(module));
+                //await windowManager.ShowWindowAsync(new ModuleSettingsViewModel(module));
             }
 
-            async Task Say(string? text)
+            Task Say(string? text)
             {
-                var synthesizer = moduleService.Synthesizer;
-                if (synthesizer == null)
+                //var synthesizer = moduleService.Synthesizer;
+                //if (synthesizer == null)
                 {
                     model.Print("Synthesizer is not found");
-                    return;
+                    return Task.CompletedTask;
                 }
 
-                var bytes = await synthesizer.ConvertAsync(text ?? string.Empty);
+                //var bytes = await synthesizer.ConvertAsync(text ?? string.Empty);
 
-                await bytes.PlayAsync();
+                //await bytes.PlayAsync();
             }
 
-            async Task<List<string>> Search(string? text)
+            Task<List<string>> Search(string? text)
             {
-                var searcher = moduleService.Searcher;
-                if (searcher == null)
+                //var searcher = moduleService.Searcher;
+                //if (searcher == null)
                 {
                     model.Print("Searcher is not found");
-                    return new List<string>();
+                    return Task.FromResult(new List<string>());
                 }
 
-                return await searcher.Search(text ?? string.Empty);
+                //return await searcher.Search(text ?? string.Empty);
             }
 
             Module.SearchFunc = Search;
@@ -77,7 +77,7 @@ namespace HomeCenter.NET.Initializers
                     ClipboardAction = command => Application.Current.Dispatcher?.Invoke(() => Clipboard.SetText(command)),
                     ClipboardFunc = () => Application.Current.Dispatcher?.Invoke(Clipboard.GetText)
                 },
-                new UiRunner(moduleService, ipcService, runnerService)
+                new UiRunner(ipcService, runnerService)
                 {
                     // TODO: refactor
                     RestartAction = command => Application.Current.Dispatcher?.Invoke(() => Restart(command)),
@@ -92,7 +92,7 @@ namespace HomeCenter.NET.Initializers
             };
             foreach (var runner in staticRunners)
             {
-                moduleService.AddStaticInstance(runner.ShortName, runner);
+                //moduleService.AddStaticInstance(runner.ShortName, runner);
             }
         }
 

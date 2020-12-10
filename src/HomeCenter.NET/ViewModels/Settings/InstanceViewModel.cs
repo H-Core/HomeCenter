@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Caliburn.Micro;
 using H.Core;
 using H.Core.Extensions;
-using H.NET.Utilities.Plugins;
 using HomeCenter.NET.Extensions;
 
 namespace HomeCenter.NET.ViewModels.Settings
@@ -54,29 +53,29 @@ namespace HomeCenter.NET.ViewModels.Settings
         public bool EditIsVisible { get; protected set; }
         public bool DeleteIsVisible { get; protected set; }
 
-        public RuntimeObject<IModule> Instance { get; }
+        //public RuntimeObject<IModule> Instance { get; }
 
         #endregion
 
         #region Constructors
 
-        public InstanceViewModel(string name, RuntimeObject<IModule> instance)
+        public InstanceViewModel(string name)
         {
-            Instance = instance ?? throw new ArgumentNullException(nameof(Module));
+            //Instance = instance ?? throw new ArgumentNullException(nameof(Module));
             
-            var module = Instance.Value;
-            var deletingAllowed = Instance.Exception != null || (Instance.Type?.AllowMultipleInstance() ?? false);
+            //var module = Instance.Value;
+            //var deletingAllowed = Instance.Exception != null || (Instance.Type?.AllowMultipleInstance() ?? false);
 
             Name = name?? string.Empty;
-            Description = module?.Name ?? Instance.Exception?.Message ?? string.Empty;
+            //Description = module?.Name ?? Instance.Exception?.Message ?? string.Empty;
 
-            IsValid = module != null;
-            IsEnabled = Instance.IsEnabled;
+            //IsValid = module != null;
+            //IsEnabled = Instance.IsEnabled;
 
-            EditIsVisible = module != null && module.Settings?.Count > 0;
-            EnableIsVisible = !Instance.IsStatic && Instance.Exception == null;
-            RenameIsVisible = !Instance.IsStatic && (Instance.Type?.AllowMultipleInstance() ?? false);
-            DeleteIsVisible = !Instance.IsStatic && deletingAllowed;
+            //EditIsVisible = module != null && module.Settings?.Count > 0;
+            //EnableIsVisible = !Instance.IsStatic && Instance.Exception == null;
+            //RenameIsVisible = !Instance.IsStatic && (Instance.Type?.AllowMultipleInstance() ?? false);
+            //DeleteIsVisible = !Instance.IsStatic && deletingAllowed;
         }
 
         #endregion
@@ -86,8 +85,8 @@ namespace HomeCenter.NET.ViewModels.Settings
         public async Task ShowDescriptionAsync()
         {
             await this.ShowMessageBoxAsync(
-                Instance.Value?.Name ?? Instance.Exception?.ToString() ?? string.Empty,
-                "Description");
+            //    Instance.Value?.Name ?? Instance.Exception?.ToString() ?? string.Empty,
+            string.Empty, "Description");
         }
 
         #endregion

@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Utilities\Plugins\Plugins.csproj" />
     <ProjectReference Include="..\Utilities\CommandsStorage\CommandsStorage.csproj" />
     <ProjectReference Include="..\Utilities\Hook\Hook.csproj" />
     <ProjectReference Include="..\Utilities\Screenshoter\Screenshoter.csproj" />
