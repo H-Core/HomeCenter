@@ -18,6 +18,7 @@
                     <Style x:Key="HiddenWindowStyle" TargetType="Window">
                         <Setter Property="Visibility" Value="Hidden"/>
                     </Style>
+                    <FontFamily x:Key="KillTheNoize">pack://application:,,,/Fonts/#Kill The Noise(RUS BY LYAJKA)</FontFamily>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
