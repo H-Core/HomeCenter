@@ -13,10 +13,10 @@
         WindowStyle="None"
         Opacity="0.8" 
         AllowsTransparency="True" 
-        Background="{Binding IsWarning, Converter={StaticResource BooleanToRedBlueConverter}, Mode=TwoWay}"
+        Background="{StaticResource MainBackgroundBrush}"
         SizeToContent="WidthAndHeight"
         ShowActivated="False"
         SizeChanged="OnSizeChanged"
         Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}">
-    <Label Margin="5" x:Name="Text" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+    <Label Margin="5" x:Name="Text" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource MainForegroundBrush}"/>
 </Window>

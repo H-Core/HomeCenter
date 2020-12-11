@@ -13,7 +13,9 @@
         Width="500" 
         WindowStartupLocation="CenterScreen"
         cal:Message.Attach="[Event Closing] = [Action OnClosing($eventArgs)]; [KeyUp Ctrl+R] = [Restart]"
-        Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}"
+        Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}, Mode=TwoWay}" 
+        Background="{StaticResource MainBackgroundBrush}"
+
         >
     <Grid Margin="10,10,10,10">
         <Grid.RowDefinitions>
@@ -25,7 +27,9 @@
             <commands:ShowHideCommand x:Key="ShowHideCommand" />
         </Grid.Resources>
         <ScrollViewer Grid.Row="0">
-            <TextBox x:Name="Text" TextWrapping="Wrap" Text="" IsReadOnly="True"/>
+            <TextBox x:Name="Text" TextWrapping="Wrap" Text="" IsReadOnly="True" 
+                     Background="{StaticResource MainBackgroundBrush}" 
+                     Foreground="{StaticResource MainForegroundBrush}" />
         </ScrollViewer>
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
@@ -41,11 +45,31 @@
                 <ColumnDefinition Width="2"></ColumnDefinition>
                 <ColumnDefinition Width="25"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Grid.RowSpan="8" x:Name="Input" TextWrapping="Wrap"
-                     cal:Message.Attach="[KeyUp Up] = [PreviousCommand]; [KeyUp Ctrl+Enter] = [AddNewLine]; [KeyUp Enter] = [RunInput]"/>
-            <Button Grid.Column="2" Grid.Row="1" x:Name="Record" Content="{Binding IsRecord, Converter={StaticResource BooleanToRecordConverter}}" Background="{Binding IsRecord, Converter={StaticResource BooleanToBlueGrayConverter}}"/>
-            <Button Grid.Column="2" Grid.Row="3" x:Name="ShowCommands" Content="☰"/>
-            <Button Grid.Column="2" Grid.Row="5" x:Name="ShowSettings" Content="⚙"/>
+            <TextBox Grid.Column="0" 
+                     Grid.RowSpan="8" 
+                     x:Name="Input" 
+                     TextWrapping="Wrap"
+                     cal:Message.Attach="[KeyUp Up] = [PreviousCommand]; [KeyUp Ctrl+Enter] = [AddNewLine]; [KeyUp Enter] = [RunInput]" 
+                     Background="{StaticResource MainBackgroundBrush}" 
+                     Foreground="{StaticResource MainForegroundBrush}"/>
+            <Button Grid.Column="2" 
+                    Grid.Row="1" 
+                    x:Name="Record" 
+                    Content="{Binding IsRecord, Converter={StaticResource BooleanToRecordConverter}}" 
+                    Background="{StaticResource MainBackgroundBrush}" 
+                    Foreground="{StaticResource MainForegroundBrush}"/>
+            <Button Grid.Column="2" 
+                    Grid.Row="3" 
+                    x:Name="ShowCommands" 
+                    Content="☰" 
+                    Background="{StaticResource MainBackgroundBrush}" 
+                    Foreground="{StaticResource MainForegroundBrush}" />
+            <Button Grid.Column="2" 
+                    Grid.Row="5" 
+                    x:Name="ShowSettings" 
+                    Content="⚙" 
+                    Background="{StaticResource MainBackgroundBrush}" 
+                    Foreground="{StaticResource MainForegroundBrush}" />
         </Grid>
         <tb:TaskbarIcon Grid.Row="0"
             x:Name="TaskbarIcon" 

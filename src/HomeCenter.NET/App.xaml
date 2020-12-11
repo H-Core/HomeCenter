@@ -19,6 +19,8 @@
                         <Setter Property="Visibility" Value="Hidden"/>
                     </Style>
                     <FontFamily x:Key="KillTheNoize">pack://application:,,,/Fonts/#Kill The Noise(RUS BY LYAJKA)</FontFamily>
+                    <Brush x:Key="MainBackgroundBrush">Black</Brush>
+                    <Brush x:Key="MainForegroundBrush">Yellow</Brush>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
