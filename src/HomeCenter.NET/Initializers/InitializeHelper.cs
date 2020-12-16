@@ -3,8 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using H.Core;
-//using H.NET.Utilities.Plugins;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
@@ -14,7 +12,7 @@ namespace HomeCenter.NET.Initializers
 {
     public static class InitializeHelper
     {
-        public static Task InitializeDynamicModules(RunnerService runnerService, HookService hookService, MainViewModel model)
+        public static Task InitializeDynamicModules(HookService hookService, MainViewModel model)
         {
             //AssembliesManager.LogAction = model.Print;
             //Module.LogAction = model.Print;
@@ -63,16 +61,16 @@ namespace HomeCenter.NET.Initializers
             }
         }
 
-        public static void CheckUpdate(string[] args, RunnerService runnerService)
+        public static void CheckUpdate(string[] args)
         {
             var isUpdating = args.Contains("/updating");
             if (!isUpdating && Settings.Default.AutoUpdateAssemblies)
             {
-                runnerService.Run("update-assemblies");
+                //runnerService.Run("update-assemblies");
             }
         }
 
-        public static void CheckRun(string[] args, RunnerService runnerService)
+        public static void CheckRun(string[] args)
         {
             if (args.Contains("/run"))
             {
@@ -82,7 +80,7 @@ namespace HomeCenter.NET.Initializers
 
                 foreach (var command in commands)
                 {
-                    runnerService.Run(command);
+                    //runnerService.Run(command);
                 }
             }
         }

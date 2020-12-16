@@ -1,6 +1,5 @@
 ﻿using System;
-using H.Core.Managers;
-using H.NET.Utilities;
+using H.Hooks;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities.HookModules;
@@ -10,7 +9,7 @@ namespace HomeCenter.NET.Initializers
 {
     public class HookInitializer
     {
-        public HookInitializer(BaseManager manager, HookService hookService, MainViewModel model, ScreenshotToClipboardModule screenshotToClipboardModule, ScreenshotToTextModule screenshotToTextModule, Settings settings)
+        public HookInitializer(HookService hookService, MainViewModel model, ScreenshotToClipboardModule screenshotToClipboardModule, ScreenshotToTextModule screenshotToTextModule, Settings settings)
         {
             bool CheckArgs(KeyboardHookEventArgs args)
             {
@@ -18,19 +17,19 @@ namespace HomeCenter.NET.Initializers
                        args.IsAltPressed && args.IsCtrlPressed;
             }
 
-            async void GlobalKeyUp(object? sender, KeyboardHookEventArgs e)
+            void GlobalKeyUp(object? sender, KeyboardHookEventArgs e)
             {
                 if (CheckArgs(e))
                 {
-                    await manager.StopAsync();
+                    //await manager.StopAsync();
                 }
             }
 
-            async void GlobalKeyDown(object? sender, KeyboardHookEventArgs e)
+            void GlobalKeyDown(object? sender, KeyboardHookEventArgs e)
             {
                 if (CheckArgs(e))
                 {
-                    await manager.StartAsync();
+                    //await manager.StartAsync();
                 }
 
                 if (hookService.IsIgnoredApplication())

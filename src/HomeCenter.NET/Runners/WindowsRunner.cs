@@ -12,10 +12,10 @@ namespace HomeCenter.NET.Runners
 
         public WindowsRunner()
         {
-            AddAction("explorer", ExplorerCommand, "path");
+            //AddAction("explorer", ExplorerCommand, "path");
 
-            AddAction("show-window", ShowWindowCommand, "process_name");
-            AddAction("show-process-names", ShowProcessNames);
+            //AddAction("show-window", ShowWindowCommand, "process_name");
+            //AddAction("show-process-names", ShowProcessNames);
         }
 
         #endregion

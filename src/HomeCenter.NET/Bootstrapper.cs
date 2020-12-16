@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Caliburn.Micro;
-using H.Core.Managers;
 using HomeCenter.NET.Initializers;
 using HomeCenter.NET.Input;
 using HomeCenter.NET.Properties;
@@ -42,11 +41,7 @@ namespace HomeCenter.NET
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<HookService>()
                 //.Singleton<ModuleService>()
-                .Singleton<RunnerService>()
-                .Singleton<IpcService>()
-                .Singleton<ExceptionService>()
                 .Singleton<StorageService>()
-                .Singleton<BaseManager>()
                 .Singleton<ScreenshotToClipboardModule>()
                 .Singleton<ScreenshotToTextModule>()
                 .Instance(Settings.Default);
@@ -179,7 +174,6 @@ namespace HomeCenter.NET
             await manager.ShowWindowAsync(instance);
             
             var model = Get<MainViewModel>();
-            var runnerService = Get<RunnerService>();
             var hookService = Get<HookService>();
             //var moduleService = Get<ModuleService>();
 
@@ -193,12 +187,12 @@ namespace HomeCenter.NET
 
             Get<StaticModulesInitializer>();
 
-            await InitializeHelper.InitializeDynamicModules(runnerService, hookService, model);
+            await InitializeHelper.InitializeDynamicModules(hookService, model);
 
             Get<HookInitializer>();
 
-            InitializeHelper.CheckUpdate(e.Args, runnerService);
-            InitializeHelper.CheckRun(e.Args, runnerService);
+            InitializeHelper.CheckUpdate(e.Args);
+            InitializeHelper.CheckRun(e.Args);
         }
 
         // ReSharper disable once UnusedMember.Global
@@ -209,16 +203,12 @@ namespace HomeCenter.NET
             return string.Empty;
         }
 
-        protected override async void OnExit(object sender, EventArgs e)
+        protected override void OnExit(object sender, EventArgs e)
         {
             MainView?.Dispose();
 
-            DisposeObject<BaseManager>();
             DisposeObject<HookService>();
             //DisposeObject<ModuleService>();
-            DisposeObject<IpcService>();
-
-            await DisposeAsyncObject<IpcService>();
 
             Application.Shutdown();
         }

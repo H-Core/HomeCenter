@@ -21,40 +21,40 @@ namespace HomeCenter.NET.Runners
 
         public DefaultRunner(Action<string?> printAction, Action<string?> warningAction, Func<string?, Task> sayFunc, Func<string?, Task<List<string>>> searchFunc)
         {
-            AddAsyncAction("say", sayFunc, "text");
-            AddInternalAction("print", printAction, "text");
-            AddInternalAction("warning", warningAction, "text");
-            AddInternalAction("notify", Notify);
-            AddInternalAction("run", command => Run(command ?? string.Empty), "other_command_key");
-            AddAction("search", async key => printAction(string.Join(Environment.NewLine, await searchFunc(key))), "key");
+            //AddAsyncAction("say", sayFunc, "text");
+            //AddInternalAction("print", printAction, "text");
+            //AddInternalAction("warning", warningAction, "text");
+            //AddInternalAction("notify", Notify);
+            //AddInternalAction("run", command => Run(command ?? string.Empty), "other_command_key");
+            //AddAction("search", async key => printAction(string.Join(Environment.NewLine, await searchFunc(key))), "key");
 
-            AddAsyncAction("sleep", SleepCommand, "integer");
-            AddAction("sync-sleep", command => Thread.Sleep(int.TryParse(command, out var result) ? result : 1000), "integer");
+            //AddAsyncAction("sleep", SleepCommand, "integer");
+            //AddAction("sync-sleep", command => Thread.Sleep(int.TryParse(command, out var result) ? result : 1000), "integer");
 
-            AddAction("start", StartCommand, "program.exe arguments");
-            AddAsyncAction("start-async", StartCommandAsync, "program.exe arguments");
+            //AddAction("start", StartCommand, "program.exe arguments");
+            //AddAsyncAction("start-async", StartCommandAsync, "program.exe arguments");
 
-            AddAction("say-my-name", async _ =>
-            {
-                if (string.IsNullOrWhiteSpace(UserName))
-                {
-                    await SayAsync("Я еще не знаю вашего имени. Пожалуйста, представьтесь");
+            //AddAction("say-my-name", async _ =>
+            //{
+            //    if (string.IsNullOrWhiteSpace(UserName))
+            //    {
+            //        await SayAsync("Я еще не знаю вашего имени. Пожалуйста, представьтесь");
 
-                    var name = await WaitNextCommand(8000);
-                    if (name == null || string.IsNullOrWhiteSpace(name))
-                    {
-                        return;
-                    }
+            //        var name = await WaitNextCommand(8000);
+            //        if (name == null || string.IsNullOrWhiteSpace(name))
+            //        {
+            //            return;
+            //        }
 
-                    // First char to upper case
-                    name = name[0].ToString().ToUpper() + name.Substring(1);
+            //        // First char to upper case
+            //        name = name[0].ToString().ToUpper() + name.Substring(1);
 
-                    Settings.Set("username", name);
-                    SaveSettings();
-                }
+            //        Settings.Set("username", name);
+            //        SaveSettings();
+            //    }
 
-                Say($"Привет {UserName}");
-            });
+            //    Say($"Привет {UserName}");
+            //});
             AddSetting("username", o => UserName = o, NoEmpty, string.Empty);
 
             AddVariable("$username$", () => UserName ?? string.Empty);

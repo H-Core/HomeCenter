@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Input;
-using H.NET.Utilities;
+using H.Utilities;
 
 namespace HomeCenter.NET.Utilities.HookModules
 {

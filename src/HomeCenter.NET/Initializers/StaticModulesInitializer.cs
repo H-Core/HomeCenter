@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using H.Core;
-using H.Core.Managers;
 using H.Core.Runners;
 using HomeCenter.NET.Runners;
 using HomeCenter.NET.Services;
@@ -17,10 +16,8 @@ namespace HomeCenter.NET.Initializers
 {
     public class StaticModulesInitializer
     {
-        public StaticModulesInitializer(IWindowManager windowManager, MainViewModel model, RunnerService runnerService, IpcService ipcService, BaseManager baseManager)
+        public StaticModulesInitializer(IWindowManager windowManager, MainViewModel model)
         {
-            var _ = ipcService.StartAsync();
-
             Task ShowModuleSettings(string? name)
             {
                 if (name == null || string.IsNullOrWhiteSpace(name))
@@ -77,7 +74,7 @@ namespace HomeCenter.NET.Initializers
                     ClipboardAction = command => Application.Current.Dispatcher?.Invoke(() => Clipboard.SetText(command)),
                     ClipboardFunc = () => Application.Current.Dispatcher?.Invoke(Clipboard.GetText)
                 },
-                new UiRunner(ipcService, runnerService)
+                new UiRunner
                 {
                     // TODO: refactor
                     RestartAction = command => Application.Current.Dispatcher?.Invoke(() => Restart(command)),
@@ -86,7 +83,7 @@ namespace HomeCenter.NET.Initializers
                     ShowSettingsAction = () => Application.Current.Dispatcher?.Invoke(model.ShowSettingsAsync),
                     ShowCommandsAction = () => Application.Current.Dispatcher?.Invoke(model.ShowCommandsAsync),
                     ShowModuleSettingsAction = name => Application.Current.Dispatcher?.Invoke(async () => await ShowModuleSettings(name)),
-                    StartRecordAction = () => Application.Current.Dispatcher?.Invoke(async () => await baseManager.StartAsync()),
+                    //StartRecordAction = () => Application.Current.Dispatcher?.Invoke(async () => await baseManager.StartAsync()),
                 },
                 new InternetRunner()
             };

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using H.NET.Storages;
-using H.NET.Utilities;
+using H.Hooks;
+using H.Utilities;
 using HomeCenter.NET.Properties;
 using HomeCenter.NET.Utilities;
 
@@ -16,7 +16,6 @@ namespace HomeCenter.NET.Services
 
         public Settings Settings { get; }
         public StorageService StorageService { get; }
-        public RunnerService RunnerService { get; }
 
         public LowLevelMouseHook MouseHook { get; set; } = new LowLevelMouseHook();
         public LowLevelKeyboardHook KeyboardHook { get; set; } = new LowLevelKeyboardHook();
@@ -34,9 +33,8 @@ namespace HomeCenter.NET.Services
 
         #region Constructors
 
-        public HookService(RunnerService runnerService, Settings settings, StorageService storageService)
+        public HookService(Settings settings, StorageService storageService)
         {
-            RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
             StorageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
         }
@@ -80,7 +78,7 @@ namespace HomeCenter.NET.Services
                 return false;
             }
 
-            RunnerService.Run(key);
+            //RunnerService.Run(key);
             return true;
         }
 

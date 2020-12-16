@@ -24,7 +24,7 @@ namespace HomeCenter.NET.ViewModels.Modules
             Settings = new BindableCollection<SettingViewModel>(
                 Module.Settings.Select(i => CreateSettingViewModel(i.Value)));
 
-            SaveAction = () => Module.SaveSettings();
+            //SaveAction = () => Module.SaveSettings();
         }
 
         protected static SettingViewModel CreateSettingViewModel(Setting setting)

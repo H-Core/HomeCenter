@@ -9,7 +9,7 @@ namespace HomeCenter.NET.Runners
 
         public KeyboardRunner()
         {
-            AddAction("keyboard", KeyboardCommand, "CONTROL+V");
+            //AddAction("keyboard", KeyboardCommand, "CONTROL+V");
         }
 
         #endregion

@@ -10,7 +10,7 @@ namespace HomeCenter.NET.Runners
 
         public InternetRunner()
         {
-            AddAction("check-internet", command => Print($"Internet is{(IsAvailableNetworkActive() ? "" : " not")} available"));
+            //AddAction("check-internet", command => Print($"Internet is{(IsAvailableNetworkActive() ? "" : " not")} available"));
 
             AddVariable("$internet$", () => IsAvailableNetworkActive());
         }

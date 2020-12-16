@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
 using H.Core;
-using H.Core.Converters;
 using H.Core.Extensions;
 using H.Core.Notifiers;
+using H.Core.Recognizers;
 using H.Core.Recorders;
 using H.Core.Runners;
 using H.Core.Searchers;
 using H.Core.Synthesizers;
-using H.NET.Utilities;
+using H.Utilities;
 using HomeCenter.NET.Extensions;
 using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
@@ -28,7 +28,6 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         public Properties.Settings Settings { get; }
         public HookService HookService { get; }
-        public RunnerService RunnerService { get; }
         //public ModuleService ModuleService { get; }
 
         public bool IsStartup { get; set; }
@@ -90,11 +89,10 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         #region Constructors
 
-        public SettingsViewModel(Properties.Settings settings, HookService hookService, RunnerService runnerService)
+        public SettingsViewModel(Properties.Settings settings, HookService hookService)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
             HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
-            RunnerService = runnerService ?? throw new ArgumentNullException(nameof(runnerService));
             //ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
 
             IgnoredApplications = new BindableCollection<ItemViewModel>(
@@ -175,14 +173,14 @@ namespace HomeCenter.NET.ViewModels.Settings
             Modules = new BindableCollection<InstanceViewModel>();
                 //ModuleService.Instances.Objects.Select(i => new InstanceViewModel(i.Key, i.Value)));
             Recorders = CreateModuleCollection<IRecorder>();
-            Converters = CreateModuleCollection<IConverter>();
+            Converters = CreateModuleCollection<IRecognizer>();
             Synthesizers = CreateModuleCollection<ISynthesizer>();
             Searchers = CreateModuleCollection<ISearcher>();
             Runners = CreateModuleCollection<IRunner>();
             Notifiers = CreateModuleCollection<INotifier>();
 
             SetComboBox<IRecorder>(Settings.Recorder, e => RecorderElements = e, s => SelectedRecorderElement = s);
-            SetComboBox<IConverter>(Settings.Converter, e => ConverterElements = e, s => SelectedConverterElement = s);
+            SetComboBox<IRecognizer>(Settings.Converter, e => ConverterElements = e, s => SelectedConverterElement = s);
             SetComboBox<ISynthesizer>(Settings.Synthesizer, e => SynthesizerElements = e, s => SelectedSynthesizerElement = s);
             SetComboBox<ISearcher>(Settings.Searcher, e => SearcherElements = e, s => SelectedSearcherElement = s);
 

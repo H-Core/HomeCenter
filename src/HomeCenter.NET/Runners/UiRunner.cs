@@ -24,26 +24,26 @@ namespace HomeCenter.NET.Runners
 
         #region Constructors
 
-        public UiRunner(IpcService ipcService, RunnerService runnerService)
+        public UiRunner()
         {
             //ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
 
-            AddInternalAction("restart", command => RestartAction?.Invoke(command));
-            AddInternalAction("update-restart", command => UpdateRestartAction?.Invoke(command));
-            AddInternalAction("show-ui", _ => ShowUiAction?.Invoke());
-            AddInternalAction("show-settings", _ => ShowSettingsAction?.Invoke());
-            AddInternalAction("show-commands", _ => ShowCommandsAction?.Invoke());
-            AddInternalAction("show-module-settings", command => ShowModuleSettingsAction?.Invoke(command), "name");
-            AddInternalAction("start-record", _ => StartRecordAction?.Invoke());
+            //AddInternalAction("restart", command => RestartAction?.Invoke(command));
+            //AddInternalAction("update-restart", command => UpdateRestartAction?.Invoke(command));
+            //AddInternalAction("show-ui", _ => ShowUiAction?.Invoke());
+            //AddInternalAction("show-settings", _ => ShowSettingsAction?.Invoke());
+            //AddInternalAction("show-commands", _ => ShowCommandsAction?.Invoke());
+            //AddInternalAction("show-module-settings", command => ShowModuleSettingsAction?.Invoke(command), "name");
+            //AddInternalAction("start-record", _ => StartRecordAction?.Invoke());
 
             // TODO: Communication through (IDeskBand)Marshal.GetActiveObject("H.NET.SearchDeskBand") ??
-            AddInternalAsyncAction("deskband", async command => await ipcService.SendToProcessesAsync(command));
+            //AddInternalAsyncAction("deskband", async command => await ipcService.SendToProcessesAsync(command));
 
-            AddAction("enable-module", name =>
-            {
-                if (name == null)
+            //AddAction("enable-module", name =>
+            //{
+                //if (name == null)
                 {
-                    return;
+                    //return;
                 }
                 
                 /*
@@ -55,9 +55,9 @@ namespace HomeCenter.NET.Runners
                 }
 
                 moduleService.RegisterHandlers(runnerService);*/
-            }, "name");
-            AddAction("disable-module", name =>
-            {
+            //}, "name");
+            //AddAction("disable-module", name =>
+            //{
                 /*
                 if (name == null)
                 {
@@ -73,17 +73,17 @@ namespace HomeCenter.NET.Runners
                 */
                 // TODO: it's required?
                 //moduleService.RegisterHandlers();
-            }, "name");
+            //}, "name");
 
             //AddInternalAction("install-assembly", command => this.CheckPathAndRun(command, moduleService.Install), "path");
             //AddInternalAction("uninstall-assembly", command => this.CheckPathAndRun(command, moduleService.Uninstall), "name");
             //AddInternalAction("update-assembly", command => this.CheckPathAndRun(command, moduleService.Update), "name");
-            AddInternalAction("check-assemblies-updates", command =>
-            {
+            //AddInternalAction("check-assemblies-updates", command =>
+            //{
                 //var names = ModuleService.GetCanBeUpdatedAssemblies();
                 //if (!names.Any())
                 {
-                    Print("All modules already updated");
+                //    Print("All modules already updated");
                 //    return;
                 }
 
@@ -91,9 +91,9 @@ namespace HomeCenter.NET.Runners
                 //{
                 //    Print($"Assembly {name} can be updated");
                 //}
-            });
-            AddInternalAction("update-assemblies", command =>
-            {
+            //});
+            //AddInternalAction("update-assemblies", command =>
+            //{
                 //Print("Checking updates...");
                 //var names = ModuleService.GetCanBeUpdatedAssemblies();
                 //if (!names.Any())
@@ -120,7 +120,7 @@ namespace HomeCenter.NET.Runners
                 }
 
                 //Run($"update-restart {arguments}");
-            });
+            //});
         }
 
         #endregion

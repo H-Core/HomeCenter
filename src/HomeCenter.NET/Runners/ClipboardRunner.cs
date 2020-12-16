@@ -16,9 +16,9 @@ namespace HomeCenter.NET.Runners
 
         public ClipboardRunner()
         {
-            AddAction("copy", CopyCommand, "text");
-            AddAction("paste", PasteCommand, "text");
-            AddAction("clipboard", ClipboardCommand, "text");
+            //AddAction("copy", CopyCommand, "text");
+            //AddAction("paste", PasteCommand, "text");
+            //AddAction("clipboard", ClipboardCommand, "text");
 
             AddVariable("$clipboard$", () => ClipboardFunc?.Invoke() ?? string.Empty);
         }
