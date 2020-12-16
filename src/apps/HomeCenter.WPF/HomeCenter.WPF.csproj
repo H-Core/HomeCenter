@@ -11,7 +11,6 @@
   <ItemGroup>
     <PackageReference Include="Caliburn.Micro" Version="4.0.153-rc" />
     <PackageReference Include="H.Core" Version="0.14.9" />
-    <PackageReference Include="H.Hooks" Version="1.0.1" />
     <PackageReference Include="H.Pipes.AccessControl" Version="1.14.7" />
     <PackageReference Include="H.Utilities.CommandsStorage" Version="0.9.0" />
     <PackageReference Include="H.Utilities.Screenshoter" Version="0.9.0" />

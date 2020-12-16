@@ -15,7 +15,6 @@ namespace HomeCenter.NET.ViewModels.Commands
     {
         #region Properties
 
-        public HookService HookService { get; }
         public StorageService StorageService { get; }
 
         public BindableCollection<UserCommandViewModel> UserCommands { get; }
@@ -27,9 +26,8 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         #region Constructors
 
-        public CommandsViewModel(HookService hookService, StorageService storageService)
+        public CommandsViewModel(StorageService storageService)
         {
-            HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
             StorageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
 
             UserCommands = new BindableCollection<UserCommandViewModel>(
@@ -50,7 +48,7 @@ namespace HomeCenter.NET.ViewModels.Commands
                 StorageService.Save();
 
                 // TODO: simplify?
-                hookService.UpdateCombinations();
+                //hookService.UpdateCombinations();
             };
             CancelAction = () => StorageService.Load(); // Cancel changes TODO: may me need to use TempStorage instead this?
         }
@@ -65,7 +63,7 @@ namespace HomeCenter.NET.ViewModels.Commands
             command.Keys.Add(new SingleKey(string.Empty));
             command.Lines.Add(new SingleCommand(string.Empty));
 
-            var viewModel = new CommandSettingsViewModel(command, HookService);
+            var viewModel = new CommandSettingsViewModel(command);
             var result = await this.ShowDialogAsync(viewModel);
             if (result != true)
             {
@@ -85,7 +83,7 @@ namespace HomeCenter.NET.ViewModels.Commands
             {
                 case UserCommandViewModel userCommandViewModel:
                     var newCommand = (Command)userCommandViewModel.Command.Clone();
-                    var dialogViewModel = new CommandSettingsViewModel(newCommand, HookService);
+                    var dialogViewModel = new CommandSettingsViewModel(newCommand);
                     var result = await this.ShowDialogAsync(dialogViewModel);
                     if (result != true)
                     {

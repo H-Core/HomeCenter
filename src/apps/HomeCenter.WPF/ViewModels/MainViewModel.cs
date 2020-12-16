@@ -19,7 +19,6 @@ namespace HomeCenter.NET.ViewModels
         #region Properties
 
         public IWindowManager WindowManager { get; }
-        public HookService HookService { get; }
         public Properties.Settings Settings { get; }
         public PopupViewModel PopupViewModel { get; }
 
@@ -65,12 +64,11 @@ namespace HomeCenter.NET.ViewModels
 
         #region Constructors
 
-        public MainViewModel(IWindowManager windowManager, Properties.Settings settings, PopupViewModel popupViewModel, HookService hookService)
+        public MainViewModel(IWindowManager windowManager, Properties.Settings settings, PopupViewModel popupViewModel)
         {
             WindowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
             PopupViewModel = popupViewModel ?? throw new ArgumentNullException(nameof(popupViewModel));
-            HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
         }
 
         #endregion

@@ -16,7 +16,6 @@ namespace HomeCenter.NET.ViewModels.Commands
         #region Properties
 
         public Command Command { get; }
-        public HookService HookService { get; }
         public BindableCollection<SingleKeyViewModel> Keys { get; }
         public BindableCollection<SingleCommandViewModel> Commands { get; }
 
@@ -45,10 +44,9 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         #region Constructors
 
-        public CommandSettingsViewModel(Command command, HookService hookService)
+        public CommandSettingsViewModel(Command command)
         {
             Command = command ?? throw new ArgumentNullException(nameof(command));
-            HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
 
             Keys = new BindableCollection<SingleKeyViewModel>(Command.Keys.Select(i => new SingleKeyViewModel(i)));
             Commands = new BindableCollection<SingleCommandViewModel>(Command.Lines.Select(i => new SingleCommandViewModel(i)));
@@ -123,14 +121,14 @@ namespace HomeCenter.NET.ViewModels.Commands
 
         #region HotKey methods
 
-        public async Task EditHotKeyAsync()
+        public Task EditHotKeyAsync()
         {
             try
             {
                 EditHotKeyIsEnabled = false;
 
-                var combination = await HookService.CatchKeyAsync(CancellationTokenSource.Token).ConfigureAwait(false);
-                HotKey = combination?.ToString() ?? string.Empty;
+                //var combination = await HookService.CatchKeyAsync(CancellationTokenSource.Token).ConfigureAwait(false);
+                //HotKey = combination?.ToString() ?? string.Empty;
             }
             catch (OperationCanceledException)
             {
@@ -139,6 +137,8 @@ namespace HomeCenter.NET.ViewModels.Commands
             {
                 EditHotKeyIsEnabled = true;
             }
+            
+            return Task.CompletedTask;
         }
 
         #endregion

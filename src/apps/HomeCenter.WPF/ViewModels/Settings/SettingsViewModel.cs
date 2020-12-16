@@ -27,7 +27,6 @@ namespace HomeCenter.NET.ViewModels.Settings
         #region Properties
 
         public Properties.Settings Settings { get; }
-        public HookService HookService { get; }
         //public ModuleService ModuleService { get; }
 
         public bool IsStartup { get; set; }
@@ -89,14 +88,13 @@ namespace HomeCenter.NET.ViewModels.Settings
 
         #region Constructors
 
-        public SettingsViewModel(Properties.Settings settings, HookService hookService)
+        public SettingsViewModel(Properties.Settings settings)
         {
             Settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            HookService = hookService ?? throw new ArgumentNullException(nameof(hookService));
             //ModuleService = moduleService ?? throw new ArgumentNullException(nameof(moduleService));
 
-            IgnoredApplications = new BindableCollection<ItemViewModel>(
-                HookService.HookIgnoredApps.Select(i => new IgnoredApplicationViewModel(i)));
+            IgnoredApplications = new BindableCollection<ItemViewModel>();
+                //HookService.HookIgnoredApps.Select(i => new IgnoredApplicationViewModel(i)));
 
             // TODO: To Container?
             UpdateAssemblies(false);
@@ -108,8 +106,8 @@ namespace HomeCenter.NET.ViewModels.Settings
             {
                 //ModuleService.Save();
 
-                HookService.KeyboardHook.SetEnabled(Settings.EnableKeyboardHook);
-                HookService.MouseHook.SetEnabled(Settings.EnableMouseHook);
+                //HookService.KeyboardHook.SetEnabled(Settings.EnableKeyboardHook);
+                //HookService.MouseHook.SetEnabled(Settings.EnableMouseHook);
 
                 Settings.Recorder = SelectedRecorderElement;
                 Settings.Converter = SelectedConverterElement;
@@ -237,7 +235,7 @@ namespace HomeCenter.NET.ViewModels.Settings
             switch (viewModel)
             {
                 case IgnoredApplicationViewModel _:
-                    HookService.HookIgnoredApps = HookService.HookIgnoredApps.Except(new[] { viewModel.Description }).ToList();
+                    //HookService.HookIgnoredApps = HookService.HookIgnoredApps.Except(new[] { viewModel.Description }).ToList();
                     IgnoredApplications?.Remove(viewModel);
                     break;
 
@@ -346,7 +344,7 @@ namespace HomeCenter.NET.ViewModels.Settings
                 return;
             }
 
-            HookService.HookIgnoredApps = HookService.HookIgnoredApps.Concat(new[] { path }).ToList();
+            //HookService.HookIgnoredApps = HookService.HookIgnoredApps.Concat(new[] { path }).ToList();
             IgnoredApplications?.Add(new IgnoredApplicationViewModel(path));
         }
 

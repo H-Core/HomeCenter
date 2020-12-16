@@ -39,7 +39,6 @@ namespace HomeCenter.NET
             Container
                 .Singleton<IWindowManager, HWindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
-                .Singleton<HookService>()
                 //.Singleton<ModuleService>()
                 .Singleton<StorageService>()
                 .Singleton<ScreenshotToClipboardModule>()
@@ -55,8 +54,7 @@ namespace HomeCenter.NET
                 .Singleton<MainViewModel>();
 
             Container
-                .PerRequest<StaticModulesInitializer>()
-                .PerRequest<HookInitializer>();
+                .PerRequest<StaticModulesInitializer>();
 
             base.Configure();
 
@@ -174,7 +172,6 @@ namespace HomeCenter.NET
             await manager.ShowWindowAsync(instance);
             
             var model = Get<MainViewModel>();
-            var hookService = Get<HookService>();
             //var moduleService = Get<ModuleService>();
 
             var hWindowManager = manager as HWindowManager ?? throw new ArgumentNullException();
@@ -187,10 +184,6 @@ namespace HomeCenter.NET
 
             Get<StaticModulesInitializer>();
 
-            await InitializeHelper.InitializeDynamicModules(hookService, model);
-
-            Get<HookInitializer>();
-
             InitializeHelper.CheckUpdate(e.Args);
             InitializeHelper.CheckRun(e.Args);
         }
@@ -198,7 +191,7 @@ namespace HomeCenter.NET
         // ReSharper disable once UnusedMember.Global
         public static string StopMouseHook()
         {
-            ((HookService)IoC.GetInstance(typeof(HookService), null)).MouseHook.Stop();
+            //((HookService)IoC.GetInstance(typeof(HookService), null)).MouseHook.Stop();
 
             return string.Empty;
         }
@@ -207,7 +200,7 @@ namespace HomeCenter.NET
         {
             MainView?.Dispose();
 
-            DisposeObject<HookService>();
+            //DisposeObject<HookService>();
             //DisposeObject<ModuleService>();
 
             Application.Shutdown();

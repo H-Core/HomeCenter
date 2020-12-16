@@ -1,43 +1,13 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using HomeCenter.NET.Properties;
-using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
-using HomeCenter.NET.ViewModels;
 
 namespace HomeCenter.NET.Initializers
 {
     public static class InitializeHelper
     {
-        public static Task InitializeDynamicModules(HookService hookService, MainViewModel model)
-        {
-            //AssembliesManager.LogAction = model.Print;
-            //Module.LogAction = model.Print;
-
-            model.Print("Loading modules...");
-            try
-            {
-                //await Task.Run(moduleService.Load);
-
-                //moduleService.AddUniqueInstancesIfNeed();
-                //moduleService.RegisterHandlers(runnerService);
-                //moduleService.UpdateActiveModules();
-
-                hookService.UpdateCombinations();
-
-                model.Print("Loaded");
-            }
-            catch (Exception exception)
-            {
-                model.Print(exception.ToString());
-            }
-            
-            return Task.CompletedTask;
-        }
-
         public static void CheckKillAll(string[] args)
         {
             var isKillAll = args.Contains("/killall");
