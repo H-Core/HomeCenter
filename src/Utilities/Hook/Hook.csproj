@@ -1,9 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>H.NET.Utilities</RootNamespace>
-    <AssemblyName>H.NET.Utilities.Hook</AssemblyName>
-    <AssemblyTitle>H.NET.Utilities.Hook</AssemblyTitle>
-    <Product>H.NET.Utilities.Hook</Product>
-  </PropertyGroup>
-</Project>
