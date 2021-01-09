@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Caliburn.Micro;
+using H.Services;
 using HomeCenter.NET.Initializers;
 using HomeCenter.NET.Input;
 using HomeCenter.NET.Properties;
@@ -34,6 +35,9 @@ namespace HomeCenter.NET
             Container = new SimpleContainer();
 
             //Container.Instance(Container);
+
+            Container
+                .Singleton<HookService>();
 
             Container
                 .Singleton<IWindowManager, HWindowManager>()
@@ -180,6 +184,12 @@ namespace HomeCenter.NET
             model.IsVisible = e.Args.Contains("/restart") || !Settings.Default.IsStartMinimized;
 
             Get<StaticModulesInitializer>();
+
+            var hookService = Get<HookService>();
+            await hookService.InitializeAsync();
+
+            hookService.UpCombinationCaught += (_, value) => model.Print($"Up: {value}");
+            hookService.DownCombinationCaught += (_, value) => model.Print($"Down: {value}");
 
             InitializeHelper.CheckUpdate(e.Args);
             InitializeHelper.CheckRun(e.Args);
