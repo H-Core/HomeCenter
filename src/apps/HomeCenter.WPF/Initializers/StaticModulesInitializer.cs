@@ -1,22 +1,17 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Caliburn.Micro;
-using H.Core;
 using H.Core.Runners;
 using HomeCenter.NET.Runners;
-using HomeCenter.NET.Services;
 using HomeCenter.NET.Utilities;
 using HomeCenter.NET.ViewModels;
-using HomeCenter.NET.ViewModels.Modules;
 
 namespace HomeCenter.NET.Initializers
 {
     public class StaticModulesInitializer
     {
-        public StaticModulesInitializer(IWindowManager windowManager, MainViewModel model)
+        public StaticModulesInitializer(MainViewModel model)
         {
             Task ShowModuleSettings(string? name)
             {
@@ -76,7 +71,7 @@ namespace HomeCenter.NET.Initializers
         {
             var run = commands.Any() ? $"/run \"{string.Join(";", commands)}\"" : string.Empty;
 
-            Process.Start($"\"{Options.FilePath}\"", $"/restart {run} {additionalArguments}");
+            System.Diagnostics.Process.Start($"\"{Options.FilePath}\"", $"/restart {run} {additionalArguments}");
             Application.Current.Shutdown();
         }
 
