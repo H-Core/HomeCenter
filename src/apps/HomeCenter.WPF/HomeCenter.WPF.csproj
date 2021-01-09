@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Resource Include="Fonts\*.ttf" />
-    <Resource Include="Resources\beep.wav" />
     <Resource Include="Properties\Icons\icon.ico" />
   </ItemGroup>
 

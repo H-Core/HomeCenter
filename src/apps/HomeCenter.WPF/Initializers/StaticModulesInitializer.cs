@@ -36,44 +36,8 @@ namespace HomeCenter.NET.Initializers
                 //await windowManager.ShowWindowAsync(new ModuleSettingsViewModel(module));
             }
 
-            Task Say(string? text)
-            {
-                //var synthesizer = moduleService.Synthesizer;
-                //if (synthesizer == null)
-                {
-                    model.Print("Synthesizer is not found");
-                    return Task.CompletedTask;
-                }
-
-                //var bytes = await synthesizer.ConvertAsync(text ?? string.Empty);
-
-                //await bytes.PlayAsync();
-            }
-
-            Task<List<string>> Search(string? text)
-            {
-                //var searcher = moduleService.Searcher;
-                //if (searcher == null)
-                {
-                    model.Print("Searcher is not found");
-                    return Task.FromResult(new List<string>());
-                }
-
-                //return await searcher.Search(text ?? string.Empty);
-            }
-
-            Module.SearchFunc = Search;
-
             var staticRunners = new List<IRunner>
             {
-                new DefaultRunner(model.Print, model.Warning, Say, Search),
-                new KeyboardRunner(),
-                new WindowsRunner(),
-                new ClipboardRunner
-                {
-                    ClipboardAction = command => Application.Current.Dispatcher?.Invoke(() => Clipboard.SetText(command)),
-                    ClipboardFunc = () => Application.Current.Dispatcher?.Invoke(Clipboard.GetText)
-                },
                 new UiRunner
                 {
                     // TODO: refactor
@@ -85,7 +49,6 @@ namespace HomeCenter.NET.Initializers
                     ShowModuleSettingsAction = name => Application.Current.Dispatcher?.Invoke(async () => await ShowModuleSettings(name)),
                     //StartRecordAction = () => Application.Current.Dispatcher?.Invoke(async () => await baseManager.StartAsync()),
                 },
-                new InternetRunner()
             };
             foreach (var runner in staticRunners)
             {
