@@ -14,6 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "apps", "apps", "{026F69B0-BDA2-4E4C-8100-337F24A982D6}"
+	ProjectSection(SolutionItems) = preProject
+		src\apps\Directory.Build.props = src\apps\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCenter.WPF", "src\apps\HomeCenter.WPF\HomeCenter.WPF.csproj", "{8475F8A8-EBFB-4978-8E8B-1537907C5299}"
 EndProject
