@@ -6,10 +6,10 @@
 This application allows you to assign any actions performed on the voice command or a global key combination.  
 The ultimate goal is to become an application that helps to actively use non-standard actions 
 (voice, global hotkeys, eye gaze direction, etc.) in everyday work at the computer. 
-Maybe add a little AI to this to simplify the things we do day after day.
+Maybe add a little AI to this to simplify the things we do day after day.  
 Existing alternatives:
-https://talonvoice.com/
-https://serenade.ai/
+- https://talonvoice.com/
+- https://serenade.ai/
 
 Available recorders:
 - Windows Multimedia API(winmm.dll)
